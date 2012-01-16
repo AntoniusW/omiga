@@ -1,0 +1,19 @@
+Check what to save in the datastrcutzure (Rete).
+HashMap<PredAtom,HashSet<PredAtom[]>>[] ????
+
+
+Datastructure proggen und testen
+ContainsMethode für data structure
+do not save same instances twiche or more often!
+
+
+Wie frage ich einen funcTerm ab? Der hat ja dann ne durchnummerierte ID!
+Für die Abfrage brauch ich aber einen mit Variablen drinnen!
+
+--> Die ID bestimmt nur die Position in der datenstruktur und dient nicht für equality abfragen!
+
+
+ein select in dem 2 mal die selbe VAriable vor kommt darf nur insanzten retournieren die an diesen STellen auch das Selbe stehen haben!
+Scheiss FuncTErms!
+
+
