@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><umlet_diagram><help_text>// Uncomment the following line to change the fontsize:
+// fontsize=14
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Welcome to UMLet!
+//
+// Double-click on UML elements to add them to the diagram, or to copy them
+// Edit elements by modifying the text in this panel
+// Hold Ctrl to select multiple elements
+// Use Ctrl+mouse to select via lasso
+//
+// Use ± or Ctrl+mouse wheel to zoom
+// Drag a whole relation at its central square icon
+//
+// Press Ctrl+C to copy the whole diagram to the system clipboard (then just paste it to, eg, Word)
+// Edit the files in the "palettes" directory to create your own element palettes
+//
+// Select "Custom Elements &gt; New..." to create new element types
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// This text will be stored with each diagram;  use it for notes.</help_text><zoom_level>5</zoom_level><element><type>com.umlet.element.base.Class</type><coordinates><x>785</x><y>725</y><w>205</w><h>90</h></coordinates><panel_attributes>&lt;&lt;Storage&gt;&gt;
+Package::Datastructures.Storage
+--
+-HashMap&lt;PredAtom,HashInstances&gt;[] memory
+--
++addInstance(PredAtom[] instance): void
++removeInstance(PredAtom[] instance): void
++containsInstance(PredAtom[] instance): boolean
++select(PredAtom[] selectionCriterion): Collection&lt;PredAtom[]&gt;
++printAllInstances()
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>975</x><y>755</y><w>104</w><h>24</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=*</panel_attributes><additional_attributes>15;15;95;15</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>1070</x><y>725</y><w>210</w><h>90</h></coordinates><panel_attributes>&lt;&lt;HashedInstances&gt;&gt;
+Package::Datastructures.Storage
+--
+-private HashMap&lt;Integer, ArrayList&lt;PredAtom[]&gt;&gt; memory;
+
+--
++add(PredAtom[] instance): void
++size(): int
++compareInstances(PredAtom[] ins1, PredAtom[] ins2): boolean
++remove(PredAtom[] instance): void
++contains(PredAtom[] instance): boolean
++getAll(): Collection&lt;PredAtom[]&gt;</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>675</x><y>415</y><w>180</w><h>80</h></coordinates><panel_attributes>&lt;&lt;Rete&gt;&gt;
+Package::Datastructures.Rete
+--
+-basicLayer: HashMap&lt;Predicate, BasicNode&gt;
+-selectionLayer: HashMap&lt;PredInRule, SelectionNode&gt;
+-joinLayer: HashMap&lt;String, JoindNode&gt;
+--
++addPredInRule(PredInRule pir): void
++addInstance(Predicate p, PredAtom[] instance): void
++getBasicNode(Predicate p): BasicNode</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>760</x><y>480</y><w>24</w><h>94</h></coordinates><panel_attributes/><additional_attributes>15;85;15;15</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>700</x><y>565</y><w>145</w><h>95</h></coordinates><panel_attributes>&lt;&lt;BasicNode&gt;&gt;
+Package::Datastructures.Rete
+--
+-memory: Storage
+-children: ArrayList&lt;SelectionNode&gt;
+--
++addInstance(PredAtom[] instance): void
++removeInstance(PredAtom[] instance): void
++AddPredInRule(PredInRule pir): void
++printAllInstances(): void
++getChildren(): ArrayList&lt;SelectionNode&gt;</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>975</x><y>570</y><w>210</w><h>95</h></coordinates><panel_attributes>&lt;&lt;SelectionNode&gt;&gt;
+Package::Datastructures.Rete
+--
+-pir: PredInRule
+-children: ArrayList&lt;Node&gt;
+-memory: Storage
+--
++addInstance(PredAtom[] varAssignment): void
+-assignVariable4PredAtom(PredAtom pa, PredAtom crit): boolean
++fits(PredAtom[] instance): boolean
++getMemory(): Storage</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>830</x><y>600</y><w>154</w><h>24</h></coordinates><panel_attributes/><additional_attributes>145;15;15;15</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1130</x><y>415</y><w>24</w><h>164</h></coordinates><panel_attributes/><additional_attributes>15;15;15;155</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>1075</x><y>335</y><w>105</w><h>95</h></coordinates><panel_attributes>&lt;&lt;Node&gt;&gt;
+Package::Interfaces
+--
+ArrayList&lt;Rule&gt; ruleToFire
+IN_WORK</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1165</x><y>275</y><w>79</w><h>89</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>15;80;70;15</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1165</x><y>340</y><w>79</w><h>84</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>15;15;70;75</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>1235</x><y>375</y><w>105</w><h>95</h></coordinates><panel_attributes>&lt;&lt;OperatorNode&gt;&gt;
+Package::Datastructures.Rete
+--
+IN_WORK</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>1235</x><y>250</y><w>105</w><h>95</h></coordinates><panel_attributes>&lt;&lt;JoinNode&gt;&gt;
+Package::Datastructures.Rete
+--
+IN_WORK</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>830</x><y>645</y><w>74</w><h>89</h></coordinates><panel_attributes/><additional_attributes>15;15;65;80</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>880</x><y>650</y><w>104</w><h>84</h></coordinates><panel_attributes/><additional_attributes>95;15;15;75</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>880</x><y>330</y><w>204</w><h>404</h></coordinates><panel_attributes/><additional_attributes>195;15;15;395</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>45</x><y>355</y><w>165</w><h>180</h></coordinates><panel_attributes>Abstract Class PredAtom
+Package::Interfaces
+--
+STATIC PART
+--
+-predAtoms: HashMap&lt;PredAtom,PredAtom&gt;
+--
++getPredAtom(PredAtom pa): PredAtom
++containsPredAtom(PredAtom pa): boolean
+--
+INSTANCE PART
+--
+-name: String
+-hash: int
+-children: ArrayList&lt;PredAtom&gt;
+--
++getName(): String
++getChildren(): ArrayList&lt;PredAtom&gt;
++isChildOf(PredAtom pa): boolean
++isParentOf(PredAtom pa): boolean
++hashCode(): int
++isConstant(): boolean
++isFuncTerm(): boolean
++isVariable(): boolean
++getUsedVariables(): ArrayList&lt;Variable&gt;
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>50</x><y>610</y><w>130</w><h>95</h></coordinates><panel_attributes>&lt;&lt;Constant&gt;&gt;
+Package::Entity
+--
+STATIC PART
+--
+getConstant(String name): Constant
+--
+INSTANCE PART
+--
+Overwrites all Methods of PredAtom</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>105</x><y>520</y><w>24</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>15;15;15;90</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>210</x><y>610</y><w>130</w><h>95</h></coordinates><panel_attributes>&lt;&lt;Variable&gt;&gt;
+Package::Entity
+--
+STATIC PART
+--
+getVariable(String name): Variable
+--
+INSTANCE PART
+--
+Overwrites all Methods of PredAtom
+--
+-value: PredAtom
+--
++getValue(): PredAtom
++setValue(PredAtom value): void</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>195</x><y>520</y><w>94</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>15;15;85;90</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>295</x><y>420</y><w>225</w><h>95</h></coordinates><panel_attributes>&lt;&lt;FuncTerm&gt;&gt;
+Package::Entity
+--
+STATIC PART
+--
+getFuncTerm(String name, ArrayList&lt;PredAtom&gt; children): FuncTerm
+--
+INSTANCE PART
+--
+Overwrites all Methods of PredAtom</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>195</x><y>445</y><w>109</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>15;15;100;15</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>75</x><y>185</y><w>105</w><h>95</h></coordinates><panel_attributes>&lt;&lt;Predicate&gt;&gt;
+Package::Entity
+--
+STATIC PART
+--
++getPredicate(): Predicate
+--
++name: String
++arity: int
++hash: int
+--
++hashCode(): int
++equals(Object o): boolean
++getArity(): int
++getName(): String
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>280</x><y>180</y><w>105</w><h>130</h></coordinates><panel_attributes>&lt;&lt;PredInRule&gt;&gt;
+Package::Entity
+--
+-p: Predicate
+-atoms: PredAtom[]
+-vars: ArrayList&lt;Variable&gt;
+--
++setAtomAt(int position, PredAtom pa): void
++getName(): String
++getArity: int
++getPredicate(): Predicate
++getAtoms(): PredAtom[]
++ToString(): String
++hashCode(): int
++equals(Object o): boolean
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>125</x><y>265</y><w>24</w><h>99</h></coordinates><panel_attributes/><additional_attributes>15;15;15;90</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>165</x><y>215</y><w>124</w><h>24</h></coordinates><panel_attributes/><additional_attributes>115;15;15;15</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>465</x><y>135</y><w>105</w><h>30</h></coordinates><panel_attributes>&lt;&lt;BodyAtom&gt;&gt;
+Package::Interfaces
+--
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>280</x><y>60</y><w>105</w><h>95</h></coordinates><panel_attributes>&lt;&lt;Operator&gt;&gt;
+Package::Entity
+--
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>370</x><y>90</y><w>104</w><h>74</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>95;65;15;15</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>370</x><y>140</y><w>104</w><h>94</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>95;15;15;85</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>675</x><y>100</y><w>175</w><h>145</h></coordinates><panel_attributes>&lt;&lt;Rule&gt;&gt;
+Package::Entity
+--
+-head: PredInRule
+-bodyPlus: ArrayList&lt;PredInRule&gt;
+-bodyMinus: ArrayList&lt;PredInRule&gt;
+-operators: ArrayList&lt;Operator&gt;
+--
++setHead(PredInRule head): void
++getHead(): PredInRule
++addAtomPlus(PredInRule p): void
++getBodyPlus(): ArrayList&lt;PredInRule&gt;
++addAtomMinus(PredInRule p): void
++getBodyMinus(): ArrayList&lt;PredInRule&gt;
++isSafe(): boolean
++isConstraint(): boolean
++toString(): String
+
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>555</x><y>140</y><w>129</w><h>24</h></coordinates><panel_attributes/><additional_attributes>15;15;120;15</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>485</x><y>250</y><w>165</w><h>95</h></coordinates><panel_attributes>&lt;&lt;Instance&gt;&gt;
+Package::Entity
+{Used to obtain hash value of
+our instances which are arrays
+of PredAtoms}
+--
+STATIC PART
+--
++hash(PredAtom[] instance): int
++getInstanceAsString(PredAtom[] instance): String
+--
+INSTANCE PART
+--
+NOTHING</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>715</x><y>285</y><w>105</w><h>95</h></coordinates><panel_attributes>&lt;&lt;Context&gt;&gt;
+--
+IN_WORK</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>755</x><y>365</y><w>24</w><h>59</h></coordinates><panel_attributes/><additional_attributes>15;15;15;50</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>755</x><y>230</y><w>24</w><h>64</h></coordinates><panel_attributes/><additional_attributes>15;15;15;55</additional_attributes></element></umlet_diagram>
