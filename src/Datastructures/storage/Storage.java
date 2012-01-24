@@ -6,7 +6,7 @@ package Datastructures.storage;
 
 import Entity.Constant;
 import Entity.Instance;
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,16 +23,16 @@ public class Storage {
     
     // TOCHECK: Maybe it is really faster if we make the instances classes!
     
-    HashMap<PredAtom,HashInstances>[] memory;
+    HashMap<Term,HashInstances>[] memory;
     
     public Storage(int arity){
         this.memory = new HashMap[arity];
         for(int i = 0; i < memory.length;i++){
-            memory[i] = new HashMap<PredAtom,HashInstances>();
+            memory[i] = new HashMap<Term,HashInstances>();
         }
     }
     
-    public void addInstance(PredAtom[] instance){
+    public void addInstance(Term[] instance){
         for(int i = 0; i < instance.length;i++){
             if(!memory[i].containsKey(instance[i])) memory[i].put(instance[i], new HashInstances());
             if(!memory[i].get(instance[i]).contains(instance)) {
@@ -46,13 +46,13 @@ public class Storage {
      * Precondition: the structure for that instance must exist, otherwise we reach a null pointer exception
      * This method should only be called for instance for which we know they are within the datastructure
      */
-    public void removeInstance(PredAtom[] instance){
+    public void removeInstance(Term[] instance){
         for(int i = 0; i < instance.length;i++){
             memory[i].get(instance[i]).remove(instance);
         }
     }
     
-    public boolean containsInstance(PredAtom[] instance){    
+    public boolean containsInstance(Term[] instance){    
         return memory[0].get(instance[0]).contains(instance);
     }
     
@@ -64,8 +64,8 @@ public class Storage {
      * 
      * PreCondition: selectionCriterion has to be of equalsize to the memory's Arraysize
      */
-    public Collection<PredAtom[]> select(PredAtom[] selectionCriterion){
-        ArrayList<PredAtom[]> ret = new ArrayList<PredAtom[]>();
+    public Collection<Term[]> select(Term[] selectionCriterion){
+        ArrayList<Term[]> ret = new ArrayList<Term[]>();
         
         ArrayList<HashInstances> selected = new ArrayList<HashInstances>();
         
@@ -95,7 +95,7 @@ public class Storage {
                 if(selected.get(i).size() < smallest.size()) smallest = selected.get(i);
             }
             selected.remove(smallest);
-            for(PredAtom[] instance: smallest.getAll()){
+            for(Term[] instance: smallest.getAll()){
                 boolean flag = true;
                 for(HashInstances hI: selected){
                     if(!hI.contains(instance)){
@@ -112,7 +112,7 @@ public class Storage {
     
     public void printAllInstances(){
         for(HashInstances hI: memory[0].values()){
-            for(PredAtom[] instance: hI.getAll()){
+            for(Term[] instance: hI.getAll()){
                 System.out.println(Instance.getInstanceAsString(instance));
             }
         }

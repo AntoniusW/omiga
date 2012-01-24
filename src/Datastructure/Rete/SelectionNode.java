@@ -7,93 +7,99 @@ package Datastructure.Rete;
 import Datastructures.storage.Storage;
 import Entity.FuncTerm;
 import Entity.Instance;
-import Entity.PredInRule;
+import Entity.Atom;
 import Entity.Variable;
-import Interfaces.PredAtom;
+import Interfaces.Term;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
  * @author User
  */
-public class SelectionNode {
+public class SelectionNode extends Node{
     
-    private PredInRule pir;
-    private ArrayList<Node> children;
-    private Storage memory;
+    private Atom atom;
     
     
-    public SelectionNode(PredInRule pir){
-        this.pir = pir;
-        memory = new Storage(pir.getVariables().size());
+    
+    public SelectionNode(Atom atom){
+        this.atom = atom;
         children = new ArrayList<Node>();
+        
+        // we calculate the variable ordering by parsing the atom for variables
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        for(int i = 0; i < atom.getTerms().length;i++){
+            for(Variable v: atom.getTerms()[i].getUsedVariables()){
+                if(!vars.contains(v)) vars.add(v);
+            }
+        }
+        varOrdering = new Variable[vars.size()];
+        vars.toArray(varOrdering);
+        
+        // memory is initialized with the size of the var ordering (as we only need to save variableassignments
+        memory = new Storage(varOrdering.length);
+        
+        /*
+         * This is the old code where we had the caluclation within the atom itself
+        varOrdering = new Variable[atom.getVariables().size()];
+        atom.getVariables().toArray(varOrdering);*/
     }
     
-    public void addInstance(PredAtom[] varAssignment){
-        System.out.println("SelectionNodeAddInstance: " + Instance.getInstanceAsString(varAssignment));
-        // TODO: Here only Vars are assigned: So only let real var assignments come form basic node here
-        // or filter the vars here!
-        
-        ArrayList<Variable> vars = pir.getVariables();
-        for(Variable v: vars){
+    /*
+     * Gets an instance of a predicate as input and unifys it with the schema of the atom. The corresponding variable assignment
+     * then is added to this nodes memory, and all child nodes are informed of the new instance (varAssignment)
+     */
+    @Override
+    public void addInstance(Term[] instance){
+        for(Variable v: varOrdering){
+            // All Variable values used in this nodes pir are set to null
             v.setValue(null);
         }
-        for(int i = 0; i < pir.getAtoms().length;i++){
-            assignVariable4PredAtom(varAssignment[i],pir.getAtoms()[i]);
+        for(int i = 0; i < instance.length; i++){
+            // unifyTerm assigns values to our variables
+            if(!unifyTerm(atom.getTerms()[i],instance[i])) return;
         }
-        PredAtom[] varsAsInstance = new PredAtom[vars.size()];
-        for(int i = 0; i < vars.size();i++){
-            varsAsInstance[i] = vars.get(i).getValue();
-            System.out.println("BLUBB: " + i + " : " + vars.get(i).getValue());
+        
+        Term[] varAssignment2Add = new Term[varOrdering.length];
+        for(int i = 0; i < varOrdering.length;i++){
+            // we create our variable assignment by taking all the values of the variables of our varOrdering.
+            varAssignment2Add[i] = varOrdering[i].getValue();
         }
-        System.out.println("VARS AS INSTANCE: " + Instance.getInstanceAsString(varsAsInstance));
-        memory.addInstance(varsAsInstance);
-        for(Node n: children){
-            n.addInstance(varsAsInstance);
+        this.memory.addInstance(varAssignment2Add);
+        
+        for(Node n: this.children){
+            // we transfer the inserted varAssignment to all childnodes
+            n.addInstance(varAssignment2Add);
         }
-        PredAtom[] sel = {Variable.getVariable("X"),Variable.getVariable("Y"),Variable.getVariable("Z")};
-        System.out.println("Size of all instanceselect: " + memory.select(sel).size());
+        
+        
     }
     
-    private boolean assignVariable4PredAtom(PredAtom pa, PredAtom crit){
-        if(crit.isConstant()){
-            System.err.println("DOING NOTHING!");
-            // Do NOthing. This criteria is already fullfilled when an instances fits this node
-        }
-        if(crit.isVariable()) {
-            System.out.println("Crit = " + crit );
-            if(((Variable)crit).getValue() != null){
-                if(!((Variable)crit).getValue().equals(pa)){
-                    System.err.println("Returning false!");
-                    return false;
-                }else{
-                    ((Variable)crit).setValue(pa);
-                    System.err.println("Set value to: " + pa);
-                } 
+    private boolean unifyTerm(Term schema, Term instance){
+        if (schema.isVariable()){
+            Variable v = (Variable)schema;
+            if(v.getValue() == null ){
+                v.setValue(instance);
             }else{
-                ((Variable)crit).setValue(pa);
-                System.err.println("Set value to: " + pa); 
-            } 
-        }
-        if(crit.isFuncTerm()){
-            for(int i = 0; i < ((FuncTerm)crit).getChildren().size();i++){
-                assignVariable4PredAtom(pa.getChildren().get(i), crit.getChildren().get(i));
+                // if the value of the variable is already assigned we return true if it is the actual term of the instance, false otherwise
+                return v.getValue().equals(instance);
+            }
+        }else{
+            if(schema.isConstant()){
+                return schema.equals(instance);
+            }else{
+                // schema is FuncTerm
+                if(schema.getName().equals(instance.getName())){ // TOCHECK: Stringvergleich
+                    for(int i = 0; i < (schema).getChildren().size();i++){
+                        unifyTerm(schema.getChildren().get(i), instance.getChildren().get(i));
+                    }
+                }
+                
             }
         }
         return true;
-    }
-    
-    public boolean fits(PredAtom[] instance){
-        for(int i = 0; i < pir.getArity();i++){
-            System.out.println(pir.getAtoms()[i]);
-            if(!pir.getAtoms()[i].isParentOf(instance[i])) return false;
-        }
-        return true;
-    }
-    
-    public Storage getMemory(){
-        return this.memory;
-    }
-    
+    } 
     
 }

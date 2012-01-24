@@ -20,8 +20,8 @@ public abstract class ReteNode {
     ArrayList<ReteNode> children;
     ArrayList<Rule> completeRules;
     //      []Pos   ConstID         InstanceID
-    HashMap<PredAtom,HashSet<String>>[] storage;
-    HashMap<PredAtom, HashSet<PredAtom[]>>[] store;
+    HashMap<Term,HashSet<String>>[] storage;
+    HashMap<Term, HashSet<Term[]>>[] store;
     
     
     public ReteNode(Predicate p){
@@ -30,7 +30,7 @@ public abstract class ReteNode {
         this.completeRules = new ArrayList<Rule>();
         this.storage = new HashMap[p.getArity()];
         for(HashMap hm: storage){
-            hm = new HashMap<PredAtom, HashSet<PredAtom[]>>();
+            hm = new HashMap<Term, HashSet<Term[]>>();
         }
     }
 

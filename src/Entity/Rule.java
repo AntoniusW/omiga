@@ -12,12 +12,12 @@ import java.util.ArrayList;
  * @author User
  */
 public class Rule {
-    private PredInRule head;
-    private ArrayList<PredInRule> bodyPlus;
-    private ArrayList<PredInRule> bodyMinus;
+    private Atom head;
+    private ArrayList<Atom> bodyPlus;
+    private ArrayList<Atom> bodyMinus;
     private ArrayList<Operator> operators;
     
-    public Rule(PredInRule head, ArrayList<PredInRule> bodyPlus, ArrayList<PredInRule> bodyMinus, ArrayList<Operator> operators){
+    public Rule(Atom head, ArrayList<Atom> bodyPlus, ArrayList<Atom> bodyMinus, ArrayList<Operator> operators){
         this.head = head;
         this.bodyPlus = bodyPlus;
         this.bodyMinus = bodyMinus;
@@ -26,17 +26,17 @@ public class Rule {
     
     public Rule(){
         this.head = null;
-        this.bodyPlus = new ArrayList<PredInRule>();
-        this.bodyMinus = new ArrayList<PredInRule>();
+        this.bodyPlus = new ArrayList<Atom>();
+        this.bodyMinus = new ArrayList<Atom>();
     }
     
-    public void setHead(PredInRule head){
+    public void setHead(Atom head){
         this.head = head;
     }
-    public void addAtomPlus(PredInRule p){
+    public void addAtomPlus(Atom p){
         this.bodyPlus.add(p);
     }
-    public void addAtomMinus(PredInRule p){
+    public void addAtomMinus(Atom p){
         this.bodyMinus.add(p);
     }
     
@@ -44,8 +44,8 @@ public class Rule {
         //TODO: Is this the definition of safe? or is it also safe when the Variable occurs in the head?
         
         for(BodyAtom ba: bodyMinus){
-            if(ba.getClass().equals(PredInRule.class)){
-                PredInRule pir = (PredInRule)ba;
+            if(ba.getClass().equals(Atom.class)){
+                Atom pir = (Atom)ba;
                 if(!bodyPlus.contains(pir)) return false;
             }
         }
@@ -71,15 +71,19 @@ public class Rule {
         return s.substring(0, s.length()-1) + ".";
     }
 
-    public ArrayList<PredInRule> getBodyMinus() {
+    public ArrayList<Atom> getBodyMinus() {
         return bodyMinus;
     }
 
-    public ArrayList<PredInRule> getBodyPlus() {
+    public ArrayList<Atom> getBodyPlus() {
         return bodyPlus;
     }
+    
+    public ArrayList<Operator> getOperators(){
+        return operators;
+    }
 
-    public PredInRule getHead() {
+    public Atom getHead() {
         return head;
     }
     

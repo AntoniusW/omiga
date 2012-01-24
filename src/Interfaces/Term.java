@@ -13,7 +13,7 @@ import java.util.HashSet;
  *
  * @author xir
  */
-public abstract class PredAtom {
+public abstract class Term {
     
     /*
      * A PredAtom is either a constant a variable or a funcTerm.
@@ -21,30 +21,30 @@ public abstract class PredAtom {
      * Father/Child relation is needed to check if we have to update more schema
      */
     
-    private static HashMap<PredAtom,PredAtom> predAtoms = new HashMap<PredAtom,PredAtom>();
+    private static HashMap<Term,Term> predAtoms = new HashMap<Term,Term>();
     
-    public static void addPredAtom(PredAtom pa){
+    public static void addPredAtom(Term pa){
         predAtoms.put(pa, pa);
     }
     
-    public static PredAtom getPredAtom(PredAtom pa){
+    public static Term getPredAtom(Term pa){
         return predAtoms.get(pa);
     }
-    public static boolean containsPredAtom(PredAtom pa){
+    public static boolean containsPredAtom(Term pa){
         return predAtoms.containsKey(pa);
     }
     
     
     protected String name;
     protected int hash;
-    protected ArrayList<PredAtom> children;
+    protected ArrayList<Term> children;
     
-    public PredAtom(String name, ArrayList<PredAtom> children){
+    public Term(String name, ArrayList<Term> children){
         this.name = name;
         if(children != null){
-            this.children = new ArrayList<PredAtom>(children);
+            this.children = new ArrayList<Term>(children);
         }else{
-            this.children = new ArrayList<PredAtom>(); // is this neccassary?
+            this.children = new ArrayList<Term>(); // is this neccassary?
         }   
         this.hash = this.toString().hashCode();
     }
@@ -53,21 +53,21 @@ public abstract class PredAtom {
         return name;
     }
     
-    public ArrayList<PredAtom> getChildren(){
+    public ArrayList<Term> getChildren(){
         return children;
     }
     /*
      * Implemented over the isParentOf method which changes in the generalisations
      */
-    public boolean isChildOf(PredAtom pa){
+    /*public boolean isChildOf(Term pa){
         return pa.isParentOf(this);
     }
     
     
-    public boolean isParentOf(PredAtom pa){
+    public boolean isParentOf(Term pa){
         //This Code depends on the child class
         return false;
-    }
+    }*/
     @Override
     public boolean equals(Object o){
         //This Code depends on the child class

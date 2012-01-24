@@ -8,7 +8,7 @@ import Entity.Constant;
 import Entity.FuncTerm;
 import Entity.Predicate;
 import Entity.Variable;
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
 
 /**

@@ -6,10 +6,11 @@ package Datastructure.Rete;
 
 import Datastructures.storage.Storage;
 import Entity.Instance;
-import Entity.PredInRule;
-import Interfaces.PredAtom;
+import Entity.Atom;
+import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  *
@@ -18,30 +19,30 @@ import java.util.Collection;
 public class BasicNode {
     
     private Storage memory;
-    private ArrayList<SelectionNode> children;
+    private HashMap<Atom,SelectionNode> children;
     
     public BasicNode(int arity){
         this.memory = new Storage(arity);
-        this.children = new ArrayList<SelectionNode>();
+        this.children = new HashMap<Atom,SelectionNode>();
     }
     
-    public void addInstance(PredAtom[] instance){
+    public void addInstance(Term[] instance){
         System.out.println("BasicNode Add Instance");
         System.out.println("Basic NOde add instance is called with: " + Instance.getInstanceAsString(instance));
         memory.addInstance(instance);
-        for(SelectionNode sn: children){
-            if(sn.fits(instance)) sn.addInstance(instance);
+        for(SelectionNode sn: children.values()){
+            sn.addInstance(instance);
         }
     }
     
-    public void removeInstance(PredAtom[] instance){
+    public void removeInstance(Term[] instance){
         memory.removeInstance(instance);
     }
     
-    public void AddPredInRule(PredInRule pir){
+    public void AddPredInRule(Atom pir){
         SelectionNode sL = new SelectionNode(pir);
-        if (!children.contains(sL))
-            this.children.add(sL);
+        if (!children.containsKey(pir))
+            this.children.put(pir,sL);
     }
     
     /*public Collection<PredAtom[]> select(PredAtom[] selectionCriteria){
@@ -55,7 +56,7 @@ public class BasicNode {
         memory.printAllInstances();
     }
     
-    public ArrayList<SelectionNode> getChildren(){
+    public HashMap<Atom,SelectionNode> getChildren(){
         return this.children;
     }
     

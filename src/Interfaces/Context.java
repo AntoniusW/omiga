@@ -14,9 +14,9 @@ import java.util.Collection;
 public interface Context {
     
     public void addRule(Rule r);
-    public boolean containsFact(Atom a);
-    public boolean addFact(Atom a);
-    public Collection<Atom> selectFacts(Atom a);
+    public boolean containsFact(Term[] a);
+    public boolean addFact(Term[] a);
+    public Collection<Term[]> selectFacts(Term[] a);
     
     public void propagate();
     public void choice();
@@ -25,6 +25,6 @@ public interface Context {
     
     public void printFacts();
     public void printRules();
-    public Collection<Atom> getAnswerset();
+    public Collection<Term[]> getAnswerset();
     
 }

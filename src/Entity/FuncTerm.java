@@ -4,7 +4,7 @@
  */
 package Entity;
 
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -12,21 +12,21 @@ import java.util.HashSet;
  *
  * @author xir
  */
-public class FuncTerm extends PredAtom{
+public class FuncTerm extends Term{
     
     // TOCHECK: maybe we should store the Variables of a functerm at creation time in the functerm to return it when getUsedVariables is called
     
-    public static FuncTerm getFuncTerm(String name, ArrayList<PredAtom> children){
+    public static FuncTerm getFuncTerm(String name, ArrayList<Term> children){
         FuncTerm t = new FuncTerm(name, children);
-        if(PredAtom.containsPredAtom(t)){
-            return (FuncTerm)PredAtom.getPredAtom(t);
+        if(Term.containsPredAtom(t)){
+            return (FuncTerm)Term.getPredAtom(t);
         }else{
-            PredAtom.addPredAtom(t);
+            Term.addPredAtom(t);
             return t;
         }
     }
     
-    private FuncTerm(String name, ArrayList<PredAtom> children){
+    private FuncTerm(String name, ArrayList<Term> children){
         super(name, children);
         this.name = name;
         this.hash = this.toString().hashCode();
@@ -35,8 +35,8 @@ public class FuncTerm extends PredAtom{
     /*
      * A func term is no parent of Variables nor constants, it's only parent to functerms
      */
-    @Override
-    public boolean isParentOf(PredAtom pa) {
+    /*@Override
+    public boolean isParentOf(Term pa) {
         if(pa.getClass().equals(this.getClass())){
             FuncTerm t = (FuncTerm)pa;
             // Functerms of different arity or different name are in no parent/child relation
@@ -50,7 +50,7 @@ public class FuncTerm extends PredAtom{
             }
         }
         return false;
-    }
+    }*/
     
     /*
      * A functerm only equals functerms of same name and same children
@@ -75,7 +75,7 @@ public class FuncTerm extends PredAtom{
      * A Functerm is instanciated iff he contains no variable
      */
     public boolean isInstanciated() {
-        for(PredAtom pa: children){
+        for(Term pa: children){
             if (!pa.isInstanciated()) return false;
         }
         return true;

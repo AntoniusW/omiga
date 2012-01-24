@@ -5,7 +5,7 @@
 package Entity;
 
 import Interfaces.Operand;
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -13,19 +13,19 @@ import java.util.HashSet;
  *
  * @author xir
  */
-public class Variable extends PredAtom implements Operand{
+public class Variable extends Term implements Operand{
     
     
-    private PredAtom value;
+    private Term value;
     
     
 
     public static Variable getVariable(String name){
         Variable v = new Variable(name);
-        if(PredAtom.containsPredAtom(v)){
-            return (Variable)PredAtom.getPredAtom(v);
+        if(Term.containsPredAtom(v)){
+            return (Variable)Term.getPredAtom(v);
         }else{
-            PredAtom.addPredAtom(v);
+            Term.addPredAtom(v);
             return v;
         }
     }
@@ -35,10 +35,10 @@ public class Variable extends PredAtom implements Operand{
         value = null;
     }
 
-    @Override
-    public boolean isParentOf(PredAtom pa) {
+    /*@Override
+    public boolean isParentOf(Term pa) {
         return true;
-    }
+    }*/
     
     @Override
     /*
@@ -47,7 +47,7 @@ public class Variable extends PredAtom implements Operand{
     public boolean equals(Object o) {
         //TODO: Is it faster to compare o.getClass().equals(Variable)?
         if(o.getClass().equals(this.getClass())){
-            if(this.name.equals(((PredAtom)o).getName())) return true;
+            if(this.name.equals(((Term)o).getName())) return true;
         }
         return false;
     }
@@ -98,10 +98,10 @@ public class Variable extends PredAtom implements Operand{
         return ret;
     }
     
-    public PredAtom getValue(){
+    public Term getValue(){
         return value;
     }
-    public void setValue(PredAtom pa){
+    public void setValue(Term pa){
         this.value=pa;
     }
     

@@ -4,7 +4,7 @@
  */
 package testStorage;
 
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import Datastructures.storage.Storage;
 import Entity.Constant;
 import Entity.Instance;
@@ -47,10 +47,10 @@ public class testStorage {
     
     @Test
     public void TestAddMethod1(){
-        PredAtom[] instance1 = {Constant.getConstant("a")};
-        PredAtom[] instance2 = {Constant.getConstant("a")};
-        PredAtom[] instance3 = {Constant.getConstant("b")};
-        PredAtom[] instance4 = {Constant.getConstant("c")};
+        Term[] instance1 = {Constant.getConstant("a")};
+        Term[] instance2 = {Constant.getConstant("a")};
+        Term[] instance3 = {Constant.getConstant("b")};
+        Term[] instance4 = {Constant.getConstant("c")};
 
         memory1.addInstance(instance1);
         memory1.addInstance(instance2);
@@ -62,22 +62,22 @@ public class testStorage {
         assertTrue(memory1.containsInstance(instance3));
         assertTrue(memory1.containsInstance(instance4));
         
-        PredAtom[] selCrit1 = {Constant.getConstant("a")};
+        Term[] selCrit1 = {Constant.getConstant("a")};
         assertTrue(memory1.select(selCrit1).size() == 1);
-        PredAtom[] selCrit2 = {Constant.getConstant("b")};
+        Term[] selCrit2 = {Constant.getConstant("b")};
         assertTrue(memory1.select(selCrit2).size() == 1);
-        PredAtom[] selCrit3 = {Constant.getConstant("c")};
+        Term[] selCrit3 = {Constant.getConstant("c")};
         assertTrue(memory1.select(selCrit3).size() == 1);
         
     }
     
     @Test
     public void TestAddMethod2(){
-        PredAtom[] instance1 = {Constant.getConstant("a"),Constant.getConstant("a")};
-        PredAtom[] instance2 = {Constant.getConstant("a"),Constant.getConstant("b")};
-        PredAtom[] instance3 = {Constant.getConstant("a"),Constant.getConstant("c")};
-        PredAtom[] instance4 = {Constant.getConstant("b"),Constant.getConstant("c")};
-        PredAtom[] instance5 = {Constant.getConstant("a"),Constant.getConstant("a")};
+        Term[] instance1 = {Constant.getConstant("a"),Constant.getConstant("a")};
+        Term[] instance2 = {Constant.getConstant("a"),Constant.getConstant("b")};
+        Term[] instance3 = {Constant.getConstant("a"),Constant.getConstant("c")};
+        Term[] instance4 = {Constant.getConstant("b"),Constant.getConstant("c")};
+        Term[] instance5 = {Constant.getConstant("a"),Constant.getConstant("a")};
 
         memory2.addInstance(instance1);
         memory2.addInstance(instance2);
@@ -92,32 +92,32 @@ public class testStorage {
         assertTrue(memory2.containsInstance(instance5));
         
 
-        PredAtom[] selCrit1 = {Constant.getConstant("a"),Constant.getConstant("a")};
+        Term[] selCrit1 = {Constant.getConstant("a"),Constant.getConstant("a")};
         assertTrue(memory2.select(selCrit1).size() == 1);
-        PredAtom[] selCrit2 = {Constant.getConstant("a"),Constant.getConstant("b")};
+        Term[] selCrit2 = {Constant.getConstant("a"),Constant.getConstant("b")};
         assertTrue(memory2.select(selCrit2).size() == 1);
-        PredAtom[] selCrit3 = {Constant.getConstant("a"),Constant.getConstant("c")};
+        Term[] selCrit3 = {Constant.getConstant("a"),Constant.getConstant("c")};
         assertTrue(memory2.select(selCrit3).size() == 1);
-        PredAtom[] selCrit4 = {Constant.getConstant("b"),Constant.getConstant("c")};
+        Term[] selCrit4 = {Constant.getConstant("b"),Constant.getConstant("c")};
         assertTrue(memory2.select(selCrit4).size() == 1);
         
-        PredAtom[] selVarCrit1 = {Variable.getVariable("X"),Constant.getConstant("a")};
+        Term[] selVarCrit1 = {Variable.getVariable("X"),Constant.getConstant("a")};
         assertTrue(memory2.select(selVarCrit1).size() == 1);
-        PredAtom[] selVarCrit2 = {Variable.getVariable("X"),Constant.getConstant("b")};
+        Term[] selVarCrit2 = {Variable.getVariable("X"),Constant.getConstant("b")};
         assertTrue(memory2.select(selVarCrit2).size() == 1);
-        PredAtom[] selVarCrit3 = {Variable.getVariable("X"),Constant.getConstant("c")};
+        Term[] selVarCrit3 = {Variable.getVariable("X"),Constant.getConstant("c")};
         assertTrue(memory2.select(selVarCrit3).size() == 2);
         
-        PredAtom[] selVarCrit4 = {Constant.getConstant("a"),Variable.getVariable("X")};
+        Term[] selVarCrit4 = {Constant.getConstant("a"),Variable.getVariable("X")};
         assertTrue(memory2.select(selVarCrit4).size() == 3);
-        PredAtom[] selVarCrit5 = {Constant.getConstant("b"),Variable.getVariable("Y")};
+        Term[] selVarCrit5 = {Constant.getConstant("b"),Variable.getVariable("Y")};
         assertTrue(memory2.select(selVarCrit5).size() == 1);
-        PredAtom[] selVarCrit6 = {Constant.getConstant("c"),Variable.getVariable("X")};
+        Term[] selVarCrit6 = {Constant.getConstant("c"),Variable.getVariable("X")};
         assertTrue(memory2.select(selVarCrit6).size() == 0);
         
-        PredAtom[] selVarCrit7 = {Variable.getVariable("X"), Variable.getVariable("X")};
+        Term[] selVarCrit7 = {Variable.getVariable("X"), Variable.getVariable("X")};
         assertTrue(memory2.select(selVarCrit7).size() == 4);
-        PredAtom[] selVarCrit8 = {Variable.getVariable("X"), Variable.getVariable("Y")};
+        Term[] selVarCrit8 = {Variable.getVariable("X"), Variable.getVariable("Y")};
         assertTrue(memory2.select(selVarCrit8).size() == 4);
         
     }

@@ -4,9 +4,11 @@
  */
 package Datastructure.Rete;
 
-import Entity.PredInRule;
+import Entity.Atom;
 import Entity.Predicate;
-import Interfaces.PredAtom;
+import Entity.Rule;
+import Interfaces.Term;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -15,30 +17,85 @@ import java.util.HashMap;
  */
 public class Rete {
     
-    HashMap<Predicate, BasicNode> basicLayer;
-    HashMap<PredInRule, SelectionNode> selectionLayer;
-    HashMap<String, JoinNode> joinLayer;
+    HashMap<Predicate, BasicNode> basicLayerPlus;
+    HashMap<Predicate, BasicNode> basicLayerMinus;
     
     public Rete(){
-        this.basicLayer = new HashMap<Predicate,BasicNode>();
-        this.selectionLayer = new HashMap<PredInRule, SelectionNode>();
-        this.joinLayer = new HashMap<String,JoinNode>();
+        this.basicLayerPlus = new HashMap<Predicate,BasicNode>();
+        this.basicLayerMinus = new HashMap<Predicate,BasicNode>();
     }
     
-    public void addPredInRule(PredInRule pir){
-        if(!basicLayer.containsKey(pir.getPredicate()))
-            this.basicLayer.put(pir.getPredicate(), new BasicNode(pir.getArity()));
-        basicLayer.get(pir.getPredicate()).AddPredInRule(pir);
+    public void addRule(Rule r){
+        //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
+        for(Atom a: r.getBodyPlus()){
+            this.addAtomPlus(a);
+        }
+        for(Atom a: r.getBodyMinus()){
+            this.addAtomMinus(a);
+        }
+        
+        ArrayList<Atom> atoms = (ArrayList<Atom>) r.getBodyPlus().clone();
+        Atom actual = getBestNextAtom(atoms);
+        Atom partner = getBestPartner(atoms, actual);
+        while(!atoms.isEmpty()){
+            
+        }
+        
+        
         
     }
     
-    
-    public void addInstance(Predicate p, PredAtom[] instance){
-        basicLayer.get(p).addInstance(instance);
+    private void createJoin(Node aNode, Atom b, boolean bPositive){
+        SelectionNode bNode;
+        if(bPositive){
+            bNode = this.basicLayerPlus.get(b.getPredicate()).getChildren().get(b);
+        }else{
+            bNode = this.basicLayerMinus.get(b.getPredicate()).getChildren().get(b);
+        }
+        // TOCHECK: Keep track of all JoinNodes such that we create each joinNode only once!
+        JoinNode jn = new JoinNode(aNode,bNode);  
     }
     
-    public BasicNode getBasicNode(Predicate p){
-        return basicLayer.get(p);
+    private Atom getBestPartner(ArrayList<Atom> atoms, Atom atom){
+        Atom a = atoms.get(0);
+        atoms.remove(a);
+        return a;
+    }
+    
+    private Atom getBestNextAtom(ArrayList<Atom> atoms){
+        Atom a = atoms.get(0);
+        atoms.remove(a);
+        return a;
+    }
+    
+    public void addAtomPlus(Atom atom){
+        if(!basicLayerPlus.containsKey(atom.getPredicate()))
+            this.basicLayerPlus.put(atom.getPredicate(), new BasicNode(atom.getArity()));
+        basicLayerPlus.get(atom.getPredicate()).AddPredInRule(atom);
+        
+    }
+    
+    public void addAtomMinus(Atom atom){
+        if(!basicLayerMinus.containsKey(atom.getPredicate()))
+            this.basicLayerMinus.put(atom.getPredicate(), new BasicNode(atom.getArity()));
+        basicLayerMinus.get(atom.getPredicate()).AddPredInRule(atom);
+        
+    }
+    
+    public void addInstancePlus(Predicate p, Term[] instance){
+        basicLayerPlus.get(p).addInstance(instance);
+    }
+    
+     
+    public void addInstanceMinus(Predicate p, Term[] instance){
+        basicLayerMinus.get(p).addInstance(instance);
+    }
+    
+    /*
+     * Only used for testing?
+     */
+    public BasicNode getBasicNodePlus(Predicate p){
+        return basicLayerPlus.get(p);
     }
     
     

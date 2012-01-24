@@ -4,7 +4,7 @@
  */
 package Entity;
 
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import java.util.HashSet;
  *
  * @author User
  */
-public class Constant extends PredAtom {
+public class Constant extends Term {
     
     
         /*
@@ -26,10 +26,10 @@ public class Constant extends PredAtom {
      */
     public static Constant getConstant(String name){
         Constant c = new Constant(name);
-        if(PredAtom.containsPredAtom(c)){
-            return (Constant)PredAtom.getPredAtom(c);
+        if(Term.containsPredAtom(c)){
+            return (Constant)Term.getPredAtom(c);
         }else{
-            PredAtom.addPredAtom(c);
+            Term.addPredAtom(c);
             return c;
         }
     }
@@ -38,11 +38,11 @@ public class Constant extends PredAtom {
         super(name, null);
     }
 
-    @Override
-    public boolean isParentOf(PredAtom pa) {
+    /*@Override
+    public boolean isParentOf(Term pa) {
         if (this.equals(pa)) return true;
         return false;
-    }
+    }*/
     
     @Override
     /*
@@ -50,7 +50,7 @@ public class Constant extends PredAtom {
      */
     public boolean equals(Object o) {
         if(o.getClass().equals(this.getClass())){
-            if(this.name.equals(((PredAtom)o).getName())) return true;
+            if(this.name.equals(((Term)o).getName())) return true;
         }
         return false;
     }

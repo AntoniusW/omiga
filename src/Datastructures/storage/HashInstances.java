@@ -5,7 +5,7 @@
 package Datastructures.storage;
 
 import Entity.Instance;
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,16 +20,16 @@ public class HashInstances{
     // TOCHECK: Maybe it is really faster to make the instances classes!
     // Then we can compare Speicheradressen
     
-    private HashMap<Integer, ArrayList<PredAtom[]>> memory;
+    private HashMap<Integer, ArrayList<Term[]>> memory;
     
     public HashInstances(){
-        memory = new HashMap<Integer, ArrayList<PredAtom[]>>();
+        memory = new HashMap<Integer, ArrayList<Term[]>>();
     }
     
     // TOCHECK: if we ensure that each instance is added only once via the Rete Network this gets much faster as we can skip the contains!
-    public void add(PredAtom[] instance){
+    public void add(Term[] instance){
         if(!memory.containsKey(Instance.hash(instance))){
-            ArrayList<PredAtom[]> aL = new ArrayList<PredAtom[]>();
+            ArrayList<Term[]> aL = new ArrayList<Term[]>();
             aL.add(instance);
             memory.put(Instance.hash(instance), aL);
             
@@ -45,28 +45,28 @@ public class HashInstances{
         return this.getAll().size();
     }
     
-    private boolean compareInstances(PredAtom[] ins1, PredAtom[] ins2){
+    private boolean compareInstances(Term[] ins1, Term[] ins2){
         for(int i = 0; i < ins1.length; i++){
             if (!ins1[i].equals(ins2[i])) return false;
         }
         return true;
     }
     
-    public void remove(PredAtom[] instance){
-        ArrayList<PredAtom[]> aL = memory.get(Instance.hash(instance));
-        for(PredAtom[] ins: aL){
+    public void remove(Term[] instance){
+        ArrayList<Term[]> aL = memory.get(Instance.hash(instance));
+        for(Term[] ins: aL){
             if (compareInstances(ins,instance)) {
                 aL.remove(ins);
             }
         }
     }
     
-    public boolean contains(PredAtom[] instance){
+    public boolean contains(Term[] instance){
         //System.out.println("LOL: " + Instance.getInstanceAsString(instance));
         if(!memory.containsKey(Instance.hash(instance))) {
             return false;
         } //TOCHECK: Maybe not needed
-        for(PredAtom[] ins:  memory.get(Instance.hash(instance))){
+        for(Term[] ins:  memory.get(Instance.hash(instance))){
             //System.out.println(Instance.getInstanceAsString2(instance) + " vs " + Instance.getInstanceAsString2(ins));
             if (compareInstances(ins, instance)) return true;
         }
@@ -75,8 +75,8 @@ public class HashInstances{
     
     // TOCHECK: Maybe we should have a seperate list with all instances in it to return here
     // this would lead to increased removement costs
-    public Collection<PredAtom[]> getAll(){
-        ArrayList<PredAtom[]> ret = new ArrayList<PredAtom[]>();
+    public Collection<Term[]> getAll(){
+        ArrayList<Term[]> ret = new ArrayList<Term[]>();
         for(ArrayList aL: this.memory.values()){
             ret.addAll(aL);
         }

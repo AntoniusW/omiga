@@ -8,8 +8,8 @@ import Entity.Operator;
 import Interfaces.Operand;
 import Interfaces.BodyAtom;
 import java.util.ArrayList;
-import Interfaces.PredAtom;
-import Entity.PredInRule;
+import Interfaces.Term;
+import Entity.Atom;
 import Entity.Rule;
 import Entity.Variable;
 import org.junit.After;
@@ -56,21 +56,21 @@ public class RulesTest {
     public void TestRuleCreation(){
         Variable x = Variable.getVariable("X");
         Variable y = Variable.getVariable("Y");
-        PredAtom[] patoms = new PredAtom[2];
+        Term[] patoms = new Term[2];
         patoms[0] = x;
         patoms[1] = y;
-        PredInRule head = new PredInRule("p",2,patoms);
-        PredAtom[] patoms1 = new PredAtom[1];
+        Atom head = new Atom("p",2,patoms);
+        Term[] patoms1 = new Term[1];
         patoms1[0] = x;
-        PredInRule q = new PredInRule("q",1,patoms1);
-        PredAtom[] patoms2 = new PredAtom[1];
+        Atom q = new Atom("q",1,patoms1);
+        Term[] patoms2 = new Term[1];
         patoms2[0] = y;
-        PredInRule r = new PredInRule("r",1,patoms2);
-        ArrayList<PredInRule> aL = new ArrayList<PredInRule>();
+        Atom r = new Atom("r",1,patoms2);
+        ArrayList<Atom> aL = new ArrayList<Atom>();
         aL.add(q);
         aL.add(r);
         
-        Rule r1 = new Rule(head,aL,new ArrayList<PredInRule>(), new ArrayList<Operator>());
+        Rule r1 = new Rule(head,aL,new ArrayList<Atom>(), new ArrayList<Operator>());
         
         //System.out.println(r1);
         
@@ -86,13 +86,13 @@ public class RulesTest {
      */
     public void TestRuleCreationNew(){
         Rule r1 = new Rule();
-        PredInRule head = new PredInRule("p",2);
+        Atom head = new Atom("p",2);
         head.setAtomAt(0, Variable.getVariable("X"));
         head.setAtomAt(1, Variable.getVariable("Y"));
         r1.setHead(head);
-        PredInRule q = new PredInRule("q",1);
+        Atom q = new Atom("q",1);
         q.setAtomAt(0, Variable.getVariable("X"));
-        PredInRule r = new PredInRule("r",1);
+        Atom r = new Atom("r",1);
         r.setAtomAt(0, Variable.getVariable("Y"));
         r1.addAtomPlus(q);
         r1.addAtomPlus(r);

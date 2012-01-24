@@ -6,11 +6,11 @@ package testRete;
 
 import Datastructure.Rete.BasicNode;
 import Datastructure.Rete.Rete;
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
 import Entity.Constant;
 import Entity.FuncTerm;
-import Entity.PredInRule;
+import Entity.Atom;
 import Entity.Predicate;
 import Entity.Variable;
 import org.junit.After;
@@ -49,13 +49,13 @@ public class SelectionNodes {
     
     @Before
     public void setUp() {
-        ArrayList<PredAtom> children1 = new ArrayList<PredAtom>();
+        ArrayList<Term> children1 = new ArrayList<Term>();
         children1.add(X);
         f1 = FuncTerm.getFuncTerm("f1", children1);
-        ArrayList<PredAtom> children2 = new ArrayList<PredAtom>();
+        ArrayList<Term> children2 = new ArrayList<Term>();
         children2.add(a);
         f2 = FuncTerm.getFuncTerm("f2", children2);
-        ArrayList<PredAtom> children3 = new ArrayList<PredAtom>();
+        ArrayList<Term> children3 = new ArrayList<Term>();
         children3.add(f2);
         children3.add(b);
         f3 = FuncTerm.getFuncTerm("f3", children3);
@@ -72,41 +72,45 @@ public class SelectionNodes {
     @Test
     public void testSelectionNodeAddInstance(){
         Predicate p = Predicate.getPredicate("p",3);
-        PredInRule pir = new PredInRule("p", 3);
+        Atom pir = new Atom("p", 3);
         pir.setAtomAt(0, X);
         pir.setAtomAt(1, Y);
         pir.setAtomAt(2, Z);
         
-        PredAtom[] instance1 = {a,a,a};
-        PredAtom[] instance2 = {a,a,b};
-        PredAtom[] instance3 = {a,a,c};
-        PredAtom[] instance4 = {a,b,a};
-        PredAtom[] instance5 = {a,b,b};
-        PredAtom[] instance6 = {a,b,c};
-        PredAtom[] instance7 = {a,c,a};
-        PredAtom[] instance8 = {a,c,b};
-        PredAtom[] instance9 = {a,c,c};
+        Term[] instance1 = {a,a,a};
+        Term[] instance2 = {a,a,b};
+        Term[] instance3 = {a,a,c};
+        Term[] instance4 = {a,b,a};
+        Term[] instance5 = {a,b,b};
+        Term[] instance6 = {a,b,c};
+        Term[] instance7 = {a,c,a};
+        Term[] instance8 = {a,c,b};
+        Term[] instance9 = {a,c,c};
         
         Rete r = new Rete();
-        r.addPredInRule(pir);
+        r.addAtomPlus(pir);
         
-        r.addInstance(p, instance1);
-        r.addInstance(p, instance2);
-        r.addInstance(p, instance3);
-        r.addInstance(p, instance4);
-        r.addInstance(p, instance5);
-        r.addInstance(p, instance6);
-        r.addInstance(p, instance7);
-        r.addInstance(p, instance8);
-        r.addInstance(p, instance9);
+        r.addInstancePlus(p, instance1);
+        r.addInstancePlus(p, instance2);
+        r.addInstancePlus(p, instance3);
+        r.addInstancePlus(p, instance4);
+        r.addInstancePlus(p, instance5);
+        r.addInstancePlus(p, instance6);
+        r.addInstancePlus(p, instance7);
+        r.addInstancePlus(p, instance8);
+        r.addInstancePlus(p, instance9);
         
         
-        BasicNode bn = r.getBasicNode(p);
-        PredAtom[] selectionCriterion = {X,Y,Z};
+        BasicNode bn = r.getBasicNodePlus(p);
+        Term[] selectionCriterion = {X,Y,Z};
         System.out.println("CHILDREN: " + bn.getChildren());
         System.out.println("CHILDREN SIZE: " + bn.getChildren().size());
-        System.out.println("SELECTED: " + bn.getChildren().get(0).getMemory().select(selectionCriterion));
-        System.out.println("SELECTED SIZE: " + bn.getChildren().get(0).getMemory().select(selectionCriterion).size());
-        assertTrue(bn.getChildren().get(0).getMemory().select(selectionCriterion).size() == 9);
+        System.out.println("SELECTED PIR: " + bn.getChildren().get(pir));
+        System.out.println("SELECTED PIR Memory: " + bn.getChildren().get(pir).testMethod_getMemory());
+        System.out.println("SELECTED: " + bn.getChildren().get(pir).testMethod_getMemory().select(selectionCriterion));
+        System.out.println("SELECTED SIZE: " + bn.getChildren().get(pir).testMethod_getMemory().select(selectionCriterion).size());
+        assertTrue(bn.getChildren().get(pir).testMethod_getMemory().select(selectionCriterion).size() == 9);
+        
+        bn.getChildren().get(pir).testMethod_getMemory().printAllInstances();
     }
 }

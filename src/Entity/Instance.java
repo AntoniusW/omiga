@@ -4,7 +4,7 @@
  */
 package Entity;
 
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import java.util.HashMap;
 
 /**
@@ -28,11 +28,11 @@ public class Instance {
         return s;
     }*/
     
-    public static int hash(PredAtom[] instance){
+    public static int hash(Term[] instance){
         return getInstanceAsString(instance).hashCode();
     }
     
-    public static String getInstanceAsString(PredAtom[] instance){
+    public static String getInstanceAsString(Term[] instance){
         String s = "[";
         for(int i = 0; i < instance.length;i++){
             s = s + instance[i].toString() + ",";

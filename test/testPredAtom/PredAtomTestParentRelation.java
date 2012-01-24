@@ -7,7 +7,7 @@ package testPredAtom;
 import Entity.FuncTerm;
 import java.util.ArrayList;
 import Entity.Constant;
-import Interfaces.PredAtom;
+import Interfaces.Term;
 import Entity.Variable;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -50,14 +50,14 @@ public class PredAtomTestParentRelation {
     // public void hello() {}
     
     
-    @Test
+    /*@Test
     public void TestParentChildRelationForVariables(){
-        PredAtom c1 = Constant.getConstant("x");
-        PredAtom v1 = Variable.getVariable("Var1");
-        PredAtom v2 = Variable.getVariable("Var2");
-        ArrayList<PredAtom> children = new ArrayList<PredAtom>();
+        Term c1 = Constant.getConstant("x");
+        Term v1 = Variable.getVariable("Var1");
+        Term v2 = Variable.getVariable("Var2");
+        ArrayList<Term> children = new ArrayList<Term>();
         children.add(c1);
-        PredAtom f1 = FuncTerm.getFuncTerm("f", children);
+        Term f1 = FuncTerm.getFuncTerm("f", children);
     
         assertTrue(v1.isParentOf(c1)); // A variable is parent of any constant
         assertFalse(v1.isChildOf(c1)); // A variable is never child of a constant
@@ -73,12 +73,12 @@ public class PredAtomTestParentRelation {
     
     @Test
     public void TestParentChildRelationForConstants(){
-        PredAtom c1 = Constant.getConstant("x");
-        PredAtom c2 = Constant.getConstant("y");
-        PredAtom v1 = Variable.getVariable("Var1");
-        ArrayList<PredAtom> children = new ArrayList<PredAtom>();
+        Term c1 = Constant.getConstant("x");
+        Term c2 = Constant.getConstant("y");
+        Term v1 = Variable.getVariable("Var1");
+        ArrayList<Term> children = new ArrayList<Term>();
         children.add(c1);
-        PredAtom f1 = FuncTerm.getFuncTerm("f", children);
+        Term f1 = FuncTerm.getFuncTerm("f", children);
     
         assertTrue(c1.isParentOf(c1));   // a constant is always parent of itself
         assertTrue(c1.isChildOf(c1));    // a constant is always child of itself
@@ -93,24 +93,24 @@ public class PredAtomTestParentRelation {
     
     @Test
     public void TestParentChildRelationForFuncTerms(){
-        PredAtom c1 = Constant.getConstant("x");
-        PredAtom c2 = Constant.getConstant("y");
-        PredAtom v1 = Variable.getVariable("Var1");
-        ArrayList<PredAtom> children = new ArrayList<PredAtom>();
+        Term c1 = Constant.getConstant("x");
+        Term c2 = Constant.getConstant("y");
+        Term v1 = Variable.getVariable("Var1");
+        ArrayList<Term> children = new ArrayList<Term>();
         children.add(c1);
-        PredAtom f1 = FuncTerm.getFuncTerm("f1", children);
+        Term f1 = FuncTerm.getFuncTerm("f1", children);
         System.out.println(f1);
-        ArrayList<PredAtom> children2 = new ArrayList<PredAtom>();
+        ArrayList<Term> children2 = new ArrayList<Term>();
         children2.add(c2);
-        PredAtom f2 = FuncTerm.getFuncTerm("f2", children2);
-        ArrayList<PredAtom> children3 = new ArrayList<PredAtom>();
+        Term f2 = FuncTerm.getFuncTerm("f2", children2);
+        ArrayList<Term> children3 = new ArrayList<Term>();
         children3.add(v1);
-        PredAtom f3 = FuncTerm.getFuncTerm("f1", children3);
-        PredAtom f4 = FuncTerm.getFuncTerm("f4", children3);
-        /*System.out.println("_______________");
+        Term f3 = FuncTerm.getFuncTerm("f1", children3);
+        Term f4 = FuncTerm.getFuncTerm("f4", children3);
+        System.out.println("_______________");
         System.out.println(f1);
         System.out.println(f2);
-        System.out.println(f3);*/
+        System.out.println(f3);
     
         assertFalse(f1.isParentOf(c1));   // a functerm is never parent of a constant
         assertFalse(f1.isChildOf(c1));    // a functerm is never child of a constant
@@ -125,13 +125,13 @@ public class PredAtomTestParentRelation {
         assertFalse(f1.isParentOf(v1));  // a functerm is never parent of a variable
         assertTrue(f1.isChildOf(v1));   // a functerm is always child of a variable
         
-    }
+    }*/
     
     @Test
     public void TestingTheFunctermConstructer(){
-        PredAtom c1 = Constant.getConstant("c1");
-        PredAtom v1 = Variable.getVariable("v1");
-        ArrayList<PredAtom> children = new ArrayList<PredAtom>();
+        Term c1 = Constant.getConstant("c1");
+        Term v1 = Variable.getVariable("v1");
+        ArrayList<Term> children = new ArrayList<Term>();
         children.add(c1);
         FuncTerm f1 = FuncTerm.getFuncTerm("f1", children);
         FuncTerm f2 = FuncTerm.getFuncTerm("f2", children);
@@ -165,19 +165,19 @@ public class PredAtomTestParentRelation {
     
     @Test
     public void TestEqualityAMontPredAtoms(){
-        PredAtom c1 = Constant.getConstant("x");
-        PredAtom c2 = Constant.getConstant("x");
-        PredAtom c3 = Constant.getConstant("y");
-        PredAtom v1 = Variable.getVariable("Var1");
-        PredAtom v2 = Variable.getVariable("Var1");
-        PredAtom v3 = Variable.getVariable("Var2");
-        ArrayList<PredAtom> children = new ArrayList<PredAtom>();
+        Term c1 = Constant.getConstant("x");
+        Term c2 = Constant.getConstant("x");
+        Term c3 = Constant.getConstant("y");
+        Term v1 = Variable.getVariable("Var1");
+        Term v2 = Variable.getVariable("Var1");
+        Term v3 = Variable.getVariable("Var2");
+        ArrayList<Term> children = new ArrayList<Term>();
         children.add(c1);
-        PredAtom f1 = FuncTerm.getFuncTerm("f", children);
-        PredAtom f2 = FuncTerm.getFuncTerm("f", children);
-        PredAtom f3 = FuncTerm.getFuncTerm("f3", children);
+        Term f1 = FuncTerm.getFuncTerm("f", children);
+        Term f2 = FuncTerm.getFuncTerm("f", children);
+        Term f3 = FuncTerm.getFuncTerm("f3", children);
         children.add(f1);
-        PredAtom f4 = FuncTerm.getFuncTerm("f", children);
+        Term f4 = FuncTerm.getFuncTerm("f", children);
         
         assertTrue(c1.equals(c1));
         assertTrue(c1.equals(c2));
