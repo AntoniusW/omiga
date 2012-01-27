@@ -28,6 +28,7 @@ public class Rule {
         this.head = null;
         this.bodyPlus = new ArrayList<Atom>();
         this.bodyMinus = new ArrayList<Atom>();
+        this.operators = new ArrayList<Operator>();
     }
     
     public void setHead(Atom head){

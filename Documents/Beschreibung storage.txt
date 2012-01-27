@@ -1,0 +1,64 @@
+Package Datastructure.storage:
+
+Class HashInstances:
+
+This class is used to store instances for one predicate. As we use Arrays of Terms as instances in our calculation
+a standard ArrayList will not fit our needs, as the comparism between two Arrays is done via the Object equals method.
+Which will always result in false if it's not the same array, even if it has the same content. (Therefore contains will
+not work in the sense we intend it to work). Furtheremore lookUptime in a list sucks. Therefore we use a HashMap where
+we use a special created hashValue of our instances as a key, and an ArrayList as values. 
+The hashValue for our instances is obtained via the static Method int hash(Term[] instance) within the static class Instance.
+
+HashMap<Integer, ArrayList<Term[]>> memory
+
+Whenever an instance is added to our datastructure we have to check if this instance is already there, if not we add it.
+To check if an instance is contained we of course have to compare it to all the other instances of that list, which takes time.
+Anyway this is the standard procedere for an unsorted List and can't be done better. Anyway, the lists should be very small,
+or even contain only one element, as the instances itself are stored via it's hashvalue. (So we have sorting one layer above).
+
+Please Note: We do not have to check for an instance to be contained here, if the retenetwork ensures us to never add an instance,
+twice. This will not decrease the runtime, since the rete network needs the containMethod of this class to check if an instance,
+is already there, but it should not be done twice, and we probably will do this in the rete network, since there we then have to
+handle the datatransfer to further nodes, if we add a new instance!
+
+
+	
+Class Storage:
+
+This class is used to sort stored instances for one predicate.
+It is a wrapper for the following datastructure: HashMap<Term,HashInstances>[] memory
+
+We have an Array of HashMaps, where each HashMap resembles a sortation of the Terms that occur at that position,
+in all stored instances. So if we want to know all instances that have for example 'a' at the first position we just
+look into our HashMap at position 1, for the key 'a' and there find all the instances for whcih this holds.
+(The instances itself are stored within a class called HashInstances, you can see this as a List of instances.)
+
+This kind of memory enables us to make fast selections over our instances, but of course we have to keep up our sorted
+index. Therefore whenever an instance is added or removed, we have to add/remove it from all our HashMaps.
+Please Note: Each instances exists only once, we do not need n times space to store this, we just store n pointers to these instances.
+
+
+Runtime Analysis: where n is the arity of the corresponding predicate and therefore the lengh of our HashMap Array
+and i is the number of all instances stored.
+
+AddInstance: O(n*i), Theta(n)
+Please be aware that this worst time complexty results from the check if the instance we add is already there. In the average case
+this will really lead to i but rather to a constant ~3-5 --> O(5n).
+Furthermore if we garantee our Retenetwok to not add the same instance twice we get O(n).
+
+remove instance: O(n)
+
+containsInstance: O(i). Theta(1).
+Worst runtime arises from the case were all instances start with the same term, and got the same hashValue.
+In praxis this will not happend, and we have constant time.
+
+select: a select with zero or one fixed positions will lead to Theta(1) runtime. 
+	  a select with n fixed positions will lead to Theta(1*i'*n-1) for n > 0 and i' beeing the smallest number of 
+	  instances that are selected at any fixed position.
+	  Whenever possible rather use containsInstance than a select with all positions fixed!
+
+SideNote: If we notice that we often have to do selects with all fixed positions we will add a special case to the select Method
+		to catch this case.
+
+printAllInstances: O(#terms + i)
+

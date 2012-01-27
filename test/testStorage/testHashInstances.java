@@ -4,7 +4,7 @@
  */
 package testStorage;
 
-import Datastructures.storage.HashInstances;
+import Datastructure.storage.HashInstances;
 import Entity.Constant;
 import org.junit.After;
 import org.junit.AfterClass;

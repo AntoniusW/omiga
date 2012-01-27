@@ -4,7 +4,8 @@
  */
 package Datastructure.Rete;
 
-import Datastructures.storage.Storage;
+import Datastructure.storage.Storage;
+import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
@@ -14,22 +15,33 @@ import java.util.Collection;
  *
  * @author User
  */
-public class JoinNode {
+public class JoinNode extends Node{
     
     Node a;
     Node b;
-    
-    Variable[] varOrdering;
-    Storage memory;
-    ArrayList<Node> children;
     
     /*
      * Select: Wir gehen einfach das Variable Ordering der anderen Node durch und setzen alle Variablen nach der Instanz davon
      */
     
-    public JoinNode(Node a, Node b){
+    public JoinNode(Node a, Node b, Rete rete){
+        super(rete);
         this.a = a;
         this.b = b;
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        for(Variable v: a.getVarOrdering()){
+            vars.add(v);
+        }
+        for(Variable v: b.getVarOrdering()){
+            if(!vars.contains(v)) vars.add(v);
+        }
+        varOrdering = new Variable[vars.size()];
+        vars.toArray(varOrdering);
+        
+        this.memory = new Storage(varOrdering.length);
+        
+        this.a.addChild(this);
+        this.b.addChild(this);
     }
     
     
@@ -46,7 +58,8 @@ public class JoinNode {
         // then we assign the variables of the node where the isntance comes from with the instanciated values of that instance
         // our selection Criteria is then the array consisting of the values of the VarOrdering of the other node
         for(Variable v: selectFromHere.getVarOrdering()){
-            v.setValue(null);
+            // we set the value of the variable to itself, as the storage only handles variables and not null values
+            v.setValue(v);
         }
         for(int i = 0; i < n.getVarOrdering().length;i++){
             n.getVarOrdering()[i].setValue(instance[i]);
@@ -60,6 +73,7 @@ public class JoinNode {
         // We select from the other node via our selectionCriterion
         // and add to our memory the combination of Variablevalues for each joinpartner
         
+        
         Collection<Term[]> joinPartners = selectFromHere.select(selectionCriteria);
         for(Term[] varAssignment: joinPartners){
             for(int i = 0; i < selectFromHere.getVarOrdering().length;i++){
@@ -72,7 +86,7 @@ public class JoinNode {
             this.memory.addInstance(toAdd);
             // We inform all children of this node that a new instance has arrived
             for(Node child: this.children){
-                child.addInstance(toAdd);
+                child.addInstance(toAdd,this);
             }
         }
         
@@ -81,6 +95,10 @@ public class JoinNode {
         
     }
     
+    @Override
+    public String toString(){
+        return "JoinNode: " + this.a.toString() + this.b.toString();
+    }
     
     
     

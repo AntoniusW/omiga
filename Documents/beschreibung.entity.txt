@@ -1,0 +1,54 @@
+package Entity:
+
+
+class constant:
+
+A constant is an entity object resembling a logical constant. It has only a name and no further functionality.
+
+
+There is no public constructor for this class. If you want to get a constant use the Static Method: getConstant(String name).
+
+A constant extends Term. See terms for further usage.
+
+Class Variable:
+
+A Variable is an entity object resembling a logical variable. It has a name and a value, where the value is used for easier
+calculation within the rete Network. For use of the value attribute see Rete.
+
+There is no public constructor for this class. If you want to get a variable use the Static Method: getVariable(String name).
+
+Class FuncTerm:
+
+A FuncTerm is an entity object resembling a logical function term. It has a name, and children of type Term 
+(so either Variables, Constants, FuncTerms).
+
+There is no public constructor for this class. If you want to get a FuncTerm use the Static Method: getFuncTerm(String name).
+
+
+Class Predicate:
+
+A predicate is an entity object resembling a logical predicate of ASP. It has a name and an arity.
+Furthermore this class is used as a Key in our rete network. Therefore hashCode and equals is implemented.
+
+There is no public constructor for this class. if you want to get a predicate use the static method getPredicate(String name, int arity)
+
+Class Atom:
+
+An atom is an entity object resembling a logical atom of ASP. it has a predicate and a list of terms.
+Furthermore this clas is used as a key in our rete netowrk. Therefore hashCode and equals is implemented.
+
+Class Rule:
+
+A rule is an entity object resembling and logcial ASP rule. it has a head, a positive body, a negative body, and a list of operators.
+rules only resemble rules and are not needed during calculation, we just use them while reading a context
+and to build the rete network at startup.
+
+Class Instance:
+
+This class is only used statically. In our calculation instances are term-arrays. In order to handle term-arrays easier,
+this class provides some static methodes to compare them, get their hashvalue or their String repreentation.
+
+
+
+
+

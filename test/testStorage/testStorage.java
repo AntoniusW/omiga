@@ -5,7 +5,7 @@
 package testStorage;
 
 import Interfaces.Term;
-import Datastructures.storage.Storage;
+import Datastructure.storage.Storage;
 import Entity.Constant;
 import Entity.Instance;
 import Entity.Variable;

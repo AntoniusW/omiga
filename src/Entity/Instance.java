@@ -35,7 +35,7 @@ public class Instance {
     public static String getInstanceAsString(Term[] instance){
         String s = "[";
         for(int i = 0; i < instance.length;i++){
-            s = s + instance[i].toString() + ",";
+            s = s + instance[i] + ",";
         }
         return s.substring(0,s.length()-1) + "]";
         //return "a";

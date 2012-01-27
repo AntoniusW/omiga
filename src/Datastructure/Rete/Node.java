@@ -4,7 +4,7 @@
  */
 package Datastructure.Rete;
 
-import Datastructures.storage.Storage;
+import Datastructure.storage.Storage;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
@@ -19,6 +19,12 @@ public abstract class Node {
     protected Variable[] varOrdering;
     protected Storage memory;
     protected ArrayList<Node> children;
+    protected Rete rete;
+    
+    public Node(Rete rete){
+        this.rete = rete;
+        this.children = new ArrayList<Node>();
+    }
     
     public Variable[] getVarOrdering(){
         return varOrdering;
@@ -28,7 +34,7 @@ public abstract class Node {
         return memory.select(selectionCriteria);
     }
     
-    public void addInstance(Term[] instance){
+    public void addInstance(Term[] instance, Node from){
         // has to be implemented by each NodeTye
     }
     
@@ -42,6 +48,16 @@ public abstract class Node {
     public Storage testMethod_getMemory(){
         return this.memory;
     }
+    
+    public ArrayList<Node> getChildren(){
+        return this.children;
+    }
+    
+    public void addChild(Node n){
+        if (!this.children.contains(n)) this.children.add(n);
+    }
+    
+
     
     
 }

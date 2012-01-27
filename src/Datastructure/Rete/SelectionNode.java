@@ -4,7 +4,7 @@
  */
 package Datastructure.Rete;
 
-import Datastructures.storage.Storage;
+import Datastructure.storage.Storage;
 import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Atom;
@@ -24,7 +24,8 @@ public class SelectionNode extends Node{
     
     
     
-    public SelectionNode(Atom atom){
+    public SelectionNode(Atom atom, Rete rete){
+        super(rete);
         this.atom = atom;
         children = new ArrayList<Node>();
         
@@ -50,9 +51,12 @@ public class SelectionNode extends Node{
     /*
      * Gets an instance of a predicate as input and unifys it with the schema of the atom. The corresponding variable assignment
      * then is added to this nodes memory, and all child nodes are informed of the new instance (varAssignment)
+     *
+     * from == null
      */
     @Override
-    public void addInstance(Term[] instance){
+    public void addInstance(Term[] instance, Node from){
+        //System.out.println(this + " addInstance is called with: " + Instance.getInstanceAsString(instance));
         for(Variable v: varOrdering){
             // All Variable values used in this nodes pir are set to null
             v.setValue(null);
@@ -71,12 +75,15 @@ public class SelectionNode extends Node{
         
         for(Node n: this.children){
             // we transfer the inserted varAssignment to all childnodes
-            n.addInstance(varAssignment2Add);
+            n.addInstance(varAssignment2Add, this);
         }
         
         
     }
     
+    /*
+     * 
+     */
     private boolean unifyTerm(Term schema, Term instance){
         if (schema.isVariable()){
             Variable v = (Variable)schema;
@@ -101,5 +108,10 @@ public class SelectionNode extends Node{
         }
         return true;
     } 
+    
+    @Override
+    public String toString(){
+        return "SelectionNode " + this.atom;
+    }
     
 }
