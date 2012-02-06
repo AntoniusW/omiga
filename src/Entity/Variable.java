@@ -105,4 +105,13 @@ public class Variable extends Term implements Operand{
         this.value=pa;
     }
     
+    @Override
+    public boolean equalsType(Term t){
+        if(this.getClass() == t.getClass()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
 }

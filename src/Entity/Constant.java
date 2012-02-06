@@ -86,6 +86,16 @@ public class Constant extends Term {
         return null;
     }
     
+    @Override
+    public boolean equalsType(Term t){
+        if(this.getClass() != t.getClass()){
+            Constant that = (Constant) t;
+            return this.name.equals(that.name);
+        }else{
+            return false;
+        }
+    }
+    
     
     
 }

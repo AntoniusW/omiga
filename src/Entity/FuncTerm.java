@@ -118,5 +118,25 @@ public class FuncTerm extends Term{
         return ret;
     }
     
+    @Override
+    public boolean equalsType(Term t){
+        if(this.getClass() != t.getClass()){
+            FuncTerm that = (FuncTerm)t;
+            if (this.name.equals(that.name)){
+                if( this.children.size() == that.children.size()){
+                    boolean flag = true;
+                    for(int i = 0; i < this.children.size();i++){
+                        if (!this.children.get(i).equalsType(that.children.get(i))){
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     
 }

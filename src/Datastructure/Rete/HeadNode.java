@@ -6,9 +6,11 @@ package Datastructure.Rete;
 
 import Entity.Atom;
 import Entity.FuncTerm;
+import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -20,10 +22,13 @@ import java.util.ArrayList;
 public class HeadNode extends Node{
     
     Atom a;
+    int[] instanceOrdering;
     
-    public HeadNode(Atom atom, Rete rete){
+    public HeadNode(Atom atom, Rete rete, Node n){
         super(rete);
+        //System.out.println("HeadNode Created!");
         this.a = atom;
+        this.tempVarPosition = (HashMap<Variable, Integer>) n.getVarPositions().clone();
     }
     
     /*
@@ -34,38 +39,36 @@ public class HeadNode extends Node{
      * from doesnt matter
      */
     @Override
-    public void addInstance(Term[] instance, Node from){
-        ArrayList<Term> toAdd = new ArrayList<Term>();
+    public void addInstance(Instance instance, Node from){
+        Term[] headInstance = new Term[a.getArity()];
         for(int i = 0; i < a.getArity();i++){
             Term t = a.getTerms()[i];
             if(t.isVariable()){
-                    toAdd.add(((Variable)t).getValue());
+                    headInstance[i] = instance.get(this.tempVarPosition.get((Variable)t));
                 }else{
                     if (t.isConstant()){
-                        toAdd.add(t);
+                        headInstance[i] = t;
                     }else{
-                        toAdd.add(this.unifyFuncTerm((FuncTerm)t));
+                        headInstance[i] = this.unifyFuncTerm((FuncTerm)t, instance);
                     }
             }  
         }
-        Term[] headInstance = new Term[toAdd.size()];
-        toAdd.toArray(headInstance);
-        rete.addInstancePlus(a.getPredicate(),headInstance);
+        rete.addInstancePlus(a.getPredicate(),Instance.getInstance(headInstance));
     }
     
-    private FuncTerm unifyFuncTerm(FuncTerm f){
+    private FuncTerm unifyFuncTerm(FuncTerm f, Instance instance){
         ArrayList<Term> fchildren = new ArrayList<Term>();
         FuncTerm ret = FuncTerm.getFuncTerm(f.getName(), fchildren);
         
         for(int i = 0; i < f.getChildren().size();i++){
             Term t = f.getChildren().get(i);
             if(t.isVariable()){
-                    fchildren.add(((Variable)t).getValue());
+                    fchildren.add(instance.get(this.tempVarPosition.get((Variable)t)));
                 }else{
                     if (t.isConstant()){
                         fchildren.add(t);
                     }else{
-                        fchildren.add(unifyFuncTerm((FuncTerm)t));
+                        fchildren.add(unifyFuncTerm((FuncTerm)t, instance));
                     }
             }
         }

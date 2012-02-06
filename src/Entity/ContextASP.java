@@ -30,21 +30,21 @@ public class ContextASP implements Context{
     }
 
     @Override
-    public boolean containsFactPlus(Predicate p, Term[] a) {
+    public boolean containsFactPlus(Predicate p, Instance a) {
         return rete.containsInstance(p, a, true);
     }
     @Override
-    public boolean containsFactMinus(Predicate p, Term[] a) {
+    public boolean containsFactMinus(Predicate p, Instance a) {
         return rete.containsInstance(p, a, false);
     }
 
     @Override
-    public void addFactToINMemory(Predicate p, Term[] a) {
+    public void addFactToINMemory(Predicate p, Instance a) {
         this.rete.addInstancePlus(p, a);
     }
     
     @Override
-    public void addFactToOUTMemory(Predicate p, Term[] a) {
+    public void addFactToOUTMemory(Predicate p, Instance a) {
         this.rete.addInstanceMinus(p, a);
     }
 

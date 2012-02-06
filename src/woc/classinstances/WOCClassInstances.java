@@ -2,29 +2,29 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package woc.wings.of.change;
+package woc.classinstances;
 
 import Datastructure.Rete.BasicNode;
 import Datastructure.Rete.Rete;
 import Entity.Atom;
 import Entity.Constant;
-import Entity.FuncTerm;
-import Entity.Predicate;
+import Entity.Instance;
 import Entity.Rule;
 import Entity.Variable;
 import Interfaces.Term;
-import java.util.ArrayList;
 
 /**
  *
  * @author User
  */
-public class WOCWingsOfChange {
+public class WOCClassInstances {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        System.out.println("LOL");
         
         Rule r = new Rule();
         Term[] terms = {Variable.getVariable("X"),Variable.getVariable("Y")};
@@ -54,13 +54,13 @@ public class WOCWingsOfChange {
         BasicNode bn = rete.getBasicNodePlus(body1.getPredicate());
         System.out.println("BN = " + bn);
         System.out.println("BN.getChildren = " + bn.getChildren().get(body1));
-        System.out.println("BN.getChildren.get(body1).getChildren: " + bn.getChildren().get(body1).getChildren().size());
+        System.out.println("BN.getChildren.get(body1).getChildren: " + bn.getChildren().get(body1.getAtomAsReteKey()).getChildren().size());
     
-        int nbb = 1300;
+        int nbb = 4000;
         for(int i = 0; i < nbb; i++){
             Term[] instance = {Constant.getConstant(String.valueOf(i))};
-            rete.addInstancePlus(body1.getPredicate(), instance);
-            rete.addInstancePlus(body2.getPredicate(), instance);
+            rete.addInstancePlus(body1.getPredicate(),Instance.getInstance(instance));
+            rete.addInstancePlus(body2.getPredicate(), Instance.getInstance(instance));
         }
         
         /*Term[] instance1 = {Constant.getConstant("a")};
@@ -71,5 +71,10 @@ public class WOCWingsOfChange {
         
         rete.propagate();
         rete.printAnswerSet();
+        
+        
+        System.out.println("LOL = " + Instance.lol);
+        
+        
     }
 }

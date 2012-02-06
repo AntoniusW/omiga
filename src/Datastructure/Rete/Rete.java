@@ -5,6 +5,7 @@
 package Datastructure.Rete;
 
 import Entity.Atom;
+import Entity.Instance;
 import Entity.Operator;
 import Entity.Predicate;
 import Entity.Rule;
@@ -23,16 +24,16 @@ public class Rete {
     HashMap<Predicate, BasicNode> basicLayerPlus;
     HashMap<Predicate, BasicNode> basicLayerMinus;
     
-    HashMap<Predicate, Stack<Term[]>> stackyPlus;
-    HashMap<Predicate, Stack<Term[]>> stackyMinus;
+    HashMap<Predicate, Stack<Instance>> stackyPlus;
+    HashMap<Predicate, Stack<Instance>> stackyMinus;
     
     boolean satisfiable = true;
     
     public Rete(){
         this.basicLayerPlus = new HashMap<Predicate,BasicNode>();
         this.basicLayerMinus = new HashMap<Predicate,BasicNode>();
-        this.stackyPlus = new HashMap<Predicate, Stack<Term[]>>();
-        this.stackyMinus = new HashMap<Predicate, Stack<Term[]>>();
+        this.stackyPlus = new HashMap<Predicate, Stack<Instance>>();
+        this.stackyMinus = new HashMap<Predicate, Stack<Instance>>();
     }
     
     /*
@@ -41,12 +42,21 @@ public class Rete {
     public void propagate(){
         boolean stacksNotEmpty = true;
         while(stacksNotEmpty){
+            /*System.out.println("ROUND:");
+            for(Stack s: this.stackyPlus.values()){
+                System.out.println(s.size());
+            }*/
             stacksNotEmpty = false;
             for(Predicate p: stackyPlus.keySet()){
                 if(!stackyPlus.get(p).isEmpty()){
-                    Term[] instance = stackyPlus.get(p).pop();
+                    Instance instance = stackyPlus.get(p).pop();
+                    //System.out.println("Adding Instance: " + instance);
                     if(!this.containsInstance(p, instance, false)){
-                        basicLayerPlus.get(p).addInstance(instance);
+                        if (!this.containsInstance(p, instance, true)) {
+                            basicLayerPlus.get(p).addInstance(instance);
+                        }else{
+                            //System.out.println("This instance is already contained!");
+                        }
                     }else{
                         satisfiable = false;
                         System.err.println("Unsatisfiable!");
@@ -58,9 +68,9 @@ public class Rete {
             }
             for(Predicate p: stackyMinus.keySet()){
                 if(!stackyMinus.get(p).isEmpty()){
-                    Term[] instance = stackyPlus.get(p).pop();
+                    Instance instance = stackyPlus.get(p).pop();
                     if(!this.containsInstance(p, instance, true)){
-                        basicLayerMinus.get(p).addInstance(instance);
+                        if (!this.containsInstance(p, instance, false)) basicLayerMinus.get(p).addInstance(instance);
                     }else{
                         satisfiable = false;
                         System.err.println("Unsatisfiable!");
@@ -88,32 +98,46 @@ public class Rete {
         ArrayList<Atom> atomsMinus = (ArrayList<Atom>) r.getBodyMinus().clone();
         ArrayList<Operator> operators = (ArrayList<Operator>) r.getOperators().clone();
         Atom actual = getBestNextAtom(atomsPlus);
-        Node actualNode = this.basicLayerPlus.get(actual.getPredicate()).getChildren().get(actual);
+        
+        /*System.err.println("BasicLayer.get: " + this.basicLayerPlus.get(actual.getPredicate()));
+        System.err.println("BasicLayer.get: " + this.basicLayerPlus.get(actual.getPredicate()).getChildren());
+        System.err.println("KEY: " + actual.getAtomAsReteKey());
+        System.err.println("Get Key: " + this.basicLayerPlus.get(actual.getPredicate()).getChildren().get(actual.getAtomAsReteKey()));
+       */
+        
+        Node actualNode = this.basicLayerPlus.get(actual.getPredicate()).getChildren().get(actual.getAtomAsReteKey());
+        ((SelectionNode)actualNode).resetVarPosition(actual);
+        /*Node actualNode = this.basicLayerPlus.get(actual.getPredicate()).getSelectionNode(actual.getAtomAsReteKey());
+        System.err.println("Get Key: " + this.basicLayerPlus.get(actual.getPredicate()).getSelectionNode(actual.getAtomAsReteKey()));*/
+        System.err.println("Actual Node: " + actualNode);
         Atom partner;
         
         while(!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()){
             if(!atomsPlus.isEmpty()){
                 partner = getBestPartner(atomsPlus, actualNode);
+                System.err.println("Partner: " + partner);
                 actualNode = this.createJoin(actualNode, partner, true);
             }else{
                 if(!atomsMinus.isEmpty()){
                     partner = getBestPartner(atomsMinus, actualNode);
+                    System.err.println("Partner: " + partner);
                     actualNode = this.createJoin(actualNode, partner, false);
                 }else{
                     // Do something cool for operators!
                 }
             }
         }
-        actualNode.addChild(new HeadNode(r.getHead(),this));
+        actualNode.addChild(new HeadNode(r.getHead(),this, actualNode));
     }
     
     private Node createJoin(Node aNode, Atom b, boolean bPositive){
         SelectionNode bNode;
         if(bPositive){
-            bNode = this.basicLayerPlus.get(b.getPredicate()).getChildren().get(b);
+            bNode = this.basicLayerPlus.get(b.getPredicate()).getChildren().get(b.getAtomAsReteKey());
         }else{
-            bNode = this.basicLayerMinus.get(b.getPredicate()).getChildren().get(b);
+            bNode = this.basicLayerMinus.get(b.getPredicate()).getChildren().get(b.getAtomAsReteKey());
         }
+        bNode.resetVarPosition(b);
         // TOCHECK: Keep track of all JoinNodes such that we create each joinNode only once!
         return new JoinNode(aNode,bNode, this);  
     }
@@ -131,10 +155,11 @@ public class Rete {
         return a;
     }
     
-    public void addAtomPlus(Atom atom){
+    public void addAtomPlus(Atom atom){   
         if(!basicLayerPlus.containsKey(atom.getPredicate())){
+            //System.out.println("Creating BasicNode: " + atom.getPredicate());
             this.basicLayerPlus.put(atom.getPredicate(), new BasicNode(atom.getArity(),this));
-            this.stackyPlus.put(atom.getPredicate(), new Stack<Term[]>());
+            this.stackyPlus.put(atom.getPredicate(), new Stack<Instance>());
         }    
         basicLayerPlus.get(atom.getPredicate()).AddPredInRule(atom);
         
@@ -143,23 +168,23 @@ public class Rete {
     public void addAtomMinus(Atom atom){
         if(!basicLayerMinus.containsKey(atom.getPredicate())){
             this.basicLayerMinus.put(atom.getPredicate(), new BasicNode(atom.getArity(),this));
-            this.stackyMinus.put(atom.getPredicate(), new Stack<Term[]>());
+            this.stackyMinus.put(atom.getPredicate(), new Stack<Instance>());
         }   
         basicLayerMinus.get(atom.getPredicate()).AddPredInRule(atom);  
     }
     
-    public void addInstancePlus(Predicate p, Term[] instance){
+    public void addInstancePlus(Predicate p, Instance instance){
         //basicLayerPlus.get(p).addInstance(instance);
         this.stackyPlus.get(p).push(instance);
     }
     
      
-    public void addInstanceMinus(Predicate p, Term[] instance){
+    public void addInstanceMinus(Predicate p,Instance instance){
         //basicLayerMinus.get(p).addInstance(instance);
         this.stackyMinus.get(p).push(instance);
     }
     
-    public boolean containsInstance(Predicate p, Term[] instance, boolean positive){
+    public boolean containsInstance(Predicate p, Instance instance, boolean positive){
         if(positive){
             if(this.basicLayerPlus.containsKey(p)){
                 return basicLayerPlus.get(p).containsInstance(instance);

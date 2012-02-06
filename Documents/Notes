@@ -1,0 +1,32 @@
+
+HashInstances getAll returniert eine ArrayList die jedes mal neu erstellt wird wenn die Methode aufgerufen wird.
+(Andererseits ist das Arbeiten auf immer der selben ArrayList irreführend)
+
+Storage: select:
+Has a return ArrayList
+Has a Selected List (That is created always a new!)
+
+
+
+Rete printAnswerSet():
+Uses a selectionCriteria that is created a new. But this mthod is called only once for printing!
+
+
+SelecteionNode addInstance:
+Uses Term[] varAssignment2Add, which is created a new all the time! (4.000.000 ausgeführt bei nbb=2000!)
+JA, ABER DAS SIND DIE INSTANZEN DIE DANN IN DEN KNOTEN GESPEICHERT WERDEN! MÜSSEN VON NEUEM ERSTELLT WERDEN! ^^
+WERDEN IM SIMPLE EXAMPLE AUCH NIMMA GELÖSCHT --> KEIN GC GRUND
+
+
+JoinNode addInstance:
+toAdd jhas to be created a new. These are the instances lateron stored.
+selectionCriteria does not need to be created a new all the time!
+
+
+
+HeadInsatnces hat eine hässliche addInstance Methode. (ArrayList to Array)
+
+
+
+
+

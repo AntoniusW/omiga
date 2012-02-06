@@ -4,6 +4,7 @@
  */
 package Interfaces;
 
+import Entity.FuncTerm;
 import Entity.Variable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +100,14 @@ public abstract class Term {
     
     public ArrayList<Variable> getUsedVariables(){
         return new ArrayList<Variable>();
+    }
+    
+    /*
+     * This method is used to define equalaty over atoms, such that p(X,Y) == p(Z,A).
+     */
+    public boolean equalsType(Term t){
+        // must beinplemented by each subclass!
+        return false;
     }
     
 }

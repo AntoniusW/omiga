@@ -23,23 +23,33 @@ public class Storage {
     
     // TOCHECK: Maybe it is really faster if we make the instances classes!
     
-    HashMap<Term,HashInstances>[] memory;
+    HashMap<Term,HashSet<Instance>>[] memory;
+    
     
     public Storage(int arity){
+        
+        
         this.memory = new HashMap[arity];
         for(int i = 0; i < memory.length;i++){
-            memory[i] = new HashMap<Term,HashInstances>();
+            memory[i] = new HashMap<Term,HashSet<Instance>>();
         }
     }
     
-    public void addInstance(Term[] instance){
-        for(int i = 0; i < instance.length;i++){
-            if(!memory[i].containsKey(instance[i])) 
-                memory[i].put(instance[i], new HashInstances());
+    public void addInstance(Instance instance){
+        for(int i = 0; i < instance.getSize();i++){
+            // I assume the try-part to be faster
+            /*try{
+                memory[i].get(instance.get(i)).add(instance);
+            }catch(Exception e){
+                memory[i].put(instance.get(i), new HashSet<Instance>());
+                memory[i].get(instance.get(i)).add(instance);
+            }*/
+            if(!memory[i].containsKey(instance.get(i))) 
+                memory[i].put(instance.get(i), new HashSet<Instance>());
             
-            if(!memory[i].get(instance[i]).contains(instance)) {
-                memory[i].get(instance[i]).add(instance);
-            }
+            //if(!memory[i].get(instance.get(i)).contains(instance)) {
+                memory[i].get(instance.get(i)).add(instance);
+            //}
         }
         //System.out.println(this + " Added: " + Instance.getInstanceAsString(instance));
     }
@@ -48,14 +58,19 @@ public class Storage {
      * Precondition: the structure for that instance must exist, otherwise we reach a null pointer exception
      * This method should only be called for instance for which we know they are within the datastructure
      */
-    public void removeInstance(Term[] instance){
-        for(int i = 0; i < instance.length;i++){
-            memory[i].get(instance[i]).remove(instance);
+    public void removeInstance(Instance instance){
+        for(int i = 0; i < instance.getSize();i++){
+            memory[i].get(instance.get(i)).remove(instance);
         }
     }
     
-    public boolean containsInstance(Term[] instance){    
-        return memory[0].get(instance[0]).contains(instance);
+    public boolean containsInstance(Instance instance){   
+        //memory[0].get(instance.get(0)) = null
+        try{
+            return memory[0].get(instance.get(0)).contains(instance);
+        }catch(Exception e){
+            return false;
+        }
     }
     
     /*
@@ -66,10 +81,16 @@ public class Storage {
      * 
      * PreCondition: selectionCriterion has to be of equalsize to the memory's Arraysize
      */
-    public Collection<Term[]> select(Term[] selectionCriterion){
-        ArrayList<Term[]> ret = new ArrayList<Term[]>();
+    
+    private ArrayList<HashSet> selected = new ArrayList<HashSet>();
+    ArrayList<Instance> ret = new ArrayList<Instance>();
+    int i = 0;
+    public Collection<Instance> select(Term[] selectionCriterion){
+        //ArrayList<Instance> ret = new ArrayList<Instance>();
+        ret.clear();
+        //ArrayList<HashSet> selected = new ArrayList<HashSet>();
+        selected.clear();
         
-        ArrayList<HashInstances> selected = new ArrayList<HashInstances>();
         
         for(int i = 0; i < selectionCriterion.length;i++){
             // We go through the selectionCriterion and create Sets of the instances per position that were selected
@@ -86,22 +107,22 @@ public class Storage {
             //if selected is empty the selectionCriterion consisted only of Variables and we have to return everything
             //if this is used often we should consider having a seperate list of all instances of a memory, because we have to iterate through all keys here
             //Anyway I assume joins were no Variables are equal, to not happen that often
-            for(HashInstances hI: memory[0].values()){
-                ret.addAll(hI.getAll());
+            for(HashSet hS: memory[0].values()){
+                ret.addAll(hS);
             }
             return ret;
         }else{
             // There is a selection Criterion so we return only those instances that are contained in each set.
-            HashInstances smallest = selected.get(0);
+            HashSet<Instance> smallest = selected.get(0);
             for(int i = 1; i < selected.size();i++){
                 if(selected.get(i).size() < smallest.size()) smallest = selected.get(i);
             }
             selected.remove(smallest);
-            for(Term[] instance: smallest.getAll()){
+            for(Instance instance: smallest){
                 boolean flag = true;
-                for(HashInstances hI: selected){
+                for(HashSet hS: selected){
                     //To Check: Just go trough the instances of the smallest one, and check their positions
-                    if(!hI.contains(instance)){
+                    if(!hS.contains(instance)){
                         flag = false;
                         break;
                     }
@@ -113,10 +134,11 @@ public class Storage {
         return ret;
     }
     
+    
     public void printAllInstances(){
-        for(HashInstances hI: memory[0].values()){
-            for(Term[] instance: hI.getAll()){
-                System.out.println(Instance.getInstanceAsString(instance));
+        for(HashSet<Instance> hS: memory[0].values()){
+            for(Instance instance: hS){
+                System.out.println(instance);
             }
         }
         

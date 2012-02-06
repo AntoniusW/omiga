@@ -10,8 +10,8 @@ import Entity.Instance;
 import Entity.Atom;
 import Entity.Variable;
 import Interfaces.Term;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -22,17 +22,25 @@ public class SelectionNode extends Node{
     
     private Atom atom;
     
+    HashMap<Variable,Integer> tempVarPosition;
+    int[] instanceOrdering;
+    
+    public Atom getAtom(){
+        return atom;
+    }
     
     
     public SelectionNode(Atom atom, Rete rete){
         super(rete);
-        this.atom = atom;
+        //System.out.println("SelectionNode Created!: " + atom);
+        this.atom = atom.getAtomAsReteKey();
         children = new ArrayList<Node>();
+        tempVarPosition = new HashMap<Variable,Integer>();
+        resetVarPosition(atom);
         
-        // we calculate the variable ordering by parsing the atom for variables
         ArrayList<Variable> vars = new ArrayList<Variable>();
-        for(int i = 0; i < atom.getTerms().length;i++){
-            for(Variable v: atom.getTerms()[i].getUsedVariables()){
+        for(int i = 0; i < atom.getAtomAsReteKey().getTerms().length;i++){
+            for(Variable v: atom.getAtomAsReteKey().getTerms()[i].getUsedVariables()){
                 if(!vars.contains(v)) vars.add(v);
             }
         }
@@ -40,7 +48,7 @@ public class SelectionNode extends Node{
         vars.toArray(varOrdering);
         
         // memory is initialized with the size of the var ordering (as we only need to save variableassignments
-        memory = new Storage(varOrdering.length);
+        memory = new Storage(atom.getArity());
         
         /*
          * This is the old code where we had the caluclation within the atom itself
@@ -55,15 +63,15 @@ public class SelectionNode extends Node{
      * from == null
      */
     @Override
-    public void addInstance(Term[] instance, Node from){
-        //System.out.println(this + " addInstance is called with: " + Instance.getInstanceAsString(instance));
+    public void addInstance(Instance instance, Node from){
+        //System.out.println(this + " " + this.children.size() +  " addInstance is called with: " + instance);
         for(Variable v: varOrdering){
             // All Variable values used in this nodes pir are set to null
             v.setValue(null);
         }
-        for(int i = 0; i < instance.length; i++){
+        for(int i = 0; i < instance.getSize(); i++){
             // unifyTerm assigns values to our variables
-            if(!unifyTerm(atom.getTerms()[i],instance[i])) return;
+            if(!unifyTerm(atom.getTerms()[i],instance.get(i))) return;
         }
         
         Term[] varAssignment2Add = new Term[varOrdering.length];
@@ -71,11 +79,12 @@ public class SelectionNode extends Node{
             // we create our variable assignment by taking all the values of the variables of our varOrdering.
             varAssignment2Add[i] = varOrdering[i].getValue();
         }
-        this.memory.addInstance(varAssignment2Add);
+        Instance instance2Add = Instance.getInstance(varAssignment2Add);
+        this.memory.addInstance(instance2Add);
         
         for(Node n: this.children){
             // we transfer the inserted varAssignment to all childnodes
-            n.addInstance(varAssignment2Add, this);
+            n.addInstance(instance2Add, this);
         }
         
         
@@ -85,6 +94,7 @@ public class SelectionNode extends Node{
      * 
      */
     private boolean unifyTerm(Term schema, Term instance){
+        //System.err.println("Unifiyng Term: " + schema + " with: " + instance);
         if (schema.isVariable()){
             Variable v = (Variable)schema;
             if(v.getValue() == null ){

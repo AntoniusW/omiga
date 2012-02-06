@@ -5,10 +5,13 @@
 package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
+import Entity.Atom;
+import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  *
@@ -20,28 +23,48 @@ public abstract class Node {
     protected Storage memory;
     protected ArrayList<Node> children;
     protected Rete rete;
+    HashMap<Variable,Integer> tempVarPosition;
+    
+    public HashMap<Variable,Integer> getVarPositions(){
+        return this.tempVarPosition;
+    }
+    
+    public void resetVarPosition(Atom atom){
+        tempVarPosition.clear();
+        Term[] terms = atom.getTerms();
+        for(int i = 0; i < terms.length;i++){
+            Term t = terms[i];
+            for(int j = 0;j < t.getUsedVariables().size();j++){
+                Variable v = t.getUsedVariables().get(j);
+                if(!tempVarPosition.containsKey(v)){
+                    tempVarPosition.put(v, tempVarPosition.size());
+                }
+            }
+        }
+    }
     
     public Node(Rete rete){
         this.rete = rete;
         this.children = new ArrayList<Node>();
+        tempVarPosition = new HashMap<Variable,Integer>();
     }
     
     public Variable[] getVarOrdering(){
         return varOrdering;
     }
     
-    public Collection<Term[]> select(Term[] selectionCriteria){
+    public Collection<Instance> select(Term[] selectionCriteria){
         return memory.select(selectionCriteria);
     }
     
-    public void addInstance(Term[] instance, Node from){
+    public void addInstance(Instance instance, Node from){
         // has to be implemented by each NodeTye
     }
     
-    public void removeInstance(Term[] instance){
+    public void removeInstance(Instance instance){
         //has to be implemented by each NodeType
     }
-    public boolean containsInstance(Term[] instance){
+    public boolean containsInstance(Instance instance){
         return memory.containsInstance(instance);
     }
     
