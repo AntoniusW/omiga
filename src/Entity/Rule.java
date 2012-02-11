@@ -5,7 +5,9 @@
 package Entity;
 
 import Interfaces.BodyAtom;
+import Interfaces.Term;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -43,13 +45,35 @@ public class Rule {
     
     public boolean isSafe(){
         //TODO: Is this the definition of safe? or is it also safe when the Variable occurs in the head?
-        
+        HashSet<Variable> hs = new HashSet<Variable>();
+        for(BodyAtom ba: bodyPlus){
+            Atom pir = (Atom)ba;
+            if(ba.getClass().equals(Atom.class)){
+                for(Term t: pir.getTerms()){
+                    for(Variable v: t.getUsedVariables()){
+                        hs.add(v);
+                    }
+                }
+            }
+        }
         for(BodyAtom ba: bodyMinus){
             if(ba.getClass().equals(Atom.class)){
                 Atom pir = (Atom)ba;
-                if(!bodyPlus.contains(pir)) return false;
+                for(Term t: pir.getTerms()){
+                    for(Variable v: t.getUsedVariables()){
+                        if(!hs.contains(v)) return false;
+                    }
+                }
             }
         }
+        if(head != null){
+            for(Term t: this.head.getTerms()){
+                for(Variable v: t.getUsedVariables()){
+                    if(!hs.contains(v)) return false;
+                }
+            }
+        }
+        
         return true;
     }
     

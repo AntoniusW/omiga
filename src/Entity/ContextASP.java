@@ -5,90 +5,92 @@
 package Entity;
 
 import Datastructure.Rete.Rete;
-import Interfaces.Context;
-import Interfaces.Term;
+import Exceptions.FactSizeException;
+import Exceptions.RuleNotSafeException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 /**
  *
- * @author User
+ * @author g.weidinger
  */
-public class ContextASP implements Context{
+public class ContextASP {
     
-    Rete rete;
-    
+    private ArrayList<Rule> rules;
+    private HashMap<Predicate, ArrayList<Instance>> facts;
+    private Rete rete;
     
     public ContextASP(){
-        rete = new Rete();
-    }
-
-    @Override
-    public void addRule(Rule r) {
-        rete.addRule(r);
-    }
-
-    @Override
-    public boolean containsFactPlus(Predicate p, Instance a) {
-        return rete.containsInstance(p, a, true);
-    }
-    @Override
-    public boolean containsFactMinus(Predicate p, Instance a) {
-        return rete.containsInstance(p, a, false);
-    }
-
-    @Override
-    public void addFactToINMemory(Predicate p, Instance a) {
-        this.rete.addInstancePlus(p, a);
+        rules = new ArrayList<Rule>();
+        facts = new HashMap<Predicate, ArrayList<Instance>>();
+        this.rete = new Rete();
     }
     
-    @Override
-    public void addFactToOUTMemory(Predicate p, Instance a) {
-        this.rete.addInstanceMinus(p, a);
+    public void propagate(){
+        this.rete.propagate();
     }
-
-    @Override
-    public Collection<Term[]> selectFacts(Predicate p, Term[] a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    public void initializeRete(){
+        for(Rule r: this.rules){
+            rete.addRule(r);
+        }
+        for(Predicate p: facts.keySet()){
+            for(Instance i: facts.get(p)){
+                if(!rete.containsPredicate(p, true)) rete.addPredicatePlus(p);
+                rete.addInstancePlus(p, i);
+            }
+        }
     }
-
-    @Override
-    public void propagate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    public void addRule(Rule r) throws RuleNotSafeException{
+        if(r.isSafe()) {
+            rules.add(r);
+        }else{
+            throw new RuleNotSafeException("This rule is not safe: " + r);
+        }
     }
-
-    @Override
-    public void choice() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    public void addFact(Predicate p, Instance instance) throws FactSizeException{
+        if(instance.getSize() != p.getArity()) {
+            String s = "Fact: " + instance.toString() + " and Predicate arity of: " + p + " do not match: " + instance.getSize() + " != " + p.getArity();
+            throw new FactSizeException(s);
+        }
+        if(!facts.containsKey(p)) facts.put(p, new ArrayList<Instance>());
+        facts.get(p).add(instance);
     }
-
-    @Override
-    public void backtrack() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    public ArrayList<Rule> getAllRules(){
+        return rules;
     }
-
-    @Override
-    public void resolveConflict() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void printFacts() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void printRules() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Collection<Term[]> getAnswerset() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    public HashMap<Predicate, ArrayList<Instance>> getAllFacts(){
+        return facts;
     }
     
     
+    
+    public void printContext(){
+        System.out.println("Printing Context: ");
+        System.out.println("Rulesize: " + rules.size());
+        for(Rule r: this.rules){
+            System.out.println(r);
+        }
+        for(Predicate p: facts.keySet()){
+            System.out.println("Factsize: " + facts.get(p).size());
+            for(Instance i: facts.get(p)){
+                System.out.println(p.getName()+ i);
+            }
+        }
+    }
+    
+    
+    public void printAnswerSet(){
+        rete.printAnswerSet();
+    }
+    
+    public Rete getRete(){
+        return rete;
+    }
     
     
 }

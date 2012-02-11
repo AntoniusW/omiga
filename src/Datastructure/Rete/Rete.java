@@ -27,7 +27,7 @@ public class Rete {
     HashMap<Predicate, Stack<Instance>> stackyPlus;
     HashMap<Predicate, Stack<Instance>> stackyMinus;
     
-    boolean satisfiable = true;
+    public boolean satisfiable = true;
     
     public Rete(){
         this.basicLayerPlus = new HashMap<Predicate,BasicNode>();
@@ -39,13 +39,25 @@ public class Rete {
     /*
      * we push facts into our network til nothing more can be reached
      */
+    public static int kok;
+    
+    
     public void propagate(){
+        boolean flag = true;
+        while(flag && satisfiable){
+            flag = false;
+            for(BasicNode bn: this.basicLayerPlus.values()){
+                if(bn.propagate()) flag = true;
+            }
+            for(BasicNode bn: this.basicLayerMinus.values()){
+                if(bn.propagate()) flag = true;
+            }
+        }
+    }
+    
+    /*public void propagate(){
         boolean stacksNotEmpty = true;
         while(stacksNotEmpty){
-            /*System.out.println("ROUND:");
-            for(Stack s: this.stackyPlus.values()){
-                System.out.println(s.size());
-            }*/
             stacksNotEmpty = false;
             for(Predicate p: stackyPlus.keySet()){
                 if(!stackyPlus.get(p).isEmpty()){
@@ -53,6 +65,8 @@ public class Rete {
                     //System.out.println("Adding Instance: " + instance);
                     if(!this.containsInstance(p, instance, false)){
                         if (!this.containsInstance(p, instance, true)) {
+                            kok++;
+                            //System.out.println("Adding to: " + p + " follwoing instance: " + instance);
                             basicLayerPlus.get(p).addInstance(instance);
                         }else{
                             //System.out.println("This instance is already contained!");
@@ -70,7 +84,10 @@ public class Rete {
                 if(!stackyMinus.get(p).isEmpty()){
                     Instance instance = stackyPlus.get(p).pop();
                     if(!this.containsInstance(p, instance, true)){
-                        if (!this.containsInstance(p, instance, false)) basicLayerMinus.get(p).addInstance(instance);
+                        if (!this.containsInstance(p, instance, false)){
+                            kok++;
+                            basicLayerMinus.get(p).addInstance(instance);
+                        }
                     }else{
                         satisfiable = false;
                         System.err.println("Unsatisfiable!");
@@ -81,7 +98,7 @@ public class Rete {
                 }
             }
         }
-    }
+    }*/
     
     public void addRule(Rule r){
         //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
@@ -173,15 +190,18 @@ public class Rete {
         basicLayerMinus.get(atom.getPredicate()).AddPredInRule(atom);  
     }
     
+    public static int omg = 0;
     public void addInstancePlus(Predicate p, Instance instance){
-        //basicLayerPlus.get(p).addInstance(instance);
-        this.stackyPlus.get(p).push(instance);
+        omg++;
+        basicLayerPlus.get(p).addInstance(instance);
+        //this.stackyPlus.get(p).push(instance);
     }
     
      
     public void addInstanceMinus(Predicate p,Instance instance){
-        //basicLayerMinus.get(p).addInstance(instance);
-        this.stackyMinus.get(p).push(instance);
+        omg++;
+        basicLayerMinus.get(p).addInstance(instance);
+        //this.stackyMinus.get(p).push(instance);
     }
     
     public boolean containsInstance(Predicate p, Instance instance, boolean positive){
@@ -216,6 +236,20 @@ public class Rete {
             System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
             //this.basicLayerPlus.get(p).printAllInstances();
         }
+    }
+    
+    /*
+     * Only needed to add Storage for facts that are of predicates that are not used within rules.
+     */
+    public void addPredicatePlus(Predicate p){
+        this.basicLayerPlus.put(p, new BasicNode(p.getArity(),this));
+    }
+    public void addPredicateMinus(Predicate p){
+        this.basicLayerMinus.put(p, new BasicNode(p.getArity(),this));
+    }
+    public boolean containsPredicate(Predicate p, boolean plus){
+        if(plus) return this.basicLayerPlus.containsKey(p);
+        return this.basicLayerMinus.containsKey(p);
     }
     
     

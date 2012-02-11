@@ -15,6 +15,7 @@ import java.util.HashSet;
  */
 public class Variable extends Term implements Operand{
     
+    //TOCHECK: Rework get usedVariables such that not every time a new arrayList is created
     
     private Term value;
     
@@ -93,6 +94,7 @@ public class Variable extends Term implements Operand{
     }
     @Override
     public ArrayList<Variable> getUsedVariables(){
+        //TODO this sucks. do not create this all the time.
         ArrayList<Variable> ret = new ArrayList<Variable>();
         ret.add(this);
         return ret;

@@ -37,19 +37,19 @@ public class Storage {
     
     public void addInstance(Instance instance){
         for(int i = 0; i < instance.getSize();i++){
-            // I assume the try-part to be faster
-            /*try{
+            // The try stuff is definitly faster than the if block ~3seconds for 2kk instances
+            try{
                 memory[i].get(instance.get(i)).add(instance);
             }catch(Exception e){
                 memory[i].put(instance.get(i), new HashSet<Instance>());
                 memory[i].get(instance.get(i)).add(instance);
-            }*/
-            if(!memory[i].containsKey(instance.get(i))) 
+            }
+            /*if(!memory[i].containsKey(instance.get(i))) 
                 memory[i].put(instance.get(i), new HashSet<Instance>());
             
             //if(!memory[i].get(instance.get(i)).contains(instance)) {
                 memory[i].get(instance.get(i)).add(instance);
-            //}
+            //}*/
         }
         //System.out.println(this + " Added: " + Instance.getInstanceAsString(instance));
     }
@@ -85,6 +85,7 @@ public class Storage {
     private ArrayList<HashSet> selected = new ArrayList<HashSet>();
     ArrayList<Instance> ret = new ArrayList<Instance>();
     int i = 0;
+    boolean flag;
     public Collection<Instance> select(Term[] selectionCriterion){
         //ArrayList<Instance> ret = new ArrayList<Instance>();
         ret.clear();
@@ -118,8 +119,9 @@ public class Storage {
                 if(selected.get(i).size() < smallest.size()) smallest = selected.get(i);
             }
             selected.remove(smallest);
+            //boolean flag;
             for(Instance instance: smallest){
-                boolean flag = true;
+                flag = true;
                 for(HashSet hS: selected){
                     //To Check: Just go trough the instances of the smallest one, and check their positions
                     if(!hS.contains(instance)){
@@ -129,8 +131,21 @@ public class Storage {
                 }
                 if(flag) ret.add(instance);
             }
+            /*Instance[] inz = new Instance[smallest.size()];
+            smallest.toArray(inz);
+            HashSet[] hss = new HashSet[selected.size()];
+            selected.toArray(hss);
+            boolean flag;
+            for(int i = 0; i < inz.length;i++){
+                flag = true;
+                for(int j = 0; j < hss.length;j++){
+                    if(!hss[j].contains(inz[i])){
+                        flag = false;
+                    }
+                }
+                if(flag) ret.add(inz[i]);
+            }*/
         }
-        
         return ret;
     }
     

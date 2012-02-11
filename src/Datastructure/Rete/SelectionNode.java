@@ -36,6 +36,7 @@ public class SelectionNode extends Node{
         this.atom = atom.getAtomAsReteKey();
         children = new ArrayList<Node>();
         tempVarPosition = new HashMap<Variable,Integer>();
+        System.err.println(atom);
         resetVarPosition(atom);
         
         ArrayList<Variable> vars = new ArrayList<Variable>();
@@ -64,14 +65,16 @@ public class SelectionNode extends Node{
      */
     @Override
     public void addInstance(Instance instance, Node from){
-        //System.out.println(this + " " + this.children.size() +  " addInstance is called with: " + instance);
+        //System.err.println(this + " " + this.children.size() +  " addInstance is called with: " + instance);
         for(Variable v: varOrdering){
             // All Variable values used in this nodes pir are set to null
             v.setValue(null);
         }
         for(int i = 0; i < instance.getSize(); i++){
             // unifyTerm assigns values to our variables
-            if(!unifyTerm(atom.getTerms()[i],instance.get(i))) return;
+            if(!unifyTerm(atom.getTerms()[i],instance.get(i))) {
+                return;
+            }
         }
         
         Term[] varAssignment2Add = new Term[varOrdering.length];
@@ -81,6 +84,7 @@ public class SelectionNode extends Node{
         }
         Instance instance2Add = Instance.getInstance(varAssignment2Add);
         this.memory.addInstance(instance2Add);
+        
         
         for(Node n: this.children){
             // we transfer the inserted varAssignment to all childnodes
@@ -94,8 +98,9 @@ public class SelectionNode extends Node{
      * 
      */
     private boolean unifyTerm(Term schema, Term instance){
-        //System.err.println("Unifiyng Term: " + schema + " with: " + instance);
+        //System.err.println("Unify!");
         if (schema.isVariable()){
+            //System.err.println("SCHWEMA-VARIABLE: " + schema + " vs instance: " + instance);
             Variable v = (Variable)schema;
             if(v.getValue() == null ){
                 v.setValue(instance);
@@ -105,13 +110,16 @@ public class SelectionNode extends Node{
             }
         }else{
             if(schema.isConstant()){
+                //System.err.println("SCHWEMA-Constant: " + schema + " vs instance: " + instance);
                 return schema.equals(instance);
             }else{
                 // schema is FuncTerm
                 if(schema.getName().equals(instance.getName())){ // TOCHECK: Stringvergleich
                     for(int i = 0; i < (schema).getChildren().size();i++){
-                        unifyTerm(schema.getChildren().get(i), instance.getChildren().get(i));
+                        if(!unifyTerm(schema.getChildren().get(i), instance.getChildren().get(i))) return false;
                     }
+                }else{
+                    return false;
                 }
                 
             }

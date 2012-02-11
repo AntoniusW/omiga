@@ -17,6 +17,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import Interfaces.Term;
 import Datastructure.Rete.Rete;
+import Entity.Predicate;
 
 /**
  *
@@ -90,7 +91,7 @@ public class testPropagation {
         rete.addRule(r3);
         rete.addRule(r4);
         
-        int nbb = 200;
+        int nbb = 10;
         // Facts for p
         for(int i = 0; i < nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
@@ -114,8 +115,10 @@ public class testPropagation {
         
         
         rete.propagate();
+
         
-        rete.printAnswerSet();
+        
+        //rete.printAnswerSet();
         
     }
 }

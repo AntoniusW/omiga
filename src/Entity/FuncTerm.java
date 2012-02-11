@@ -138,5 +138,9 @@ public class FuncTerm extends Term{
         return false;
     }
     
+    public void addChild(Term t){
+        this.children.add(t);
+    }
+    
     
 }

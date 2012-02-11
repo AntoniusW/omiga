@@ -17,6 +17,7 @@ import java.util.HashSet;
 public class Instance {
     
     public static int lol = 0;
+    public static int lolra = 0;
     private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();
         
     Term[] terms;
@@ -37,6 +38,7 @@ public class Instance {
             //System.out.println("Asked for: " + s + " returning: " + instances.get(i)); 
             return instances.get(i);
         }else{
+            lol++;
             instances.put(i, i);
             return i;
         }*/

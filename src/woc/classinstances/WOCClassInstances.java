@@ -56,7 +56,7 @@ public class WOCClassInstances {
         System.out.println("BN.getChildren = " + bn.getChildren().get(body1));
         System.out.println("BN.getChildren.get(body1).getChildren: " + bn.getChildren().get(body1.getAtomAsReteKey()).getChildren().size());
     
-        int nbb = 4000;
+        int nbb = 3000;
         for(int i = 0; i < nbb; i++){
             Term[] instance = {Constant.getConstant(String.valueOf(i))};
             rete.addInstancePlus(body1.getPredicate(),Instance.getInstance(instance));

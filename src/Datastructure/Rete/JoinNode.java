@@ -66,7 +66,7 @@ public class JoinNode extends Node{
     
     public JoinNode(Node a, Node b, Rete rete){
         super(rete);
-        //System.out.println("JoinNode Created!");
+       //System.out.println("JoinNode Created!");
         this.a = a;
         this.b = b;
 
@@ -93,15 +93,15 @@ public class JoinNode extends Node{
         this.selectionCriterion2 = new Integer[b.getVarPositions().size()];
         for(Variable v: a.getVarPositions().keySet()){
             if(b.getVarPositions().containsKey(v)){
-                selectionCriterion1[b.getVarPositions().get(v)] = a.getVarPositions().get(v);
+                selectionCriterion2[b.getVarPositions().get(v)] = a.getVarPositions().get(v);
             }
         }
         selCrit1 = new Term[selectionCriterion1.length];
         selCrit2 = new Term[selectionCriterion2.length];
         
         this.tempVar = Variable.getVariable("temp:Var");
-        System.err.println("LOLRAGA:  creating JoinNode for: " + a.getVarPositions() + " - " + b.getVarPositions());
         this.resetVarPosition(a, b);
+        
     }
     
     @Override

@@ -11,6 +11,7 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Stack;
 
 /**
  *
@@ -22,6 +23,7 @@ public class BasicNode {
     private HashMap<Atom,SelectionNode> children;
     //private ArrayList<SelectionNode> children;
     private Rete rete;
+    Stack<Instance> toPropagate;
     
     public BasicNode(int arity, Rete rete){
         //System.out.println("BasicNode Created!");
@@ -29,16 +31,33 @@ public class BasicNode {
         this.children = new HashMap<Atom,SelectionNode>();
         //this.children = new ArrayList<SelectionNode>();
         this.rete = rete;
+        this.toPropagate = new Stack<Instance>();
     }
     
     public void addInstance(Instance instance){
         //System.out.println("BasicNode Add Instance");
-        //System.out.println("Basic NOde add instance is called with: " + Instance.getInstanceAsString(instance));
+        //System.err.println("Basic NOde add instance is called with: " + instance + " : " + toPropagate.size());
         memory.addInstance(instance);
-        for(SelectionNode sn: children.values()){
+        this.toPropagate.add(instance); 
+        //System.err.println("toPropagate = " + this.toPropagate);
+        /*for(SelectionNode sn: children.values()){
         //for(SelectionNode sn: children){
             sn.addInstance(instance, null);
+        }*/
+    }
+    
+    public boolean propagate(){
+        //System.err.println("CHILDREN OF BASIC NODE: " + this.children.size());
+        boolean ret = this.toPropagate.size() > 0;
+        while(!this.toPropagate.isEmpty() /*&& rete.satisfiable*/){
+            //System.err.println("WHATSUP!?");
+            Instance ins = toPropagate.pop();
+            for(SelectionNode sn: children.values()){
+                //System.err.println("Giving instance: " + ins + " to : " + sn);
+                sn.addInstance(ins, null);
+            }
         }
+        return ret;
     }
     
     public void removeInstance(Instance instance){

@@ -83,7 +83,8 @@ public class Constant extends Term {
     
     @Override
     public ArrayList<Variable> getUsedVariables(){
-        return null;
+        //TODO: new ArrayList is bad!
+        return new ArrayList<Variable>();
     }
     
     @Override

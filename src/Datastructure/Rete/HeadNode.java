@@ -23,6 +23,7 @@ public class HeadNode extends Node{
     
     Atom a;
     int[] instanceOrdering;
+    public static int arg = 0;
     
     public HeadNode(Atom atom, Rete rete, Node n){
         super(rete);
@@ -40,6 +41,13 @@ public class HeadNode extends Node{
      */
     @Override
     public void addInstance(Instance instance, Node from){
+        if(a == null){
+            rete.satisfiable = false;
+            System.err.println("UNSATISFIABLE!");
+            return;
+        }
+        //System.err.println("ADD Intsnace to HEADNODE: " + instance);
+        arg++;
         Term[] headInstance = new Term[a.getArity()];
         for(int i = 0; i < a.getArity();i++){
             Term t = a.getTerms()[i];
@@ -49,29 +57,42 @@ public class HeadNode extends Node{
                     if (t.isConstant()){
                         headInstance[i] = t;
                     }else{
+                        //System.err.println("unifyTerm from head");
                         headInstance[i] = this.unifyFuncTerm((FuncTerm)t, instance);
                     }
             }  
         }
-        rete.addInstancePlus(a.getPredicate(),Instance.getInstance(headInstance));
+        
+        Instance instance2Add = Instance.getInstance(headInstance);
+        //System.out.println("HEAD: " + instance2Add);
+        if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
+            if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
+                rete.addInstancePlus(a.getPredicate(),instance2Add);
+                //System.err.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
+            }else{
+                System.err.println("UNSATISFIABLE!");
+                this.rete.satisfiable = false;
+            }
+        }
     }
     
     private FuncTerm unifyFuncTerm(FuncTerm f, Instance instance){
-        ArrayList<Term> fchildren = new ArrayList<Term>();
-        FuncTerm ret = FuncTerm.getFuncTerm(f.getName(), fchildren);
-        
+        //System.err.println("Unifying Head Instance: " + f + " vs. " + instance);
+        ArrayList<Term> fchildren = new ArrayList<Term>();        
         for(int i = 0; i < f.getChildren().size();i++){
             Term t = f.getChildren().get(i);
             if(t.isVariable()){
                     fchildren.add(instance.get(this.tempVarPosition.get((Variable)t)));
+            }else{
+                if (t.isConstant()){
+                    fchildren.add(t);
                 }else{
-                    if (t.isConstant()){
-                        fchildren.add(t);
-                    }else{
-                        fchildren.add(unifyFuncTerm((FuncTerm)t, instance));
-                    }
+                    fchildren.add(unifyFuncTerm((FuncTerm)t, instance));
+                }
             }
         }
+        FuncTerm ret = FuncTerm.getFuncTerm(f.getName(), fchildren);
+        //System.err.println("Tehrefore returning: " + ret + " as children are: " + ret.getChildren());
         return ret;
     }
     

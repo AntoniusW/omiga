@@ -4,6 +4,7 @@
  */
 package woc.classinstances;
 
+import Datastructure.Rete.HeadNode;
 import Entity.Atom;
 import Entity.Constant;
 import Entity.Instance;
@@ -65,7 +66,7 @@ public class testProp {
         rete.addRule(r3);
         rete.addRule(r4);
         
-        int nbb = 50;
+        int nbb = 5;
         // Facts for p
         for(int i = 0; i < nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
@@ -92,6 +93,8 @@ public class testProp {
         rete.printAnswerSet();
         
         System.out.println("LOL = " + Instance.lol);
+        System.out.println("OMG = " + Rete.omg);
+        System.out.println("ARG = " + HeadNode.arg);
     }
     
 }
