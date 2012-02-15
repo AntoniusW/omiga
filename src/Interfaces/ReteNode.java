@@ -23,7 +23,7 @@ public abstract class ReteNode {
     HashMap<Term,HashSet<String>>[] storage;
     HashMap<Term, HashSet<Term[]>>[] store;
     
-    
+    @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public ReteNode(Predicate p){
         this.p = p;
         this.children= new ArrayList<ReteNode>();

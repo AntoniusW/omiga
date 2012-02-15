@@ -33,7 +33,8 @@ public class main {
     
     public static void main(String arg[]){
         
-        File input = new File("C:\\Users\\User\\Desktop\\Context.txt");
+        //File input = new File("C:\\Users\\User\\Desktop\\Context.txt");
+        File input = new File("context_broken.txt");
         
         Parser pars = new Parser();
         try {

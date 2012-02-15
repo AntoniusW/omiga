@@ -38,9 +38,11 @@ public class ReteBuilder {
         for(Atom a: r.getBodyMinus()){
             this.addAtomMinus(a);
         }
-        
+        @SuppressWarnings("unchecked") // AW: workaround for array conversion
         ArrayList<Atom> atomsPlus = (ArrayList<Atom>) r.getBodyPlus().clone();
+        @SuppressWarnings("unchecked") // AW: workaround for array conversion
         ArrayList<Atom> atomsMinus = (ArrayList<Atom>) r.getBodyMinus().clone();
+        @SuppressWarnings("unchecked") // AW: workaround for array conversion
         ArrayList<Operator> operators = (ArrayList<Operator>) r.getOperators().clone();
         Atom actual = getBestNextAtom(atomsPlus);
         

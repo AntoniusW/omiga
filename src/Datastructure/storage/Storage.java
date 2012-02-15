@@ -34,6 +34,7 @@ public class Storage {
      * 
      * @param arity The arity of the predicate this storage is used for
      */
+    @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public Storage(int arity){
         this.memory = new HashMap[arity];
         for(int i = 0; i < memory.length;i++){
@@ -124,6 +125,7 @@ public class Storage {
      *                           The size of the selectionCriterion must be equal to this class memory length
      * @return a List of all Instances contained in the memory, that follow all slots of the selection criteria
      */
+    @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public Collection<Instance> select(Term[] selectionCriterion){
         
         // We reset the list we return and clear the temp list selected

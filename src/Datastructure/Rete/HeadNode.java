@@ -26,6 +26,7 @@ public class HeadNode extends Node{
     int[] instanceOrdering;
     public static int arg = 0;
     
+    @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public HeadNode(Atom atom, Rete rete, Node n){
         super(rete);
         //System.out.println("HeadNode Created!");
