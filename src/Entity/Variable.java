@@ -4,116 +4,94 @@
  */
 package Entity;
 
-import Interfaces.Operand;
 import Interfaces.Term;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  *
- * @author xir
+ * @author Gerald Weidinger 0526105
+ * 
+ * A Variable represents a logical variabele. It can take any constant or FuncTerm as value.
+ * 
+ * @param value the value this variable actually has. This is used within rete selection nodes.
+ * @param vars a List of Variables, used to ensure uniqueness of Variables
+ * 
+ * 
  */
-public class Variable extends Term implements Operand{
-    
-    //TOCHECK: Rework get usedVariables such that not every time a new arrayList is created
+public class Variable extends Term{
     
     private Term value;
     
+    private static ArrayList<Variable> vars = new ArrayList<Variable>();
     
-
+    
+    /**
+     * if you want to generate a Variable use this method, since the constructor is prvate, in order
+     * to ensure uniqueness of Variables.
+     * 
+     * @param name the name of the Variable
+     * @return  the desired Variable
+     */
     public static Variable getVariable(String name){
-        Variable v = new Variable(name);
-        if(Term.containsPredAtom(v)){
-            return (Variable)Term.getPredAtom(v);
-        }else{
-            Term.addPredAtom(v);
-            return v;
+        for(Variable var: vars){
+            if(var.getName().equals(name)) return var;
         }
+        Variable v = new Variable(name);
+        vars.add(v);
+        return v;
     }
     
+    /**
+     * private constructor. In order to obtain Variables use the static getVariable method.
+     * Generates a new Variable and sets it's name, usedVariables, as well as calculating it's hashValue.
+     * 
+     * @param name 
+     */
     private Variable(String name){
-        super(name, null);
+        super(name);
         value = null;
+        usedVariables.add(this);
     }
-
-    /*@Override
-    public boolean isParentOf(Term pa) {
-        return true;
-    }*/
     
     @Override
-    /*
-     * A Variable only euqal another PredAtom of type Variable iff both names are equal
+    /**
+     * Since this is a variable, and for variables we implement the factory pattern, and since
+     * a variable never equals a functerm or a constant, we can just use the == operator to
+     * determine equality.
+     * 
+     * @param o The object we want this variable to compare with
+     * @return wether o equals this object
      */
     public boolean equals(Object o) {
-        //TODO: Is it faster to compare o.getClass().equals(Variable)?
-        if(o.getClass().equals(this.getClass())){
-            if(this.name.equals(((Term)o).getName())) return true;
-        }
-        return false;
-    }
-
-    @Override
-    /*
-     * A Variable is not instanciated.
-     * Please be aware that this is in respect to the comparism of mapping instances and schemata
-     * We do not take the value of the variable into account
-     */
-    public boolean isInstanciated() {
-        return false;
+        return (this == o);
     }
     
+    /**
+     * 
+     * @return the string representation of this variable
+     */
     @Override
     public String toString(){
         return this.name;
     }
-
-    @Override
-    public Integer getOperandValue(ArrayList<Variable> vars) {
-        if (vars.contains(this)) return Integer.parseInt(this.value.getName());
-        return null;
-    }
-
-    @Override
-    public boolean isInstanciated(ArrayList<Variable> vars) {
-        if(vars.contains(this)) return true;
-        return false;
-    }
     
-    @Override
-    public boolean isConstant(){
-        return false;
-    }
-    @Override
-    public boolean isFuncTerm(){
-        return false;
-    }
-    @Override
-    public boolean isVariable(){
-        return true;
-    }
-    @Override
-    public ArrayList<Variable> getUsedVariables(){
-        //TODO this sucks. do not create this all the time.
-        ArrayList<Variable> ret = new ArrayList<Variable>();
-        ret.add(this);
-        return ret;
-    }
-    
+    /**
+     * This method is needed within the rete network's selection nodes. There we assign values to variables, til we can build a hole variable assignment
+     * for the corresponding Atom. This is actually not very pritty but it's faster than having a temp value storage within our selection nodes.
+     * 
+     * @return the value of this variable
+     */
     public Term getValue(){
         return value;
     }
+    /**
+     * This method is needed within the rete network's selection nodes. There we assign values to variables, til we can build a hole variable assignment
+     * for the corresponding Atom. This is actually not very pritty but it's faster than having a temp value storage within our selection nodes.
+     * 
+     * @param the term you want to assign to this variable
+     */
     public void setValue(Term pa){
         this.value=pa;
-    }
-    
-    @Override
-    public boolean equalsType(Term t){
-        if(this.getClass() == t.getClass()){
-            return true;
-        }else{
-            return false;
-        }
     }
     
 }

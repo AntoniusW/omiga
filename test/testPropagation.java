@@ -17,6 +17,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import Interfaces.Term;
 import Datastructure.Rete.Rete;
+import Datastructure.Rete.ReteBuilder;
 import Entity.Predicate;
 
 /**
@@ -65,31 +66,32 @@ public class testPropagation {
         Term[] p_terms_Z = {Variable.getVariable("Z")};
         Term[] q_terms_Y = {Variable.getVariable("Y")};
         Term[] q_terms_Z = {Variable.getVariable("Z")};
-        Atom r = new Atom("r",2,r_terms);
-        Atom p_X = new Atom("p",1,p_terms_X);
-        Atom q_Y = new Atom("q",1,q_terms_Y);
+        Atom r = Atom.getAtom("r",2,r_terms);
+        Atom p_X = Atom.getAtom("p",1,p_terms_X);
+        Atom q_Y = Atom.getAtom("q",1,q_terms_Y);
         r1.setHead(r);
         r1.addAtomPlus(p_X);
         r1.addAtomPlus(q_Y);
-        Atom t = new Atom("t",2,t_terms);
-        Atom s = new Atom("s",2,s_terms);
+        Atom t = Atom.getAtom("t",2,t_terms);
+        Atom s = Atom.getAtom("s",2,s_terms);
         r2.setHead(t);
         r2.addAtomPlus(r);
         r2.addAtomPlus(s);
-        Atom p_Z = new Atom("p",1,p_terms_Z);
+        Atom p_Z = Atom.getAtom("p",1,p_terms_Z);
         r3.setHead(p_Z);
         r3.addAtomPlus(s);
         r3.addAtomPlus(t);
-        Atom q_Z = new Atom("q",1,q_terms_Z);
+        Atom q_Z = Atom.getAtom("q",1,q_terms_Z);
         r4.setHead(q_Z);
         r4.addAtomPlus(s);
         r4.addAtomPlus(t);
         
         Rete rete = new Rete();
-        rete.addRule(r1);
-        rete.addRule(r2);
-        rete.addRule(r3);
-        rete.addRule(r4);
+        ReteBuilder rb = new ReteBuilder(rete);
+        rb.addRule(r1);
+        rb.addRule(r2);
+        rb.addRule(r3);
+        rb.addRule(r4);
         
         int nbb = 10;
         // Facts for p

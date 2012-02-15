@@ -22,7 +22,10 @@ import parser.Parser;
 
 /**
  *
- * @author g.weidinger
+ * @author Gerald Weidinger 0526105
+ * 
+ * The main main class of this project. Use it to read in a context via the File specified by input.
+ * 
  */
 public class main {
     
@@ -37,7 +40,7 @@ public class main {
             ContextASP c = pars.readContext(input);
             c.printContext();
             
-            c.initializeRete();
+            //c.initializeRete();
 
             c.propagate();
             

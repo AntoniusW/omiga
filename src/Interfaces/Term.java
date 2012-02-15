@@ -12,102 +12,93 @@ import java.util.HashSet;
 
 /**
  *
- * @author xir
+ * @author Gerald Weidinger 0526105
+ * 
+ * A Term is an abstract class extended by Variable, Constant and FuncTerm. It's essential for creating instances
+ * since an instance is nothing more than an array of terms.
+ * 
+ * @param name the name of the term
+ * @param hash the hasValue of the term (calculated on creation)
+ * @param usedVariables a List of Variables used by this term
+ * @param terms a static HashMap of terms, which is used for uniqueness of terms
+ * 
+ * 
  */
 public abstract class Term {
     
-    /*
-     * A PredAtom is either a constant a variable or a funcTerm.
-     * Equals and hashCode Methodes are used for HashMapLookUps in the datastructure
-     * Father/Child relation is needed to check if we have to update more schema
+    
+    private static HashMap<Term,Term> terms = new HashMap<Term,Term>();
+    
+    /**
+     * 
+     * @param t the term you want to register
      */
-    
-    private static HashMap<Term,Term> predAtoms = new HashMap<Term,Term>();
-    
-    public static void addPredAtom(Term pa){
-        predAtoms.put(pa, pa);
+    public static void addTerm(Term t){
+        terms.put(t, t);
     }
-    
-    public static Term getPredAtom(Term pa){
-        return predAtoms.get(pa);
+    /**
+     * 
+     * @param t the term for which you want to get the unique term
+     * @return the unique instance of t or null if there is no such term yet
+     */
+    public static Term getTerm(Term t){
+        return terms.get(t);
     }
-    public static boolean containsPredAtom(Term pa){
-        return predAtoms.containsKey(pa);
+    /**
+     * 
+     * @param t the term for which you want to verify if it is already there
+     * @return wether t is already there
+     */
+    public static boolean containsTerm(Term t){
+        return terms.containsKey(t);
     }
     
     
     protected String name;
     protected int hash;
-    protected ArrayList<Term> children;
+    protected ArrayList<Variable> usedVariables;
     
-    public Term(String name, ArrayList<Term> children){
-        this.name = name;
-        if(children != null){
-            this.children = new ArrayList<Term>(children);
-        }else{
-            this.children = new ArrayList<Term>(); // is this neccassary?
-        }   
-        this.hash = this.toString().hashCode();
+    /**
+     * empty constructor
+     */
+    public Term(){
+        
     }
     
+    /**
+     * public constructor
+     * creates a term with desired name calculates and sets the hashValue and initializes the usedVariables list
+     * 
+     * @param name name of the Term
+     */
+    public Term(String name){
+        this.name = name;  
+        this.hash = this.toString().hashCode();
+        this.usedVariables = new ArrayList<Variable>();
+    }
+    
+    /**
+     * 
+     * @return the name of this term
+     */
     public String getName(){
         return name;
     }
-    
-    public ArrayList<Term> getChildren(){
-        return children;
-    }
     /*
-     * Implemented over the isParentOf method which changes in the generalisations
+     * returns the hashValue of this term, which was set during creation
      */
-    /*public boolean isChildOf(Term pa){
-        return pa.isParentOf(this);
-    }
-    
-    
-    public boolean isParentOf(Term pa){
-        //This Code depends on the child class
-        return false;
-    }*/
-    @Override
-    public boolean equals(Object o){
-        //This Code depends on the child class
-        return false;
-    }
     @Override
     public int hashCode(){
         return this.hash;
     }
-    public boolean isInstanciated(){
-        //This Code depends on the child class
-        return false;
-    }
     
-    @Override
-    public String toString(){
-        return "ABSTRACT CLASS";
-    }
     
-    public boolean isConstant(){
-        return false;
-    }
-    public boolean isFuncTerm(){
-        return false;
-    }
-    public boolean isVariable(){
-        return false;
-    }
-    
-    public ArrayList<Variable> getUsedVariables(){
-        return new ArrayList<Variable>();
-    }
-    
-    /*
-     * This method is used to define equalaty over atoms, such that p(X,Y) == p(Z,A).
+    /**
+     * 
+     * @return the list of used variables of this term
      */
-    public boolean equalsType(Term t){
-        // must beinplemented by each subclass!
-        return false;
+    public ArrayList<Variable> getUsedVariables(){
+        return this.usedVariables;
     }
     
 }

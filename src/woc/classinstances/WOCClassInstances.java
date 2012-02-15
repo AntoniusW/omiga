@@ -6,6 +6,7 @@ package woc.classinstances;
 
 import Datastructure.Rete.BasicNode;
 import Datastructure.Rete.Rete;
+import Datastructure.Rete.ReteBuilder;
 import Entity.Atom;
 import Entity.Constant;
 import Entity.Instance;
@@ -15,7 +16,11 @@ import Interfaces.Term;
 
 /**
  *
- * @author User
+ * @author Gerald Weidinger 0526105
+ * 
+ * A simple test class, containing only one rule: p(X,Y) :- s(X),t(Y).
+ * nbb defines the number of starting facts for s and t.
+ * This class tests how fast the propagation is.
  */
 public class WOCClassInstances {
 
@@ -28,28 +33,29 @@ public class WOCClassInstances {
         
         Rule r = new Rule();
         Term[] terms = {Variable.getVariable("X"),Variable.getVariable("Y")};
-        Atom head = new Atom("p",2,terms);
+        Atom head = Atom.getAtom("p",2,terms);
         Term[] terms1 = {Variable.getVariable("X")};
         Term[] terms2 = {Variable.getVariable("Y")};
-        Atom body1 = new Atom("s",1,terms1);
-        Atom body2 = new Atom("t",1,terms2);  
+        Atom body1 = Atom.getAtom("s",1,terms1);
+        Atom body2 = Atom.getAtom("t",1,terms2);  
         
         r.setHead(head);
         r.addAtomPlus(body1);
         r.addAtomPlus(body2);
         
         Rete rete = new Rete();
-        rete.addRule(r);
+        ReteBuilder rb = new ReteBuilder(rete);
+        rb.addRule(r);
         // p(X,Y) :- s(X),t(Y).
         
         Rule r2 = new Rule();
-        Atom headR2 = new Atom("k",2,terms);
-        Atom bodyR21 = new Atom("s",1,terms1);
-        Atom bodyR22 = new Atom("q",1,terms2); 
+        Atom headR2 = Atom.getAtom("k",2,terms);
+        Atom bodyR21 = Atom.getAtom("s",1,terms1);
+        Atom bodyR22 = Atom.getAtom("q",1,terms2); 
         r2.setHead(headR2);
         r2.addAtomPlus(bodyR21);
         r2.addAtomPlus(bodyR22);
-        rete.addRule(r2);
+        rb.addRule(r2);
         
         BasicNode bn = rete.getBasicNodePlus(body1.getPredicate());
         System.out.println("BN = " + bn);

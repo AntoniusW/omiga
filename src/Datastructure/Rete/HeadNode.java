@@ -5,6 +5,7 @@
 package Datastructure.Rete;
 
 import Entity.Atom;
+import Entity.Constant;
 import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Variable;
@@ -51,10 +52,10 @@ public class HeadNode extends Node{
         Term[] headInstance = new Term[a.getArity()];
         for(int i = 0; i < a.getArity();i++){
             Term t = a.getTerms()[i];
-            if(t.isVariable()){
+            if(t.getClass().equals(Variable.class)){
                     headInstance[i] = instance.get(this.tempVarPosition.get((Variable)t));
                 }else{
-                    if (t.isConstant()){
+                    if (t.getClass().equals(Constant.class)){
                         headInstance[i] = t;
                     }else{
                         //System.err.println("unifyTerm from head");
@@ -81,10 +82,10 @@ public class HeadNode extends Node{
         ArrayList<Term> fchildren = new ArrayList<Term>();        
         for(int i = 0; i < f.getChildren().size();i++){
             Term t = f.getChildren().get(i);
-            if(t.isVariable()){
+            if(t.getClass().equals(Variable.class)){
                     fchildren.add(instance.get(this.tempVarPosition.get((Variable)t)));
             }else{
-                if (t.isConstant()){
+                if (t.getClass().equals(Constant.class)){
                     fchildren.add(t);
                 }else{
                     fchildren.add(unifyFuncTerm((FuncTerm)t, instance));

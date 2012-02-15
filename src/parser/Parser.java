@@ -26,18 +26,17 @@ import java.util.ArrayList;
 
 /**
  *
- * @author g.weidinger
+ * @author Gerald Weidinger 0526105
+ * 
+ * The Parser class is used to read in a context from a file.
+ * This class is not documented since my hard core java parser gets only discriminated anyway!
+ * 
  */
 public class Parser {
     
     // TODO: 
-    // FuncTerms
-    // hole contexts
     // Operators
     // Predicates of arity 0 are read wrong ) is added to the name at the end
-    //--------------------------------------------------------------------------------
-    // negative predicates
-    // DONE head of a rule has to be treated seperatly (a sit is added a shead not as a body Atom!)
     
     public ContextASP readContext(File f)throws FactSizeException,RuleNotSafeException{
         String s = "";
@@ -120,7 +119,7 @@ public class Parser {
                             System.out.println("Read Fact: " + predName);
                             Term[] termArray = new Term[terms.size()];
                             terms.toArray(termArray);
-                            con.addFact(Predicate.getPredicate(predName, terms.size()), Instance.getInstance(termArray) );
+                            con.addFact2IN(Predicate.getPredicate(predName, terms.size()), Instance.getInstance(termArray) );
                             break;
                         }else{
                             if(c != ',') System.err.println("ERROR404!");
@@ -264,7 +263,7 @@ public class Parser {
             i++;
             c = s.charAt(i);
         }
-        System.err.println("FUNCTERM TERMINATED!");
+        System.err.println("FUNCTERM TERMINATED!: " + funcTermName + " - " + children);
         FuncTerm ft = FuncTerm.getFuncTerm(funcTermName, children);
         aL.add(ft);
         return i;
@@ -308,7 +307,7 @@ public class Parser {
                             System.out.println("Read Predicate: " + predName);
                             Term[] termArray = new Term[terms.size()];
                             terms.toArray(termArray);
-                            pir = new Atom(predName, terms.size(), terms.toArray(termArray));
+                            pir = Atom.getAtom(predName, terms.size(), terms.toArray(termArray));
                             if(neg){
                                 r.addAtomMinus(pir);
                             }else{
@@ -358,7 +357,7 @@ public class Parser {
                             System.out.println("Read Predicate: " + predName);
                             Term[] termArray = new Term[terms.size()];
                             terms.toArray(termArray);
-                            pir = new Atom(predName, terms.size(), terms.toArray(termArray));
+                            pir = Atom.getAtom(predName, terms.size(), terms.toArray(termArray));
                             r.setHead(pir);
                             break;
                         }else{

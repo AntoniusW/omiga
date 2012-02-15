@@ -10,58 +10,86 @@ import java.util.HashSet;
 
 /**
  *
- * @author xir
+ * @author Gerald Weidinger 0526105
+ * 
+ * A FuncTerm represents a logical function term. 
+ * 
+ * @param children a list of Terms representing those terms that are contained within this functerm. (in the ordering of the list) 
+ * 
+ * 
  */
 public class FuncTerm extends Term{
     
-    // TOCHECK: maybe we should store the Variables of a functerm at creation time in the functerm to return it when getUsedVariables is called
+    private ArrayList<Term> children;
     
+    
+    /**
+     * If you want to generate a FuncTerm use this method, since the constructor is private in order to prevent generation of
+     * double FuncTerms instances. (Please note that this factory pattern is not as powerfull like the one we use for 
+     * variables and constants, since we have to create a funcTerm, before we are able to check it's existence.
+     * Anyway this may save some space, as the functerm created for lookUp can be destroyed by garbage collction as soon
+     * as this method terminates. (While if we simple create Functerms when needed, the functerms are stored within our rete,
+     * and therefore double functerms could not be destroyed by garbage collection, as they are in use.
+     * 
+     * @param name the name of your desired FuncTerm
+     * @param children a list of Terms representing those terms that are contained within this functerm. (in the ordering of the list)
+     * @return the desired Functerm with given name and children
+     */
     public static FuncTerm getFuncTerm(String name, ArrayList<Term> children){
         FuncTerm t = new FuncTerm(name, children);
-        if(Term.containsPredAtom(t)){
-            return (FuncTerm)Term.getPredAtom(t);
+        if(Term.containsTerm(t)){
+            return (FuncTerm)Term.getTerm(t);
         }else{
-            Term.addPredAtom(t);
+            Term.addTerm(t);
             return t;
         }
     }
     
-    private FuncTerm(String name, ArrayList<Term> children){
-        super(name, children);
-        this.name = name;
-        this.hash = this.toString().hashCode();
+    /**
+     * 
+     * @return the List of Terms this function term contains in correct ordering
+     */
+    public ArrayList<Term> getChildren(){
+        return children;
     }
     
-    /*
-     * A func term is no parent of Variables nor constants, it's only parent to functerms
+    /**
+     * private constructor. In order to obtain a FuncTerm use the static method getFuncTerm.
+     * generates a new functerm by setting it's name, usedVariables, children and hashValue.
+     * 
+     * @param name the name of the FuncTerm you want to create
+     * @param children a list of Terms representing those terms that are contained within this functerm. (in the ordering of the list)
      */
-    /*@Override
-    public boolean isParentOf(Term pa) {
-        if(pa.getClass().equals(this.getClass())){
-            FuncTerm t = (FuncTerm)pa;
-            // Functerms of different arity or different name are in no parent/child relation
-            if(this.name.equals(t.name) && t.children.size() == this.children.size()) {
-                for(int i = 0; i < this.children.size(); i++){
-                    if(!this.children.get(i).isParentOf(t.children.get(i))) {
-                        return false;
-                    }
-                }
-                return true;
+    private FuncTerm(String name, ArrayList<Term> children){
+        this.name = name;
+        this.children = children;
+        this.hash = this.toString().hashCode();
+        this.usedVariables = new ArrayList<Variable>();
+        for(int i = 0; i < children.size();i++){
+            for(int j = 0; j < children.get(i).getUsedVariables().size();j++){
+                Variable v = children.get(i).getUsedVariables().get(j);
+                if(!usedVariables.contains(v)) usedVariables.add(v);
             }
         }
-        return false;
-    }*/
-    
-    /*
-     * A functerm only equals functerms of same name and same children
+    }    
+
+    /**
+     * Since function terms have to be created during calculation we cannot apply the factory patterns
+     * in such a way that we can use == for equals, because creating a function Term like we do with 
+     * variables or constants would take to long (since there can be unlimited many functerms).
+     * 
+     * @param o the object we want to compare with this function term
+     * @return wether this fucntion term equals o
      */
     @Override
     public boolean equals(Object o) {
-        if(o.getClass().equals(this.getClass())){
+        // functerms only equal functerms
+        if(o.getClass().equals(FuncTerm.class)){
             FuncTerm t = (FuncTerm)o;
-            // Functerms of different arity or different name are in no parent/child relation
+            // Functerms of different arity or different name are not equal
             if(this.name.equals(t.name) && t.children.size() == this.children.size()) {
                 for(int i = 0; i < this.children.size(); i++){
+                    //if the children of both functerms are not equal, the functerms are not equal
                     if(!this.children.get(i).equals(t.children.get(i))) return false;
                 }
                 return true;
@@ -70,17 +98,10 @@ public class FuncTerm extends Term{
         return false;
     }
     
-    @Override
-    /*
-     * A Functerm is instanciated iff he contains no variable
+    /**
+     * 
+     * @return the string representation of this function term.
      */
-    public boolean isInstanciated() {
-        for(Term pa: children){
-            if (!pa.isInstanciated()) return false;
-        }
-        return true;
-    }
-    
     @Override
     public String toString(){
         String s = name + "(";
@@ -88,59 +109,6 @@ public class FuncTerm extends Term{
              s = s + this.children.get(i).toString() + ",";
         } 
         return s.substring(0,s.length()-1) + ")";
-    }
-    
-    @Override
-    public boolean isConstant(){
-        return false;
-    }
-    @Override
-    public boolean isFuncTerm(){
-        return true;
-    }
-    @Override
-    public boolean isVariable(){
-        return false;
-    }
-    
-    @Override
-    public ArrayList<Variable> getUsedVariables(){
-        ArrayList<Variable> ret = new ArrayList<Variable>();
-        for(int i = 0; i < children.size();i++){
-            for(int j = 0; j < children.get(i).getUsedVariables().size();j++){
-                Variable v = children.get(i).getUsedVariables().get(j);
-                if(!ret.contains(v)) ret.add(v);
-            }
-        }
-        /*for(PredAtom child: children){
-            ret.addAll(child.getUsedVariables());
-        }*/
-        return ret;
-    }
-    
-    @Override
-    public boolean equalsType(Term t){
-        if(this.getClass() != t.getClass()){
-            FuncTerm that = (FuncTerm)t;
-            if (this.name.equals(that.name)){
-                if( this.children.size() == that.children.size()){
-                    boolean flag = true;
-                    for(int i = 0; i < this.children.size();i++){
-                        if (!this.children.get(i).equalsType(that.children.get(i))){
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if (flag) return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    public void addChild(Term t){
-        this.children.add(t);
-    }
-    
+    }    
     
 }

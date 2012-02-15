@@ -24,16 +24,16 @@ public class Rete {
     HashMap<Predicate, BasicNode> basicLayerPlus;
     HashMap<Predicate, BasicNode> basicLayerMinus;
     
-    HashMap<Predicate, Stack<Instance>> stackyPlus;
-    HashMap<Predicate, Stack<Instance>> stackyMinus;
+    /*HashMap<Predicate, Stack<Instance>> stackyPlus;
+    HashMap<Predicate, Stack<Instance>> stackyMinus;*/
     
     public boolean satisfiable = true;
     
     public Rete(){
         this.basicLayerPlus = new HashMap<Predicate,BasicNode>();
         this.basicLayerMinus = new HashMap<Predicate,BasicNode>();
-        this.stackyPlus = new HashMap<Predicate, Stack<Instance>>();
-        this.stackyMinus = new HashMap<Predicate, Stack<Instance>>();
+        /*this.stackyPlus = new HashMap<Predicate, Stack<Instance>>();
+        this.stackyMinus = new HashMap<Predicate, Stack<Instance>>();*/
     }
     
     /*
@@ -100,95 +100,7 @@ public class Rete {
         }
     }*/
     
-    public void addRule(Rule r){
-        //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
-        if(r.getHead()!=null) this.addAtomPlus(r.getHead());
-        
-        for(Atom a: r.getBodyPlus()){
-            this.addAtomPlus(a);
-        }
-        for(Atom a: r.getBodyMinus()){
-            this.addAtomMinus(a);
-        }
-        
-        ArrayList<Atom> atomsPlus = (ArrayList<Atom>) r.getBodyPlus().clone();
-        ArrayList<Atom> atomsMinus = (ArrayList<Atom>) r.getBodyMinus().clone();
-        ArrayList<Operator> operators = (ArrayList<Operator>) r.getOperators().clone();
-        Atom actual = getBestNextAtom(atomsPlus);
-        
-        /*System.err.println("BasicLayer.get: " + this.basicLayerPlus.get(actual.getPredicate()));
-        System.err.println("BasicLayer.get: " + this.basicLayerPlus.get(actual.getPredicate()).getChildren());
-        System.err.println("KEY: " + actual.getAtomAsReteKey());
-        System.err.println("Get Key: " + this.basicLayerPlus.get(actual.getPredicate()).getChildren().get(actual.getAtomAsReteKey()));
-       */
-        
-        Node actualNode = this.basicLayerPlus.get(actual.getPredicate()).getChildren().get(actual.getAtomAsReteKey());
-        ((SelectionNode)actualNode).resetVarPosition(actual);
-        /*Node actualNode = this.basicLayerPlus.get(actual.getPredicate()).getSelectionNode(actual.getAtomAsReteKey());
-        System.err.println("Get Key: " + this.basicLayerPlus.get(actual.getPredicate()).getSelectionNode(actual.getAtomAsReteKey()));*/
-        System.err.println("Actual Node: " + actualNode);
-        Atom partner;
-        
-        while(!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()){
-            if(!atomsPlus.isEmpty()){
-                partner = getBestPartner(atomsPlus, actualNode);
-                System.err.println("Partner: " + partner);
-                actualNode = this.createJoin(actualNode, partner, true);
-            }else{
-                if(!atomsMinus.isEmpty()){
-                    partner = getBestPartner(atomsMinus, actualNode);
-                    System.err.println("Partner: " + partner);
-                    actualNode = this.createJoin(actualNode, partner, false);
-                }else{
-                    // Do something cool for operators!
-                }
-            }
-        }
-        actualNode.addChild(new HeadNode(r.getHead(),this, actualNode));
-    }
     
-    private Node createJoin(Node aNode, Atom b, boolean bPositive){
-        SelectionNode bNode;
-        if(bPositive){
-            bNode = this.basicLayerPlus.get(b.getPredicate()).getChildren().get(b.getAtomAsReteKey());
-        }else{
-            bNode = this.basicLayerMinus.get(b.getPredicate()).getChildren().get(b.getAtomAsReteKey());
-        }
-        bNode.resetVarPosition(b);
-        // TOCHECK: Keep track of all JoinNodes such that we create each joinNode only once!
-        return new JoinNode(aNode,bNode, this);  
-    }
-    
-    
-    private Atom getBestPartner(ArrayList<Atom> atoms, Node node){
-        Atom a = atoms.get(0);
-        atoms.remove(a);
-        return a;
-    }
-    
-    private Atom getBestNextAtom(ArrayList<Atom> atoms){
-        Atom a = atoms.get(0);
-        atoms.remove(a);
-        return a;
-    }
-    
-    public void addAtomPlus(Atom atom){   
-        if(!basicLayerPlus.containsKey(atom.getPredicate())){
-            //System.out.println("Creating BasicNode: " + atom.getPredicate());
-            this.basicLayerPlus.put(atom.getPredicate(), new BasicNode(atom.getArity(),this));
-            this.stackyPlus.put(atom.getPredicate(), new Stack<Instance>());
-        }    
-        basicLayerPlus.get(atom.getPredicate()).AddPredInRule(atom);
-        
-    }
-    
-    public void addAtomMinus(Atom atom){
-        if(!basicLayerMinus.containsKey(atom.getPredicate())){
-            this.basicLayerMinus.put(atom.getPredicate(), new BasicNode(atom.getArity(),this));
-            this.stackyMinus.put(atom.getPredicate(), new Stack<Instance>());
-        }   
-        basicLayerMinus.get(atom.getPredicate()).AddPredInRule(atom);  
-    }
     
     public static int omg = 0;
     public void addInstancePlus(Predicate p, Instance instance){
@@ -251,6 +163,23 @@ public class Rete {
         if(plus) return this.basicLayerPlus.containsKey(p);
         return this.basicLayerMinus.containsKey(p);
     }
+
+    public HashMap<Predicate, BasicNode> getBasicLayerMinus() {
+        return basicLayerMinus;
+    }
+
+    public HashMap<Predicate, BasicNode> getBasicLayerPlus() {
+        return basicLayerPlus;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 }

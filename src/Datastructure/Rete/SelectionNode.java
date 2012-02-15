@@ -8,6 +8,7 @@ import Datastructure.storage.Storage;
 import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Atom;
+import Entity.Constant;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
@@ -99,7 +100,7 @@ public class SelectionNode extends Node{
      */
     private boolean unifyTerm(Term schema, Term instance){
         //System.err.println("Unify!");
-        if (schema.isVariable()){
+        if (schema.getClass().equals(Variable.class)){
             //System.err.println("SCHWEMA-VARIABLE: " + schema + " vs instance: " + instance);
             Variable v = (Variable)schema;
             if(v.getValue() == null ){
@@ -109,14 +110,14 @@ public class SelectionNode extends Node{
                 return v.getValue().equals(instance);
             }
         }else{
-            if(schema.isConstant()){
+            if(schema.getClass().equals(Constant.class)){
                 //System.err.println("SCHWEMA-Constant: " + schema + " vs instance: " + instance);
                 return schema.equals(instance);
             }else{
                 // schema is FuncTerm
                 if(schema.getName().equals(instance.getName())){ // TOCHECK: Stringvergleich
-                    for(int i = 0; i < (schema).getChildren().size();i++){
-                        if(!unifyTerm(schema.getChildren().get(i), instance.getChildren().get(i))) return false;
+                    for(int i = 0; i < ((FuncTerm)schema).getChildren().size();i++){
+                        if(!unifyTerm(((FuncTerm)schema).getChildren().get(i), ((FuncTerm)instance).getChildren().get(i))) return false;
                     }
                 }else{
                     return false;

@@ -61,32 +61,32 @@ public class TestAtomKey {
         Term[] termsXX = new Term[2];
         termsXX[0] = Variable.getVariable("X");
         termsXX[1] = Variable.getVariable("X");
-        pxx = new Atom("p",2,termsXX);
-        pxx2 = new Atom("p",2,termsXX);
+        pxx = Atom.getAtom("p",2,termsXX);
+        pxx2 = Atom.getAtom("p",2,termsXX);
         
         Term[] termsYY = new Term[2];
         termsYY[0] = Variable.getVariable("Y");
         termsYY[1] = Variable.getVariable("Y");
-        pyy = new Atom("p",2,termsYY);
+        pyy = Atom.getAtom("p",2,termsYY);
         
         Term[] termsXY = new Term[2];
         termsXY[0] = Variable.getVariable("X");
         termsXY[1] = Variable.getVariable("Y");
-        pxy = new Atom("p",2,termsXY);
+        pxy = Atom.getAtom("p",2,termsXY);
         
         Term[] termsYX = new Term[2];
         termsYX[0] = Variable.getVariable("Y");
         termsYX[1] = Variable.getVariable("X");
-        pyx = new Atom("p",2,termsYX);
+        pyx = Atom.getAtom("p",2,termsYX);
         
-        qxx = new Atom("q",2,termsXX);
-        qxx2 = new Atom("q",2,termsXX);
+        qxx = Atom.getAtom("q",2,termsXX);
+        qxx2 = Atom.getAtom("q",2,termsXX);
 
-        qyy = new Atom("q",2,termsYY);
+        qyy = Atom.getAtom("q",2,termsYY);
 
-        qxy = new Atom("q",2,termsXY);
+        qxy = Atom.getAtom("q",2,termsXY);
         
-        qyx = new Atom("q",2,termsYX);
+        qyx = Atom.getAtom("q",2,termsYX);
         
         
         ArrayList<Term> childrenX = new ArrayList<Term>();
@@ -114,10 +114,10 @@ public class TestAtomKey {
         fyy[1] = Variable.getVariable("Y");
         
         
-        pfxx = new Atom("p", 2,fxx);
-        pfyy = new Atom("p", 2, fyy);
-        pfxy = new Atom("p", 2, fxy);
-        pfyx = new Atom("p", 2, fyx);
+        pfxx = Atom.getAtom("p", 2,fxx);
+        pfyy = Atom.getAtom("p", 2, fyy);
+        pfxy = Atom.getAtom("p", 2, fxy);
+        pfyx = Atom.getAtom("p", 2, fyx);
         
         
         Term[] xfx = new Term[2];
@@ -136,10 +136,10 @@ public class TestAtomKey {
         yfy[1] = fy;
         yfy[0] = Variable.getVariable("Y");
         
-        pxfx = new Atom("p", 2,xfx);
-        pyfy = new Atom("p", 2,yfy);
-        pxfy = new Atom("p", 2,xfy);
-        pyfx = new Atom("p", 2,yfx);
+        pxfx = Atom.getAtom("p", 2,xfx);
+        pyfy = Atom.getAtom("p", 2,yfy);
+        pxfy = Atom.getAtom("p", 2,xfy);
+        pyfx = Atom.getAtom("p", 2,yfx);
         
     }
     
