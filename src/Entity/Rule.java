@@ -137,7 +137,7 @@ public class Rule {
             s = s + ba + ",";
         }
         for(Atom ba: bodyMinus){
-            s = s + ba + ",";
+            s = s + "not " + ba + ",";
         }
         //TODO: Operators
         return s.substring(0, s.length()-1) + ".";

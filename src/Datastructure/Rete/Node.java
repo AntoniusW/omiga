@@ -47,6 +47,7 @@ public abstract class Node {
         this.rete = rete;
         this.children = new ArrayList<Node>();
         tempVarPosition = new HashMap<Variable,Integer>();
+        this.rete.getChoiceUnit().addNode(this);
     }
     
     public Variable[] getVarOrdering(){
@@ -58,7 +59,7 @@ public abstract class Node {
     }
     
     public void addInstance(Instance instance, Node from){
-        // has to be implemented by each NodeTye
+        this.rete.getChoiceUnit().addInstance(this, instance);
     }
     
     public void removeInstance(Instance instance){
@@ -77,6 +78,10 @@ public abstract class Node {
     }
     
     public void addChild(Node n){
+        if(n.getClass().equals(ChoiceNode.class)){
+            System.out.println("NODE: Choice node is added to: " + this);
+        }
+            
         if (!this.children.contains(n)) this.children.add(n);
     }
     

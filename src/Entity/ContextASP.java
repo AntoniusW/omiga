@@ -6,6 +6,7 @@ package Entity;
 
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
+import Datastructure.choice.ChoiceUnit;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ContextASP {
     private HashMap<Predicate, ArrayList<Instance>> factsOUT;
     private ReteBuilder reteBuilder;
     private Rete rete;
+    private ChoiceUnit choiceUnit;
     
     /**
      * public constructor
@@ -36,7 +38,8 @@ public class ContextASP {
         rules = new ArrayList<Rule>();
         factsIN = new HashMap<Predicate, ArrayList<Instance>>();
         factsOUT = new HashMap<Predicate, ArrayList<Instance>>();
-        this.rete = new Rete();
+        this.choiceUnit = new ChoiceUnit(this);
+        this.rete = new Rete(choiceUnit);
         this.reteBuilder = new ReteBuilder(rete);
     }
     
@@ -45,6 +48,10 @@ public class ContextASP {
      */
     public void propagate(){
         this.rete.propagate();
+    }
+    
+    public boolean choice(){
+        return this.choiceUnit.choice();
     }
     
     /**
@@ -74,7 +81,12 @@ public class ContextASP {
             String s = "Fact: " + instance.toString() + " and Predicate arity of: " + p + " do not match: " + instance.getSize() + " != " + p.getArity();
             throw new FactSizeException(s);
         }
-        if(!factsIN.containsKey(p)) factsIN.put(p, new ArrayList<Instance>());
+        if(!factsIN.containsKey(p)) {
+            factsIN.put(p, new ArrayList<Instance>());
+            if(!rete.containsPredicate(p, true)){
+                rete.addPredicatePlus(p);
+            }    
+        }
         factsIN.get(p).add(instance);
         rete.addInstancePlus(p, instance);
     }
@@ -157,6 +169,23 @@ public class ContextASP {
      */
     public Rete getRete(){
         return rete;
+    }
+    
+    public ChoiceUnit getChoiceUnit(){
+        return this.choiceUnit;
+    }
+    
+    public boolean isSatisfiable(){
+        return rete.satisfiable;
+    }
+    
+    public void backtrack(){
+        this.resetSatisfiable();
+        this.choiceUnit.backtrack();
+    }
+    
+    public void resetSatisfiable(){
+        this.rete.satisfiable = true;
     }
     
     

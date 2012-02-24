@@ -29,9 +29,9 @@ public class HeadNode extends Node{
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public HeadNode(Atom atom, Rete rete, Node n){
         super(rete);
-        //System.out.println("HeadNode Created!");
         this.a = atom;
         this.tempVarPosition = (HashMap<Variable, Integer>) n.getVarPositions().clone();
+        System.err.println("HeadNode Created!: " + this);
     }
     
     /*
@@ -43,9 +43,18 @@ public class HeadNode extends Node{
      */
     @Override
     public void addInstance(Instance instance, Node from){
+        //System.err.println("Adding something to headNode: " + instance);
+        // the only children of HeadNodes are choice Nodes --> We remove the actual Instance from the choice Node
+        // The instance should match the instance of the choice Node, since after the positive Part + Operators have been apllied no mor eVariables are added to the assignment
+        //System.err.println(this.children);
+        for(int i=0; i < this.children.size();i++){
+            this.children.get(i).removeInstance(instance);
+        }
         if(a == null){
+            // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             rete.satisfiable = false;
-            System.err.println("UNSATISFIABLE!");
+            System.out.println("UNSATISFIABLE!: huhu?");
+            rete.printAnswerSet();
             return;
         }
         //System.err.println("ADD Intsnace to HEADNODE: " + instance);
@@ -72,8 +81,9 @@ public class HeadNode extends Node{
                 rete.addInstancePlus(a.getPredicate(),instance2Add);
                 //System.err.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
             }else{
-                System.err.println("UNSATISFIABLE!");
+                System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel());
                 this.rete.satisfiable = false;
+                rete.printAnswerSet();
             }
         }
     }

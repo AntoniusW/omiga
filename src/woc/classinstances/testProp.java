@@ -13,6 +13,8 @@ import Entity.Variable;
 import Interfaces.Term;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
+import Datastructure.choice.ChoiceUnit;
+import Entity.ContextASP;
 
 /**
  *
@@ -71,14 +73,14 @@ public class testProp {
         r4.addAtomPlus(s);
         r4.addAtomPlus(t);
         
-        Rete rete = new Rete();
+        Rete rete = new Rete(new ChoiceUnit(new ContextASP()));
         ReteBuilder rb = new ReteBuilder(rete);
         rb.addRule(r1);
         rb.addRule(r2);
         rb.addRule(r3);
         rb.addRule(r4);
         
-        int nbb = 60;
+        int nbb = 2;
         // Facts for p
         for(int i = 0; i < nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};

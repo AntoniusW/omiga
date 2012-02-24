@@ -27,6 +27,8 @@ import java.util.HashSet;
  */
 public class Storage {
     
+    public int arity; //TODO delete. Only needed for test use
+    
     HashMap<Term,HashSet<Instance>>[] memory; // this is where we store our stuff
     
     /**
@@ -36,6 +38,7 @@ public class Storage {
      */
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public Storage(int arity){
+        this.arity = arity;
         this.memory = new HashMap[arity];
         for(int i = 0; i < memory.length;i++){
             memory[i] = new HashMap<Term,HashSet<Instance>>();

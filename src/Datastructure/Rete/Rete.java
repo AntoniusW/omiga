@@ -4,6 +4,7 @@
  */
 package Datastructure.Rete;
 
+import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
 import Entity.Instance;
 import Entity.Operator;
@@ -21,6 +22,9 @@ import java.util.Stack;
  */
 public class Rete {
     
+    // TODO: Rete does not need a chocie Unit pointer, or we add the choice Unit to all the nodes via the rete builder. But this is more work and the Node constrcutor becomes ugly
+    ChoiceUnit choiceUnit;
+    
     HashMap<Predicate, BasicNode> basicLayerPlus;
     HashMap<Predicate, BasicNode> basicLayerMinus;
     
@@ -29,7 +33,8 @@ public class Rete {
     
     public boolean satisfiable = true;
     
-    public Rete(){
+    public Rete(ChoiceUnit choiceUnit){
+        this.choiceUnit = choiceUnit;
         this.basicLayerPlus = new HashMap<Predicate,BasicNode>();
         this.basicLayerMinus = new HashMap<Predicate,BasicNode>();
         /*this.stackyPlus = new HashMap<Predicate, Stack<Instance>>();
@@ -53,6 +58,21 @@ public class Rete {
                 if(bn.propagate()) flag = true;
             }
         }
+        if(!satisfiable){
+            // Since we store facts within the basic Nodes on a stack, we have to empty this stack
+            // in case of unsatisfiability, since the stack has to be empty for the next propagation after backtracking
+            for(BasicNode bn: basicLayerPlus.values()){
+                bn.resetPropagation();
+            }
+            for(BasicNode bn: basicLayerMinus.values()){
+                bn.resetPropagation();
+            }
+        }
+        /*System.out.println("DECISION UNIT OUTPRINT:");
+        this.choiceUnit.printDecisionMemory();
+        System.out.println("____________________");
+        this.choiceUnit.printAllChoiceNodes();
+        System.out.println("____________________");*/
     }
     
     /*public void propagate(){
@@ -111,6 +131,7 @@ public class Rete {
     
      
     public void addInstanceMinus(Predicate p,Instance instance){
+        //System.out.println("Adding instance Minus!!!!: " + p + " - " + instance);
         omg++;
         basicLayerMinus.get(p).addInstance(instance);
         //this.stackyMinus.get(p).push(instance);
@@ -140,24 +161,37 @@ public class Rete {
     }
     
     public void printAnswerSet(){
+        System.out.println("Printing Answerset: ");
+        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        System.out.println("Positive Facts: ");
         for(Predicate p: this.basicLayerPlus.keySet()){
             Term[] selectionCriteria = new Term[p.getArity()];
             for(int i = 0; i < p.getArity();i++){
                 selectionCriteria[i] = Variable.getVariable("X");
             }
             System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
-            //this.basicLayerPlus.get(p).printAllInstances();
+            this.basicLayerPlus.get(p).printAllInstances();
         }
+        System.out.println("Negative Facts: ");
+        for(Predicate p: this.basicLayerMinus.keySet()){
+            Term[] selectionCriteria = new Term[p.getArity()];
+            for(int i = 0; i < p.getArity();i++){
+                selectionCriteria[i] = Variable.getVariable("X");
+            }
+            System.out.println("Instances for: " + p + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
+            this.basicLayerMinus.get(p).printAllInstances();
+        }
+        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
     }
     
     /*
      * Only needed to add Storage for facts that are of predicates that are not used within rules.
      */
     public void addPredicatePlus(Predicate p){
-        this.basicLayerPlus.put(p, new BasicNode(p.getArity(),this));
+        this.basicLayerPlus.put(p, new BasicNode(p.getArity(),this,p));
     }
     public void addPredicateMinus(Predicate p){
-        this.basicLayerMinus.put(p, new BasicNode(p.getArity(),this));
+        this.basicLayerMinus.put(p, new BasicNode(p.getArity(),this,p));
     }
     public boolean containsPredicate(Predicate p, boolean plus){
         if(plus) return this.basicLayerPlus.containsKey(p);
@@ -173,7 +207,9 @@ public class Rete {
     }
     
     
-    
+    public ChoiceUnit getChoiceUnit(){
+        return this.choiceUnit;
+    }
     
     
     

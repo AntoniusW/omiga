@@ -106,6 +106,7 @@ public class JoinNode extends Node{
     
     @Override
     public void addInstance(Instance instance, Node n){
+        super.addInstance(instance, this);
         // We determine the which of the two join partners the instance comes from
         
         //System.out.println(this + " addInstance is called with: " + instance);

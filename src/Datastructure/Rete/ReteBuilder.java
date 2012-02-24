@@ -4,6 +4,7 @@
  */
 package Datastructure.Rete;
 
+import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
 import Entity.ContextASP;
 import Entity.Instance;
@@ -20,8 +21,8 @@ public class ReteBuilder {
     
     Rete rete;
     
-    public ReteBuilder(){
-        this.rete = new Rete();
+    public ReteBuilder(ChoiceUnit choiceUnit){
+        this.rete = new Rete(choiceUnit);
     }
     
     public ReteBuilder(Rete rete){
@@ -52,37 +53,68 @@ public class ReteBuilder {
         System.err.println("Get Key: " + this.basicLayerPlus.get(actual.getPredicate()).getChildren().get(actual.getAtomAsReteKey()));
        */
         
-        Node actualNode = this .rete.getBasicLayerPlus().get(actual.getPredicate()).getChildren().get(actual.getAtomAsReteKey());
+        //Node actualNode = this .rete.getBasicLayerPlus().get(actual.getPredicate()).getChildren().get(actual.getAtomAsReteKey());
+        Node actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+        System.err.println(actualNode);
         ((SelectionNode)actualNode).resetVarPosition(actual);
+        System.err.println("ASA: " + actualNode + " actual Pred= " + actual.getPredicate());
         /*Node actualNode = this.basicLayerPlus.get(actual.getPredicate()).getSelectionNode(actual.getAtomAsReteKey());
         System.err.println("Get Key: " + this.basicLayerPlus.get(actual.getPredicate()).getSelectionNode(actual.getAtomAsReteKey()));*/
         System.err.println("Actual Node: " + actualNode);
         Atom partner;
         
+        ChoiceNode cN = null;
+        HeadNodeConstraint constraintNode = null;
+        
+        
+        if(atomsPlus.isEmpty() && operators.isEmpty() && !atomsMinus.isEmpty()){
+                    // if the rule consisted only of one positive atom no operators and has a negative body we have to create the choice Node here.
+                    constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
+                    cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(),r,actualNode.tempVarPosition, constraintNode);
+                    System.err.println("ChoiceNode: " + cN);
+                    actualNode.addChild(cN);
+                }
+        
+        
         while(!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()){
+            System.out.println("OMG: " + atomsPlus.isEmpty() + atomsMinus.isEmpty() + operators.isEmpty());
             if(!atomsPlus.isEmpty()){
                 partner = getBestPartner(atomsPlus, actualNode);
                 System.err.println("Partner: " + partner);
                 actualNode = this.createJoin(actualNode, partner, true);
+                if(atomsPlus.isEmpty() && operators.isEmpty() && !atomsMinus.isEmpty()){
+                    System.out.println("HALLÖLÖ?!");
+                    // if atomPlus is now empty  we removed the last atom from here.
+                    // If there is a negative part and no operators are within this Rule then we now add the ChoiceNode
+                    // since the positive part of the rule is satisfied now
+                    constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
+                    cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(),r,actualNode.tempVarPosition, constraintNode);
+                    System.err.println("ChoiceNode: " + cN);
+                    actualNode.addChild(cN);
+                }
             }else{
                 if(!atomsMinus.isEmpty()){
                     partner = getBestPartner(atomsMinus, actualNode);
                     System.err.println("Partner: " + partner);
                     actualNode = this.createJoin(actualNode, partner, false);
                 }else{
+                    // TODO: Do this before atomsMinus, and create cN Node here as well!
                     // Do something cool for operators!
                 }
             }
         }
-        actualNode.addChild(new HeadNode(r.getHead(),rete, actualNode));
+        HeadNode hN = new HeadNode(r.getHead(),rete, actualNode);
+        actualNode.addChild(hN);
+        if(constraintNode != null) actualNode.addChild(constraintNode);
+        if(cN!=null) hN.addChild(cN);
     }
     
     private Node createJoin(Node aNode, Atom b, boolean bPositive){
         SelectionNode bNode;
         if(bPositive){
-            bNode = this.rete.getBasicLayerPlus().get(b.getPredicate()).getChildren().get(b.getAtomAsReteKey());
+            bNode = this.rete.getBasicLayerPlus().get(b.getPredicate()).getChildNode(b.getAtomAsReteKey());
         }else{
-            bNode = this.rete.getBasicLayerMinus().get(b.getPredicate()).getChildren().get(b.getAtomAsReteKey());
+            bNode = this.rete.getBasicLayerMinus().get(b.getPredicate()).getChildNode(b.getAtomAsReteKey());
         }
         bNode.resetVarPosition(b);
         // TOCHECK: Keep track of all JoinNodes such that we create each joinNode only once!
@@ -103,9 +135,10 @@ public class ReteBuilder {
     }
     
     public void addAtomPlus(Atom atom){   
+        System.err.println("AddAtomPlus:");
         if(!this.rete.getBasicLayerPlus().containsKey(atom.getPredicate())){
-            //System.out.println("Creating BasicNode: " + atom.getPredicate());
-            this.rete.getBasicLayerPlus().put(atom.getPredicate(), new BasicNode(atom.getArity(),rete));
+            System.err.println("AddAtomPlus: Creating BasicNode: " + atom.getPredicate());
+            this.rete.getBasicLayerPlus().put(atom.getPredicate(), new BasicNode(atom.getArity(),rete, atom.getPredicate()));
             //this.stackyPlus.put(atom.getPredicate(), new Stack<Instance>());
         }    
         this.rete.getBasicLayerPlus().get(atom.getPredicate()).AddPredInRule(atom);
@@ -114,7 +147,7 @@ public class ReteBuilder {
     
     public void addAtomMinus(Atom atom){
         if(!this.rete.getBasicLayerMinus().containsKey(atom.getPredicate())){
-            this.rete.getBasicLayerMinus().put(atom.getPredicate(), new BasicNode(atom.getArity(),rete));
+            this.rete.getBasicLayerMinus().put(atom.getPredicate(), new BasicNode(atom.getArity(),rete, atom.getPredicate()));
             //this.stackyMinus.put(atom.getPredicate(), new Stack<Instance>());
         }   
         this.rete.getBasicLayerMinus().get(atom.getPredicate()).AddPredInRule(atom);  

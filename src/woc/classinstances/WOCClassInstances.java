@@ -7,8 +7,10 @@ package woc.classinstances;
 import Datastructure.Rete.BasicNode;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
+import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
 import Entity.Constant;
+import Entity.ContextASP;
 import Entity.Instance;
 import Entity.Rule;
 import Entity.Variable;
@@ -43,7 +45,7 @@ public class WOCClassInstances {
         r.addAtomPlus(body1);
         r.addAtomPlus(body2);
         
-        Rete rete = new Rete();
+        Rete rete = new Rete(new ChoiceUnit(new ContextASP()));
         ReteBuilder rb = new ReteBuilder(rete);
         rb.addRule(r);
         // p(X,Y) :- s(X),t(Y).
@@ -59,10 +61,10 @@ public class WOCClassInstances {
         
         BasicNode bn = rete.getBasicNodePlus(body1.getPredicate());
         System.out.println("BN = " + bn);
-        System.out.println("BN.getChildren = " + bn.getChildren().get(body1));
-        System.out.println("BN.getChildren.get(body1).getChildren: " + bn.getChildren().get(body1.getAtomAsReteKey()).getChildren().size());
+        System.out.println("BN.getChildren = " + bn.getChildNode(body1));
+        System.out.println("BN.getChildren.get(body1).getChildren: " + bn.getChildNode(body1.getAtomAsReteKey()).getChildren().size());
     
-        int nbb = 3000;
+        int nbb = 1000;
         for(int i = 0; i < nbb; i++){
             Term[] instance = {Constant.getConstant(String.valueOf(i))};
             rete.addInstancePlus(body1.getPredicate(),Instance.getInstance(instance));

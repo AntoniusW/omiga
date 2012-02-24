@@ -18,6 +18,8 @@ import static org.junit.Assert.*;
 import Interfaces.Term;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
+import Datastructure.choice.ChoiceUnit;
+import Entity.ContextASP;
 import Entity.Predicate;
 
 /**
@@ -86,7 +88,7 @@ public class testPropagation {
         r4.addAtomPlus(s);
         r4.addAtomPlus(t);
         
-        Rete rete = new Rete();
+        Rete rete = new Rete(new ChoiceUnit(new ContextASP()));
         ReteBuilder rb = new ReteBuilder(rete);
         rb.addRule(r1);
         rb.addRule(r2);

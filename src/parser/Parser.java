@@ -47,6 +47,7 @@ public class Parser {
         
             String strLine;
             while ((strLine = br.readLine()) != null)   {
+                System.out.println("Reading Line: " + strLine);
                 // Print the content on the console
                 s = s +strLine;
             }

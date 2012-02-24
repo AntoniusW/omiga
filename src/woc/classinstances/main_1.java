@@ -14,6 +14,7 @@ import Entity.Variable;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
+import Manager.Manager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,35 +28,22 @@ import parser.Parser;
  * The main main class of this project. Use it to read in a context via the File specified by input.
  * 
  */
-public class main {
+public class main_1 {
     
     
     
     public static void main(String arg[]){
         
         //File input = new File("C:\\Users\\User\\Desktop\\Context.txt");
-        File input = new File("context_neg.txt");
+        File input = new File("context_1.txt");
         
         Parser pars = new Parser();
         try {
             ContextASP c = pars.readContext(input);
             c.printContext();
             
-            //c.initializeRete();
-
-            c.propagate();
-            while(c.choice() == true){
-                //c.choice();
-                c.propagate();
-            }
-            
-            
-            c.printAnswerSet();
-            
-            System.out.println("Instances created = " + Instance.lol);
-            System.out.println("Instances added to the Network = " + Rete.omg);
-            System.out.println("Instances added through the fullfillment of a rule = " + HeadNode.arg);
-            System.out.println("SATISFIABLE: " + c.getRete().satisfiable);
+            Manager m = new Manager(c);
+            m.calculate();
             
         } catch (FactSizeException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);

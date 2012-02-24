@@ -66,6 +66,8 @@ public class SelectionNode extends Node{
      */
     @Override
     public void addInstance(Instance instance, Node from){
+        //System.err.println("Adding something to SelectionNode");
+        super.addInstance(instance, this);
         //System.err.println(this + " " + this.children.size() +  " addInstance is called with: " + instance);
         for(Variable v: varOrdering){
             // All Variable values used in this nodes pir are set to null
@@ -86,7 +88,7 @@ public class SelectionNode extends Node{
         Instance instance2Add = Instance.getInstance(varAssignment2Add);
         this.memory.addInstance(instance2Add);
         
-        
+        //System.out.println("SelectionNode addInstance: " + this.children);
         for(Node n: this.children){
             // we transfer the inserted varAssignment to all childnodes
             n.addInstance(instance2Add, this);
