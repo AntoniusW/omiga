@@ -15,51 +15,63 @@ import java.util.HashMap;
 
 /**
  *
- * @author Mika
+ * @author Gerald Weidinger 0526105
  * 
- * Maybe we have to execute HeadNodes as soon as an instance reaches a node... but i dont think so
- * if so we have to use a childlist of headnodes
+ * A HeadNode represents the fullfillment of a rule. A HeadNode is a node that does not story any instances. 
+ * Whenever an instance is added to a headNode the Atom is unified and the resulting instance then added to the rete.
+ * 
+ * 
+ * @param a the atom that is head of the corresponding rule
+ * @param 
  */
 public class HeadNode extends Node{
     
-    Atom a;
-    int[] instanceOrdering;
-    public static int arg = 0;
+    private Atom a;
+    private int[] instanceOrdering;
     
+    /**
+     * 
+     * public constructor. Creates a new Headnode with initialized data structures.
+     * 
+     * @param atom the atom that is head of the corresponding rule
+     * @param rete the rete network this node is in
+     * @param n The parent node of this headNode
+     */
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public HeadNode(Atom atom, Rete rete, Node n){
         super(rete);
         this.a = atom;
-        this.tempVarPosition = (HashMap<Variable, Integer>) n.getVarPositions().clone();
-        System.err.println("HeadNode Created!: " + this);
+        this.tempVarPosition = (HashMap<Variable, Integer>) n.getVarPositions().clone(); // As we have one headNode per Rule, we can use the tempVarPosition of the parentNode for unification
+        //System.err.println("HeadNode Created!: " + this);
     }
     
-    /*
+    /**
      * If an instance is added to a headNode then this means the body of a rule has been
      * satisfied. We therefore create a new instance of the head via the variable assignment
      * that is still left from the last node.
      * 
-     * from doesnt matter
+     * @param instance the instance that is added
+     * @param from can be null, only needed for extending class Node
      */
     @Override
     public void addInstance(Instance instance, Node from){
-        //System.err.println("Adding something to headNode: " + instance);
-        // the only children of HeadNodes are choice Nodes --> We remove the actual Instance from the choice Node
-        // The instance should match the instance of the choice Node, since after the positive Part + Operators have been apllied no mor eVariables are added to the assignment
-        //System.err.println(this.children);
         for(int i=0; i < this.children.size();i++){
+        // the only children of HeadNodes are choice Nodes --> We remove the actual Instance from the choice Node
+        // The instance should match the instance of the choice Node, since after the positive Part + Operators have been apllied no more Variables are added to the assignment
+            //System.err.println("normal headNode: " + this);
             this.children.get(i).removeInstance(instance);
         }
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             rete.satisfiable = false;
-            System.out.println("UNSATISFIABLE!: huhu?");
-            rete.printAnswerSet();
+            System.out.println("UNSATISFIABLE!:");
+            //rete.printAnswerSet();
             return;
         }
-        //System.err.println("ADD Intsnace to HEADNODE: " + instance);
-        arg++;
-        Term[] headInstance = new Term[a.getArity()];
+        //We unify the headAtom of the corresponding rule
+        Instance instance2Add = Unifyer.unifyAtom(a, instance, tempVarPosition);
+        
+        /*Term[] headInstance = new Term[a.getArity()];
         for(int i = 0; i < a.getArity();i++){
             Term t = a.getTerms()[i];
             if(t.getClass().equals(Variable.class)){
@@ -74,21 +86,23 @@ public class HeadNode extends Node{
             }  
         }
         
-        Instance instance2Add = Instance.getInstance(headInstance);
+        Instance instance2Add = Instance.getInstance(headInstance);*/
         //System.out.println("HEAD: " + instance2Add);
         if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
+                //if the resolved instance is not contained within our rete we add it
                 rete.addInstancePlus(a.getPredicate(),instance2Add);
                 //System.err.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
             }else{
+                //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.
                 System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel());
+                //rete.printAnswerSet();
                 this.rete.satisfiable = false;
-                rete.printAnswerSet();
             }
         }
     }
     
-    private FuncTerm unifyFuncTerm(FuncTerm f, Instance instance){
+    /*private FuncTerm unifyFuncTerm(FuncTerm f, Instance instance){
         //System.err.println("Unifying Head Instance: " + f + " vs. " + instance);
         ArrayList<Term> fchildren = new ArrayList<Term>();        
         for(int i = 0; i < f.getChildren().size();i++){
@@ -106,6 +120,6 @@ public class HeadNode extends Node{
         FuncTerm ret = FuncTerm.getFuncTerm(f.getName(), fchildren);
         //System.err.println("Tehrefore returning: " + ret + " as children are: " + ret.getChildren());
         return ret;
-    }
+    }*/
     
 }

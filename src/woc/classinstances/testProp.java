@@ -108,8 +108,6 @@ public class testProp {
         rete.printAnswerSet();
         
         System.out.println("Instances created = " + Instance.lol);
-        System.out.println("Instances added to the Network = " + Rete.omg);
-        System.out.println("Instances added through the fullfillment of a rule = " + HeadNode.arg);
         System.out.println("SATISFIABLE: " +rete.satisfiable);;
     }
     

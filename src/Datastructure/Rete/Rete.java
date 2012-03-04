@@ -18,39 +18,58 @@ import java.util.Stack;
 
 /**
  *
- * @author User
+ * @author Gerald Weidinger 0526105
+ * 
+ * The class Rete defines a hole rete network.To actually build a Rete, have a look into the class ReteBuilder.
+ * The rete class itself is an entrypoint for new instances. Those instances are then pushed into BasicNodes.
+ * Each basicNode is a memory for one predicate. The Basic Nodes again push the instances forward into SelectionNodes.
+ * A selection Node represents an atom, and only insatnces of the corresponding predicate that fullfill the atoms schema
+ * may enter a selection node. Selection nodes again push the insatnces to other nodes.
+ * 
+ * JoinNodes: represent joins of instances between 2 nodes.
+ * Operator nodes: Represent an Operator. Only instances that satisfy this operator may enter here.
+ * 
+ * When an instance is finally pushed to a headNode, we know a rules body has been fullfilled, and therefore we can add
+ * a ne fact, that is pushed into rete.
+ * 
+ * Additional nodes:
+ * 
+ * ChoiceNodes: Used to define guessing. (Not needed for propagation)
+ * HeadNodeConstraints: Defining stuff that may not happen anymore. 8Also used because of guessing)
+ * 
+ * @param ChoiceUnit the choice Unit that is connected to the rete. (Rete itself does not need this, but it's nodes have to register there)
+ * @param basicLayerPlus entrypoints for instances into the positive memory, sorted by predicate the belong to
+ * @param basicLayerMinus entrypoints for instances into the negative memory, sorted by predicate the belong to
+ * @param satisfiable a boolean flag stating if the actual calculation may still be satisfiable or already is unsatisfiable
+ * 
  */
 public class Rete {
     
-    // TODO: Rete does not need a chocie Unit pointer, or we add the choice Unit to all the nodes via the rete builder. But this is more work and the Node constrcutor becomes ugly
-    ChoiceUnit choiceUnit;
-    
-    HashMap<Predicate, BasicNode> basicLayerPlus;
-    HashMap<Predicate, BasicNode> basicLayerMinus;
-    
-    /*HashMap<Predicate, Stack<Instance>> stackyPlus;
-    HashMap<Predicate, Stack<Instance>> stackyMinus;*/
-    
+    // TODO: Rete does not need a chocie Unit pointer but the nodes do. more elegant solution?
+    private ChoiceUnit choiceUnit;
+    private HashMap<Predicate, BasicNode> basicLayerPlus;
+    private HashMap<Predicate, BasicNode> basicLayerMinus;
     public boolean satisfiable = true;
     
+    /**
+     * 
+     * public constructor. generates a new rete network with initialized data structures.
+     * @param choiceUnit the choiceUnit you want to connect with this rete
+     */
     public Rete(ChoiceUnit choiceUnit){
         this.choiceUnit = choiceUnit;
         this.basicLayerPlus = new HashMap<Predicate,BasicNode>();
         this.basicLayerMinus = new HashMap<Predicate,BasicNode>();
-        /*this.stackyPlus = new HashMap<Predicate, Stack<Instance>>();
-        this.stackyMinus = new HashMap<Predicate, Stack<Instance>>();*/
     }
     
-    /*
-     * we push facts into our network til nothing more can be reached
+    /**
+     * propagates til nothing can be propagated anymore or til unsatisfiability is reached
      */
-    public static int kok;
-    
-    
     public void propagate(){
         boolean flag = true;
         while(flag && satisfiable){
             flag = false;
+            // we propagate all instances from positive and negative basic layer
             for(BasicNode bn: this.basicLayerPlus.values()){
                 if(bn.propagate()) flag = true;
             }
@@ -75,68 +94,33 @@ public class Rete {
         System.out.println("____________________");*/
     }
     
-    /*public void propagate(){
-        boolean stacksNotEmpty = true;
-        while(stacksNotEmpty){
-            stacksNotEmpty = false;
-            for(Predicate p: stackyPlus.keySet()){
-                if(!stackyPlus.get(p).isEmpty()){
-                    Instance instance = stackyPlus.get(p).pop();
-                    //System.out.println("Adding Instance: " + instance);
-                    if(!this.containsInstance(p, instance, false)){
-                        if (!this.containsInstance(p, instance, true)) {
-                            kok++;
-                            //System.out.println("Adding to: " + p + " follwoing instance: " + instance);
-                            basicLayerPlus.get(p).addInstance(instance);
-                        }else{
-                            //System.out.println("This instance is already contained!");
-                        }
-                    }else{
-                        satisfiable = false;
-                        System.err.println("Unsatisfiable!");
-                        return;
-                    }
-                    stacksNotEmpty = true;
-                    //System.out.println("Added Something!");
-                }
-            }
-            for(Predicate p: stackyMinus.keySet()){
-                if(!stackyMinus.get(p).isEmpty()){
-                    Instance instance = stackyPlus.get(p).pop();
-                    if(!this.containsInstance(p, instance, true)){
-                        if (!this.containsInstance(p, instance, false)){
-                            kok++;
-                            basicLayerMinus.get(p).addInstance(instance);
-                        }
-                    }else{
-                        satisfiable = false;
-                        System.err.println("Unsatisfiable!");
-                        return;
-                    }
-                    stacksNotEmpty = true;
-                    //System.out.println("Added Something!");
-                }
-            }
-        }
-    }*/
+   
     
-    
-    
-    public static int omg = 0;
+     /**
+     * 
+     * @param p the predicate you want to add an instance for
+     * @param instance the instance you want to add
+     */ 
     public void addInstancePlus(Predicate p, Instance instance){
-        omg++;
         basicLayerPlus.get(p).addInstance(instance);
-        //this.stackyPlus.get(p).push(instance);
     }
     
-     
+    /**
+     * 
+     * @param p the predicate you want to add an instance for
+     * @param instance the instance you want to add
+     */ 
     public void addInstanceMinus(Predicate p,Instance instance){
-        //System.out.println("Adding instance Minus!!!!: " + p + " - " + instance);
-        omg++;
         basicLayerMinus.get(p).addInstance(instance);
-        //this.stackyMinus.get(p).push(instance);
     }
     
+    /**
+     * 
+     * @param p the predicate of the fact
+     * @param instance the instance of the fact
+     * @param positive negative or positive occurance?
+     * @return wether the fact is contained within the neg/pos memory of the retenetwork or not
+     */
     public boolean containsInstance(Predicate p, Instance instance, boolean positive){
         if(positive){
             if(this.basicLayerPlus.containsKey(p)){
@@ -153,13 +137,20 @@ public class Rete {
         }
     }
     
-    /*
-     * Only used for testing?
+    /**
+     * 
+     * returns the Basic Node that corresponds to the given predicate
+     * 
+     * @param p the predicate for which you want the corresponding basic Node
+     * @return the BasicNode for predicate p
      */
     public BasicNode getBasicNodePlus(Predicate p){
         return basicLayerPlus.get(p);
     }
     
+    /**
+     * prints the actual Answersets (=All Instances) to standard Out
+     */
     public void printAnswerSet(){
         System.out.println("Printing Answerset: ");
         System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
@@ -184,38 +175,58 @@ public class Rete {
         System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
     }
     
-    /*
-     * Only needed to add Storage for facts that are of predicates that are not used within rules.
+    /**
+     * 
+     * Adds a new BasicNode into the positive BasicLayer by creating a new BasicNode
+     * 
+     * @param p the predicate you want to add
      */
     public void addPredicatePlus(Predicate p){
         this.basicLayerPlus.put(p, new BasicNode(p.getArity(),this,p));
     }
+    
+    /**
+     * 
+     * Adds a new BasicNode into the negative BasicLayer by creating a new BasicNode
+     * 
+     * @param p the predicate you want to add
+     */
     public void addPredicateMinus(Predicate p){
         this.basicLayerMinus.put(p, new BasicNode(p.getArity(),this,p));
     }
+    
+    /**
+     * 
+     * @param p the predicate you want to check
+     * @param plus positive or negative occurance of that predicate
+     * @return wether the predicate is contained within our rete or not
+     */
     public boolean containsPredicate(Predicate p, boolean plus){
         if(plus) return this.basicLayerPlus.containsKey(p);
         return this.basicLayerMinus.containsKey(p);
     }
 
+    /**
+     * 
+     * @return the HashMap reresenting the negative BasicLayer
+     */
     public HashMap<Predicate, BasicNode> getBasicLayerMinus() {
         return basicLayerMinus;
     }
 
+    /**
+     * 
+     * @return the HashMap reresenting the positive BasicLayer
+     */
     public HashMap<Predicate, BasicNode> getBasicLayerPlus() {
         return basicLayerPlus;
     }
     
-    
+    /**
+     * 
+     * @return the choice Unit that is connected to this rete
+     */
     public ChoiceUnit getChoiceUnit(){
         return this.choiceUnit;
     }
-    
-    
-    
-    
-    
-    
-    
-    
 }

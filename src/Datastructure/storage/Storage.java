@@ -209,5 +209,14 @@ public class Storage {
         
     }
     
+    public ArrayList<Instance> getAllInstances(){
+        //ArrayList<Instance> ret = new ArrayList<Instance>();
+        ret.clear();
+        for(Term t: this.memory[0].keySet()){
+            ret.addAll(this.memory[0].get(t));
+        }
+        return ret;
+    }
+    
     
 }

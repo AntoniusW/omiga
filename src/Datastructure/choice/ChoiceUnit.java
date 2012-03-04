@@ -5,7 +5,9 @@
 package Datastructure.choice;
 
 import Datastructure.Rete.ChoiceNode;
+import Datastructure.Rete.HeadNodeConstraint;
 import Datastructure.Rete.Node;
+import Datastructure.Rete.Unifyer;
 import Entity.Atom;
 import Entity.Constant;
 import Entity.ContextASP;
@@ -18,29 +20,56 @@ import Interfaces.Context;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
 
 /**
  *
- * @author User
+ * @author Gerald Weidinger 0526105
+ * 
+ * The choiceUnit controls all the choices that are made.
+ * 
+ * @param memory The DecisionMemory used to store the instances per node per decision level
+ * @param choiceNodes a List of ChoiceNodes, such that the choice Unit knows on what to make a choice on
+ * @param c The context this choiceUnit should work on
+ * 
+ * @param stackyNode a stack were we push nodes on which's instance we guessed
+ * @param stackybool a stack were we push if the last guess was a positive or negative one
+ * @param stackyInstance a stack were we push the instance guessed on
+ * 
+ * @param nextNode when null a positive guess has to be done on the next possible choice. Otherwise we have to guess negativly on this node with the nextInstance
+ * @param nextInstance the instance we have to guess negativly on nextNode if nextNode is not null.
+ * 
+ * 
+ * @param choiceNodesDecisionLayer A Datastructure for storing instances fo choiceNodes per decisionlevel. Theses insatnces have to be added after backtracking
  */
 public class ChoiceUnit {
     
-    //TODO: A select everything Method in Storage and all nodes!
-    //TODO: Store choiceNodes within the memory, as we need to store removement instances for them. This is now done her. But this is ugly.
+    //TODO: Is there a problem if we guess, and remove choiceNodes other than the one we guessed on, because propagation lead to some headNodefullfillment. These nodes are not reverted?
     
+    // TODO: HeadNodeCOnstraints are not treated correctly (remove is called to often why?
+    
+    private ContextASP c;
     private ArrayList<ChoiceNode> choiceNodes;
-    private ArrayList<HashMap<ChoiceNode,ArrayList<Instance>>> choiceNodesDecisionLayer;
-    
     private DecisionMemory memory;
     
     private Stack<ChoiceNode> stackyNode;
     private Stack<Boolean> stackybool;
     private Stack<Instance> stackyInstance;
+    private ChoiceNode nextNode = null;
+    private Instance nextInstance = null;
     
-    ContextASP c;
+    private ArrayList<HashMap<ChoiceNode,HashSet<Instance>>> choiceNodesDecisionLayer;
     
+    
+    
+    /**
+     * 
+     * public constructor. Creates a new ChoiceUnit with initialized data structures.
+     * 
+     * @param c The ASP Context you want to use this choice unit for
+     */
     public ChoiceUnit(ContextASP c){
         this.memory = new DecisionMemory();
         this.choiceNodes = new ArrayList<ChoiceNode>();
@@ -48,111 +77,99 @@ public class ChoiceUnit {
         this.stackyNode = new Stack<ChoiceNode>();
         this.stackybool = new Stack<Boolean>();
         this.stackyInstance = new Stack<Instance>();
-        this.choiceNodesDecisionLayer = new ArrayList<HashMap<ChoiceNode,ArrayList<Instance>>>();
-        this.choiceNodesDecisionLayer.add(new HashMap<ChoiceNode,ArrayList<Instance>>());
+        this.choiceNodesDecisionLayer = new ArrayList<HashMap<ChoiceNode,HashSet<Instance>>>();
+        this.choiceNodesDecisionLayer.add(new HashMap<ChoiceNode,HashSet<Instance>>());
     }
     
+    /**
+     * 
+     * 
+     * 
+     * @return if there was a guess that was made, or if there are no more guesses left
+     */
     public boolean choice(){
         System.out.println("Choice is called! " + this.memory.getDecisonLevel());
+        this.printAllChoiceNodes();
         if(this.nextNode != null){
-            this.memory.addChoicePoint();
+            //There is a next node. This means we have to make a negative guess since we returned at this point because of backtracking
+            //We add a choicepoint since we are doing a guess
+            this.addChoicePoint();
+            //we activate a constraint for this rule. Since this rule must not be true anymore, as we guessed it to be false
             nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
+            //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);
             this.stackyInstance.push(nextInstance);
+            //We set nextNode=null. So the next guess will be a positive one if no backtracking is apllied in between
             nextNode = null;
+            
+            //We return true, since we guessed
             return true;
         }
-        
-        this.printAllChoiceNodes();
-        int i = 0;
-        for(;i < choiceNodes.size();i++){
-            Term[] selectionCriteria = new Term[choiceNodes.get(i).getVarPositions().size()];
-            for(int j = 0; j < choiceNodes.get(i).getVarPositions().size();j++){
-                selectionCriteria[j] = Variable.getVariable("X");
-            }
-            if(!choiceNodes.get(i).select(selectionCriteria).isEmpty()){
-                memory.addChoicePoint();
-                // We add a new layer to our choiceNodeLayer
-                HashMap<ChoiceNode,ArrayList<Instance>> newHM = new HashMap<ChoiceNode, ArrayList<Instance>>();
-                for(ChoiceNode cN: this.choiceNodes){
-                    newHM.put(cN, new ArrayList<Instance>());
-                }
-                this.choiceNodesDecisionLayer.add(newHM);
-                // End DecisionNode Layer update
-                Instance inz = ((Instance)choiceNodes.get(i).select(selectionCriteria).toArray()[0]);
-                String varPos = "[";
+        //nextNode was not set, therefore we have to make a positive guess if possible
+        for(int i = 0;i < choiceNodes.size();i++){
+            //We go through all nodes that may contain instances for choice
+            //TODO: [PERFORMANCE INCREASE]Maybe we can increase runtrime if we delete nodes from here when no instances to guess on are left, and add them again when such an insatnce is added to it
+            if(!choiceNodes.get(i).getAllInstances().isEmpty()){
+                //The actual choicenode contains at least one instance, so we guess on it and add a choicePoint
+                this.addChoicePoint();
+                //We take the first instance that is in this node
+                Instance inz = ((Instance)choiceNodes.get(i).getAllInstances().get(0));
+                /*String varPos = "[";
                 for(Variable v: choiceNodes.get(i).getVarPositions().keySet()){
                     varPos = varPos + v + "=" + choiceNodes.get(i).getVarPositions().get(v) + ",";
                 }
                 varPos = varPos + "]";
                 System.out.println("VarPos: ");
-                System.out.println(varPos);
+                System.out.println(varPos);*/
                 
+                //Since we do a positive guess we put one unifyed instance for each negative atom of the corresponding rule into our OUT memory
+                //Since we add all negative parts to the outset, and all positive parts have to be fullfilled since, the isntance reached the choiceNode
+                //This rule is fullfilled for the actual groundinstance and the head will be added within the next propagationstep
+                //Unification works here, since all variables have to to be set at a choiceNode, since we only work on save rules
                 for(Atom a: choiceNodes.get(i).getRule().getBodyMinus()){
-                    Instance toAdd = unifyAtom(a,inz, choiceNodes.get(i).getVarPositions());
+                    Instance toAdd = Unifyer.unifyAtom(a,inz, choiceNodes.get(i).getVarPositions());
                     c.getRete().addInstanceMinus(a.getPredicate(), toAdd);
                 }
-                // be aware that used instances get deleted from choice nodes via propagation
+                choiceNodes.get(i).simpleRemoveInstance(inz) ;
+                //Be aware that the instance we just guessed on will be deleted automatially within the next propagationstep, so we do not need to remove it here.
                 
+                //We push the node and instance we just guessed on, as well as true, onto our stacks, to let backtrackign know a positive guess was made
                 this.stackyNode.push(choiceNodes.get(i));
                 this.stackybool.push(true); 
                 this.stackyInstance.push(inz); 
                 System.out.println("GUESSED: " + choiceNodes.get(i).getRule() + " with: " + inz);
-                // We made a chocie so we have to store the information on which we guessed
-                
+
+                //We return true since we made a guess
                 return true;
                 
             }
         }
+        //No negative guess was there to make, and all choiceNodes are empty, therefore no guess at all can be made anymore and we return false
         return false;
     }
     
-    public Instance unifyAtom(Atom a, Instance instance,HashMap<Variable,Integer> varPos){
-        Term[] headInstance = new Term[a.getArity()];
-        for(int i = 0; i < a.getArity();i++){
-            Term t = a.getTerms()[i];
-            if(t.getClass().equals(Variable.class)){
-                    headInstance[i] = instance.get(varPos.get((Variable)t));
-                }else{
-                    if (t.getClass().equals(Constant.class)){
-                        headInstance[i] = t;
-                    }else{
-                        //System.err.println("unifyTerm from head");
-                        headInstance[i] = this.unifyFuncTerm((FuncTerm)t, instance,varPos);
-                    }
-            }  
-        }
-        
-        Instance instance2Add = Instance.getInstance(headInstance);
-        return instance2Add;
+    private void addChoicePoint(){
+        this.memory.addChoicePoint();
+        this.IncreasechoiceNodesDecisionLayer();
     }
     
-    private FuncTerm unifyFuncTerm(FuncTerm f, Instance instance,HashMap<Variable,Integer> varPos){
-        //System.err.println("Unifying Head Instance: " + f + " vs. " + instance);
-        ArrayList<Term> fchildren = new ArrayList<Term>();        
-        for(int i = 0; i < f.getChildren().size();i++){
-            Term t = f.getChildren().get(i);
-            if(t.getClass().equals(Variable.class)){
-                    fchildren.add(instance.get(varPos.get((Variable)t)));
-            }else{
-                if (t.getClass().equals(Constant.class)){
-                    fchildren.add(t);
-                }else{
-                    fchildren.add(unifyFuncTerm((FuncTerm)t, instance, varPos));
-                }
-            }
-        }
-        FuncTerm ret = FuncTerm.getFuncTerm(f.getName(), fchildren);
-        //System.err.println("Tehrefore returning: " + ret + " as children are: " + ret.getChildren());
-        return ret;
-    }
-    
+    /**
+     * 
+     * registers a ChoiceNode
+     * 
+     * @param cN the choice node you want to register in this choiceunit
+     */
     public void addChoiceNode(ChoiceNode cN){
-        this.choiceNodesDecisionLayer.get(0).put(cN, new ArrayList<Instance>());
+        this.choiceNodesDecisionLayer.get(0).put(cN, new HashSet<Instance>());
         this.choiceNodes.add(cN);
     }
     
+     /**
+     * 
+     * Prints all choiceNodes and their instances contained, to standard out.
+     * 
+     */
     public void printAllChoiceNodes(){
         System.out.println("Printing choice nodes");
         System.out.println("_________________________");
@@ -169,145 +186,126 @@ public class ChoiceUnit {
         System.out.println("_________________________");
     }
     
-    
+    /**
+     * 
+     * registers the adding of an instance to a node into the decision memory.
+     * 
+     * @param n the node to which the instance was added
+     * @param instance the instance that was added
+     */
     public void addInstance(Node n, Instance instance){
         this.memory.addInstance(n, instance);
     }
     
-    public void AddInstanceRemovement(ChoiceNode cn, Instance instance){
-        this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cn).add(instance);
+    /**
+     * 
+     * this resets the choiceNodes into the state before the last guess(Except for the guessed one)
+     * 
+     */
+    public void backtrackchoiceNodesDecisionLayer(){
+        for(ChoiceNode cN: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).keySet()){
+            for(Instance inz: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN)){
+                //System.err.println("RESETTING: " + cN + " - " + inz);
+                cN.simpleAddInstance(inz);
+            }
+        }
+        this.choiceNodesDecisionLayer.remove(this.choiceNodesDecisionLayer.size()-1);
     }
     
+    /**
+     * 
+     * Adds an Instance into the choiceNodeDecisionlayer. Such that this instance is added after backtracking.
+     * 
+     * @param n the Node of the instance
+     * @param instance the instance you want to add
+     */
+    public void addInstanceForRemovement(ChoiceNode n, Instance instance){
+        //System.err.println("ADDING INSTANCE FOR REMOVEMENT!");
+        this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(n).add(instance);
+    }
+    
+    /**
+     * Adds the next Decisionlevel to the choiceNodeDecisionLayer
+     */
+    public void IncreasechoiceNodesDecisionLayer(){
+        HashMap<ChoiceNode,HashSet<Instance>> hm = new HashMap<ChoiceNode,HashSet<Instance>>();
+        for(ChoiceNode cN: this.choiceNodes){
+            hm.put(cN, new HashSet<Instance>());
+        }
+        this.choiceNodesDecisionLayer.add(hm);
+    }
+    
+    /**
+     * prints the decision memory to standard out
+     */
     public void printDecisionMemory(){
         memory.printDecisionMemory();
     }
     
+    /**
+     * 
+     * registers a node in the decisionmemory such that the decision memory can initialize required space for that node
+     * 
+     * @param n The node you want to register in the decision memory.
+     */
     public void addNode(Node n){
         this.memory.addNode(n);
     }
     
-    private ChoiceNode nextNode = null;
-    private Instance nextInstance = null;
+    /**
+     * backtrack one decisionlevel and bring memory back to state before last guess
+     */
     public void backtrack(){
-        //if(this.memory.getDecisonLevel()< 0) return;
-        System.out.println("BACKTRACK: " + this.memory.getDecisonLevel());
+        // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
         this.memory.backtrack();
-        System.out.println("STACKSIZE: " + stackybool.size() + " - " + stackyInstance.size() + " - " + stackyNode.size());
-        if(this.stackybool.isEmpty()) return;
+        this.backtrackchoiceNodesDecisionLayer();
         if(this.stackybool.pop()){
+            //Positive Guess
             System.out.println("Last was a POSITVE Guess");
+            //We take the node and instacne from the last guess and set them as nextNode/nextInstance.
+            //This will lead the enxt guess to guess negative on this node and insatnce when it is called the nxt time.
             nextNode = stackyNode.pop();
             nextInstance = stackyInstance.pop();
+            //nextNode.simpleRemoveInstance(nextInstance);
         }else{
+            //Negative Guess
             System.out.println("Last was a NEGATIVE Guess");
-            if(memory.getDecisonLevel() > 0) {
-                //Terminate the Guessing here. We are back at lvl one and no more guessing is possible since we arrived via a negative guess!
-                this.stackyNode.pop().addInstance(this.stackyInstance.pop(), null);
-            } // We add the choice back into the choice node
-            backtrack();
+            if(memory.getDecisonLevel() > 1) {
+                //This was not the last guess. Add the last guess back tino the choicenode (since it can be reguessed in the other branch of the guess before)
+                //this.stackyNode.pop().simpleAddInstance(this.stackyInstance.pop()); // TODO: Is this needed? We add the choice back into the choice node
+                //backtrack(); // TODO: if this is a standalone calculation we can imideatly backtrack once more, since nothing else is possible.
+            }//else we are finished with guessing and at decisoonlevel 0 therefore no more backtracking is needed
         }
     }
     
-    
-    public void backtrack2(){
-        System.out.println("BACKTRACKING!: " + memory.getDecisonLevel());
-        this.printAllChoiceNodes();
-        // add Instances that have been removed from choicenodes on a certain decisionlevel
-        /*for(ChoiceNode cN: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).keySet()){
-            for(int i = 0; i < this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN).size();i++){
-                cN.addInstance(this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN).get(i),null);
-            }
-        }*/
-        //this.choiceNodesDecisionLayer.remove(this.choiceNodesDecisionLayer.size()-1);
-        if(this.stackyNode.isEmpty()) return;
-        ChoiceNode n = this.stackyNode.pop();
-        Instance inz = stackyInstance.pop();
-        //n.removeInstance(inz);
-        System.out.println("STACKSIZE: " + stackybool.size() + " - " + stackyInstance.size() + " - " + stackyNode.size());
-        if(this.stackybool.empty()){
-            return;
-        }
-        boolean temp = this.stackybool.peek();
-        if(temp){
-            System.out.println("ASA+");
-            this.memory.backtrack();
-            n.getConstraintNode().saveConstraintInstance(inz); //TODO: Remove Constraint instance?!
-            this.stackybool.push(false);
-            this.stackyNode.push(n);
-            this.stackyInstance.push(inz);
-        }else{
-            System.out.println("Asa-");
-            System.out.println("This Never happens! ^^: " + memory.getDecisonLevel());
-            if(memory.getDecisonLevel() > 0 ){
-                //this.stackyInstance.pop();
-                System.out.println("Adding: " + inz + " to Node: " + n);
-                n.addInstance(inz, null);
-                System.out.println("PEEK: " + stackybool.peek());
-                System.out.println("PEEK: " + stackybool.empty());
-                if(!temp || stackybool.isEmpty()){
-                    System.out.println("SPECIAL BACK TRACK!");
-                    backtrack();
-                }else{
-                    System.out.println("FUCK!");
-                }
-            }else{
-                return;
-            }
-        }
-    }
-    
-    /*public void backtrack(Instance instance){
-        System.out.println("BACKTRACKING!");
-        this.printAllChoiceNodes();
-        this.memory.backtrack();
-        // add Instances that have been removed from choicenodes on a certain decisionlevel
-        for(ChoiceNode cN: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).keySet()){
-            System.err.println("Einraga");
-            for(int i = 0; i < this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN).size();i++){
-                System.err.println("Zweiraga");
-                cN.addInstance(this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN).get(i),null);
-                System.out.println("AFTERPARTY: ");
-                this.printAllChoiceNodes();
-            }
-        }
-        this.choiceNodesDecisionLayer.remove(this.choiceNodesDecisionLayer.size()-1);
-        ChoiceNode n = this.stackyNode.pop();
-        n.removeInstance(instance);
-        if(this.stackybool.pop()){
-            Instance inz = stackyInstance.pop();
-            n.getConstraintNode().saveConstraintInstance(inz);
-            this.stackybool.push(false);
-            this.stackyNode.push(n);
-            this.stackyInstance.push(inz);
-        }else{
-            System.out.println("This Never happens! ^^");
-            if(memory.getDecisonLevel() > 0){
-                //this.stackyInstance.pop();
-                backtrack(this.stackyInstance.pop());
-            }else{
-                return;
-            }
-        }
-        System.out.println("AFTER BACK: ");
-        this.printAllChoiceNodes();
-    }*/
-    
+    /**
+     * 
+     * @return the actual decision level
+     */
     public int getDecisionLevel(){
         return this.memory.getDecisonLevel();
     }
     
-    public void printDecisionNodes(){
+    public boolean check4AnswerSet(){
+        // TODO: Constraints of the context!
+        boolean flag = false;
         for(ChoiceNode cN: this.choiceNodes){
-            System.out.println("ChoiceNode: " + cN);
-            Term[] selectionCriteria = new Term[cN.getVarPositions().size()];
-            for(int j = 0; j < cN.getVarPositions().size();j++){
-                selectionCriteria[j] = Variable.getVariable("X");
-            }
-            for(Instance inz: cN.select(selectionCriteria)){
-                System.out.println("Instance: " + inz);
+            HeadNodeConstraint con = cN.getConstraintNode();
+            for(Instance inz: con.getAllInstances()){
+                flag = true;
+                for(Atom a: cN.getRule().getBodyMinus()){
+                    Instance unified = Unifyer.unifyAtom(a, inz, cN.getVarPositions());
+                    if(c.getRete().containsInstance(a.getPredicate(),unified,true)){
+                        flag = false;
+                        break;
+                    } //TODO does it work for c.containsInstances as well?
+                }
+                if(flag) return false; // No AnswerSet since one constraint is fullfilled!
             }
         }
+        return true;
     }
+
     
     
 }

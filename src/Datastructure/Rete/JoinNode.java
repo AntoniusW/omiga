@@ -16,22 +16,43 @@ import java.util.HashSet;
 
 /**
  *
- * @author User
+ * @author Gerald Weidinger 0526105
+ * 
+ * JoinNodes are store the joined variable assignments of two other nodes.
+ * 
+ * @param a the node that is the first join partner
+ * @param b the node that is the second join partner
+ * @param instanceOrdering defines how the variable assignment that is saved is calculated from to instance (one form a one from b). 2 means: take position 1 of node a. -1 means take position 0 of node b
+ * @param selectionCriterion1 which position of an instance coming from node b resembles this position of node a, null means no one
+ * @param selectionCriterion2 which position of an instance coming from node a resembles this position of node b, null means no one
+ * 
+ * @param selCrit1 temporary memory, for the selectionCriterion of Node a. (used within method addInstance)
+ * @param selCrit2 temporary memory, for the selectionCriterion of Node b. (used within method addInstance)
+ * @param tempVar A Variable that is used for the lookUp within addInstance. (It's a global variable so we do not have to create it all the time add instance is called)
+ * 
  */
 public class JoinNode extends Node{
     
-    Node a;
-    Node b;
-    int[] instanceOrdering; // which position of which node goes where. 1 means position 0 of Node a, -2 means position 1 of Node b
-    Integer[] selectionCriterion1; // store the positions for a lookup
-    Integer[] selectionCriterion2;
-    Term[] selCrit1; // Temporaere Vars fuer das selectionCriterion der anderen Node by INstance add
-    Term[] selCrit2;
+    private Node a;
+    private Node b;
+    private int[] instanceOrdering; // which position of which node goes where. 1 means position 0 of Node a, -2 means position 1 of Node b
+    private Integer[] selectionCriterion1; // store the positions for a lookup
+    private Integer[] selectionCriterion2;
+    private Term[] selCrit1; // Temporaere Vars fuer das selectionCriterion der anderen Node by INstance add
+    private Term[] selCrit2;
     
-    Variable tempVar; // used as a Variable for the lookup
+    private Variable tempVar; // used as a Variable for the lookup
     
     
-    
+    /**
+     * 
+     * resets the tempVarPosition by clearing it and then adding all variables from both parentNodes.
+     * This method also initializes the instanceOrdering, where the variables of node a are set to
+     * the first n positions, and the variables from b, that are not contained in a, make up the rest.
+     * 
+     * @param a the node that is the first join partner
+     * @param b the node that is the second join partner
+     */
     public void resetVarPosition(Node a, Node b){
         tempVarPosition.clear();
         HashMap<Variable,Integer> termsA = a.getVarPositions();
@@ -50,12 +71,12 @@ public class JoinNode extends Node{
             }
             
         }
-        String testTemp = "[";
+        /*String testTemp = "[";
         for(int i: instanceOrdering){
             testTemp = testTemp + i + ",";
         }
         testTemp = testTemp + "]";
-        System.err.println("LOLRAGARIAGA: " + testTemp);
+        System.err.println("LOLRAGARIAGA: " + testTemp);*/
     }
     
     
@@ -64,14 +85,19 @@ public class JoinNode extends Node{
      * Select: Wir gehen einfach das Variable Ordering der anderen Node durch und setzen alle Variablen nach der Instanz davon
      */
     
+    /**
+     * 
+     * public constructor. Creates a new joinNode with initialized data structures.
+     * 
+     * @param a the node that is the first join partner
+     * @param bthe node that is the second join partner
+     * @param rete the rete this join node is in
+     */
     public JoinNode(Node a, Node b, Rete rete){
-        super(rete);
-       //System.out.println("JoinNode Created!");
+        super(rete); // registering this node within the ChoiceUnit
+
         this.a = a;
         this.b = b;
-
-        System.err.println(a);
-        System.err.println(b);
 
         HashMap<Variable,Integer> temp = new HashMap<Variable, Integer>();
         temp.putAll(a.getVarPositions());
@@ -100,20 +126,29 @@ public class JoinNode extends Node{
         selCrit2 = new Term[selectionCriterion2.length];
         
         this.tempVar = Variable.getVariable("temp:Var");
-        this.resetVarPosition(a, b);
+        this.resetVarPosition(a, b); // init tempVarPositions and instanceordering
         
     }
     
+    /**
+     * 
+     * Informs the joinNode of a new instance of it's parent nodes. The join node then 
+     * calculates all joined variable assignments for this new instance, and adds them
+     * to it's memory.
+     * 
+     * @param instance the new instance that has arrived
+     * @param n the node where the instance arrived (a or b)
+     */
     @Override
     public void addInstance(Instance instance, Node n){
-        super.addInstance(instance, this);
-        // We determine the which of the two join partners the instance comes from
+        Term[] selectionCriteria; // TODO: check if putting thise two variable outside this method decreases runtime
+        Node selectFromHere; // TODO: check if putting thise two variable outside this method decreases runtime
         
-        //System.out.println(this + " addInstance is called with: " + instance);
-        Term[] selectionCriteria;
-        
-        Node selectFromHere;
+        // we determine from which joinpartner the instance arrived, and build our selectionCriteria accordingly
+        // by setting the position to be a variable if selectionCriterionX is null, and to the term of the insatnce's position
+        // otherwise. This way we'll obtain all joinable instances from the other joinpartner.
         if(n.equals(a)){
+            //The instance came from node a
             selectFromHere = b;
             for(int i = 0; i < selectionCriterion2.length;i++){
                 if (selectionCriterion2[i] == null){
@@ -124,6 +159,7 @@ public class JoinNode extends Node{
             }
             selectionCriteria = selCrit2;;
         }else{
+            //the instance came from node b
             selectFromHere = a;
             for(int i = 0; i < selectionCriterion1.length;i++){
                 if (selectionCriterion1[i] == null){
@@ -135,12 +171,10 @@ public class JoinNode extends Node{
             selectionCriteria = selCrit1;
         }
         
-        
-        // We select from the other node via our selectionCriterion
-        // and add to our memory the combination of Variablevalues for each joinpartner
-        
-        
+        // We select all instances that match the selectionCriterion, and therefore are joinable with the new instance, from the other node
         Collection<Instance> joinPartners = selectFromHere.select(selectionCriteria);
+        
+        // for each joinpartner we build a variable assignment we then add to this joinnodes memory
         for(Instance varAssignment: joinPartners){
             Term[] toAdd = new Term[this.instanceOrdering.length];
             for(int i = 0; i < this.instanceOrdering.length;i++){
@@ -159,21 +193,21 @@ public class JoinNode extends Node{
                 }
             }
             Instance instance2Add = Instance.getInstance(toAdd);
+            //System.out.println(this + "Adding " + instance2Add + " because of " + instance + " from " + n);
             this.memory.addInstance(instance2Add);
+            super.addInstance(instance2Add, this); // register the adding of this variableassignment within the choiceUnit
+            
             // We inform all children of this node that a new instance has arrived
             for(Node child: this.children){
                 child.addInstance(instance2Add,this);
             }
         }
-        
-        /*Term[] selectAll = new Term[this.tempVarPosition.size()];
-        for(int i = 0; i < selectAll.length; i++){
-            selectAll[i] = Variable.getVariable("X");
-        }
-        System.out.println(this + " contains instances: " + this.memory.select(selectAll).size());
-        System.out.println(this.memory.select(selectAll));*/
     }
     
+    /**
+     * 
+     * @return the string representation of this join node
+     */
     @Override
     public String toString(){
         return "JoinNode: " + this.a.toString() + this.b.toString();
