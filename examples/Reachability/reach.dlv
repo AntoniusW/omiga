@@ -1,0 +1,5 @@
+%% Author: Giorgio Terracina
+
+reachable(X,Y):-edge(X,Y).
+reachable(X,Y):-edge(X,Z),reachable(Z,Y).
+reachable(10380, 10189)?

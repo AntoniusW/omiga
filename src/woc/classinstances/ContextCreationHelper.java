@@ -16,12 +16,18 @@ public class ContextCreationHelper {
     public static void main(String arg[]){
         
        
-        int nbb = 3000;
+        int nbb = 25;
         for(int i = 0; i < nbb; i++){
+            System.out.println("b(" + i + ").");
+        }
+        for(int i = 0; i < nbb/10; i++){
+            System.out.println("o(" + i + ").");
+        }
+        for(int i = nbb - nbb/5; i < nbb; i++){
             System.out.println("p(" + i + ").");
         }
-        for(int i = 0; i < nbb; i++){
-            System.out.println("q(" + i + ").");
+        for(int i = nbb - nbb/10; i < nbb; i++){
+            System.out.println("sp(" + i + ").");
         }
         
         

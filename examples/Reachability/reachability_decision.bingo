@@ -1,0 +1,14 @@
+#hide.
+#show reaches/2.
+
+reach        :- query(S,E), edge(S,E).
+
+#complete reach/0.
+
+reaches(S,E) :- query(S,E), reach.
+reaches(S,B) :- query(S,E),                       edge(S,B), not reach.
+reaches(S,B) :- query(S,E), reaches(S,A), A != E, edge(A,B), not reach.
+
+#complete reaches/2.
+
+ :- query(S,E), not reaches(S,E).

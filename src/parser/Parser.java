@@ -39,7 +39,8 @@ public class Parser {
     // Predicates of arity 0 are read wrong ) is added to the name at the end
     
     public ContextASP readContext(File f)throws FactSizeException,RuleNotSafeException{
-        String s = "";
+        System.out.println("Starting to read input file: " + System.currentTimeMillis());
+        StringBuffer s = new StringBuffer("");
         try{
             FileInputStream fstream = new FileInputStream(f);
             DataInputStream in = new DataInputStream(fstream);
@@ -47,12 +48,12 @@ public class Parser {
         
             String strLine;
             while ((strLine = br.readLine()) != null)   {
-                System.out.println("Reading Line: " + strLine);
+                //System.out.println("Reading Line: " + strLine);
                 // Print the content on the console
-                s = s +strLine;
+                s = s.append(strLine);
             }
-            System.out.println("s: " + s);
-            return this.readContext(s);
+            //System.out.println("s: " + s);
+            return this.readContext(s.toString());
         
         
         
@@ -65,7 +66,7 @@ public class Parser {
     }
     
     public ContextASP readContext(String s) throws FactSizeException,RuleNotSafeException{
-        System.out.println("STARTING to read Context");
+        System.out.println("STARTING to read Context: " + System.currentTimeMillis());
         ContextASP con = new ContextASP();
         String[] arr = s.split("\\.");
         for(String str: arr){
@@ -76,7 +77,7 @@ public class Parser {
             }
         }
         System.out.println("=============================");
-        System.out.println("FINISHED READING CONTEXT!");
+        System.out.println("FINISHED READING CONTEXT!: " + System.currentTimeMillis());
         System.out.println("=============================");
         return con;
     }
@@ -117,7 +118,7 @@ public class Parser {
                         i = i + this.readFuncTerm(realString.substring(i), terms);
                     }else{
                         if (c == ')'){
-                            System.out.println("Read Fact: " + predName);
+                            //System.out.println("Read Fact: " + predName);
                             Term[] termArray = new Term[terms.size()];
                             terms.toArray(termArray);
                             con.addFact2IN(Predicate.getPredicate(predName, terms.size()), Instance.getInstance(termArray) );
@@ -187,7 +188,7 @@ public class Parser {
     }
     
     public int readConstant(String s, ArrayList<Term> aL){
-        System.out.println("READ CONSTANT STARTED!: " + s);
+        //System.out.println("READ CONSTANT STARTED!: " + s);
         String constantName = "";
         int i = 0;
         char c = s.charAt(i);
@@ -196,7 +197,7 @@ public class Parser {
             i++;
             c = s.charAt(i);
         }
-        System.out.println("read constant: " + constantName);
+        //System.out.println("read constant: " + constantName);
         //System.out.println("ReadConstant terminated with symbol: " + s.charAt(i));
         aL.add(Constant.getConstant(constantName));
         return i-1;

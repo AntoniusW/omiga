@@ -28,10 +28,10 @@ import java.util.Stack;
 public class BasicNode extends Node{
     
     //private Storage memory;
-    private ArrayList<SelectionNode> basicChildren;
+    protected ArrayList<SelectionNode> basicChildren;
     //private Rete rete;
-    private Stack<Instance> toPropagate;
-    private Predicate pred;
+    protected Stack<Instance> toPropagate;
+    protected Predicate pred;
     
     /**
      * 

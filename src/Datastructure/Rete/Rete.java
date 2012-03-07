@@ -102,6 +102,10 @@ public class Rete {
      * @param instance the instance you want to add
      */ 
     public void addInstancePlus(Predicate p, Instance instance){
+        if(this.containsInstance(p, instance, false)) {
+            //System.out.println("HAHA UNSAT!");
+            this.satisfiable = false;
+        }
         basicLayerPlus.get(p).addInstance(instance);
     }
     
@@ -111,6 +115,10 @@ public class Rete {
      * @param instance the instance you want to add
      */ 
     public void addInstanceMinus(Predicate p,Instance instance){
+        if(this.containsInstance(p, instance, true)) {
+            //System.out.println("HAHA UNSAT!");
+            this.satisfiable = false;
+        }
         basicLayerMinus.get(p).addInstance(instance);
     }
     

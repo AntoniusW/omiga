@@ -4,9 +4,13 @@
  */
 package Manager;
 
+import Datastructure.DependencyGraph.DGraph;
 import Datastructure.Rete.Rete;
 import Datastructure.choice.ChoiceUnit;
 import Entity.ContextASP;
+import Entity.Predicate;
+import Entity.Rule;
+import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  *
@@ -48,8 +52,11 @@ public class Manager {
     public void calculate(){
         boolean finished = false;
         c.propagate();
+        //System.out.println("Printing AnswerSet: " + System.currentTimeMillis());
+        //c.printAnswerSet();
         while(!finished){
             if(c.choice()){
+                //System.out.println("StartPropagation: " + System.currentTimeMillis());
                 c.propagate();
                 if(!c.isSatisfiable()){
                     c.backtrack();
@@ -76,6 +83,21 @@ public class Manager {
             }
         }
         System.out.println("Found: " + this.answerSetCount + " answersets!");
+        
+        DGraph g = new DGraph();
+        for(Rule r: c.getAllRules()){
+            g.addRule(r);
+        }
+        //g.gd.addEdge(Predicate.getPredicate("p",2), Predicate.getPredicate("s",1));
+        int i = 0;
+        for(DirectedSubgraph gsg: g.getSCCs()){
+            i++;
+            System.out.println("SCC: " + i);
+            System.out.println(gsg.vertexSet());
+        }
+        
+        System.out.println(g.gd.getAllEdges(Predicate.getPredicate("q", 1), Predicate.getPredicate("s",1)));
+        
     }
     
     

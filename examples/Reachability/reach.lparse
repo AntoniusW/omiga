@@ -1,0 +1,7 @@
+%% Author: Giorgio Terracina
+
+reachable(X,Y):-edge(X,Y).
+reachable(X,Y):-edge(X,Z),reachable(Z,Y),node(Y).
+node(Y):-edge(X,Y).
+node(Y):-edge(Y,X).
+compute all {reachable(10380, 10189)}.

@@ -198,7 +198,7 @@ public class ReteBuilder {
      */
     public void addAtomMinus(Atom atom){
         if(!this.rete.getBasicLayerMinus().containsKey(atom.getPredicate())){
-            this.rete.getBasicLayerMinus().put(atom.getPredicate(), new BasicNode(atom.getArity(),rete, atom.getPredicate()));
+            this.rete.getBasicLayerMinus().put(atom.getPredicate(), new BasicNodeNegative(atom.getArity(),rete, atom.getPredicate()));
             //this.stackyMinus.put(atom.getPredicate(), new Stack<Instance>());
         }   
         this.rete.getBasicLayerMinus().get(atom.getPredicate()).AddAtom(atom);  
