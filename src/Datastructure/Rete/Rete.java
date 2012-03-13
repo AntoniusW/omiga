@@ -48,7 +48,7 @@ public class Rete {
     // TODO: Rete does not need a chocie Unit pointer but the nodes do. more elegant solution?
     private ChoiceUnit choiceUnit;
     private HashMap<Predicate, BasicNode> basicLayerPlus;
-    private HashMap<Predicate, BasicNode> basicLayerMinus;
+    private HashMap<Predicate, BasicNodeNegative> basicLayerMinus;
     public boolean satisfiable = true;
     
     /**
@@ -59,7 +59,7 @@ public class Rete {
     public Rete(ChoiceUnit choiceUnit){
         this.choiceUnit = choiceUnit;
         this.basicLayerPlus = new HashMap<Predicate,BasicNode>();
-        this.basicLayerMinus = new HashMap<Predicate,BasicNode>();
+        this.basicLayerMinus = new HashMap<Predicate,BasicNodeNegative>();
     }
     
     /**
@@ -103,7 +103,7 @@ public class Rete {
      */ 
     public void addInstancePlus(Predicate p, Instance instance){
         if(this.containsInstance(p, instance, false)) {
-            //System.out.println("HAHA UNSAT!");
+            System.out.println("HAHA UNSAT! durch plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
         basicLayerPlus.get(p).addInstance(instance);
@@ -116,7 +116,7 @@ public class Rete {
      */ 
     public void addInstanceMinus(Predicate p,Instance instance){
         if(this.containsInstance(p, instance, true)) {
-            //System.out.println("HAHA UNSAT!");
+            System.out.println("HAHA UNSAT durch minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
         basicLayerMinus.get(p).addInstance(instance);
@@ -147,6 +147,40 @@ public class Rete {
     
     /**
      * 
+     * @param p the predicate of the fact
+     * @param instance the instance of the fact
+     * @param positive negative or positive occurance?
+     * @return wether the fact is contained within the neg/pos memory of the retenetwork or not
+     */
+    public boolean containsInstance(Atom a, Instance instance, boolean positive){
+        if(positive){
+            if(this.basicLayerPlus.containsKey(a.getPredicate())){
+                if(basicLayerPlus.get(a.getPredicate()).getChildNode(a) != null){
+                    return basicLayerPlus.get(a.getPredicate()).getChildNode(a).containsInstance(instance);
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }else{
+            if(this.basicLayerMinus.containsKey(a.getPredicate())){
+                if(((BasicNodeNegative)basicLayerMinus.get(a.getPredicate())).isClosed()) {
+                    return !containsInstance(a,instance,true);
+                }
+                if(basicLayerMinus.get(a.getPredicate()).getChildNode(a) != null){
+                    return basicLayerMinus.get(a.getPredicate()).getChildNode(a).containsInstance(instance);
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
+    }
+    
+    /**
+     * 
      * returns the Basic Node that corresponds to the given predicate
      * 
      * @param p the predicate for which you want the corresponding basic Node
@@ -154,6 +188,17 @@ public class Rete {
      */
     public BasicNode getBasicNodePlus(Predicate p){
         return basicLayerPlus.get(p);
+    }
+    
+        /**
+     * 
+     * returns the Basic Node Negative that corresponds to the given predicate
+     * 
+     * @param p the predicate for which you want the corresponding basic Node
+     * @return the BasicNode for predicate p
+     */
+    public BasicNodeNegative getBasicNodeMinus(Predicate p){
+        return basicLayerMinus.get(p);
     }
     
     /**
@@ -177,7 +222,7 @@ public class Rete {
             for(int i = 0; i < p.getArity();i++){
                 selectionCriteria[i] = Variable.getVariable("X");
             }
-            System.out.println("Instances for: " + p + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
+            System.out.println("Instances for: " + this.basicLayerMinus.get(p) + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
             this.basicLayerMinus.get(p).printAllInstances();
         }
         System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
@@ -200,7 +245,7 @@ public class Rete {
      * @param p the predicate you want to add
      */
     public void addPredicateMinus(Predicate p){
-        this.basicLayerMinus.put(p, new BasicNode(p.getArity(),this,p));
+        this.basicLayerMinus.put(p, new BasicNodeNegative(p.getArity(),this,p));
     }
     
     /**
@@ -218,7 +263,7 @@ public class Rete {
      * 
      * @return the HashMap reresenting the negative BasicLayer
      */
-    public HashMap<Predicate, BasicNode> getBasicLayerMinus() {
+    public HashMap<Predicate, BasicNodeNegative> getBasicLayerMinus() {
         return basicLayerMinus;
     }
 

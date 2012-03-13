@@ -38,7 +38,8 @@ public class ChoiceNode extends Node{
     
     private Rule r;
     private HeadNodeConstraint constraintNode;
-    private ArrayList<Instance> allInstances;
+    //private ArrayList<Instance> allInstances;
+    private HashSet<Instance> allInstances;
     
     /**
      * 
@@ -59,7 +60,8 @@ public class ChoiceNode extends Node{
         this.tempVarPosition = varPosition;
         this.constraintNode = constraintNode;
         constraintNode.setChoicenode(this);
-        this.allInstances = new ArrayList<Instance>();
+        //this.allInstances = new ArrayList<Instance>(); //TODO Init size of this list?
+        this.allInstances = new HashSet<Instance>();
     }
     
     /**
@@ -79,10 +81,10 @@ public class ChoiceNode extends Node{
      * @param from the node the instance comes from. (Can be null. just needed to extend class Node)
      */
     @Override
-    public void addInstance(Instance instance, Node from){
-        super.addInstance(instance, null);
+    public void addInstance(Instance instance, boolean from){
+        super.addInstance(instance, true);
         this.memory.addInstance(instance);
-        this.allInstances.add(instance);    
+        this.allInstances.add(instance);  
     }
     
     /**
@@ -112,7 +114,7 @@ public class ChoiceNode extends Node{
      */
     @Override
     public void simpleRemoveInstance(Instance instance){
-        //TODO: Is this method used?
+        //TODO: Is this method used? (It's not used when no guessing occures)
         this.memory.removeInstance(instance);
         this.allInstances.remove(instance);
     }
@@ -149,7 +151,7 @@ public class ChoiceNode extends Node{
      * @return allInstances that are stored within this choice node
      */
     public ArrayList<Instance> getAllInstances(){
-        return this.allInstances;
+        return new ArrayList<Instance>(this.allInstances);
     }
     
     

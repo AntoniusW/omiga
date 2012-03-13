@@ -242,6 +242,5 @@ public class Atom {
         ret = FuncTerm.getFuncTerm(t.getName(), children);
         return ret;
     }
-    
-    
+     
 }

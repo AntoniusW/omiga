@@ -30,6 +30,8 @@ public class DGraph {
     
     
     public void addRule(Rule r){
+        if(r.getHead() == null) return; // this rule is a constraint dont add it to the Graph
+        System.err.println("GD= " + gd);
         gd.addVertex(r.getHead().getPredicate());
         for(Atom a: r.getBodyPlus()){
             gd.addVertex(a.getPredicate());
@@ -50,11 +52,23 @@ public class DGraph {
         return sci.stronglyConnectedSubgraphs();
     }
     
+    /**
+     * 
+     * @return A List of Lists of Predicates, where the first list-indix stands for the corresponding SCC lvl,
+     * and the second one for the different predicate nodes within that SCC.
+     */
     public ArrayList<ArrayList<Predicate>> getSortedSCCs(){
         //TODO
         ArrayList<ArrayList<Predicate>> ret = new ArrayList<ArrayList<Predicate>>();
         List<DirectedSubgraph> temp = sci.stronglyConnectedSubgraphs();
-        // The SCCs seem to be ordered allready!
+        
+        for(int i = 0; i < temp.size();i++){
+            ret.add(new ArrayList<Predicate>());
+            for(Object o: temp.get(i).vertexSet()){
+                Predicate p = (Predicate)o;
+                ret.get(i).add(p);
+            }
+        }
         
         return ret;
     }

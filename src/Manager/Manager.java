@@ -52,16 +52,34 @@ public class Manager {
     public void calculate(){
         boolean finished = false;
         c.propagate();
-        //System.out.println("Printing AnswerSet: " + System.currentTimeMillis());
+        System.err.println("First Propagation finsihed: " + System.currentTimeMillis());
+        c.getChoiceUnit().DeriveSCC();
+        if(!c.getChoiceUnit().killSoloSCC()){
+            System.err.println("Killed all SCC: " + System.currentTimeMillis());
+            //We killed all SCC --> This context is guessfree
+            if(c.isSatisfiable()){
+                //c.printAnswerSet();
+                System.out.println("GuessFree Context found 1 AnswerSet");
+            }else{
+                System.out.println("GuessFree Context UNSATISFIABLE!");
+            }
+            return;
+        }
+        System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
         while(!finished){
             if(c.choice()){
+                System.out.println("choice Reurned true");
                 //System.out.println("StartPropagation: " + System.currentTimeMillis());
                 c.propagate();
                 if(!c.isSatisfiable()){
+                    System.out.println("UNSAT why?");
                     c.backtrack();
                 }
+                 System.out.println("RESAT?? " + c.isSatisfiable());
+                 System.out.println("Next Choice!");
             }else{
+                System.out.println("Chocie returned false");
                 // No more chocies can be made
                 
                 if(c.getChoiceUnit().getDecisionLevel() > 0){
@@ -73,6 +91,7 @@ public class Manager {
                             answerSetCount++;
                         }else{
                             // constraint Violation detected: No answerSet!
+                            System.out.println("CONSTRAINT VIOLATION!");
                         }
                     }
                     c.backtrack();
@@ -84,7 +103,7 @@ public class Manager {
         }
         System.out.println("Found: " + this.answerSetCount + " answersets!");
         
-        DGraph g = new DGraph();
+        /*DGraph g = new DGraph();
         for(Rule r: c.getAllRules()){
             g.addRule(r);
         }
@@ -96,7 +115,7 @@ public class Manager {
             System.out.println(gsg.vertexSet());
         }
         
-        System.out.println(g.gd.getAllEdges(Predicate.getPredicate("q", 1), Predicate.getPredicate("s",1)));
+        System.out.println(g.gd.getAllEdges(Predicate.getPredicate("q", 1), Predicate.getPredicate("s",1)));*/
         
     }
     

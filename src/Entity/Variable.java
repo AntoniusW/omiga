@@ -6,6 +6,7 @@ package Entity;
 
 import Interfaces.Term;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -22,7 +23,8 @@ public class Variable extends Term{
     
     private Term value;
     
-    private static ArrayList<Variable> vars = new ArrayList<Variable>();
+    //private static ArrayList<Variable> vars = new ArrayList<Variable>();
+    private static HashMap<String,Variable> vars = new HashMap<String,Variable>();
     
     
     /**
@@ -33,12 +35,19 @@ public class Variable extends Term{
      * @return  the desired Variable
      */
     public static Variable getVariable(String name){
-        for(Variable var: vars){
+        if(vars.containsKey(name)){
+            return vars.get(name);
+        }else{
+            Variable v = new Variable(name);
+            vars.put(name, v);
+            return v;
+        }
+        /*for(Variable var: vars){
             if(var.getName().equals(name)) return var;
         }
         Variable v = new Variable(name);
         vars.add(v);
-        return v;
+        return v;*/
     }
     
     /**

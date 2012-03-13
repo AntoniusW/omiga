@@ -57,7 +57,7 @@ public class HeadNodeConstraint extends Node{
     public void saveConstraintInstance(Instance instance){
         // we call super because super only handles the istance storage in the choice layer.
         // so we can use it althaugh this is not the addFunction in common sense
-        super.addInstance(instance, this);
+        super.addInstance(instance, true);
         this.memory.addInstance(instance);
         this.cN.removeInstance(instance); // we remove the corresponding instance from the choice node, since this instance shall not be true, and therefore should never be guessed
     }
@@ -75,7 +75,7 @@ public class HeadNodeConstraint extends Node{
      * @param instance 
      */
     @Override
-    public void addInstance(Instance instance, Node n){
+    public void addInstance(Instance instance, boolean from){
         /*Term[] selectionCriteria = new Term[instance.getSize()];
             for(int j = 0; j < instance.getSize();j++){
                 selectionCriteria[j] = Variable.getVariable("X");

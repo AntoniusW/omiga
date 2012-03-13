@@ -28,6 +28,7 @@ public class HeadNode extends Node{
     
     private Atom a;
     private int[] instanceOrdering;
+    Node from;
     
     /**
      * 
@@ -38,10 +39,14 @@ public class HeadNode extends Node{
      * @param n The parent node of this headNode
      */
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
-    public HeadNode(Atom atom, Rete rete, Node n){
+    public HeadNode(Atom atom, Rete rete, HashMap<Variable,Integer> varPos, Node from){
         super(rete);
+        this.from = from;
         this.a = atom;
-        this.tempVarPosition = (HashMap<Variable, Integer>) n.getVarPositions().clone(); // As we have one headNode per Rule, we can use the tempVarPosition of the parentNode for unification
+        System.err.println("Head Node for: " + atom);
+        //this.tempVarPosition = (HashMap<Variable, Integer>) n.getVarPositions().clone(); // As we have one headNode per Rule, we can use the tempVarPosition of the parentNode for unification
+        this.tempVarPosition = varPos;
+        System.err.println("Tempvars: " + tempVarPosition);
         //System.err.println("HeadNode Created!: " + this);
     }
     
@@ -51,10 +56,11 @@ public class HeadNode extends Node{
      * that is still left from the last node.
      * 
      * @param instance the instance that is added
-     * @param from can be null, only needed for extending class Node
+     * @param from only needed for extending class Node
      */
     @Override
-    public void addInstance(Instance instance, Node from){
+    public void addInstance(Instance instance, boolean from){
+        //System.out.println("HeadNode instance reached: " + instance + " FROM: " + from);
         for(int i=0; i < this.children.size();i++){
         // the only children of HeadNodes are choice Nodes --> We remove the actual Instance from the choice Node
         // The instance should match the instance of the choice Node, since after the positive Part + Operators have been apllied no more Variables are added to the assignment
@@ -64,11 +70,13 @@ public class HeadNode extends Node{
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             rete.satisfiable = false;
-            System.out.println("UNSATISFIABLE!:");
+            System.out.println("UNSATISFIABLE!: " + instance);
+            rete.printAnswerSet();
             //rete.printAnswerSet();
             return;
         }
         //We unify the headAtom of the corresponding rule
+        //System.err.println(this + "Atom: " + a + " - instance: " + instance + "tempVarPos: " + tempVarPosition);
         Instance instance2Add = Unifyer.unifyAtom(a, instance, tempVarPosition);
         
         /*Term[] headInstance = new Term[a.getArity()];
@@ -88,15 +96,49 @@ public class HeadNode extends Node{
         
         Instance instance2Add = Instance.getInstance(headInstance);*/
         //System.out.println("HEAD: " + instance2Add);
+        
+        /*if(!rete.containsInstance(a.getPredicate(), instance2Add, true) != !rete.containsInstance(a, instance2Add, true)){
+            System.out.println("DANGER1");
+            System.out.println("1 says: " + rete.containsInstance(a.getPredicate(), instance2Add, true));
+            System.out.println("2 says: " + rete.containsInstance(a, instance2Add, true));
+            System.out.println("for: " + a + ": " + instance2Add);
+            rete.printAnswerSet();
+        }
+        if(rete.containsInstance(a.getPredicate(), instance2Add, false) != rete.containsInstance(a, instance2Add, false)){
+            System.out.println("DANGER2");
+            System.out.println("1 says: " + rete.containsInstance(a.getPredicate(), instance2Add, false));
+            System.out.println("2 says: " + rete.containsInstance(a, instance2Add, false));
+            System.out.println("for: " + a + ": " + instance2Add);
+            rete.printAnswerSet();
+        }
+        
+        if(!rete.containsInstance(a, instance2Add, true)){
+            if(!rete.containsInstance(a, instance2Add, false)){
+                //if the resolved instance is not contained within our rete we add it
+                rete.addInstancePlus(a.getPredicate(),instance2Add);
+                //System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
+                //System.err.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
+            }else{
+                //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.
+                System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel()+ " instance: " + instance + " Atom: " + a);
+                System.out.println("HeadNode Of: " + this.from);
+                System.out.println("Because Instance: " + instance2Add + " for " + a.getPredicate() + " ha sbeen dervied");
+                System.out.println("Rete contains this negativly??: " + rete.containsInstance(a, instance2Add, false));
+                rete.printAnswerSet();
+                this.rete.satisfiable = false;
+            }
+        }*/
         if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 //if the resolved instance is not contained within our rete we add it
                 rete.addInstancePlus(a.getPredicate(),instance2Add);
+                //System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
                 //System.err.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
             }else{
                 //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.
-                System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel());
-                //rete.printAnswerSet();
+                System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel()+ " instance: " + instance + " Atom: " + a);
+                System.out.println("HeadNode Of: " + this.from);
+                rete.printAnswerSet();
                 this.rete.satisfiable = false;
             }
         }

@@ -57,7 +57,7 @@ public class BasicNode extends Node{
      * @param instance The instance you want to add
      */
     public void addInstance(Instance instance){
-        super.addInstance(instance, this);
+        super.addInstance(instance, true);
         memory.addInstance(instance);
         this.toPropagate.add(instance); 
     }
@@ -73,9 +73,12 @@ public class BasicNode extends Node{
         boolean ret = this.toPropagate.size() > 0;
         while(!this.toPropagate.isEmpty() && rete.satisfiable){
             Instance ins = toPropagate.pop();
-            for(Node sn: basicChildren){
-                sn.addInstance(ins, null);
+            for(SelectionNode sN: basicChildren){
+                sN.addInstance(ins, true);
             }
+            /*for(int i = 0; i < basicChildren.size();i++){
+                basicChildren.get(i).addInstance(ins, true);
+            }*/
         }
         return ret;
     }
@@ -88,6 +91,7 @@ public class BasicNode extends Node{
      */
     public void AddAtom(Atom atom){
         if(this.getChildNode(atom.getAtomAsReteKey()) == null){
+            System.out.println("Adding new SelectionNode!: " + atom);
             this.basicChildren.add(new SelectionNode(atom.getAtomAsReteKey(), this.rete));
         }
     }

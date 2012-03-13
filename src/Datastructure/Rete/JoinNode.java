@@ -33,15 +33,15 @@ import java.util.HashSet;
  */
 public class JoinNode extends Node{
     
-    private Node a;
-    private Node b;
-    private int[] instanceOrdering; // which position of which node goes where. 1 means position 0 of Node a, -2 means position 1 of Node b
-    private Integer[] selectionCriterion1; // store the positions for a lookup
-    private Integer[] selectionCriterion2;
-    private Term[] selCrit1; // Temporaere Vars fuer das selectionCriterion der anderen Node by INstance add
-    private Term[] selCrit2;
+    protected Node a;
+    protected Node b;
+    protected int[] instanceOrdering; // which position of which node goes where. 1 means position 0 of Node a, -2 means position 1 of Node b
+    protected Integer[] selectionCriterion1; // store the positions for a lookup
+    protected Integer[] selectionCriterion2;
+    protected Term[] selCrit1; // Temporaere Vars fuer das selectionCriterion der anderen Node by INstance add
+    protected Term[] selCrit2;
     
-    private Variable tempVar; // used as a Variable for the lookup
+    protected Variable tempVar; // used as a Variable for the lookup
     
     
     /**
@@ -54,6 +54,7 @@ public class JoinNode extends Node{
      * @param b the node that is the second join partner
      */
     public void resetVarPosition(Node a, Node b){
+        System.err.println("RESETVARPOSITION of joinNOdes is used!");
         tempVarPosition.clear();
         HashMap<Variable,Integer> termsA = a.getVarPositions();
         HashMap<Variable, Integer> termsB = b.getVarPositions();
@@ -67,6 +68,7 @@ public class JoinNode extends Node{
         for(Variable v: termsB.keySet()){
             if(!this.tempVarPosition.containsKey(v)){
                 this.tempVarPosition.put(v,this.tempVarPosition.size());
+                System.err.println("LOL: " + (this.tempVarPosition.size()-1) + " v = " + v);
                 instanceOrdering[this.tempVarPosition.size()-1] = (b.getVarPositions().get(v)+1)*-1;
             }
             
@@ -78,6 +80,27 @@ public class JoinNode extends Node{
         testTemp = testTemp + "]";
         System.err.println("LOLRAGARIAGA: " + testTemp);*/
     }
+    
+    
+    
+    
+    
+    /*public HashMap<Variable,Integer> getVarPosition(HashMap<Variable,Integer> varPosLeft, HashMap<Variable,Integer> varPosRight){
+        HashMap<Variable,Integer> ret = new HashMap<Variable,Integer>();
+        // first we add all Variables of Node a (These will reach from 0 to a.arity)
+        for(Variable v: varPosLeft.keySet()){
+            ret.put(v,varPosLeft.get(v));
+        }
+        // then we add all Nodes of B, without the Ordering of B. They take the last positions of our instances
+        for(Variable v: varPosRight.keySet()){
+            if(!ret.containsKey(v)){
+                ret.put(v,ret.size());
+            }
+            
+        }
+        return ret;
+    }*/
+    
     
     
     
@@ -93,40 +116,68 @@ public class JoinNode extends Node{
      * @param bthe node that is the second join partner
      * @param rete the rete this join node is in
      */
-    public JoinNode(Node a, Node b, Rete rete){
+    public JoinNode(Node a, Node b, Rete rete, HashMap<Variable,Integer> varPosA, HashMap<Variable,Integer> varPosB){
         super(rete); // registering this node within the ChoiceUnit
 
         this.a = a;
         this.b = b;
 
+        //We initialize the instance Ordering array
         HashMap<Variable,Integer> temp = new HashMap<Variable, Integer>();
-        temp.putAll(a.getVarPositions());
-        temp.putAll(b.getVarPositions());
+        temp.putAll(varPosA);
+        temp.putAll(varPosB);
         this.instanceOrdering = new int[temp.size()];
         
+        //We initialize this nodes memory
         this.memory = new Storage(instanceOrdering.length);
         
-        this.a.addChild(this);
+        //We register this joinNode within it's two partners as child
+        this.a.addChildR(this);
         this.b.addChild(this);
         
         // We set the selectionCriterias by putting the number of the other predicates position for that position into the array
-        this.selectionCriterion1 = new Integer[a.getVarPositions().size()];
-        for(Variable v: b.getVarPositions().keySet()){
-            if(a.getVarPositions().containsKey(v)){
-                selectionCriterion1[a.getVarPositions().get(v)] = b.getVarPositions().get(v);
+        this.selectionCriterion1 = new Integer[varPosA.size()];
+        for(Variable v: varPosB.keySet()){
+            if(varPosA.containsKey(v)){
+                System.err.println(v);
+                selectionCriterion1[varPosA.get(v)] = varPosB.get(v);
+                //System.err.println("Setting Var position to: " + varPosB.get(v));
             }
         }
-        this.selectionCriterion2 = new Integer[b.getVarPositions().size()];
-        for(Variable v: a.getVarPositions().keySet()){
-            if(b.getVarPositions().containsKey(v)){
-                selectionCriterion2[b.getVarPositions().get(v)] = a.getVarPositions().get(v);
+        this.selectionCriterion2 = new Integer[varPosB.size()];
+        for(Variable v: varPosA.keySet()){
+            if(varPosB.containsKey(v)){
+                System.err.println(v);
+                selectionCriterion2[varPosB.get(v)] = varPosA.get(v);
+               // System.err.println("Setting Var position to: " + varPosA.get(v));
             }
         }
         selCrit1 = new Term[selectionCriterion1.length];
         selCrit2 = new Term[selectionCriterion2.length];
         
+        //We initialize a temp variable. that is laters used for lookups
         this.tempVar = Variable.getVariable("temp:Var");
-        this.resetVarPosition(a, b); // init tempVarPositions and instanceordering
+        
+        //this.resetVarPosition(a,b);
+        
+        //We initialize the instanceOrdering: Variables of the Left Partner get numbers from 1 to arity
+        //while Variables of the right partner get negative numbers from -1 to - arity
+        HashMap<Variable,Integer> temp2 = new HashMap<Variable,Integer>();
+        for(Variable v: varPosA.keySet()){
+            temp2.put(v,varPosA.get(v));
+            instanceOrdering[varPosA.get(v)] = varPosA.get(v)+1; // +1  because we have to distinguish between Node a,b. and +0 = -0. SO we map the positions to 1..n, -1..-n
+        }
+        // then we add all Nodes of B, without the Ordering of B. They take the last positions of our instances
+        for(Variable v: varPosB.keySet()){
+            if(!temp2.containsKey(v)){
+                temp2.put(v,temp2.size());
+                instanceOrdering[temp2.size()-1] = (varPosB.get(v)+1)*-1;
+            }
+            
+        }
+        this.tempVarPosition = temp2;
+        
+        System.err.println("Creating JoinNode for: A= " + a + " _ B= " + b + " MemorySIze= " + this.memory.arity);
         
     }
     
@@ -140,14 +191,15 @@ public class JoinNode extends Node{
      * @param n the node where the instance arrived (a or b)
      */
     @Override
-    public void addInstance(Instance instance, Node n){
+    public void addInstance(Instance instance, boolean from){
+        //System.err.println("ADD Instance called: " + instance + " -" + from + " - " + this);
         Term[] selectionCriteria; // TODO: check if putting thise two variable outside this method decreases runtime
         Node selectFromHere; // TODO: check if putting thise two variable outside this method decreases runtime
         
         // we determine from which joinpartner the instance arrived, and build our selectionCriteria accordingly
         // by setting the position to be a variable if selectionCriterionX is null, and to the term of the insatnce's position
         // otherwise. This way we'll obtain all joinable instances from the other joinpartner.
-        if(n.equals(a)){
+        if(from){
             //The instance came from node a
             selectFromHere = b;
             for(int i = 0; i < selectionCriterion2.length;i++){
@@ -173,12 +225,12 @@ public class JoinNode extends Node{
         
         // We select all instances that match the selectionCriterion, and therefore are joinable with the new instance, from the other node
         Collection<Instance> joinPartners = selectFromHere.select(selectionCriteria);
-        
+        //System.out.println("JoinNode instance added: " + instance + " JOINPARTNERS: " + joinPartners);
         // for each joinpartner we build a variable assignment we then add to this joinnodes memory
         for(Instance varAssignment: joinPartners){
             Term[] toAdd = new Term[this.instanceOrdering.length];
             for(int i = 0; i < this.instanceOrdering.length;i++){
-                if(n.equals(a)){
+                if(from){
                     if(instanceOrdering[i] < 0){
                         toAdd[i] = varAssignment.get((instanceOrdering[i]*-1)-1);
                     }else{
@@ -193,13 +245,24 @@ public class JoinNode extends Node{
                 }
             }
             Instance instance2Add = Instance.getInstance(toAdd);
-            //System.out.println(this + "Adding " + instance2Add + " because of " + instance + " from " + n);
+            System.out.println(this + "Adding " + instance2Add + " because of " + instance + " from " + from);
+            System.out.println("Found JoindPartner: " + varAssignment);
             this.memory.addInstance(instance2Add);
-            super.addInstance(instance2Add, this); // register the adding of this variableassignment within the choiceUnit
+            super.addInstance(instance2Add, true); // register the adding of this variableassignment within the choiceUnit
             
             // We inform all children of this node that a new instance has arrived
-            for(Node child: this.children){
-                child.addInstance(instance2Add,this);
+            /*for(Node n: this.children){
+                n.addInstance(instance2Add,false);
+            }
+            for(Node n: this.childrenR){
+                n.addInstance(instance2Add,true);
+            }*/
+        
+            for(int i = 0; i < this.children.size();i++){
+                this.children.get(i).addInstance(instance2Add, false);
+            }
+            for(int i = 0; i < this.childrenR.size();i++){
+                this.childrenR.get(i).addInstance(instance2Add, true);
             }
         }
     }
@@ -210,7 +273,56 @@ public class JoinNode extends Node{
      */
     @Override
     public String toString(){
-        return "JoinNode: " + this.a.toString() + this.b.toString();
+        return "JoinNode: " + "[" + this.b.toString() + "] [" + this.a.toString() + "] ";
+    }
+    
+    //Actually this method is only called for JoinNodeNegative
+    ArrayList<Instance> temp;
+    public void informOfClosure(SelectionNode sN, boolean from){
+        System.out.println("Closure of: " + sN);
+        //TODO: A closed notification always come from the right side! just kick this if statement. No need for bool nor sN
+        Node actual; // The node that is not closed
+        if(from){
+            // the right partner is closed
+            actual = b;
+        }else{
+            //the left partner is closed
+            actual = a;
+        }
+        temp = actual.memory.getAllInstances();
+        System.out.println("ACTUAL = " + actual);
+        //System.err.println("informed of closure: " + this + " #instances: " + temp.size() + " time: " + System.currentTimeMillis());
+        //System.err.println("EXAMPLE INSTANCE: " + temp.get(0));
+        for(int i = 0; i < temp.size();i++){
+            //rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i));
+            //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
+            //if(!rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i))){
+            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i)) ){
+            //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
+                System.out.println("Rete contains: " + sN.getAtom().getPredicate() + "(" + temp.get(i) + ")" + "SN = " + sN.getAtom());
+                this.memory.addInstance(temp.get(i));
+                System.out.println("Dervied through Closure: " + temp.get(i));
+                for(int j = 0; j < this.children.size();j++){
+                    this.children.get(j).addInstance(temp.get(i), false);
+                }
+                for(int j = 0; j < this.childrenR.size();j++){
+                    this.childrenR.get(j).addInstance(temp.get(i), true);
+                }
+            }
+        }
+        System.err.println("Finished closing: " + System.currentTimeMillis());
+        
+        /*for(Instance inz: actual.memory.getAllInstances()){
+            if(!rete.containsInstance(sN.getAtom().getPredicate(), inz, true)){
+                this.memory.addInstance(inz);
+                for(Node n: this.children){
+                    n.addInstance(inz, false);
+                }
+                for(Node n: this.childrenR){
+                    n.addInstance(inz, true);
+                }
+            }
+        }*/
     }
     
     

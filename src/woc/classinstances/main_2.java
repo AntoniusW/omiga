@@ -35,7 +35,7 @@ public class main_2 {
     public static void main(String arg[]){
         System.out.println("STARTING THE PROGRAM: " + System.currentTimeMillis());
         //File input = new File("C:\\Users\\User\\Desktop\\Context.txt");
-        File input = new File("birds_ASPERIX_nbb=20.txt");
+        File input = new File("birds_ASPERIX_nbb=100.txt");
         
         Parser pars = new Parser();
         try {

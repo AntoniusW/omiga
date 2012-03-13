@@ -20,7 +20,8 @@ import java.util.HashSet;
 public class Constant extends Term {
     
     
-    private static ArrayList<Constant> constants = new ArrayList<Constant>();
+    //private static ArrayList<Constant> constants = new ArrayList<Constant>();
+    private static HashMap<String,Constant> constants = new HashMap<String,Constant>();
     
     /**
      * 
@@ -31,12 +32,13 @@ public class Constant extends Term {
      * @return the desired constant of name=name
      */
     public static Constant getConstant(String name){
-        for(Constant con: constants){
-            if(con.getName().equals(name)) return con;
+        if(constants.containsKey(name)){
+            return constants.get(name);
+        }else{
+            Constant c = new Constant(name);
+            constants.put(name,c);
+            return c;
         }
-        Constant c = new Constant(name);
-        constants.add(c);
-        return c;
     }
     
     /**

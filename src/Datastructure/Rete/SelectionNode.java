@@ -30,6 +30,11 @@ import java.util.HashSet;
 public class SelectionNode extends Node{
     
     private Atom atom;
+    boolean neg = true; // TODO: Remove neg when it works
+    
+    public void setNeg(){
+        this.neg = false;
+    }
     
     public Atom getAtom(){
         return atom;
@@ -45,6 +50,7 @@ public class SelectionNode extends Node{
      */
     public SelectionNode(Atom atom, Rete rete){
         super(rete); // register within the choiceUnit
+        System.err.println("Creating SelectionNode: " + atom);
         
         this.atom = atom.getAtomAsReteKey(); 
         super.resetVarPosition(atom);
@@ -58,6 +64,10 @@ public class SelectionNode extends Node{
         }
         varOrdering = new Variable[vars.size()];
         vars.toArray(varOrdering);
+        //System.err.println("VAR ORDERING: " + this);
+        for(Variable v: varOrdering){
+            System.err.println(v);
+        }
         
         // memory is initialized with the size of the var ordering (as we only need to save variableassignments
         memory = new Storage(atom.getArity());
@@ -79,12 +89,10 @@ public class SelectionNode extends Node{
      * @param from not used, only needed for extending SelectionNode
      */
     @Override
-    public void addInstance(Instance instance, Node from){
-        super.addInstance(instance, this); // registering the adding of an instance within the choiceUnit
-
-        for(Variable v: varOrdering){
+    public void addInstance(Instance instance, boolean from){
+        for(int i = 0; i < varOrdering.length;i++){
             // All Variable values used in this nodes atom are set to null
-            v.setValue(null);
+            varOrdering[i].setValue(null);
         }
         
         for(int i = 0; i < instance.getSize(); i++){
@@ -94,6 +102,9 @@ public class SelectionNode extends Node{
             }
         }
         
+        super.addInstance(instance, true); // registering the adding of an instance within the choiceUnit
+        System.out.println(this + " Adding Instance: " + instance);
+        
         Term[] varAssignment2Add = new Term[varOrdering.length];
         for(int i = 0; i < varOrdering.length;i++){
             // we create our variable assignment by taking all the values of the variables of our varOrdering.
@@ -102,9 +113,19 @@ public class SelectionNode extends Node{
         Instance instance2Add = Instance.getInstance(varAssignment2Add);
         this.memory.addInstance(instance2Add);
         
-        for(Node n: this.children){
-            // we transfer the inserted varAssignment to all childnodes
-            n.addInstance(instance2Add, this);
+        // we transfer the inserted varAssignment to all childnodes
+        /*for(Node n: this.children){
+            n.addInstance(instance2Add,false);
+        }
+        for(Node n: this.childrenR){
+            n.addInstance(instance2Add,true);
+        }*/
+        
+        for(int i = 0; i < this.children.size();i++){
+            children.get(i).addInstance(instance2Add, false);
+        }
+        for(int i = 0; i < this.childrenR.size();i++){
+            childrenR.get(i).addInstance(instance2Add, true);
         }
         
         
@@ -154,7 +175,33 @@ public class SelectionNode extends Node{
      */
     @Override
     public String toString(){
-        return "SelectionNode " + this.atom;
+        return "SelectionNode " + this.atom + " neg: " + neg + " ";
+    }
+    
+    /**
+     * 
+     * @param atom The atom for which you want to get the VariablePositions
+     * @return a HashMap that contains Variables together with their position in the memory in the corresponding SelectionNode of the given atom
+     */
+    public static HashMap<Variable,Integer> getVarPosition(Atom atom){
+        HashMap<Variable,Integer> ret = new HashMap<Variable,Integer>();
+        Term[] terms = atom.getTerms();
+        for(int i = 0; i < terms.length;i++){
+            Term t = terms[i];
+            for(int j = 0;j < t.getUsedVariables().size();j++){
+                Variable v = t.getUsedVariables().get(j);
+                if(!ret.containsKey(v)){
+                    ret.put(v, ret.size());
+                }
+            }
+        }
+        return ret;
+    }
+    
+    public HashMap<Variable,Integer> getVarPosition(){
+        // This method must not be used for selectionNodes since the VariablePositions are useless here since more 
+        System.err.println("EROOR: getVarPositions called for a SelectionNode!");
+        return null;
     }
     
 }

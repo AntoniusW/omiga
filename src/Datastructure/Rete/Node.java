@@ -31,6 +31,7 @@ public abstract class Node {
     protected Variable[] varOrdering;
     protected Storage memory;
     protected ArrayList<Node> children;
+    protected ArrayList<Node> childrenR;
     protected Rete rete;
     protected HashMap<Variable,Integer> tempVarPosition;
     
@@ -39,6 +40,7 @@ public abstract class Node {
      * @return the tempVarPosition Mapping of this node.
      */
     public HashMap<Variable,Integer> getVarPositions(){
+        //TODO remove this method --> Extra treatment for choiceNOdes needed then, but tempVars should not be used anymore!
         return this.tempVarPosition;
     }
     
@@ -49,6 +51,7 @@ public abstract class Node {
      * @param atom 
      */
     public void resetVarPosition(Atom atom){
+        System.err.println("resetVarPosition: " + this);
         tempVarPosition.clear();
         Term[] terms = atom.getTerms();
         for(int i = 0; i < terms.length;i++){
@@ -60,7 +63,24 @@ public abstract class Node {
                 }
             }
         }
+        System.err.println(this + ": varPositions: " + tempVarPosition);
     }
+    
+    //TODO: Remove not used? Now in Atom?!
+    /*public HashMap<Variable,Integer> getVarPosition(Atom atom){
+        HashMap<Variable,Integer> ret = new HashMap<Variable,Integer>();
+        Term[] terms = atom.getTerms();
+        for(int i = 0; i < terms.length;i++){
+            Term t = terms[i];
+            for(int j = 0;j < t.getUsedVariables().size();j++){
+                Variable v = t.getUsedVariables().get(j);
+                if(!ret.containsKey(v)){
+                    ret.put(v, ret.size());
+                }
+            }
+        }
+        return ret;
+    }*/
     
     /**
      * 
@@ -73,6 +93,7 @@ public abstract class Node {
     public Node(Rete rete){
         this.rete = rete;
         this.children = new ArrayList<Node>();
+        this.childrenR = new ArrayList<Node>();
         tempVarPosition = new HashMap<Variable,Integer>();
         this.rete.getChoiceUnit().addNode(this);
     }
@@ -131,9 +152,9 @@ public abstract class Node {
      * to register within the Decision Memory)
      * 
      * @param instance The instance you want to add
-     * @param from the node from which the instance comes (needed for choice nodes, can be null for other nodes)
+     * @param from true means right JoinPartner false means leftt one. For nonJoinNodes this parameter doese not matter
      */
-    public void addInstance(Instance instance, Node from){
+    public void addInstance(Instance instance, boolean from){
         this.rete.getChoiceUnit().addInstance(this, instance);
     }
     
@@ -171,6 +192,13 @@ public abstract class Node {
     public ArrayList<Node> getChildren(){
         return this.children;
     }
+    /**
+     * 
+     * @return the childrenR of this node
+     */
+    public ArrayList<Node> getChildrenR(){
+        return this.childrenR;
+    }
     
     /**
      * 
@@ -180,6 +208,10 @@ public abstract class Node {
      */
     public void addChild(Node n){
         if (!this.children.contains(n)) this.children.add(n);
+    }
+    
+    public void addChildR(Node n){
+        if (!this.childrenR.contains(n)) this.childrenR.add(n);
     }
     
 
