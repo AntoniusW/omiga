@@ -48,6 +48,7 @@ public class HeadNode extends Node{
         this.tempVarPosition = varPos;
         System.err.println("Tempvars: " + tempVarPosition);
         //System.err.println("HeadNode Created!: " + this);
+        //this.rete.getChoiceUnit().addNode(this);
     }
     
     /**
@@ -60,7 +61,8 @@ public class HeadNode extends Node{
      */
     @Override
     public void addInstance(Instance instance, boolean from){
-        //System.out.println("HeadNode instance reached: " + instance + " FROM: " + from);
+       //System.err.println("HeadNode instance reached: " + instance + " FROM: " + from + " Atom: " + this.a);
+        //System.out.println(this.tempVarPosition);
         for(int i=0; i < this.children.size();i++){
         // the only children of HeadNodes are choice Nodes --> We remove the actual Instance from the choice Node
         // The instance should match the instance of the choice Node, since after the positive Part + Operators have been apllied no more Variables are added to the assignment
@@ -70,8 +72,8 @@ public class HeadNode extends Node{
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             rete.satisfiable = false;
-            System.out.println("UNSATISFIABLE!: " + instance);
-            rete.printAnswerSet();
+            //System.err.println("UNSATISFIABLE!: " + instance);
+            //rete.printAnswerSet();
             //rete.printAnswerSet();
             return;
         }
@@ -132,16 +134,23 @@ public class HeadNode extends Node{
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 //if the resolved instance is not contained within our rete we add it
                 rete.addInstancePlus(a.getPredicate(),instance2Add);
-                //System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
+             //   System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
                 //System.err.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
             }else{
                 //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.
-                System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel()+ " instance: " + instance + " Atom: " + a);
-                System.out.println("HeadNode Of: " + this.from);
-                rete.printAnswerSet();
+                /*System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel()+ " instance: " + instance + " Atom: " + a);
+                System.out.println("Wanted to add: " + instance2Add + " to " + a);
+                System.out.println("TEMPVAR: " + this.from.tempVarPosition);
+                System.out.println("SelCrit1: " + Instance.getInstanceAsString(((JoinNode)this.from).selectionCriterion1));
+                System.out.println("SelCrit2: " + Instance.getInstanceAsString(((JoinNode)this.from).selectionCriterion2));*/
+                //System.out.println(rete.getChoiceUnit().getMemory().getNodes());
+                //System.out.println("HeadNode Of: " + this.from);
+                //rete.printAnswerSet();
                 this.rete.satisfiable = false;
             }
-        }
+        }/*else{
+            System.out.println("Instance: " + instance2Add + " already contained in rete: " + this.a);
+        }*/
     }
     
     /*private FuncTerm unifyFuncTerm(FuncTerm f, Instance instance){
@@ -163,5 +172,10 @@ public class HeadNode extends Node{
         //System.err.println("Tehrefore returning: " + ret + " as children are: " + ret.getChildren());
         return ret;
     }*/
+    
+    @Override
+    public String toString(){
+        return "HeadNode: " + a + " - " + this.tempVarPosition;
+    }
     
 }

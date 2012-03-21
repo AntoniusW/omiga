@@ -7,6 +7,7 @@ package Manager;
 import Datastructure.DependencyGraph.DGraph;
 import Datastructure.Rete.Rete;
 import Datastructure.choice.ChoiceUnit;
+import Entity.Constant;
 import Entity.ContextASP;
 import Entity.Predicate;
 import Entity.Rule;
@@ -52,7 +53,7 @@ public class Manager {
     public void calculate(){
         boolean finished = false;
         c.propagate();
-        System.err.println("First Propagation finsihed: " + System.currentTimeMillis());
+        //System.err.println("First Propagation finsihed: " + System.currentTimeMillis());
         c.getChoiceUnit().DeriveSCC();
         if(!c.getChoiceUnit().killSoloSCC()){
             System.err.println("Killed all SCC: " + System.currentTimeMillis());
@@ -69,17 +70,18 @@ public class Manager {
         //c.printAnswerSet();
         while(!finished){
             if(c.choice()){
-                System.out.println("choice Reurned true");
+                //System.out.println("choice Reurned true");
                 //System.out.println("StartPropagation: " + System.currentTimeMillis());
                 c.propagate();
+                //c.printAnswerSet();
                 if(!c.isSatisfiable()){
-                    System.out.println("UNSAT why?");
+                    //System.out.println("UNSAT why?");
                     c.backtrack();
                 }
-                 System.out.println("RESAT?? " + c.isSatisfiable());
-                 System.out.println("Next Choice!");
+                 //System.out.println("RESAT?? " + c.isSatisfiable());
+                 //System.out.println("Next Choice!");
             }else{
-                System.out.println("Chocie returned false");
+                //System.out.println("Chocie returned false");
                 // No more chocies can be made
                 
                 if(c.getChoiceUnit().getDecisionLevel() > 0){
@@ -91,17 +93,28 @@ public class Manager {
                             answerSetCount++;
                         }else{
                             // constraint Violation detected: No answerSet!
-                            System.out.println("CONSTRAINT VIOLATION!");
+                            //System.out.println("CONSTRAINT VIOLATION!");
                         }
                     }
                     c.backtrack();
                     //c.resetSatisfiable();
                 }else{
                     finished = true;
+                    /*if(this.answerSetCount == 0){
+                        if(c.getChoiceUnit().check4AnswerSet()){
+                            System.out.println("AnswerSet Found! There is only one AnswerSet and that's without apllying any guesses: ");
+                            c.printAnswerSet();
+                            answerSetCount++;
+                        }
+                    }*/
                 }
             }
         }
         System.out.println("Found: " + this.answerSetCount + " answersets!");
+        //System.out.println(this.c.getChoiceUnit().getMemory().getNodes());
+        /*System.out.println("HashCode red: " + Constant.getConstant("red"));
+        System.out.println("HashCode green: " + Constant.getConstant("green"));
+        System.out.println("Equals? red = green: " + Constant.getConstant("red").equals(Constant.getConstant("green")));*/
         
         /*DGraph g = new DGraph();
         for(Rule r: c.getAllRules()){

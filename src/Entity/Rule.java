@@ -171,5 +171,9 @@ public class Rule {
     public Atom getHead() {
         return head;
     }
+    
+    public boolean isConstraint(){
+        return this.head == null;
+    }
 
 }

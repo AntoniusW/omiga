@@ -4,6 +4,7 @@
  */
 package Entity;
 
+import Interfaces.OperandI;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.HashMap;
  * 
  * 
  */
-public class Variable extends Term{
+public class Variable extends Term implements OperandI{
     
     private Term value;
     
@@ -92,6 +93,17 @@ public class Variable extends Term{
      */
     public Term getValue(){
         return value;
+    }
+    
+    /**
+     * 
+     * Works only for constants as values!
+     * 
+     * @return The integer representation of this variables value.
+     */
+    @Override
+    public int getIntValue(){
+        return ((Constant)this.value).getIntValue();
     }
     /**
      * This method is needed within the rete network's selection nodes. There we assign values to variables, til we can build a hole variable assignment

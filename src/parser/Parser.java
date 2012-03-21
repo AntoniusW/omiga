@@ -9,9 +9,11 @@ import Entity.ContextASP;
 import Entity.Atom;
 import Entity.FuncTerm;
 import Entity.Instance;
+import Entity.Operator;
 import Entity.Predicate;
 import Entity.Rule;
 import Entity.Variable;
+import Enumeration.OP;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
@@ -174,7 +176,7 @@ public class Parser {
             }else{
                 if(Character.isUpperCase(realString.charAt(i))){
                     //readOperator
-                    this.readOperator();
+                    this.readOperator(realString.substring(i),r);
                     System.out.println("LOl OPERATOR: " + realString.charAt(i));
                 }else{
                     if (realString.charAt(i) != ','){
@@ -271,8 +273,38 @@ public class Parser {
         return i;
     }
     
-    public void readOperator(){
+    public void readOperator(String s, Rule r){
         System.out.println("READING OPERATOR!");
+        ArrayList<String> strings = new ArrayList<String>();
+        ArrayList<OP> ops = new ArrayList<OP>();
+        int i = 0;
+        String temp;
+        while(s.charAt(i) !=',' && s.charAt(i) !='.'){
+            temp = "";
+            while(!isOperator(s.charAt(i))){
+                temp = temp + s.charAt(i);
+                i++;
+            }
+            strings.add(temp);
+            ops.add(OP.valueOf(String.valueOf(s.charAt(i))));
+            i++;
+        }
+        //We now have the hole Operator on the string and ops ArrayList.
+        Operator tempOpi;
+        for(int j = 0; j < ops.size();j++){
+            if(ops.get(j).equals(OP.PLUS) || ops.get(j).equals(OP.MINUS)){
+                tempOpi = new Operator(tempOpi, this.readConstant(s, new ArrayList<Term>()));
+            }
+        }
+        
+        
+    }
+    
+    private boolean isOperator(char c){
+        if(c == '+' || c == '-' || c == '=' || c == '>' || c == '<' || c == '~'){
+            return true;
+        }
+        return false;
     }
     
     public int readPredicate(String s, Rule r){

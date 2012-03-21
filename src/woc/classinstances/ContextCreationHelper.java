@@ -16,8 +16,8 @@ public class ContextCreationHelper {
     public static void main(String arg[]){
         
        
-        int nbb = 200000;
-        for(int i = 0; i < nbb; i++){
+        int nbb = 200;
+        /*for(int i = 0; i < nbb; i++){
             System.out.println("b(" + i + ").");
         }
         for(int i = 0; i < nbb/10; i++){
@@ -28,7 +28,15 @@ public class ContextCreationHelper {
         }
         for(int i = nbb - nbb/10; i < nbb; i++){
             System.out.println("sp(" + i + ").");
+        }*/
+        for(int i = 0; i < nbb;i++){
+            System.out.println("p(" + i + ").");
         }
+        /*for(int i = 0; i < nbb; i++){
+            for(int j = i+1; j < nbb; j++){
+                System.out.println("arc(" + i + "," + j + ").");
+            }
+        }*/
         
         
         

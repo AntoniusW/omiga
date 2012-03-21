@@ -38,6 +38,7 @@ public class HeadNodeConstraint extends Node{
     public HeadNodeConstraint(Rete rete, int arity){
         super(rete); // HeadNodeConstraints are saved within the DecisionMemory of the choiceUnit!
         this.memory = new Storage(arity);
+        //this.rete.getChoiceUnit().addNode(this);
     }
     
     /**
@@ -88,7 +89,7 @@ public class HeadNodeConstraint extends Node{
             
         if(this.memory.containsInstance(instance)){
             rete.satisfiable = false;
-            System.out.println("UNSATISFIABLE because of HeadConstraintNode! Printing AnswerSet");
+            //System.out.println("UNSATISFIABLE because of HeadConstraintNode! Printing AnswerSet: " + instance);
             //rete.printAnswerSet();
         }
     }

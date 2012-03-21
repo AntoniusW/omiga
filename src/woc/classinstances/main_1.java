@@ -34,14 +34,14 @@ public class main_1 {
     
     public static void main(String arg[]){
         System.out.println("STARTING THE PROGRAM: " + System.currentTimeMillis());
-        //File input = new File("C:\\Users\\User\\Desktop\\Context.txt");
-        //File input = new File("Copy of Maximal Cliqze ASPERAGUS.txt");
-        File input = new File("Z:\\DLV\\3colEasy2.txt");
+        //File input = new File("Z:\\DLV\\3col.txt");
+        //File input = new File("C:\\Dokumente und Einstellungen\\Mika\\Desktop\\WOC - Wings of Change\\examples\\stratC\\woc_roc.txt");
+        File input = new File("3Col\\3Col6AS.txt");
         
         Parser pars = new Parser();
         try {
             ContextASP c = pars.readContext(input);
-            c.printContext();
+            //c.printContext();
             
             Manager m = new Manager(c);
             System.out.println("Starting calculation: " + System.currentTimeMillis());

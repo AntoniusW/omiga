@@ -31,17 +31,17 @@ public class DGraph {
     
     public void addRule(Rule r){
         if(r.getHead() == null) return; // this rule is a constraint dont add it to the Graph
-        System.err.println("GD= " + gd);
+        //System.err.println("GD= " + gd);
         gd.addVertex(r.getHead().getPredicate());
         for(Atom a: r.getBodyPlus()){
             gd.addVertex(a.getPredicate());
-            System.out.println("Adding Edge: " + a.getPredicate() + " --> " + r.getHead().getPredicate());
+            //System.out.println("Adding Edge: " + a.getPredicate() + " --> " + r.getHead().getPredicate());
             gd.addEdge(a.getPredicate(), r.getHead().getPredicate());
             //gd.addEdge(r.getHead().getPredicate(),a.getPredicate());
         }
         for(Atom a: r.getBodyMinus()){
             gd.addVertex(a.getPredicate());
-            System.out.println("Adding Edge: " + a.getPredicate() + " -N-> " + r.getHead().getPredicate());
+            //System.out.println("Adding Edge: " + a.getPredicate() + " -N-> " + r.getHead().getPredicate());
             gd.addEdge(a.getPredicate(), r.getHead().getPredicate());
             //gd.addEdge(r.getHead().getPredicate(),a.getPredicate());
         }

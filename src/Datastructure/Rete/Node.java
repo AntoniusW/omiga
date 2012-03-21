@@ -29,7 +29,7 @@ import java.util.HashMap;
 public abstract class Node {
     
     protected Variable[] varOrdering;
-    protected Storage memory;
+    public Storage memory;
     protected ArrayList<Node> children;
     protected ArrayList<Node> childrenR;
     protected Rete rete;
@@ -128,9 +128,7 @@ public abstract class Node {
         //System.err.println("this: " + this + " memory: " + this.memory + " removeSimpelInstnce: " + instance);
         if(this.memory.containsInstance(instance)){ // TODO: das if muss weg. Im Moment sreiekn leider noch die HeadNodeConstraints!
             this.memory.removeInstance(instance);
-            //System.out.println("REMOVING INSTANCE: " + instance + " from: " + this);
-        }else{
-            //System.out.println("TRIED TO REMOVE " + instance + " from: " + this + " BUT WAS NOT THERE!");
+            //System.err.println("REMOVING INSTANCE: " + instance + " from: " + this);
         }
     }
     
@@ -169,7 +167,7 @@ public abstract class Node {
         //has to be implemented by each NodeType
         if(this.memory.containsInstance(instance)){ // TODO: das if muss weg. Im Moment sreiekn leider noch die HeadNodeConstraints!
             this.memory.removeInstance(instance);
-            //System.out.println("REMOVING INSTANCE: " + instance + " from: " + this);
+            //System.err.println("REMOVING INSTANCE: " + instance + " from: " + this);
         }else{
             //System.out.println("TRIED TO REMOVE " + instance + " from: " + this + " BUT WAS NOT THERE!");
         }

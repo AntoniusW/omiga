@@ -62,6 +62,7 @@ public class ChoiceNode extends Node{
         constraintNode.setChoicenode(this);
         //this.allInstances = new ArrayList<Instance>(); //TODO Init size of this list?
         this.allInstances = new HashSet<Instance>();
+        //this.rete.getChoiceUnit().addNode(this);
     }
     
     /**

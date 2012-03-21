@@ -6,6 +6,7 @@ package Datastructure.choice;
 
 import Datastructure.DependencyGraph.DGraph;
 import Datastructure.Rete.ChoiceNode;
+import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.HeadNodeConstraint;
 import Datastructure.Rete.Node;
 import Datastructure.Rete.Unifyer;
@@ -90,7 +91,7 @@ public class ChoiceUnit {
         c.getRete().propagate();
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)) {
-               System.out.println("Closing Predicate: " + p);
+               //System.out.println("Closing Predicate: " + p);
                c.getRete().getBasicNodeMinus(p).close();
            }
         }
@@ -112,11 +113,12 @@ public class ChoiceUnit {
      * 
      * @return if there was a guess that was made, or if there are no more guesses left
      */
+    int i = 0; //TODO: Remove this counter
     public boolean choice(){
-        System.out.println("CHOICE IS CALLED!");
+        //System.out.println("CHOICE IS CALLED!");
         //System.out.println("Choice is called!");
         //TODO: replace foreach loops with iterator loops.
-        
+        i++;
         //System.out.println("Choice is called! " + this.memory.getDecisonLevel());
         //this.printAllChoiceNodes();
         if(this.nextNode != null){
@@ -125,7 +127,7 @@ public class ChoiceUnit {
             this.addChoicePoint();
             //we activate a constraint for this rule. Since this rule must not be true anymore, as we guessed it to be false
             nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
-            System.out.println("Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!");
+            //System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
             //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);
@@ -140,12 +142,13 @@ public class ChoiceUnit {
         //We need to do a positive guess
         for(ChoiceNode cN: SCC.get(actualSCC)){
             if(!cN.getAllInstances().isEmpty()){
-                System.out.println("POSITIVE GUESS possible!");
+                //System.out.println("POSITIVE GUESS possible!");
                 this.addChoicePoint();
                 Instance inz = cN.getAllInstances().get(0);
-                System.out.println("Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!");
+                //System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                 for(Atom a: cN.getRule().getBodyMinus()){
                     Instance toAdd = Unifyer.unifyAtom(a,inz, cN.getVarPositions());
+                    //System.out.println("Adding: " + toAdd + " to: " + a.getPredicate());
                     c.getRete().addInstanceMinus(a.getPredicate(), toAdd);
                 }
                 cN.simpleRemoveInstance(inz) ;
@@ -156,15 +159,15 @@ public class ChoiceUnit {
                 return true;
             }
         }
-        System.out.println("WHATSUP?!");
+        //System.out.println("WHATSUP?!");
         //if we reach this point this means the actual SCC contains no more guesses
         // therefore we close each Predicate of this SCC (HeadPredicates)
         this.closeActualSCC(); // closing the SCC increases actual SCC to the next SCC
         if(SCC.size() <= actualSCC) {
-            System.out.println("Guess returns false, because all SCC are through");
+            //System.out.println("Guess returns false, because all SCC are through");
             return false;
         } // We have no more ChoiceNode to guess on!
-        System.out.println("OMG?");
+        //System.out.println("OMG?");
         //We can close all reached SCCs that are of size one (as they have no more input and do not depend on anything else!
         while(this.SCCSize.get(actualSCC) <= 1){
             this.closeActualSCC(); // closing the SCC increases actual SCC to the next SCC
@@ -173,77 +176,8 @@ public class ChoiceUnit {
                 return false;
             } // We have no more ChoiceNode to guess on!
         }
-        System.out.println("Doing another choice!?!");
+        //System.out.println("Doing another choice!?!");
         return choice();
-    }
-    
-    public boolean oldGuess(){
-                // the code for the guessing without SCC follows
-        
-        
-        //System.out.println("Choice is called! " + this.memory.getDecisonLevel());
-        //this.printAllChoiceNodes();
-        if(this.nextNode != null){
-            //There is a next node. This means we have to make a negative guess since we returned at this point because of backtracking
-            //We add a choicepoint since we are doing a guess
-            this.addChoicePoint();
-            //we activate a constraint for this rule. Since this rule must not be true anymore, as we guessed it to be false
-            nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
-            //System.out.println("Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!");
-            //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
-            this.stackybool.push(false);
-            this.stackyNode.push(nextNode);
-            this.stackyInstance.push(nextInstance);
-            //We set nextNode=null. So the next guess will be a positive one if no backtracking is apllied in between
-            nextNode = null;
-            
-            //We return true, since we guessed
-            return true;
-        }
-        
-        //nextNode was not set, therefore we have to make a positive guess if possible
-        for(int i = 0;i < choiceNodes.size();i++){
-            //We go through all nodes that may contain instances for choice
-            //TODO: [PERFORMANCE INCREASE]Maybe we can increase runtrime if we delete nodes from here when no instances to guess on are left, and add them again when such an insatnce is added to it
-            if(!choiceNodes.get(i).getAllInstances().isEmpty()){
-                //The actual choicenode contains at least one instance, so we guess on it and add a choicePoint
-                this.addChoicePoint();
-                //We take the first instance that is in this node
-                Instance inz = ((Instance)choiceNodes.get(i).getAllInstances().get(0));
-                //System.out.println("Guesing on: " + choiceNodes.get(i).getRule() + " - with VarAsign: " + inz + " to be true!");
-                /*String varPos = "[";
-                for(Variable v: choiceNodes.get(i).getVarPositions().keySet()){
-                    varPos = varPos + v + "=" + choiceNodes.get(i).getVarPositions().get(v) + ",";
-                }
-                varPos = varPos + "]";
-                System.out.println("VarPos: ");
-                System.out.println(varPos);*/
-                
-                //Since we do a positive guess we put one unifyed instance for each negative atom of the corresponding rule into our OUT memory
-                //Since we add all negative parts to the outset, and all positive parts have to be fullfilled since, the isntance reached the choiceNode
-                //This rule is fullfilled for the actual groundinstance and the head will be added within the next propagationstep
-                //Unification works here, since all variables have to to be set at a choiceNode, since we only work on save rules
-                for(Atom a: choiceNodes.get(i).getRule().getBodyMinus()){
-                    Instance toAdd = Unifyer.unifyAtom(a,inz, choiceNodes.get(i).getVarPositions());
-                    c.getRete().addInstanceMinus(a.getPredicate(), toAdd);
-                }
-                choiceNodes.get(i).simpleRemoveInstance(inz) ;
-                this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(choiceNodes.get(i)).add(inz);
-                //Be aware that the instance we just guessed on will be deleted automatially within the next propagationstep, so we do not need to remove it here.
-                
-                //We push the node and instance we just guessed on, as well as true, onto our stacks, to let backtrackign know a positive guess was made
-                this.stackyNode.push(choiceNodes.get(i));
-                this.stackybool.push(true); 
-                this.stackyInstance.push(inz); 
-                //System.out.println("GUESSED: " + choiceNodes.get(i).getRule() + " with: " + inz);
-
-                //We return true since we made a guess
-                return true;
-                
-            }
-        }
-        //No negative guess was there to make, and all choiceNodes are empty, therefore no guess at all can be made anymore and we return false
-        return false;
     }
     
     private void addChoicePoint(){
@@ -354,8 +288,8 @@ public class ChoiceUnit {
      */
     public void backtrack(){
         
-        
-        System.out.println("BACKTRACKING!");
+        //System.err.println(this.stackybool.size() + " vs: " + this.memory.getDecisonLevel());
+        //System.err.println("BACKTRACKING!");
         // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
         this.backtrackchoiceNodesDecisionLayer();
         this.memory.backtrack();
@@ -383,14 +317,14 @@ public class ChoiceUnit {
                 stackyInstance.pop();
                 //This was not the last guess. Add the last guess back tino the choicenode (since it can be reguessed in the other branch of the guess before)
                 //this.stackyNode.pop().simpleAddInstance(this.stackyInstance.pop()); // TODO: Is this needed? We add the choice back into the choice node
-                backtrack(); // TODO: if this is a standalone calculation we can imideatly backtrack once more, since nothing else is possible.
+                //backtrack(); // TODO: if this is a standalone calculation we can imideatly backtrack once more, since nothing else is possible.
             }else{
                 //else we are finished with guessing and at decisoonlevel 0 therefore no more backtracking is needed
 
                 //We set rete.unsatisfiable since such that this is not seen as an answerset
                 // We empty all choicenodes such that the guessing is over
-                System.out.println("BACKTRACKING setzt unsat!");
-                this.c.getRete().satisfiable = false;
+                //System.out.println("BACKTRACKING setzt unsat!");
+                //this.c.getRete().satisfiable = false;
                 for(ChoiceNode cN: this.choiceNodes){
                     Stack<Instance> stacky = new Stack<Instance>();
                     for(Instance inz: cN.getAllInstances()){
@@ -403,7 +337,92 @@ public class ChoiceUnit {
                 }
             }
         }
+        /*System.out.println("AnswerSetAfter BACKTRACKING:");
+        for(Node n: this.memory.getNodes()){
+            if(!n.getClass().equals(HeadNode.class)){
+                System.out.println(n +" contains: ");
+                System.out.println(n.memory.getAllInstances());
+            }
+            
+        }*/
     }
+    
+    
+    /**
+     * backtrack one decisionlevel and bring memory back to state before last guess
+     */
+    public void backtrack2(){
+        //TODO: This is used -_> remove othe rbacktrackings!
+        //DANGER: NORMAL backtrack() could be needed for MCS thingy, as there we do not want to backtrack multiple tims.
+        while(!this.stackybool.isEmpty() && !this.stackybool.peek()){
+            this.stackybool.pop();
+            this.backtrackchoiceNodesDecisionLayer();
+            this.memory.backtrack();
+        
+            //TODO: backtracking on SCC
+            if(!this.closedAt.isEmpty()){
+                if(this.closedAt.peek() >= this.memory.getDecisonLevel()){
+                    this.openActualSCC();
+                }
+            }
+            if(memory.getDecisonLevel() > 0) {
+                stackyNode.pop();
+                stackyInstance.pop();
+                //This was not the last guess. Add the last guess back tino the choicenode (since it can be reguessed in the other branch of the guess before)
+                //this.stackyNode.pop().simpleAddInstance(this.stackyInstance.pop()); // TODO: Is this needed? We add the choice back into the choice node
+                //backtrack(); // TODO: if this is a standalone calculation we can imideatly backtrack once more, since nothing else is possible.
+            }else{
+                //else we are finished with guessing and at decisoonlevel 0 therefore no more backtracking is needed
+
+                //We set rete.unsatisfiable since such that this is not seen as an answerset
+                // We empty all choicenodes such that the guessing is over
+                //System.out.println("BACKTRACKING setzt unsat!");
+                //this.c.getRete().satisfiable = false;
+                for(ChoiceNode cN: this.choiceNodes){
+                    Stack<Instance> stacky = new Stack<Instance>();
+                    for(Instance inz: cN.getAllInstances()){
+                        stacky.push(inz);
+                    }
+                    while(!stacky.empty()){
+                        cN.simpleRemoveInstance(stacky.pop());
+                    }
+                    
+                }
+                return;
+            }
+            
+            //backtrack();
+        }
+        if(!this.stackybool.isEmpty()) {
+            this.backtrackchoiceNodesDecisionLayer();
+            this.memory.backtrack();
+        
+            //TODO: backtracking on SCC
+            if(!this.closedAt.isEmpty()){
+                if(this.closedAt.peek() >= this.memory.getDecisonLevel()){
+                    this.openActualSCC();
+                }
+            }
+            stackybool.pop();
+            nextNode = stackyNode.pop();
+            nextInstance = stackyInstance.pop();
+            //backtrack();
+        }
+    }
+    
+     /**
+     * backtrack one decisionlevel and bring memory back to state before last guess
+     */
+    public void backtrack3(){
+        while(!this.stackybool.isEmpty() && !this.stackybool.peek()){
+            backtrack();
+        }
+        if(!this.stackybool.isEmpty()) {
+            backtrack();
+        }
+    }
+    
+    
     
     /**
      * 
@@ -415,9 +434,11 @@ public class ChoiceUnit {
     
     public boolean check4AnswerSet(){
         // TODO: Constraints of the context!
+        //System.out.println("Check4AnswerSet!");
         boolean flag = false;
         for(ChoiceNode cN: this.choiceNodes){
             HeadNodeConstraint con = cN.getConstraintNode();
+            //System.out.println(con.getAllInstances());
             //System.out.println("HEADCONSTRAINT: " + cN.getRule());
             for(Instance inz: con.getAllInstances()){
                 //System.out.println("INZ: " + inz);
@@ -468,7 +489,7 @@ public class ChoiceUnit {
              SCCSize.add(SCC.get(i).size());
         }
         
-        System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
+        /*System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
         for(int i = 0; i < this.SCC.size();i++){
             System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i));
         }
@@ -480,7 +501,7 @@ public class ChoiceUnit {
             i++;
             System.out.println("SCC: " + i);
             System.out.println(gsg.vertexSet());
-        }
+        }*/
     }
     
     public boolean killSoloSCC(){
@@ -489,6 +510,10 @@ public class ChoiceUnit {
             if(actualSCC >= SCC.size()) return false;
         }
         return true;
+    }
+    
+    public DecisionMemory getMemory(){
+        return this.memory;
     }
 
     

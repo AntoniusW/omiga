@@ -181,7 +181,7 @@ public class ContextASP {
     
     public void backtrack(){
         this.resetSatisfiable();
-        this.choiceUnit.backtrack();
+        this.choiceUnit.backtrack2();
     }
     
     public void resetSatisfiable(){

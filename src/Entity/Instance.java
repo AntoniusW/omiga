@@ -131,6 +131,22 @@ public class Instance {
         }
         return s.substring(0,s.length()-1) + "]";
     }
+    
+    public static String getInstanceAsString(Integer[] instance){
+        String s = "[";
+        for(int i = 0; i < instance.length;i++){
+            s = s + instance[i] + ",";
+        }
+        return s.substring(0,s.length()-1) + "]";
+    }
+    
+    public static String getInstanceAsString(int[] instance){
+        String s = "[";
+        for(int i = 0; i < instance.length;i++){
+            s = s + instance[i] + ",";
+        }
+        return s.substring(0,s.length()-1) + "]";
+    }
 
 }
 

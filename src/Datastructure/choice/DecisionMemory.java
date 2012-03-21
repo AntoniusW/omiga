@@ -49,6 +49,10 @@ public class DecisionMemory {
         this.addChoicePoint();
     }
     
+    public ArrayList<Node> getNodes(){
+        return nodes;
+    }
+    
     /**
      * Used to register nodes such that the DecisionMemory knows which nodes are to handle, such that whenever a new decisionlevel
      * is created the new memory for all nodes can be allocated (Key ENtrys within the new HashMap).
@@ -89,6 +93,7 @@ public class DecisionMemory {
         //System.out.println("STARTING BACKTRACKING!");
         for(Node n: this.decisionLayer.get(this.decisionLevel).keySet()){
             for(Instance inz: this.decisionLayer.get(this.decisionLevel).get(n)){
+                //System.out.println("Trying to remove: " + inz + " from: " + n);
                 n.simpleRemoveInstance(inz);
             }
         }

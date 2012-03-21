@@ -108,7 +108,7 @@ public class Storage {
     // Having them outside and just resetting them is much faster
     private ArrayList<HashSet> selected = new ArrayList<HashSet>(); // used within method select, to store the hashsets that are treated by the actual guess
     private HashSet<Instance> smallest;
-    private ArrayList<Instance> ret = new ArrayList<Instance>(); // the arrayList that is returned by the select
+    //private ArrayList<Instance> ret = new ArrayList<Instance>(); // the arrayList that is returned by the select
     boolean flag; // a flag needed in method select
     
     
@@ -132,7 +132,8 @@ public class Storage {
     public Collection<Instance> select(Term[] selectionCriterion){
         
         // We reset the list we return and clear the temp list selected
-        ret.clear();
+        //ret.clear();
+        ArrayList<Instance> ret = new ArrayList<Instance>();
         selected.clear();
         
         // for each term of the selectionCriterion we add the HashSet of that Key to our selected List.
@@ -143,6 +144,7 @@ public class Storage {
             if(!selectionCriterion[i].getClass().equals(Variable.class)){
                 if(!memory[i].containsKey(selectionCriterion[i])) {
                     // There is not even an entry for this key --> no instances
+                    //System.out.println("Storage returns because no entry found!");
                     return ret;
                 }
                 selected.add(memory[i].get(selectionCriterion[i]));
@@ -155,6 +157,7 @@ public class Storage {
             for(HashSet hS: memory[0].values()){
                 ret.addAll(hS);
             }
+            //System.out.println("Storage returns everything, as only vars are in selCrit: " + Instance.getInstanceAsString(selectionCriterion));
             return ret;
         }else{
             // There is a selection Criterion so we return only those instances that are contained in each set.
@@ -181,19 +184,25 @@ public class Storage {
             
             // for each instance within smallest, we check if the instance fullfills the complete selectionCriteria
             if(selected.isEmpty()){
+                //System.err.println("Storage returns the HashSet of the single variable that was the crit");
                 return smallest;
             }else{
                 for(Instance instance: smallest){
+                    flag = true;
                     for(int i = 1; i < selectionCriterion.length;i++){
-                        flag = true;
                         if (!selectionCriterion[i].getClass().equals(Variable.class)){
-                            if(!instance.get(i).equals(selectionCriterion[i])) flag = false;
+                            if(!instance.get(i).equals(selectionCriterion[i])) {
+                                flag = false;
+                            }else{
+                                //System.out.println("Oo: " + instance.get(i) + " == " + selectionCriterion[i]);
+                            }
                         }
                     }
                     if(flag) ret.add(instance);
                 }
             }
         }
+        //System.out.println("Storage asked for: " + Instance.getInstanceAsString(selectionCriterion) + " therefore returning: " + ret);
         return ret;
     }
     
@@ -210,8 +219,8 @@ public class Storage {
     }
     
     public ArrayList<Instance> getAllInstances(){
-        //ArrayList<Instance> ret = new ArrayList<Instance>();
-        ret.clear();
+        ArrayList<Instance> ret = new ArrayList<Instance>();
+        //ret.clear();
         for(Term t: this.memory[0].keySet()){
             ret.addAll(this.memory[0].get(t));
         }

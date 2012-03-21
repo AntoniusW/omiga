@@ -7,6 +7,8 @@ package Datastructure.Rete;
 import Entity.Atom;
 import Entity.Instance;
 import Entity.Predicate;
+import Interfaces.Term;
+import java.util.Collection;
 
 /**
  *
@@ -38,6 +40,11 @@ public class BasicNodeNegative extends BasicNode{
         return memory.containsInstance(instance);
     }
     
+    @Override
+    public Collection<Instance> select(Term[] selectionCriteria){
+        return null; // TOCHECK: This should never be used!
+    }
+    
     /**
      * closes this node and informs all children of this closure (can lead to many instances at once)
      * Be aware that you have to propagate after a closure to derive all facts that arise from this closure,
@@ -45,12 +52,13 @@ public class BasicNodeNegative extends BasicNode{
      * but all derived facts are put on the propagation stack!
      */
     public void close(){
-        System.err.println(this + " --> closed");
+        //System.err.println(this + " --> closed");
         this.closed = true;
         //for(SelectionNode sN: this.basicChildren){
-        SelectionNode sN;
+        SelectionNodeNegative sN;
         for(int j = 0; j < this.basicChildren.size();j++){
-            sN = this.basicChildren.get(j);
+            sN = (SelectionNodeNegative) this.basicChildren.get(j);
+            sN.close();
             /*Closure only comes from right
             //
             for(int i = 0; i < sN.getChildren().size();i++){
@@ -81,6 +89,11 @@ public class BasicNodeNegative extends BasicNode{
      */
     public void unclose(){
         this.closed=false;
+        SelectionNodeNegative sN;
+        for(int j = 0; j < this.basicChildren.size();j++){
+            sN = (SelectionNodeNegative) this.basicChildren.get(j);
+            sN.unClose();
+        }
     }
     
     /**
@@ -105,15 +118,38 @@ public class BasicNodeNegative extends BasicNode{
     public void AddAtom(Atom atom){
         if(this.getChildNode(atom.getAtomAsReteKey()) == null){
             System.out.println("Adding new SelectionNode!: " + atom);
-            SelectionNode sN = new SelectionNode(atom.getAtomAsReteKey(), this.rete);
+            SelectionNode sN = new SelectionNodeNegative(atom.getAtomAsReteKey(), this.rete);
             this.basicChildren.add(sN);
-            sN.setNeg();
             //this.basicChildren.add(new SelectionNode(atom.getAtomAsReteKey(), this.rete));
         }
     }
     
     public boolean isClosed(){
         return closed;
+    }
+    
+    /**
+     * 
+     * tells the basicNode to propagate. The basic Node will then go through all
+     * the instances on the toPropagatestack and push them to it's children.
+     * 
+     * @return wether propagation could be done or not (because the stack may have been empty)
+     */
+    @Override
+    public boolean propagate(){
+        boolean ret = this.toPropagate.size() > 0;
+        while(!this.toPropagate.isEmpty() && rete.satisfiable){
+            //System.out.println("POPPING!");
+            Instance ins = toPropagate.pop();
+            for(SelectionNode sN: basicChildren){
+                //System.out.println("Adding: " + ins + " to: " + sN);
+                sN.addInstance(ins, true);
+            }
+            /*for(int i = 0; i < basicChildren.size();i++){
+                basicChildren.get(i).addInstance(ins, true);
+            }*/
+        }
+        return ret;
     }
     
 }

@@ -4,6 +4,7 @@
  */
 package Entity;
 
+import Interfaces.OperandI;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +18,9 @@ import java.util.HashSet;
  * 
  * @param constants a static List of Constants, used to ensure uniqueness of Constants
  */
-public class Constant extends Term {
+public class Constant extends Term implements OperandI{
     
+    private Integer intValue;
     
     //private static ArrayList<Constant> constants = new ArrayList<Constant>();
     private static HashMap<String,Constant> constants = new HashMap<String,Constant>();
@@ -49,6 +51,11 @@ public class Constant extends Term {
      */
     private Constant(String name){
         super(name);
+        try{
+            this.intValue = Integer.parseInt(name);
+        }catch(Exception e){
+            this.intValue = null;
+        }
     }
     
     @Override
@@ -76,6 +83,12 @@ public class Constant extends Term {
      */
     public String toString(){
         return this.name;
+    }
+    
+    //TODO: Check if this is correct for numbers!
+    @Override
+    public int getIntValue(){
+        return this.intValue;
     }
     
 }

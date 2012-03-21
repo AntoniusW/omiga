@@ -29,17 +29,21 @@ import java.util.HashSet;
  */
 public class SelectionNode extends Node{
     
-    private Atom atom;
-    boolean neg = true; // TODO: Remove neg when it works
+    protected Atom atom;
+    //boolean neg = true; // TODO: Remove neg when it works
     
-    public void setNeg(){
+    /*public void setNeg(){
         this.neg = false;
-    }
+    }*/
     
     public Atom getAtom(){
         return atom;
     }
     
+    
+    /*public SelectionNode(Rete rete){
+        super(rete);
+    }*/
     /**
      * 
      * public constructor. Creates a new SelectionNode with initialized data structures.
@@ -49,11 +53,11 @@ public class SelectionNode extends Node{
      * @param rete the rete network this selectionNode is in
      */
     public SelectionNode(Atom atom, Rete rete){
-        super(rete); // register within the choiceUnit
+        super(rete);
         System.err.println("Creating SelectionNode: " + atom);
         
         this.atom = atom.getAtomAsReteKey(); 
-        super.resetVarPosition(atom);
+        this.tempVarPosition = getVarPosition(atom); //super.resetVarPosition(atom); 
         
         // we create the variableOrdering
         ArrayList<Variable> vars = new ArrayList<Variable>();
@@ -72,6 +76,7 @@ public class SelectionNode extends Node{
         // memory is initialized with the size of the var ordering (as we only need to save variableassignments
         memory = new Storage(atom.getArity());
         //System.err.println("SelectionNode Created!: " + atom + " memory: " + this.memory);
+        //this.rete.getChoiceUnit().addNode(this);
     }
     
     /**
@@ -102,8 +107,7 @@ public class SelectionNode extends Node{
             }
         }
         
-        super.addInstance(instance, true); // registering the adding of an instance within the choiceUnit
-        System.out.println(this + " Adding Instance: " + instance);
+        
         
         Term[] varAssignment2Add = new Term[varOrdering.length];
         for(int i = 0; i < varOrdering.length;i++){
@@ -111,6 +115,8 @@ public class SelectionNode extends Node{
             varAssignment2Add[i] = varOrdering[i].getValue();
         }
         Instance instance2Add = Instance.getInstance(varAssignment2Add);
+        super.addInstance(instance2Add, true); // registering the adding of an instance within the choiceUnit
+        //System.err.println(this + " Adding Instance: " + instance2Add);
         this.memory.addInstance(instance2Add);
         
         // we transfer the inserted varAssignment to all childnodes
@@ -140,7 +146,7 @@ public class SelectionNode extends Node{
      * @param instance the term of the instance
      * @return wether both terms are equal
      */
-    private boolean unifyTerm(Term schema, Term instance){
+    protected boolean unifyTerm(Term schema, Term instance){
         if (schema.getClass().equals(Variable.class)){
             Variable v = (Variable)schema;
             if(v.getValue() == null ){
@@ -175,7 +181,7 @@ public class SelectionNode extends Node{
      */
     @Override
     public String toString(){
-        return "SelectionNode " + this.atom + " neg: " + neg + " ";
+        return "SelectionNode " + this.atom;
     }
     
     /**

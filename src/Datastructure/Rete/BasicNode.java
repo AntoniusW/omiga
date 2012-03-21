@@ -7,6 +7,7 @@ package Datastructure.Rete;
 import Datastructure.storage.Storage;
 import Entity.Instance;
 import Entity.Atom;
+import Entity.Constant;
 import Entity.Predicate;
 import Interfaces.Term;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class BasicNode extends Node{
         this.basicChildren = new ArrayList<SelectionNode>();
         this.toPropagate = new Stack<Instance>();
         this.pred = pred;
+        //this.rete.getChoiceUnit().addNode(this);
     }
     
     /**
@@ -58,6 +60,7 @@ public class BasicNode extends Node{
      */
     public void addInstance(Instance instance){
         super.addInstance(instance, true);
+        //System.out.println("Adding Instace: " + instance + " to " + this);
         memory.addInstance(instance);
         this.toPropagate.add(instance); 
     }
