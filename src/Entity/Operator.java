@@ -7,6 +7,7 @@ package Entity;
 import Enumeration.OP;
 import Interfaces.OperandI;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -25,6 +26,8 @@ public class Operator implements OperandI{
         this.right = right;
         this.op = op;
     }
+    
+   
     
     @Override
     public int getIntValue() {
@@ -45,6 +48,21 @@ public class Operator implements OperandI{
                 return 0;
             default: return 0;
         }
+    }
+
+    @Override
+    public ArrayList<Variable> getUsedVariables() {
+        HashSet<Variable> vars = new HashSet<Variable>();
+        System.out.println(this.left.getUsedVariables());
+        vars.addAll(this.left.getUsedVariables());
+        vars.addAll(this.right.getUsedVariables());
+        ArrayList<Variable> ret = new ArrayList<Variable>(vars);
+        return ret;
+    }
+    
+    @Override
+    public String toString(){
+        return left.toString() + " " + op.toString() + " " + right.toString();
     }
     
     

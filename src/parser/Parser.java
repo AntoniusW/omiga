@@ -16,6 +16,7 @@ import Entity.Variable;
 import Enumeration.OP;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
+import Interfaces.OperandI;
 import Interfaces.Term;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -176,8 +177,8 @@ public class Parser {
             }else{
                 if(Character.isUpperCase(realString.charAt(i))){
                     //readOperator
-                    this.readOperator(realString.substring(i),r);
-                    System.out.println("LOl OPERATOR: " + realString.charAt(i));
+                    i = i + this.readOperator(realString.substring(i),r);
+                    //System.out.println("LOl OPERATOR: " + realString.charAt(i));
                 }else{
                     if (realString.charAt(i) != ','){
                         System.err.println("ERROR007");
@@ -273,31 +274,99 @@ public class Parser {
         return i;
     }
     
-    public void readOperator(String s, Rule r){
-        System.out.println("READING OPERATOR!");
+    public int readOperator(String s, Rule r){
+        System.out.println("READING OPERATOR!: " + s);
         ArrayList<String> strings = new ArrayList<String>();
         ArrayList<OP> ops = new ArrayList<OP>();
         int i = 0;
         String temp;
-        while(s.charAt(i) !=',' && s.charAt(i) !='.'){
+        while(i < s.length() && s.charAt(i) !=',' && s.charAt(i) !='.'){
             temp = "";
-            while(!isOperator(s.charAt(i))){
+            while(i < s.length() && !isOperator(s.charAt(i)) && s.charAt(i) != '.'){
+                System.out.println(s.charAt(i));
                 temp = temp + s.charAt(i);
                 i++;
             }
             strings.add(temp);
-            ops.add(OP.valueOf(String.valueOf(s.charAt(i))));
+            if(i >= s.length()) break;
+            ops.add(OP.valueOf(s.charAt(i)));
             i++;
         }
         //We now have the hole Operator on the string and ops ArrayList.
-        Operator tempOpi;
+        OperandI tempOpi = null;
+        if(Character.isLowerCase(s.charAt(0))){
+            tempOpi = Constant.getConstant(strings.get(0));
+        }else{
+            tempOpi = Variable.getVariable(strings.get(0));
+        }
+        OperandI tempOpiLeft = null;
+        OP fin = null;
         for(int j = 0; j < ops.size();j++){
             if(ops.get(j).equals(OP.PLUS) || ops.get(j).equals(OP.MINUS)){
-                tempOpi = new Operator(tempOpi, this.readConstant(s, new ArrayList<Term>()));
+                if(Character.isLowerCase(s.charAt(0))){
+                    tempOpi = new Operator(tempOpi, Constant.getConstant(strings.get(j+1)), ops.get(j));
+                }else{
+                    System.out.println(strings.get(j+1));
+                    tempOpi = new Operator(tempOpi, Variable.getVariable(strings.get(j+1)), ops.get(j));
+                }
+            }else{
+                tempOpiLeft = tempOpi;
+                fin = ops.get(j);
+                if(Character.isLowerCase(s.charAt(0))){
+                    tempOpi = Constant.getConstant(strings.get(j+1));
+                }else{
+                    tempOpi = Variable.getVariable(strings.get(j+1));
+                }
+                j++;
             }
         }
+        Operator ret;
+        if(tempOpiLeft != null){
+            ret = new Operator(tempOpiLeft,tempOpi,fin);
+        }else{
+            ret = (Operator)tempOpi;
+        }
+        System.out.println("Read operator: " + ret);
+        r.addOperator(ret);
+        return i;
+    }
+    
+    /*
+     * Used for readOperators
+     */
+    public Constant getConstant(String s){
+        //System.out.println("READ CONSTANT STARTED!: " + s);
+        String constantName = "";
+        int i = 0;
+        char c = s.charAt(i);
+        while(c != ',' && c != '(' && c != ')'){
+            constantName = constantName + c;
+            i++;
+            c = s.charAt(i);
+        }
+        //System.out.println("read constant: " + constantName);
+        //System.out.println("ReadConstant terminated with symbol: " + s.charAt(i));
+        return Constant.getConstant(constantName);
+    }
+    
         
-        
+    /*
+     * Used for readOperators
+     */
+    public Variable getVariable(String s){
+        System.out.println("READ VAR STARTED: " + s);
+        String variableName = "";
+        int i = 0;
+        char c = s.charAt(i);
+        while(c != ',' && c != '(' && c != ')'){
+            //System.out.println("varC = " + c);
+            variableName = variableName + c;
+            i++;
+            c = s.charAt(i);
+        }
+        System.out.println("read variable: " + variableName);
+        System.out.println("ReadVariable terminated with symbol: " + s.charAt(i) + " - and returns i = " + (i-1));
+        return Variable.getVariable(variableName);
     }
     
     private boolean isOperator(char c){

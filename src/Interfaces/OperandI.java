@@ -6,6 +6,7 @@ package Interfaces;
 
 import Entity.Variable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -16,5 +17,6 @@ import java.util.ArrayList;
 public interface OperandI {
     
     public int getIntValue();
+    public ArrayList<Variable> getUsedVariables();
     
 }

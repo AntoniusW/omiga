@@ -59,7 +59,7 @@ public class Manager {
             System.err.println("Killed all SCC: " + System.currentTimeMillis());
             //We killed all SCC --> This context is guessfree
             if(c.isSatisfiable()){
-                //c.printAnswerSet();
+                c.printAnswerSet();
                 System.out.println("GuessFree Context found 1 AnswerSet");
             }else{
                 System.out.println("GuessFree Context UNSATISFIABLE!");

@@ -80,6 +80,14 @@ public class Rule {
     public void addAtomMinus(Atom p){
         this.bodyMinus.add(p);
     }
+     /**
+     * This method is only needed when working with the empty constructor.
+     * 
+     * @param o the operator you want to add
+     */
+    public void addOperator(Operator o){
+        this.operators.add(o);
+    }
     
     /**
      * a rule is safe if no variable occurring in the head or negative body are free (= not occurring within the positive body and not fixed through operators)
@@ -100,13 +108,39 @@ public class Rule {
                 }
             }
         }
+        
+        for(Operator op: this.operators){
+            for(Operator op2: this.operators){
+                int i = 0;
+                for(Variable v: op2.getUsedVariables()){
+                    if(hs.contains(v)) i++;
+                }
+                if(i >= op2.getUsedVariables().size()-1){ // All but one Variables of this operator are fixed --> Add the new one
+                    hs.addAll(op2.getUsedVariables());
+                }
+            }
+        }
+        
+        // we check for each Operator if it is well defined (all Variables in HS)
+        for(Operator op: this.operators){
+            for(Variable v: op.getUsedVariables()){
+                if(!hs.contains(v)) {
+                    System.err.println("Operator not Safe: " + op);
+                    return false;
+                }
+            }
+        }
+        
         // we check for each Variable of the negative body if it also occurs in the positive body
         for(Atom ba: bodyMinus){
             if(ba.getClass().equals(Atom.class)){
                 Atom pir = (Atom)ba;
                 for(Term t: pir.getTerms()){
                     for(Variable v: t.getUsedVariables()){
-                        if(!hs.contains(v)) return false;
+                        if(!hs.contains(v)) {
+                            System.err.println("Atom not Safe: not " + ba);
+                            return false;
+                        }
                     }
                 }
             }
@@ -115,7 +149,10 @@ public class Rule {
         if(head != null){
             for(Term t: this.head.getTerms()){
                 for(Variable v: t.getUsedVariables()){
-                    if(!hs.contains(v)) return false;
+                    if(!hs.contains(v)) {
+                        System.err.println("Head not Safe: " + head);
+                        return false;
+                    }
                 }
             }
         }
@@ -139,7 +176,9 @@ public class Rule {
         for(Atom ba: bodyMinus){
             s = s + "not " + ba + ",";
         }
-        //TODO: Operators
+        for(Operator op: this.operators){
+            s = s + op + ",";
+        }
         return s.substring(0, s.length()-1) + ".";
     }
 

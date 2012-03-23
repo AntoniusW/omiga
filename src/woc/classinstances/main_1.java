@@ -35,8 +35,8 @@ public class main_1 {
     public static void main(String arg[]){
         System.out.println("STARTING THE PROGRAM: " + System.currentTimeMillis());
         //File input = new File("Z:\\DLV\\3col.txt");
-        //File input = new File("C:\\Dokumente und Einstellungen\\Mika\\Desktop\\WOC - Wings of Change\\examples\\stratC\\woc_roc.txt");
-        File input = new File("3Col\\3Col6AS.txt");
+        File input = new File("strat10.txt");
+        //File input = new File("3Col\\3Col6AS.txt");
         
         Parser pars = new Parser();
         try {

@@ -295,10 +295,8 @@ public class ChoiceUnit {
         this.memory.backtrack();
         
         //TODO: backtracking on SCC
-        if(!this.closedAt.isEmpty()){
-            if(this.closedAt.peek() >= this.memory.getDecisonLevel()){
+        while(!this.closedAt.isEmpty() && this.closedAt.peek() >= this.memory.getDecisonLevel()){
                 this.openActualSCC();
-            }
         }
         
         if(this.stackybool.pop()){
