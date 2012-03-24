@@ -88,9 +88,10 @@ public class Manager {
                     if(c.isSatisfiable()){
                         if(c.getChoiceUnit().check4AnswerSet()){
                             // We have found an answerset, print it!
-                            System.out.println("ANSWERSET FOUND!");
-                            c.printAnswerSet();
+                            //System.out.println("ANSWERSET FOUND!");
+                            //c.printAnswerSet();
                             answerSetCount++;
+                            //break;
                         }else{
                             // constraint Violation detected: No answerSet!
                             //System.out.println("CONSTRAINT VIOLATION!");
