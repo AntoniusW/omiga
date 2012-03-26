@@ -56,19 +56,23 @@ public class ChoiceUnit {
     
     // TODO: HeadNodeCOnstraints are not treated correctly (remove is called to often why?
     
-    private ContextASP c;
-    private ArrayList<ChoiceNode> choiceNodes;
-    private DecisionMemory memory;
+    protected ContextASP c;
+    protected ArrayList<ChoiceNode> choiceNodes;
+    protected DecisionMemory memory;
     
-    private Stack<ChoiceNode> stackyNode;
-    private Stack<Boolean> stackybool;
-    private Stack<Instance> stackyInstance;
-    private ChoiceNode nextNode = null;
-    private Instance nextInstance = null;
+    protected Stack<ChoiceNode> stackyNode;
+    protected Stack<Boolean> stackybool;
+    protected Stack<Instance> stackyInstance;
+    protected ChoiceNode nextNode = null;
+    protected Instance nextInstance = null;
     
-    private ArrayList<HashMap<ChoiceNode,HashSet<Instance>>> choiceNodesDecisionLayer;
+    protected ArrayList<HashMap<ChoiceNode,HashSet<Instance>>> choiceNodesDecisionLayer;
     
     
+    
+    public ChoiceUnit(){
+        
+    }
     
     /**
      * 
@@ -99,7 +103,7 @@ public class ChoiceUnit {
         this.closedAt.add(this.memory.getDecisonLevel());
     }
     
-    private void openActualSCC(){
+    protected void openActualSCC(){
         this.actualSCC--;
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)) c.getRete().getBasicNodeMinus(p).unclose();
@@ -119,6 +123,10 @@ public class ChoiceUnit {
         //System.out.println("Choice is called!");
         //TODO: replace foreach loops with iterator loops.
         i++;
+        /*if(i==471) {
+            c.printAnswerSet();
+            c.getRete().printRete();
+        }*/
         //System.out.println("Choice is called! " + this.memory.getDecisonLevel());
         //this.printAllChoiceNodes();
         if(this.nextNode != null){
@@ -156,6 +164,7 @@ public class ChoiceUnit {
                 this.stackyNode.push(cN);
                 this.stackybool.push(true); 
                 this.stackyInstance.push(inz); 
+                if(i==471) c.printAnswerSet();
                 return true;
             }
         }
@@ -171,7 +180,7 @@ public class ChoiceUnit {
         //We can close all reached SCCs that are of size one (as they have no more input and do not depend on anything else!
         while(this.SCCSize.get(actualSCC) <= 1){
             this.closeActualSCC(); // closing the SCC increases actual SCC to the next SCC
-            c.propagate();
+            //c.propagate(); //TODO Remove this propaagte its already in the close SCC MEthod!
             if(SCC.size() <= actualSCC) {
                 return false;
             } // We have no more ChoiceNode to guess on!
@@ -180,7 +189,7 @@ public class ChoiceUnit {
         return choice();
     }
     
-    private void addChoicePoint(){
+    protected void addChoicePoint(){
         this.memory.addChoicePoint();
         this.IncreasechoiceNodesDecisionLayer();
     }
@@ -236,7 +245,7 @@ public class ChoiceUnit {
     public void backtrackchoiceNodesDecisionLayer(){
         for(ChoiceNode cN: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).keySet()){
             for(Instance inz: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN)){
-                //System.out.println("RESETTING: " + cN + " - " + inz);
+                //System.out.println("ADDING to CHoiceNode: " + cN + " - " + inz);
                 cN.simpleAddInstance(inz);
             }
         }
@@ -289,7 +298,8 @@ public class ChoiceUnit {
     public void backtrack(){
         
         //System.err.println(this.stackybool.size() + " vs: " + this.memory.getDecisonLevel());
-        //System.err.println("BACKTRACKING!");
+        //System.out.println("BACKTRACKING!");
+        //this.printAllChoiceNodes();
         // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
         this.backtrackchoiceNodesDecisionLayer();
         this.memory.backtrack();
@@ -457,11 +467,11 @@ public class ChoiceUnit {
         return true;
     }
     
-    private ArrayList<ArrayList<ChoiceNode>> SCC;
-    private ArrayList<ArrayList<Predicate>> SCCPreds;
-    private ArrayList<Integer> SCCSize;
-    private int actualSCC;
-    private Stack<Integer> closedAt;
+    protected ArrayList<ArrayList<ChoiceNode>> SCC;
+    protected ArrayList<ArrayList<Predicate>> SCCPreds;
+    protected ArrayList<Integer> SCCSize;
+    protected int actualSCC;
+    protected Stack<Integer> closedAt;
     public void DeriveSCC(){
         SCC = new ArrayList<ArrayList<ChoiceNode>>();
         SCCPreds = new ArrayList<ArrayList<Predicate>>();

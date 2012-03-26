@@ -1,6 +1,7 @@
 a(X) :- p(X), not b(X). 
+b(X) :- p(X), not a(X).
+
 aa(X,Y) :- a(X), p(Y), not a(Y).
-b(X) :- p(X), not a(X). 
 bb(X,Y) :- b(X), p(Y), not b(Y).
 
 qas(W,Z) :- a(W), b(Z).

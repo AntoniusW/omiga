@@ -56,6 +56,7 @@ public class JoinNodeNegative extends JoinNode{
             //selectionCriteria = selCrit2;
             // The new instance arived from right, therefore we to push all instances of the select from left to the children
             Collection<Instance> joinPartners = b.select(selCrit2);
+            //System.out.println("selCrit: " + Instance.getInstanceAsString(selCrit2));
             //System.out.println("JoinNodeNegative has this many children: " + this.children);
             for(Instance inz: joinPartners){
                 this.memory.addInstance(inz);

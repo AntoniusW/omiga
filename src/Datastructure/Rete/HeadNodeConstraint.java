@@ -60,6 +60,7 @@ public class HeadNodeConstraint extends Node{
         // so we can use it althaugh this is not the addFunction in common sense
         super.addInstance(instance, true);
         this.memory.addInstance(instance);
+        //System.out.println("The constraintNode removes an instance: " + this + " becasue of: " + instance);
         this.cN.removeInstance(instance); // we remove the corresponding instance from the choice node, since this instance shall not be true, and therefore should never be guessed
     }
     

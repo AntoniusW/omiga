@@ -67,6 +67,7 @@ public class HeadNode extends Node{
         // the only children of HeadNodes are choice Nodes --> We remove the actual Instance from the choice Node
         // The instance should match the instance of the choice Node, since after the positive Part + Operators have been apllied no more Variables are added to the assignment
             //System.err.println("normal headNode: " + this);
+            //System.out.println("HeadNode: " + this + " removes something becasue of: " + instance);
             this.children.get(i).removeInstance(instance);
         }
         if(a == null){

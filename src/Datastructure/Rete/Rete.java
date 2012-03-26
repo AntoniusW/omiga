@@ -14,6 +14,7 @@ import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
 /**
@@ -235,6 +236,32 @@ public class Rete {
             this.basicLayerMinus.get(p).printAllInstances();
         }
         System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+    }
+    
+    public void printRete(){
+        /*HashSet<BasicNode> basics = new HashSet<BasicNode>();
+        HashSet<SelectionNode> sel = new HashSet<SelectionNode>();
+        HashSet<JoinNode> join = new HashSet<JoinNode>();
+        HashSet<ChoiceNode> choicer = new HashSet<ChoiceNode>();
+        HashSet<HeadNode> heads = new HashSet<HeadNode>();
+        HashSet<HeadNodeConstraint> cons = new HashSet<HeadNodeConstraint>();
+        for(BasicNode bn: this.basicLayerPlus.values()){
+            basics.add(bn);
+        }
+        for(BasicNode bn: this.basicLayerMinus.values()){
+            basics.add(bn);
+        }
+        for(BasicNode bn: basics){
+            for(SelectionNode sn: bn.basicChildren){
+                sel.add(sn);
+            }
+        }*/
+        for(Node n: Node.nodes){
+            System.out.println(n + " :");
+            System.out.println("________________________");
+            if(n.memory != null) n.memory.printAllInstances();
+        }
+        
     }
     
     /**

@@ -106,7 +106,7 @@ public class Storage {
     // Following variables are defined public, since the select method is called very often during calculation
     // Therefore many objects would be created if these variables were defined within the method itself
     // Having them outside and just resetting them is much faster
-    private ArrayList<HashSet> selected = new ArrayList<HashSet>(); // used within method select, to store the hashsets that are treated by the actual guess
+    private ArrayList<HashSet<Instance>> selected = new ArrayList<HashSet<Instance>>(); // used within method select, to store the hashsets that are treated by the actual guess
     private HashSet<Instance> smallest;
     //private ArrayList<Instance> ret = new ArrayList<Instance>(); // the arrayList that is returned by the select
     boolean flag; // a flag needed in method select
@@ -130,7 +130,7 @@ public class Storage {
      */
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public Collection<Instance> select(Term[] selectionCriterion){
-        
+        //System.out.println("SELCRIT OF STORAGE: " + Instance.getInstanceAsString(selectionCriterion));
         // We reset the list we return and clear the temp list selected
         //ret.clear();
         ArrayList<Instance> ret = new ArrayList<Instance>();
@@ -147,6 +147,7 @@ public class Storage {
                     //System.out.println("Storage returns because no entry found!");
                     return ret;
                 }
+                //System.out.println("KEY: " + memory[i].get(selectionCriterion[i]));
                 selected.add(memory[i].get(selectionCriterion[i]));
             }  
         }
@@ -164,32 +165,35 @@ public class Storage {
             
             // We find the set with least ammount of instances and remove it from selected
             smallest = selected.get(0);
-            for(int i = 1; i < selected.size();i++){
+            for(int i = 1; i < selected.size();i++){ //TODO: Maybe this is useless!
                 if(selected.get(i).size() < smallest.size()) smallest = selected.get(i);
             }
             selected.remove(smallest);
+            //System.out.println("SMALLEST: " + smallest);
             // for each Instance within smallest we check if the instance is containd in all other sets
             // if so the instance fullfills the selectioncriterion and is added to ret
-            /*for(Instance instance: smallest){
+            for(Instance instance: smallest){
                 flag = true;
-                for(HashSet hS: selected){
+                //for(HashSet hS: selected){
+                for(int i = 0; i < selected.size();i++){
                     //To Check: Just go trough the instances of the smallest one, and check their positions
-                    if(!hS.contains(instance)){
+                    if(!selected.get(i).contains(instance)){
                         flag = false;
                         break;
                     }
                 }
                 if(flag) ret.add(instance);
-            }*/
+            }
             
             // for each instance within smallest, we check if the instance fullfills the complete selectionCriteria
-            if(selected.isEmpty()){
+            /*if(selected.isEmpty()){
                 //System.err.println("Storage returns the HashSet of the single variable that was the crit");
                 return smallest;
             }else{
                 for(Instance instance: smallest){
                     flag = true;
-                    for(int i = 1; i < selectionCriterion.length;i++){
+                    //System.out.println("INSTANCE: " + instance);
+                    for(int i = 0; i < selectionCriterion.length;i++){
                         if (!selectionCriterion[i].getClass().equals(Variable.class)){
                             if(!instance.get(i).equals(selectionCriterion[i])) {
                                 flag = false;
@@ -200,7 +204,7 @@ public class Storage {
                     }
                     if(flag) ret.add(instance);
                 }
-            }
+            }*/
         }
         //System.out.println("Storage asked for: " + Instance.getInstanceAsString(selectionCriterion) + " therefore returning: " + ret);
         return ret;

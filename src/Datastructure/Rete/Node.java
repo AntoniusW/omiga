@@ -12,6 +12,7 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -34,6 +35,8 @@ public abstract class Node {
     protected ArrayList<Node> childrenR;
     protected Rete rete;
     protected HashMap<Variable,Integer> tempVarPosition;
+    
+    public static HashSet<Node> nodes = new HashSet<Node>();
     
     /**
      * 
@@ -96,6 +99,7 @@ public abstract class Node {
         this.childrenR = new ArrayList<Node>();
         tempVarPosition = new HashMap<Variable,Integer>();
         this.rete.getChoiceUnit().addNode(this);
+        nodes.add(this);
     }
     
     /**
@@ -114,6 +118,7 @@ public abstract class Node {
      * @return all instances that satisfy the selectionCriteria and are contained within this memory
      */
     public Collection<Instance> select(Term[] selectionCriteria){
+        //System.out.println("Selecting from node: " + this + " - " + Instance.getInstanceAsString(selectionCriteria));
         return memory.select(selectionCriteria);
     }
     

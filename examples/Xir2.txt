@@ -1,0 +1,21 @@
+a(X,Y) :- r(X,Y), not b(X,Y), not c(X,Y).
+b(X,Y) :- r(X,Y), not a(X,Y), not c(X,Y).
+c(X,Y) :- r(X,Y), not a(X,Y), not b(X,Y).
+
+r(X,Y) :- p(X), q(Y).
+
+p(0).
+p(1).
+p(2).
+
+q(0).
+q(1).
+q(2).
+
+g(Z) :- a(X,Z), r(Z,Y), b(Y,H).
+h(Z) :- b(X,Z), r(Z,Y), c(Y,H).
+j(Z) :- c(X,Z), r(Z,Y), a(Y,H).
+
+m(X,Y) :- g(X), h(Y), r(X,Y).
+n(X,Y) :- g(X), j(Y), r(X,Y).
+v(X,Y) :- h(X), j(Y), r(X,Y).

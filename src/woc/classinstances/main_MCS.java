@@ -7,6 +7,7 @@ package woc.classinstances;
 import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.Rete;
 import Entity.ContextASP;
+import Entity.ContextASPMCS;
 import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Predicate;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import parser.Parser;
+import parser.ParserMCS;
 
 /**
  *
@@ -28,19 +30,19 @@ import parser.Parser;
  * The main main class of this project. Use it to read in a context via the File specified by input.
  * 
  */
-public class main_1 {
+public class main_MCS {
     
     
     
     public static void main(String arg[]){
         System.out.println("STARTING THE PROGRAM: " + System.currentTimeMillis());
         //File input = new File("Z:\\DLV\\3col.txt");
-        File input = new File("Xir2.txt");
+        File input = new File("Xir.txt");
         //File input = new File("3Col\\3Col6AS.txt");
         
-        Parser pars = new Parser();
+        ParserMCS pars = new ParserMCS();
         try {
-            ContextASP c = pars.readContext(input);
+            ContextASPMCS c = pars.readContext(input);
             c.printContext();
             
             Manager m = new Manager(c);
@@ -53,8 +55,7 @@ public class main_1 {
         } catch (RuleNotSafeException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        System.out.println("Termianted main1 calc!");
+        System.out.println("TERMINATED MCS CALC!");
         
         
     }

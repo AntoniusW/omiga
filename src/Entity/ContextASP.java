@@ -23,12 +23,21 @@ import java.util.HashMap;
  */
 public class ContextASP {
     
-    private ArrayList<Rule> rules;
-    private HashMap<Predicate, ArrayList<Instance>> factsIN;
-    private HashMap<Predicate, ArrayList<Instance>> factsOUT;
-    private ReteBuilder reteBuilder;
-    private Rete rete;
-    private ChoiceUnit choiceUnit;
+    protected static int nextID = 0;
+    
+    protected static int getNextID(){
+        nextID++;
+        return nextID;
+    }
+    
+    protected ArrayList<Rule> rules;
+    protected HashMap<Predicate, ArrayList<Instance>> factsIN;
+    protected HashMap<Predicate, ArrayList<Instance>> factsOUT;
+    protected ReteBuilder reteBuilder;
+    protected Rete rete;
+    protected ChoiceUnit choiceUnit;
+    protected int id;
+    
     
     /**
      * public constructor
@@ -41,6 +50,11 @@ public class ContextASP {
         this.choiceUnit = new ChoiceUnit(this);
         this.rete = new Rete(choiceUnit);
         this.reteBuilder = new ReteBuilder(rete);
+        this.id=getNextID();
+    }
+    
+    public int getID(){
+        return this.id;
     }
     
     /**

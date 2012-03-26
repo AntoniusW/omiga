@@ -103,6 +103,7 @@ public class ChoiceNode extends Node{
             this.allInstances.remove(instance);
             this.rete.getChoiceUnit().addInstanceForRemovement(this, instance);
         }
+        //System.out.println("RemoveInstance: " + this + " - " + instance);
         
     }
     

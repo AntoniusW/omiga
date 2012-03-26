@@ -1,0 +1,12 @@
+a(X,Y) :- r(X,Y), not b(X,Y), not c(X,Y).
+b(X,Y) :- r(X,Y), not a(X,Y), not c(X,Y).
+c(X,Y) :- r(X,Y), not a(X,Y), not b(X,Y).
+
+r(2,5).
+r(2,3).
+r(2,2).
+r(3,2).
+r(8,9).
+r(6,5).
+r(8,4).
+r(0,0).
