@@ -26,8 +26,8 @@ import java.util.HashMap;
  */
 public class HeadNode extends Node{
     
-    private Atom a;
-    private int[] instanceOrdering;
+    protected Atom a;
+    protected int[] instanceOrdering;
     Node from;
     
     /**
@@ -43,10 +43,10 @@ public class HeadNode extends Node{
         super(rete);
         this.from = from;
         this.a = atom;
-        System.err.println("Head Node for: " + atom);
+        //System.err.println("Head Node for: " + atom);
         //this.tempVarPosition = (HashMap<Variable, Integer>) n.getVarPositions().clone(); // As we have one headNode per Rule, we can use the tempVarPosition of the parentNode for unification
         this.tempVarPosition = varPos;
-        System.err.println("Tempvars: " + tempVarPosition);
+        //System.err.println("Tempvars: " + tempVarPosition);
         //System.err.println("HeadNode Created!: " + this);
         //this.rete.getChoiceUnit().addNode(this);
     }

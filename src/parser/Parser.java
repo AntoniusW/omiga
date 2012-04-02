@@ -42,7 +42,7 @@ public class Parser {
     // Predicates of arity 0 are read wrong ) is added to the name at the end
     
     public ContextASP readContext(File f)throws FactSizeException,RuleNotSafeException{
-        System.out.println("Starting to read input file: " + System.currentTimeMillis());
+        //System.out.println("Starting to read input file: " + System.currentTimeMillis());
         StringBuffer s = new StringBuffer("");
         try{
             FileInputStream fstream = new FileInputStream(f);
@@ -69,7 +69,7 @@ public class Parser {
     }
     
     public ContextASP readContext(String s) throws FactSizeException,RuleNotSafeException{
-        System.out.println("STARTING to read Context: " + System.currentTimeMillis());
+        //System.out.println("STARTING to read Context: " + System.currentTimeMillis());
         ContextASP con = new ContextASP();
         String[] arr = s.split("\\.");
         for(String str: arr){
@@ -79,9 +79,9 @@ public class Parser {
                 this.readFact(str,con);
             }
         }
-        System.out.println("=============================");
+        /*System.out.println("=============================");
         System.out.println("FINISHED READING CONTEXT!: " + System.currentTimeMillis());
-        System.out.println("=============================");
+        System.out.println("=============================");*/
         return con;
     }
     
@@ -207,7 +207,7 @@ public class Parser {
     }
     
     public int readVariable(String s, ArrayList<Term> aL){
-        System.out.println("READ VAR STARTED");
+        //System.out.println("READ VAR STARTED");
         String variableName = "";
         int i = 0;
         char c = s.charAt(i);
@@ -217,14 +217,14 @@ public class Parser {
             i++;
             c = s.charAt(i);
         }
-        System.out.println("read variable: " + variableName);
-        System.out.println("ReadVariable terminated with symbol: " + s.charAt(i) + " - and returns i = " + (i-1));
+        //System.out.println("read variable: " + variableName);
+        //System.out.println("ReadVariable terminated with symbol: " + s.charAt(i) + " - and returns i = " + (i-1));
         aL.add(Variable.getVariable(variableName));
         return i-1;
     }
     
     public int readFuncTerm(String s, ArrayList<Term> aL){
-        System.out.println("READ FUNCTERM STARTED: " + s);
+        //System.out.println("READ FUNCTERM STARTED: " + s);
         int i = 0;
         char c = s.charAt(i);
         String funcTermName = "";
@@ -234,26 +234,26 @@ public class Parser {
             i++;
             c = s.charAt(i);
         }
-        System.err.println(c);
+        //System.err.println(c);
         i++;
         c = s.charAt(i);
-        System.err.println(c);
+        //System.err.println(c);
         ArrayList<Term> children = new ArrayList<Term>();
         while( c != ')'){
-            System.err.println(c);
+            //System.err.println(c);
             if (Character.isLowerCase(c) || Character.isDigit(c)){
                 i = i + this.readConstant(s.substring(i), children);
             }else{
                 if (Character.isUpperCase(c)){
-                    System.out.println("i= " + i);
-                    System.out.println("Calling Variable with: " + s.substring(i));
+                    //System.out.println("i= " + i);
+                    //System.out.println("Calling Variable with: " + s.substring(i));
                     i = i + this.readVariable(s.substring(i), children);
                 }else{
-                    System.out.println("C= " + c);
+                    //System.out.println("C= " + c);
                     if (c == '_'){
-                        System.out.println("s = " + s);
-                        System.out.println("i=" + i);
-                        System.out.println("CALLING FUNCTERM !: " + s.substring(i));
+                        //System.out.println("s = " + s);
+                        //System.out.println("i=" + i);
+                        //System.out.println("CALLING FUNCTERM !: " + s.substring(i));
                         i = i + this.readFuncTerm(s.substring(i), children);
                     }else{
                         if(c == ','){
@@ -268,14 +268,14 @@ public class Parser {
             i++;
             c = s.charAt(i);
         }
-        System.err.println("FUNCTERM TERMINATED!: " + funcTermName + " - " + children);
+        //System.err.println("FUNCTERM TERMINATED!: " + funcTermName + " - " + children);
         FuncTerm ft = FuncTerm.getFuncTerm(funcTermName, children);
         aL.add(ft);
         return i;
     }
     
     public int readOperator(String s, Rule r){
-        System.out.println("READING OPERATOR!: " + s);
+        //System.out.println("READING OPERATOR!: " + s);
         ArrayList<String> strings = new ArrayList<String>();
         ArrayList<OP> ops = new ArrayList<OP>();
         int i = 0;
@@ -283,7 +283,7 @@ public class Parser {
         while(i < s.length() && s.charAt(i) !=',' && s.charAt(i) !='.'){
             temp = "";
             while(i < s.length() && !isOperator(s.charAt(i)) && s.charAt(i) != '.'){
-                System.out.println(s.charAt(i));
+                //System.out.println(s.charAt(i));
                 temp = temp + s.charAt(i);
                 i++;
             }
@@ -306,7 +306,7 @@ public class Parser {
                 if(Character.isLowerCase(s.charAt(0))){
                     tempOpi = new Operator(tempOpi, Constant.getConstant(strings.get(j+1)), ops.get(j));
                 }else{
-                    System.out.println(strings.get(j+1));
+                    //System.out.println(strings.get(j+1));
                     tempOpi = new Operator(tempOpi, Variable.getVariable(strings.get(j+1)), ops.get(j));
                 }
             }else{
@@ -326,7 +326,7 @@ public class Parser {
         }else{
             ret = (Operator)tempOpi;
         }
-        System.out.println("Read operator: " + ret);
+        //System.out.println("Read operator: " + ret);
         r.addOperator(ret);
         return i;
     }
@@ -354,7 +354,7 @@ public class Parser {
      * Used for readOperators
      */
     public Variable getVariable(String s){
-        System.out.println("READ VAR STARTED: " + s);
+        //System.out.println("READ VAR STARTED: " + s);
         String variableName = "";
         int i = 0;
         char c = s.charAt(i);
@@ -364,8 +364,8 @@ public class Parser {
             i++;
             c = s.charAt(i);
         }
-        System.out.println("read variable: " + variableName);
-        System.out.println("ReadVariable terminated with symbol: " + s.charAt(i) + " - and returns i = " + (i-1));
+        //System.out.println("read variable: " + variableName);
+        //System.out.println("ReadVariable terminated with symbol: " + s.charAt(i) + " - and returns i = " + (i-1));
         return Variable.getVariable(variableName);
     }
     
@@ -407,7 +407,7 @@ public class Parser {
                         i = i + this.readFuncTerm(s.substring(i), terms);
                     }else{
                         if (c == ')'){
-                            System.out.println("Read Predicate: " + predName);
+                            //System.out.println("Read Predicate: " + predName);
                             Term[] termArray = new Term[terms.size()];
                             terms.toArray(termArray);
                             pir = Atom.getAtom(predName, terms.size(), terms.toArray(termArray));
@@ -425,7 +425,7 @@ public class Parser {
                 }
             }
         }
-        System.out.println("ReadPredicate terminated with symbol: " + s.charAt(i));
+        //System.out.println("ReadPredicate terminated with symbol: " + s.charAt(i));
         return i;
     }
     
@@ -457,7 +457,7 @@ public class Parser {
                         i = i + this.readFuncTerm(s.substring(i), terms);
                     }else{
                         if (c == ')'){
-                            System.out.println("Read Predicate: " + predName);
+                            //System.out.println("Read Predicate: " + predName);
                             Term[] termArray = new Term[terms.size()];
                             terms.toArray(termArray);
                             pir = Atom.getAtom(predName, terms.size(), terms.toArray(termArray));
@@ -470,7 +470,7 @@ public class Parser {
                 }
             }
         }
-        System.out.println("ReadPredicate terminated with symbol: " + s.charAt(i));
+        //System.out.println("ReadPredicate terminated with symbol: " + s.charAt(i));
         return i;
     }
     

@@ -51,7 +51,7 @@ public class Constant extends Term implements OperandI{
      */
     private Constant(String name){
         super(name);
-        System.out.println("CREATED CONSTANT: " + name);
+        //System.out.println("CREATED CONSTANT: " + name);
         try{
             this.intValue = Integer.parseInt(name);
         }catch(Exception e){

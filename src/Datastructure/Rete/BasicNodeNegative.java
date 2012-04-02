@@ -21,7 +21,7 @@ public class BasicNodeNegative extends BasicNode{
     public BasicNodeNegative(int arity, Rete rete, Predicate pred){
         super(arity,rete,pred);
         this.closed = false;
-        System.err.println("BasicNodeNegative created!: " + pred);
+        //System.err.println("BasicNodeNegative created!: " + pred);
     }
     
     /**
@@ -117,7 +117,7 @@ public class BasicNodeNegative extends BasicNode{
     @Override
     public void AddAtom(Atom atom){
         if(this.getChildNode(atom.getAtomAsReteKey()) == null){
-            System.out.println("Adding new SelectionNode!: " + atom);
+            //System.out.println("Adding new SelectionNode!: " + atom);
             SelectionNode sN = new SelectionNodeNegative(atom.getAtomAsReteKey(), this.rete);
             this.basicChildren.add(sN);
             //this.basicChildren.add(new SelectionNode(atom.getAtomAsReteKey(), this.rete));

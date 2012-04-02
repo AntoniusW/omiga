@@ -137,11 +137,19 @@ public class ContextASP {
         return factsIN;
     }
     
+    public void setINFActs(HashMap<Predicate,ArrayList<Instance>> facts){
+        this.factsIN = facts;
+    }
+    
      /**
      * @return all facts per predicate that are OUT
      */
     public HashMap<Predicate, ArrayList<Instance>> getAllOUTFacts(){
         return factsOUT;
+    }
+    
+    public void setOUTFActs(HashMap<Predicate,ArrayList<Instance>> facts){
+        this.factsOUT = facts;
     }
     
     
@@ -173,8 +181,8 @@ public class ContextASP {
     /**
      * prints the answerSet of this context (All facts that werde derived)
      */
-    public void printAnswerSet(){
-        rete.printAnswerSet();
+    public void printAnswerSet(String filter){
+        rete.printAnswerSet(filter);
     }
     
     /**
@@ -187,6 +195,10 @@ public class ContextASP {
     
     public ChoiceUnit getChoiceUnit(){
         return this.choiceUnit;
+    }
+    
+    public void setChoiceUnit(ChoiceUnit choice){
+        this.choiceUnit = choice;
     }
     
     public boolean isSatisfiable(){

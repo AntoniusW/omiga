@@ -21,7 +21,11 @@ import java.util.HashMap;
  */
 public class ReteBuilder {
     
-    private Rete rete;
+    protected Rete rete;
+    
+        private HashMap<Predicate,ArrayList<ChoiceNode>> choiceNodes;
+        private HashMap<Predicate,ArrayList<HeadNode>> headNodes;
+    
     
     /**
      * 
@@ -31,6 +35,8 @@ public class ReteBuilder {
      */
     public ReteBuilder(ChoiceUnit choiceUnit){
         this.rete = new Rete(choiceUnit);
+        this.choiceNodes = new HashMap<Predicate,ArrayList<ChoiceNode>>();
+        this.headNodes = new HashMap<Predicate,ArrayList<HeadNode>>();
     }
     
     /**
@@ -41,6 +47,65 @@ public class ReteBuilder {
      */
     public ReteBuilder(Rete rete){
         this.rete = rete;
+        this.choiceNodes = new HashMap<Predicate,ArrayList<ChoiceNode>>();
+        this.headNodes = new HashMap<Predicate,ArrayList<HeadNode>>();
+    }
+    
+    public void addNegRule(Rule r){
+        VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
+        HashMap<Atom,HashMap<Variable,Integer>> varPositions = new HashMap<Atom, HashMap<Variable,Integer>>();
+        
+        if(r.getHead()!=null) {
+            this.addAtomMinus(r.getHead());
+            varPositions.put(r.getHead(), SelectionNode.getVarPosition(r.getHead()));
+        }
+        
+        for(Atom a: r.getBodyPlus()){
+            this.addAtomPlus(a);
+            this.addAtomMinus(a);
+            varPositions.put(a, SelectionNode.getVarPosition(a));
+        }
+        for(Atom a: r.getBodyMinus()){
+            this.addAtomMinus(a);
+            this.addAtomPlus(a); // We also create apositive SelectionNode for each negative one, since then it is easier to look them up for closed nodes.
+            varPositions.put(a, SelectionNode.getVarPosition(a));
+        }
+        
+        if(r.getBodyPlus().isEmpty()){
+            Atom actual = r.getBodyMinus().get(0);
+            SelectionNode actualNode = this.rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+            actualNode.resetVarPosition(actual);
+            HeadNode hN = new HeadNodeNegative(r.getHead(),rete, SelectionNode.getVarPosition(actual),actualNode);
+            actualNode.addChild(hN);
+            //this.addHeadNode(actual.getPredicate(), hN);
+        }else{
+            Atom actual = r.getBodyPlus().get(0);
+            SelectionNode actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+            actualNode.resetVarPosition(actual);
+            HeadNode hN = new HeadNodeNegative(r.getHead(),rete, SelectionNode.getVarPosition(actual),actualNode);
+            actualNode.addChild(hN);
+            //this.addHeadNode(actual.getPredicate(), hN);
+        }
+        
+        
+    }
+    
+    private void addHeadNode(Predicate p, HeadNode hn){
+        if (!this.headNodes.containsKey(p)) headNodes.put(p, new ArrayList<HeadNode>());
+        this.headNodes.get(p).add(hn);
+        if (!this.choiceNodes.containsKey(p)) return;
+        for(ChoiceNode cN: this.choiceNodes.get(p)){
+            hn.addChild(cN);
+        }
+    }
+    
+    private void addChoiceNode(Predicate p, ChoiceNode cn){
+        if (!this.choiceNodes.containsKey(p)) choiceNodes.put(p, new ArrayList<ChoiceNode>());
+        this.choiceNodes.get(p).add(cn);
+        if (!this.headNodes.containsKey(p)) return;
+        for(HeadNode hN: this.headNodes.get(p)){
+            cn.addChild(hN);
+        }
     }
     
     /**
@@ -61,6 +126,7 @@ public class ReteBuilder {
         
         for(Atom a: r.getBodyPlus()){
             this.addAtomPlus(a);
+            this.addAtomMinus(a);
             varPositions.put(a, SelectionNode.getVarPosition(a));
         }
         for(Atom a: r.getBodyMinus()){
@@ -106,7 +172,7 @@ public class ReteBuilder {
                 //There is still something within the positive body of the rule --> take it --> it's the new partner
                 partner = getBestPartner(atomsPlus, actualNode);
                 //Create a joinNode from the actualNode and the partner
-                System.out.println("RULE: " + r);
+                //System.out.println("RULE: " + r);
                 if(actualNode.getClass().equals(SelectionNode.class)){
                     actualNode = this.createJoin(actual, partner, true,varPositions);
                 }else{
@@ -127,7 +193,7 @@ public class ReteBuilder {
                     //There is still something within the negative body of the rule --> take it --> it's the new partner
                     partner = getBestPartner(atomsMinus, actualNode);
                     //Create a joinNode from the actualNode and the partner
-                    System.out.println("RULE: " + r);
+                    //System.out.println("RULE: " + r);
                     if(actualNode.getClass().equals(SelectionNode.class)){
                         actualNode = this.createJoinNegative(actual, partner, false,varPositions); // TODO createJoinNegative
                     }else{
@@ -141,6 +207,7 @@ public class ReteBuilder {
         }
         //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
         HeadNode hN = new HeadNode(r.getHead(),rete, this.VarPosNodes.get(actualNode),actualNode);
+        this.addHeadNode(r.getHead().getPredicate(), hN);
         /*System.out.println("BLING!: " + r + " derives head: " + hN);
         JoinNode jn = (JoinNode)actualNode;
         System.out.println("SelCrit1: " + Instance.getInstanceAsString(jn.selectionCriterion1));
@@ -150,6 +217,10 @@ public class ReteBuilder {
         if(constraintNode != null) actualNode.addChild(constraintNode);
         //if we did construct a ChoiceNode we add it to the headNode
         if(cN!=null) hN.addChild(cN);
+        
+        /*if(cN != null){
+            this.addChoiceNode(r.getHead().getPredicate(), cN);
+        }*/
     }
     
     /**
@@ -162,7 +233,7 @@ public class ReteBuilder {
      * @param varPositions a HAshMap containing for each Atom of the actual Rule the correspondin
      * @return the resulting joinnode with a and b as children.
      */
-    private Node createJoin(Node aNode, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
+    protected Node createJoin(Node aNode, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
         SelectionNode bNode;
         if(bPositive){
             bNode = this.rete.getBasicLayerPlus().get(b.getPredicate()).getChildNode(b.getAtomAsReteKey());
@@ -175,16 +246,16 @@ public class ReteBuilder {
         //JoinNode jn = new JoinNode(aNode,bNode,rete, aNode.getVarPositions(), varPositions.get(b));
         //VarPosNodes.put(jn,jn.getVarPosition(VarPosNodes.get(aNode), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
-        System.out.println("LOL JOIN1: " + jn);
+        /*System.out.println("LOL JOIN1: " + jn);
         System.out.println("TempVars: " + jn.tempVarPosition);
         System.out.println("SelCrit1: " + Instance.getInstanceAsString(jn.selectionCriterion1));
-        System.out.println("SelCrit2: " + Instance.getInstanceAsString(jn.selectionCriterion2));
+        System.out.println("SelCrit2: " + Instance.getInstanceAsString(jn.selectionCriterion2));*/
         return jn;
     }
     
-    private HashMap<Node,HashMap<Variable,Integer>> VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
+    protected HashMap<Node,HashMap<Variable,Integer>> VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
     
-    private Node createJoin(Atom a, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
+    protected Node createJoin(Atom a, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
         SelectionNode aNode = this.rete.getBasicLayerPlus().get(a.getPredicate()).getChildNode(a.getAtomAsReteKey());
         SelectionNode bNode;
         if(bPositive){
@@ -196,14 +267,14 @@ public class ReteBuilder {
         //JoinNode jn = new JoinNode(aNode,bNode,rete, varPositions.get(a), varPositions.get(b));
         //VarPosNodes.put(jn,jn.getVarPosition(varPositions.get(a), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
-        System.out.println("LOL JOIN2: " + jn);
+        /*System.out.println("LOL JOIN2: " + jn);
         System.out.println("TempVars: " + jn.tempVarPosition);
         System.out.println("SelCrit1: " + Instance.getInstanceAsString(jn.selectionCriterion1));
-        System.out.println("SelCrit2: " + Instance.getInstanceAsString(jn.selectionCriterion2));
+        System.out.println("SelCrit2: " + Instance.getInstanceAsString(jn.selectionCriterion2));*/
         return jn;
     }
     
-    private Node createJoinNegative(Node aNode, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
+    protected Node createJoinNegative(Node aNode, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
         SelectionNode bNode;
         if(bPositive){
             bNode = this.rete.getBasicLayerPlus().get(b.getPredicate()).getChildNode(b.getAtomAsReteKey());
@@ -214,15 +285,15 @@ public class ReteBuilder {
         JoinNodeNegative jn = new JoinNodeNegative(bNode,aNode,rete, varPositions.get(b),this.VarPosNodes.get(aNode));
         //VarPosNodes.put(jn,jn.getVarPosition(VarPosNodes.get(aNode), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
-        System.out.println("LOL JOIN3: " + jn);
+        /*System.out.println("LOL JOIN3: " + jn);
         System.out.println("TempVars: " + jn.tempVarPosition);
         System.out.println("SelCrit1: " + Instance.getInstanceAsString(jn.selectionCriterion1));
         System.out.println("SelCrit2: " + Instance.getInstanceAsString(jn.selectionCriterion2));
-        System.out.println("Atom b: " + b);
+        System.out.println("Atom b: " + b);*/
         return jn;
     }
     
-    private Node createJoinNegative(Atom a, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
+    protected Node createJoinNegative(Atom a, Atom b, boolean bPositive,HashMap<Atom,HashMap<Variable,Integer>> varPositions){
         SelectionNode aNode = this.rete.getBasicLayerPlus().get(a.getPredicate()).getChildNode(a.getAtomAsReteKey());
         SelectionNode bNode;
         if(bPositive){
@@ -233,11 +304,11 @@ public class ReteBuilder {
         JoinNodeNegative jn = new JoinNodeNegative(bNode,aNode,rete, varPositions.get(b), varPositions.get(a));
         //VarPosNodes.put(jn,jn.getVarPosition(varPositions.get(a), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
-        System.out.println("LOL JOIN4: " + jn);
+        /*System.out.println("LOL JOIN4: " + jn);
         System.out.println("TempVars: " + jn.tempVarPosition);
         System.out.println("SelCrit1: " + Instance.getInstanceAsString(jn.selectionCriterion1));
         System.out.println("SelCrit2: " + Instance.getInstanceAsString(jn.selectionCriterion2));
-        System.out.println("Atom b: " + b);
+        System.out.println("Atom b: " + b);*/
         return jn;
     }
     
@@ -250,7 +321,7 @@ public class ReteBuilder {
      * @param node a node representing a memory for variable assignments
      * @return the best partner atom for the node
      */
-    private Atom getBestPartner(ArrayList<Atom> atoms, Node node){
+    protected Atom getBestPartner(ArrayList<Atom> atoms, Node node){
         Atom a = atoms.get(0);
         atoms.remove(a);
         return a;
@@ -264,7 +335,7 @@ public class ReteBuilder {
      * @param atoms a list of atoms you want to choose from
      * @return the best atom to start with
      */
-    private Atom getBestNextAtom(ArrayList<Atom> atoms){
+    protected Atom getBestNextAtom(ArrayList<Atom> atoms){
         Atom a = atoms.get(0);
         atoms.remove(a);
         return a;
@@ -283,7 +354,7 @@ public class ReteBuilder {
             this.rete.getBasicLayerPlus().put(atom.getPredicate(), new BasicNode(atom.getArity(),rete, atom.getPredicate()));
             //this.stackyPlus.put(atom.getPredicate(), new Stack<Instance>());
         }    
-        System.out.println("Adding Atom Plus");
+        //System.out.println("Adding Atom Plus");
         this.rete.getBasicLayerPlus().get(atom.getPredicate()).AddAtom(atom);
         
     }
@@ -298,7 +369,7 @@ public class ReteBuilder {
             this.rete.getBasicLayerMinus().put(atom.getPredicate(), new BasicNodeNegative(atom.getArity(),rete, atom.getPredicate()));
             //this.stackyMinus.put(atom.getPredicate(), new Stack<Instance>());
         }   
-        System.out.println("Adding Atom Minus");
+        //System.out.println("Adding Atom Minus");
         this.rete.getBasicLayerMinus().get(atom.getPredicate()).AddAtom(atom);  
     }
     

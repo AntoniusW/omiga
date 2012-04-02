@@ -164,7 +164,6 @@ public class ChoiceUnit {
                 this.stackyNode.push(cN);
                 this.stackybool.push(true); 
                 this.stackyInstance.push(inz); 
-                if(i==471) c.printAnswerSet();
                 return true;
             }
         }

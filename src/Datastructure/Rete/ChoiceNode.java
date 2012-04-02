@@ -55,7 +55,7 @@ public class ChoiceNode extends Node{
         super(rete);
         this.r = r;
         this.memory = new Storage(arity);
-        System.out.println("ChoiceNode created!");
+        //System.out.println("ChoiceNode created!");
         rete.getChoiceUnit().addChoiceNode(this); // The choiceNode is registered on creation within the choiceUnit
         this.tempVarPosition = varPosition;
         this.constraintNode = constraintNode;

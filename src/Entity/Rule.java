@@ -24,10 +24,10 @@ import java.util.HashSet;
  */
 public class Rule {
     
-    private Atom head;
-    private ArrayList<Atom> bodyPlus;
-    private ArrayList<Atom> bodyMinus;
-    private ArrayList<Operator> operators;
+    protected Atom head;
+    protected ArrayList<Atom> bodyPlus;
+    protected ArrayList<Atom> bodyMinus;
+    protected ArrayList<Operator> operators;
     
     /**
      * 

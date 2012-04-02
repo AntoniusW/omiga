@@ -105,7 +105,7 @@ public class testProp {
         
         rete.propagate();
         
-        rete.printAnswerSet();
+        rete.printAnswerSet(null);
         
         System.out.println("Instances created = " + Instance.lol);
         System.out.println("SATISFIABLE: " +rete.satisfiable);;

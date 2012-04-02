@@ -59,14 +59,14 @@ public class Manager {
             System.err.println("Killed all SCC: " + System.currentTimeMillis());
             //We killed all SCC --> This context is guessfree
             if(c.isSatisfiable()){
-                c.printAnswerSet();
+                c.printAnswerSet(null);
                 System.out.println("GuessFree Context found 1 AnswerSet");
             }else{
                 System.out.println("GuessFree Context UNSATISFIABLE!");
             }
             return;
         }
-        System.out.println("Preparing to Guess: " + System.currentTimeMillis());
+        //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
         while(!finished){
             if(c.choice()){
@@ -111,7 +111,7 @@ public class Manager {
                 }
             }
         }
-        System.out.println("Found: " + this.answerSetCount + " answersets!");
+        //System.out.println("Found: " + this.answerSetCount + " answersets!");
         //System.out.println(this.c.getChoiceUnit().getMemory().getNodes());
         /*System.out.println("HashCode red: " + Constant.getConstant("red"));
         System.out.println("HashCode green: " + Constant.getConstant("green"));
@@ -130,6 +130,51 @@ public class Manager {
         }
         
         System.out.println(g.gd.getAllEdges(Predicate.getPredicate("q", 1), Predicate.getPredicate("s",1)));*/
+        
+    }
+    
+    
+    public void calculate(Integer answersets, boolean output, String filter){
+        boolean finished = false;
+        c.propagate();
+        c.getChoiceUnit().DeriveSCC();
+        if(!c.getChoiceUnit().killSoloSCC()){
+            System.err.println("Killed all SCC: " + System.currentTimeMillis());
+            //We killed all SCC --> This context is guessfree
+            if(c.isSatisfiable()){
+                c.printAnswerSet(filter);
+                System.out.println("GuessFree Context found 1 AnswerSet");
+            }else{
+                System.out.println("GuessFree Context UNSATISFIABLE!");
+            }
+            return;
+        }
+        System.out.println("Preparing to Guess: " + System.currentTimeMillis());
+        //c.printAnswerSet();
+        while(!finished){
+            if(c.choice()){
+                c.propagate();
+                if(!c.isSatisfiable()){
+                    c.backtrack();
+                }
+            }else{
+                
+                if(c.getChoiceUnit().getDecisionLevel() > 0){
+                    if(c.isSatisfiable()){
+                        if(c.getChoiceUnit().check4AnswerSet()){
+                            if(output)c.printAnswerSet(filter);
+                            answerSetCount++;
+                            if(answersets != null && answerSetCount == answersets) break;
+                        }else{
+                        }
+                    }
+                    c.backtrack();
+                }else{
+                    finished = true;
+                }
+            }
+        }
+        System.out.println("Found: " + this.answerSetCount + " answersets!");
         
     }
     

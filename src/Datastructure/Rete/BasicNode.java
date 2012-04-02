@@ -94,7 +94,7 @@ public class BasicNode extends Node{
      */
     public void AddAtom(Atom atom){
         if(this.getChildNode(atom.getAtomAsReteKey()) == null){
-            System.out.println("Adding new SelectionNode!: " + atom);
+            //System.out.println("Adding new SelectionNode!: " + atom);
             this.basicChildren.add(new SelectionNode(atom.getAtomAsReteKey(), this.rete));
         }
     }

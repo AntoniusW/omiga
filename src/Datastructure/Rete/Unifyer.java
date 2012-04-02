@@ -39,8 +39,11 @@ public class Unifyer {
             if(t.getClass().equals(Variable.class)){
                 //if the actual term is a variable we set the corresponding position of the instance we want to return to the the value that is within the variabel assignment at the position
                 //of that variable within the mapping
-                //System.err.println("VARAS: " + variableAssignment);
-                //System.err.println("WARPOS: " + varPositionMapping.get((Variable)t));
+                /*System.err.println("VARAS: " + variableAssignment);
+                System.err.println("Atom: " + a);
+                System.err.println("Variable: " + t);
+                System.err.println("Mapping: " + varPositionMapping);
+                System.err.println("WARPOS: " + varPositionMapping.get((Variable)t));*/
                 retTerms[i] = variableAssignment.get(varPositionMapping.get((Variable)t));
             }else{
                 if (t.getClass().equals(Constant.class)){

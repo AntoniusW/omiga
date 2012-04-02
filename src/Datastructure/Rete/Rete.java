@@ -52,6 +52,9 @@ public class Rete {
     private HashMap<Predicate, BasicNodeNegative> basicLayerMinus;
     public boolean satisfiable = true;
     
+    
+
+    
     /**
      * 
      * public constructor. generates a new rete network with initialized data structures.
@@ -112,6 +115,7 @@ public class Rete {
             System.out.println("BLING!: DOUBLE ADD!");
             return;
         }*/ // TODO: Somehow avoid this
+        //System.out.println("AddingPLUS: " + p.getName() + "(" + instance + ")");
         basicLayerPlus.get(p).addInstance(instance);
     }
     
@@ -129,6 +133,7 @@ public class Rete {
             System.out.println("BLING!: DOUBLE ADD!");
             return;
         }*/ // TODO: Somehow avoid this
+        //System.out.println("AddingMINUS: " + p.getName() + "(" + instance + ")");
         basicLayerMinus.get(p).addInstance(instance);
     }
     
@@ -214,27 +219,41 @@ public class Rete {
     /**
      * prints the actual Answersets (=All Instances) to standard Out
      */
-    public void printAnswerSet(){
+    public void printAnswerSet(String filter){
         System.out.println("Printing Answerset: ");
         System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         System.out.println("Positive Facts: ");
-        for(Predicate p: this.basicLayerPlus.keySet()){
-            Term[] selectionCriteria = new Term[p.getArity()];
-            for(int i = 0; i < p.getArity();i++){
-                selectionCriteria[i] = Variable.getVariable("X");
+        if(filter == null){
+            for(Predicate p: this.basicLayerPlus.keySet()){
+                Term[] selectionCriteria = new Term[p.getArity()];
+                for(int i = 0; i < p.getArity();i++){
+                    selectionCriteria[i] = Variable.getVariable("X");
+                }
+                System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
+                this.basicLayerPlus.get(p).printAllInstances();
             }
-            System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
-            this.basicLayerPlus.get(p).printAllInstances();
-        }
-        System.out.println("Negative Facts: ");
-        for(Predicate p: this.basicLayerMinus.keySet()){
-            Term[] selectionCriteria = new Term[p.getArity()];
-            for(int i = 0; i < p.getArity();i++){
-                selectionCriteria[i] = Variable.getVariable("X");
+            /*System.out.println("Negative Facts: ");
+            for(Predicate p: this.basicLayerMinus.keySet()){
+                Term[] selectionCriteria = new Term[p.getArity()];
+                for(int i = 0; i < p.getArity();i++){
+                    selectionCriteria[i] = Variable.getVariable("X");
+                }
+                System.out.println("Instances for: " + this.basicLayerMinus.get(p));// + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
+                this.basicLayerMinus.get(p).printAllInstances();
+            }*/
+        }else{
+            for(Predicate p: this.basicLayerPlus.keySet()){
+                if(p.getName().equals(filter)){
+                    Term[] selectionCriteria = new Term[p.getArity()];
+                    for(int i = 0; i < p.getArity();i++){
+                        selectionCriteria[i] = Variable.getVariable("X");
+                    }
+                    System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
+                    this.basicLayerPlus.get(p).printAllInstances();
+                }
             }
-            System.out.println("Instances for: " + this.basicLayerMinus.get(p));// + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
-            this.basicLayerMinus.get(p).printAllInstances();
         }
+        
         System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
     }
     

@@ -54,7 +54,7 @@ public abstract class Node {
      * @param atom 
      */
     public void resetVarPosition(Atom atom){
-        System.err.println("resetVarPosition: " + this);
+        //System.err.println("resetVarPosition: " + this);
         tempVarPosition.clear();
         Term[] terms = atom.getTerms();
         for(int i = 0; i < terms.length;i++){
@@ -66,7 +66,7 @@ public abstract class Node {
                 }
             }
         }
-        System.err.println(this + ": varPositions: " + tempVarPosition);
+        //System.err.println(this + ": varPositions: " + tempVarPosition);
     }
     
     //TODO: Remove not used? Now in Atom?!

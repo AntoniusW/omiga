@@ -78,7 +78,7 @@ public class WOCClassInstances {
         rete.addInstancePlus(body2.getPredicate(), instance2);*/
         
         rete.propagate();
-        rete.printAnswerSet();
+        rete.printAnswerSet(null);
         
         
         System.out.println("LOL = " + Instance.lol);

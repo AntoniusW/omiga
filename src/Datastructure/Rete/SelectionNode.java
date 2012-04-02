@@ -54,7 +54,7 @@ public class SelectionNode extends Node{
      */
     public SelectionNode(Atom atom, Rete rete){
         super(rete);
-        System.err.println("Creating SelectionNode: " + atom);
+        //System.err.println("Creating SelectionNode: " + atom);
         
         this.atom = atom.getAtomAsReteKey(); 
         this.tempVarPosition = getVarPosition(atom); //super.resetVarPosition(atom); 
@@ -69,9 +69,9 @@ public class SelectionNode extends Node{
         varOrdering = new Variable[vars.size()];
         vars.toArray(varOrdering);
         //System.err.println("VAR ORDERING: " + this);
-        for(Variable v: varOrdering){
+        /*for(Variable v: varOrdering){
             System.err.println(v);
-        }
+        }*/
         
         // memory is initialized with the size of the var ordering (as we only need to save variableassignments
         memory = new Storage(atom.getArity());
@@ -190,6 +190,7 @@ public class SelectionNode extends Node{
      * @return a HashMap that contains Variables together with their position in the memory in the corresponding SelectionNode of the given atom
      */
     public static HashMap<Variable,Integer> getVarPosition(Atom atom){
+        //System.out.println("GetVarPos Atom: " + atom);
         HashMap<Variable,Integer> ret = new HashMap<Variable,Integer>();
         Term[] terms = atom.getTerms();
         for(int i = 0; i < terms.length;i++){
@@ -201,6 +202,7 @@ public class SelectionNode extends Node{
                 }
             }
         }
+        //System.out.println("Ret: " + ret);
         return ret;
     }
     

@@ -77,7 +77,7 @@ public class Atom {
         p = Predicate.getPredicate(name, arity);
         this.terms = terms;
         this.hash = (this.p.toString() + Instance.getInstanceAsString(this.terms)).hashCode();
-        System.out.println(this + " - ATOMHASHCODE: " + this.hashCode() + " - " + name);
+        //System.out.println(this + " - ATOMHASHCODE: " + this.hashCode() + " - " + name);
     }
     
     /*public Atom(String name, int arity){

@@ -7,6 +7,7 @@ package woc.classinstances;
 import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.Rete;
 import Entity.ContextASP;
+import Entity.ContextASPRewriting;
 import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Predicate;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import parser.Parser;
+import parser.ParserRewrite;
 
 /**
  *
@@ -38,10 +40,10 @@ public class main_1 {
         File input = new File("Xir2.txt");
         //File input = new File("3Col\\3Col6AS.txt");
         
-        Parser pars = new Parser();
+       Parser pars = new Parser();
         try {
             ContextASP c = pars.readContext(input);
-            c.printContext();
+            //c.printContext();
             
             Manager m = new Manager(c);
             System.out.println("Starting calculation: " + System.currentTimeMillis());

@@ -4,9 +4,11 @@
  */
 package woc.classinstances;
 
+
 import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.Rete;
 import Entity.ContextASP;
+import Entity.ContextASPRewriting;
 import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Predicate;
@@ -14,46 +16,35 @@ import Entity.Variable;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
+import Manager.Manager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import parser.Parser;
+import parser.ParserRewrite;
 
 /**
  *
- * @author Gerald Weidinger 0526105
- * 
- * The main main class of this project. Use it to read in a context via the File specified by input.
- * 
+ * @author User
  */
-public class main {
-    
-    
+public class main_Rewriting {
+
     
     public static void main(String arg[]){
+        System.out.println("STARTING THE REWRITING PROGRAM: " + System.currentTimeMillis());
+        File input = new File("Xir2.txt");
         
-        //File input = new File("C:\\Users\\User\\Desktop\\Context.txt");
-        File input = new File("context_neg.txt");
         
-        Parser pars = new Parser();
+         ParserRewrite pars = new ParserRewrite();
         try {
-            ContextASP c = pars.readContext(input);
-            c.printContext();
+            ContextASPRewriting c = pars.readContext(input);
+            //c.printContext();
             
-            //c.initializeRete();
-
-            c.propagate();
-            while(c.choice() == true){
-                //c.choice();
-                c.propagate();
-            }
-            
-            
-            c.printAnswerSet(null);
-            
-            System.out.println("Instances created = " + Instance.lol);
-            System.out.println("SATISFIABLE: " + c.getRete().satisfiable);
+            Manager m = new Manager(c);
+            System.out.println("Starting calculation: " + System.currentTimeMillis());
+            m.calculate();
+            System.out.println("Program finished: " + System.currentTimeMillis());
             
         } catch (FactSizeException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,6 +52,9 @@ public class main {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
+        
+        System.out.println("Termianted main1 calc!");
         
         
     }
