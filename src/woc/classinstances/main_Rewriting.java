@@ -33,7 +33,7 @@ public class main_Rewriting {
     
     public static void main(String arg[]){
         System.out.println("STARTING THE REWRITING PROGRAM: " + System.currentTimeMillis());
-        File input = new File("Xir2.txt");
+        File input = new File("Xir3.txt");
         
         
          ParserRewrite pars = new ParserRewrite();

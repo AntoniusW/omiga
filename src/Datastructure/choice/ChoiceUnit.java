@@ -344,6 +344,7 @@ public class ChoiceUnit {
                 }
             }
         }
+        //c.printAnswerSet(null);
         /*System.out.println("AnswerSetAfter BACKTRACKING:");
         for(Node n: this.memory.getNodes()){
             if(!n.getClass().equals(HeadNode.class)){

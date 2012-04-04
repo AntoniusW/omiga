@@ -147,6 +147,7 @@ public class HeadNode extends Node{
                 //System.out.println(rete.getChoiceUnit().getMemory().getNodes());
                 //System.out.println("HeadNode Of: " + this.from);
                 //rete.printAnswerSet();
+                //System.out.println("UNSATISFIABLE because of HeadNode: " + " instance: " + instance + " Atom: " + a);
                 this.rete.satisfiable = false;
             }
         }/*else{

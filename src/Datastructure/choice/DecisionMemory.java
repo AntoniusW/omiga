@@ -94,9 +94,9 @@ public class DecisionMemory {
         //System.out.println("STARTING BACKTRACKING!");
         for(Node n: this.decisionLayer.get(this.decisionLevel).keySet()){
             for(Instance inz: this.decisionLayer.get(this.decisionLevel).get(n)){
-                if(n.getClass().equals(ChoiceNode.class)){
-                    //System.out.println("Removing from ChoiceNode: " + n + " - " + inz);
-                }
+                /*if(n.getClass().equals(ChoiceNode.class)){
+                    System.out.println("Removing from ChoiceNode: " + n + " - " + inz);
+                }*/
                 //System.out.println("Trying to remove: " + inz + " from: " + n);
                 n.simpleRemoveInstance(inz);
             }

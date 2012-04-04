@@ -37,6 +37,7 @@ public class main_FINAL {
     private static int rewriting;
     private static String filename;
     private static Integer answersets;
+    private static boolean outprint;
     
     public static void main(String args[]) throws FactSizeException, RuleNotSafeException{
         long start = System.currentTimeMillis();
@@ -48,7 +49,8 @@ public class main_FINAL {
         filename = "Xir2.txt";
         rewriting = 1;
         answersets = null;
-        filter = "a";
+        filter = null;
+        outprint = false;
         
         
         File input = new File(filename);
@@ -82,7 +84,7 @@ public class main_FINAL {
         //c.printContext();
         Manager m = new Manager(c);
         long beforeCalc = System.currentTimeMillis();
-        m.calculate(answersets,false,filter);
+        m.calculate(answersets,outprint,filter);
 
         System.out.println("Termianted final Calculation");
         System.out.println("Time needed overAll: " + (1.0F*(System.currentTimeMillis()-start)/1000));

@@ -72,6 +72,7 @@ public class Rewriter_easy {
                 
                 for(Atom a: r.getBodyPlus()){
                     boolean flag1 = true;
+                    //All Variables of the head must occur within the atom
                     for(Term t1: r.getHead().getTerms()){
                         boolean flag2 = false;
                         for(Term t2: a.getTerms()){
@@ -84,7 +85,23 @@ public class Rewriter_easy {
                             break;
                         }
                     }
+                    //All Variables of the atom must occur within the head
+                    for(Term t1: a.getTerms()){
+                        boolean flag2 = false;
+                        for(Term t2: r.getHead().getTerms()){
+                            if(t1.equals(t2)) {
+                                flag2 = true;
+                            }
+                        }
+                        if(!flag2){
+                            flag1=false;
+                            break;
+                        }
+                    }
+                    
+                    
                     if(flag1){
+                        //The Variables of head and atom are equal
                         ArrayList<Atom> negBody = new ArrayList<Atom>();
                         negBody.add(a);
                         Rule rule2Add = new Rule(head, new ArrayList<Atom>(), negBody, new ArrayList<Operator>());
@@ -93,6 +110,7 @@ public class Rewriter_easy {
                 }
                 
                 for(Atom a: r.getBodyMinus()){
+                    //All Variables of the head must occur within the atom
                     boolean flag1 = true;
                     for(Term t1: r.getHead().getTerms()){
                         boolean flag2 = false;
@@ -104,7 +122,21 @@ public class Rewriter_easy {
                             break;
                         }
                     }
+                    //All Variables of the atom must occur within the head
+                    for(Term t1: a.getTerms()){
+                        boolean flag2 = false;
+                        for(Term t2: r.getHead().getTerms()){
+                            if(t1.equals(t2)) flag2 = true;
+                        }
+                        if(!flag2){
+                            flag1=false;
+                            break;
+                        }
+                    }
+                    
+                    
                     if(flag1){
+                        //The Variables of head and atom are equal
                         ArrayList<Atom> posBody = new ArrayList<Atom>();
                         posBody.add(a);
                         Rule rule2Add= new Rule(head, posBody, new ArrayList<Atom>(), new ArrayList<Operator>());

@@ -162,7 +162,10 @@ public class Manager {
                 if(c.getChoiceUnit().getDecisionLevel() > 0){
                     if(c.isSatisfiable()){
                         if(c.getChoiceUnit().check4AnswerSet()){
-                            if(output)c.printAnswerSet(filter);
+                            if(output){
+                                System.out.println("Found AD: " + answerSetCount);
+                                c.printAnswerSet(filter);
+                            }
                             answerSetCount++;
                             if(answersets != null && answerSetCount == answersets) break;
                         }else{

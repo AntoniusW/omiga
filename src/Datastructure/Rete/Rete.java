@@ -111,10 +111,10 @@ public class Rete {
             //System.out.println("HAHA UNSAT! durch plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
-        /*if(this.containsInstance(p, instance, true)) {
-            System.out.println("BLING!: DOUBLE ADD!");
+        if(this.containsInstance(p, instance, true)) {
+            //System.out.println("BLING!: DOUBLE ADD!");
             return;
-        }*/ // TODO: Somehow avoid this
+        } // TODO: Somehow avoid this if.
         //System.out.println("AddingPLUS: " + p.getName() + "(" + instance + ")");
         basicLayerPlus.get(p).addInstance(instance);
     }
@@ -129,10 +129,10 @@ public class Rete {
             //System.out.println("HAHA UNSAT durch minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
-        /*if(this.containsInstance(p, instance, false)) {
-            System.out.println("BLING!: DOUBLE ADD!");
+        if(this.containsInstance(p, instance, false)) {
+            //System.out.println("BLING!: DOUBLE ADD!");
             return;
-        }*/ // TODO: Somehow avoid this
+        } // TODO: Somehow avoid this if.
         //System.out.println("AddingMINUS: " + p.getName() + "(" + instance + ")");
         basicLayerMinus.get(p).addInstance(instance);
     }

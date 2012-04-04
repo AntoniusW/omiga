@@ -110,9 +110,10 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         //System.out.println("Choice is called!");
         //TODO: replace foreach loops with iterator loops.
         i++;
-        /*if(i==471) {
-            c.printAnswerSet();
-            c.getRete().printRete();
+        /*if(i==13) {
+            System.out.println("SPECIAL:");
+            c.printAnswerSet(null);
+            //c.getRete().printRete();
         }*/
         //System.out.println("Choice is called! " + this.memory.getDecisonLevel());
         //this.printAllChoiceNodes();
@@ -122,8 +123,10 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             this.addChoicePoint();
             //we activate a constraint for this rule. Since this rule must not be true anymore, as we guessed it to be false
             nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
-            //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
-            this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), nextInstance);
+            Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
+            //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
+            //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
+            this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
             //System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
             //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
@@ -133,6 +136,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             nextNode = null;
             
             //We return true, since we guessed
+            //c.printAnswerSet(null);
             return true;
         }
         
@@ -153,6 +157,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 this.stackyNode.push(cN);
                 this.stackybool.push(true); 
                 this.stackyInstance.push(inz); 
+                //c.printAnswerSet(null);
                 return true;
             }
         }
