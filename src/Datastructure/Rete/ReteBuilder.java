@@ -90,7 +90,7 @@ public class ReteBuilder {
         
     }
     
-    private void addHeadNode(Predicate p, HeadNode hn){
+    /*private void addHeadNode(Predicate p, HeadNode hn){
         if (!this.headNodes.containsKey(p)) headNodes.put(p, new ArrayList<HeadNode>());
         this.headNodes.get(p).add(hn);
         if (!this.choiceNodes.containsKey(p)) return;
@@ -106,7 +106,7 @@ public class ReteBuilder {
         for(HeadNode hN: this.headNodes.get(p)){
             cn.addChild(hN);
         }
-    }
+    }*/
     
     /**
      * 
@@ -207,7 +207,7 @@ public class ReteBuilder {
         }
         //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
         HeadNode hN = new HeadNode(r.getHead(),rete, this.VarPosNodes.get(actualNode),actualNode);
-        this.addHeadNode(r.getHead().getPredicate(), hN);
+        //this.addHeadNode(r.getHead().getPredicate(), hN);
         /*System.out.println("BLING!: " + r + " derives head: " + hN);
         JoinNode jn = (JoinNode)actualNode;
         System.out.println("SelCrit1: " + Instance.getInstanceAsString(jn.selectionCriterion1));

@@ -181,7 +181,7 @@ public class Parser {
                     //System.out.println("LOl OPERATOR: " + realString.charAt(i));
                 }else{
                     if (realString.charAt(i) != ','){
-                        System.err.println("ERROR007");
+                        System.err.println("ERROR007: Ignore if this is a constraintrule: " + s);
                     }
                 }
                 

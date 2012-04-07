@@ -52,10 +52,15 @@ public class Rewriter_easy {
         HashMap<Predicate,ArrayList<Rule>> sorted = new HashMap<Predicate,ArrayList<Rule>>();
         
         for(Rule r: c.getAllRules()){
-            if(!sorted.containsKey(r.getHead().getPredicate())){
-                sorted.put(r.getHead().getPredicate(), new ArrayList<Rule>());
+            if(!r.isConstraint()){
+                if(!sorted.containsKey(r.getHead().getPredicate())){
+                    sorted.put(r.getHead().getPredicate(), new ArrayList<Rule>());
+                }
+                sorted.get(r.getHead().getPredicate()).add(r);
+            }else{
+                ret.addRule(r);
             }
-            sorted.get(r.getHead().getPredicate()).add(r);
+            
         }
         
         for(Predicate p: sorted.keySet()){
@@ -145,7 +150,6 @@ public class Rewriter_easy {
                 }
                 
             }
-
             
             //Since the old head and the new heads are of same size, reteKey will derive same variables for same positions, therefore generating correct rules!
             //TODO: Retebuilder cannot handle negRules with bodysize > 1.

@@ -46,7 +46,7 @@ public class main_FINAL {
             System.out.println(s);
         }*/
         
-        filename = "Xir2.txt";
+        filename = "2col\\2col0AS.txt";
         rewriting = 1;
         answersets = 1000;
         filter = null;
