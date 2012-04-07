@@ -122,7 +122,9 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             //We add a choicepoint since we are doing a guess
             this.addChoicePoint();
             //we activate a constraint for this rule. Since this rule must not be true anymore, as we guessed it to be false
-            nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
+            //nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
+            //We do not have to have constraints node anymore but then we have to kill the instance of the choice node here.
+            nextNode.removeInstance(nextInstance);
             Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");

@@ -59,7 +59,7 @@ public class ChoiceNode extends Node{
         rete.getChoiceUnit().addChoiceNode(this); // The choiceNode is registered on creation within the choiceUnit
         this.tempVarPosition = varPosition;
         this.constraintNode = constraintNode;
-        constraintNode.setChoicenode(this);
+        //constraintNode.setChoicenode(this);
         //this.allInstances = new ArrayList<Instance>(); //TODO Init size of this list?
         this.allInstances = new HashSet<Instance>();
         //this.rete.getChoiceUnit().addNode(this);

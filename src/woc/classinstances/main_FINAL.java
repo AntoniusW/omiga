@@ -39,7 +39,7 @@ public class main_FINAL {
     private static Integer answersets;
     private static boolean outprint;
     
-    public static void main(String args[]) throws FactSizeException, RuleNotSafeException{
+    public static void main(String args[]) /*throws FactSizeException, RuleNotSafeException*/{
         long start = System.currentTimeMillis();
         /*filename = args[0];
         for(String s: args){
@@ -48,7 +48,7 @@ public class main_FINAL {
         
         filename = "Xir2.txt";
         rewriting = 1;
-        answersets = null;
+        answersets = 1000;
         filter = null;
         outprint = false;
         
@@ -60,6 +60,7 @@ public class main_FINAL {
         
         ContextASP c = null;
         Parser pars;
+        try{
         if(rewriting == 0){
             pars = new Parser();
             c = pars.readContext(input);
@@ -79,7 +80,10 @@ public class main_FINAL {
                     c.printContext();
                 }
             }
-        }      
+        }    
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         
         //c.printContext();
         Manager m = new Manager(c);

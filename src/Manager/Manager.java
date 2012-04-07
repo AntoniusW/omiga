@@ -11,6 +11,7 @@ import Entity.Constant;
 import Entity.ContextASP;
 import Entity.Predicate;
 import Entity.Rule;
+import java.io.FileNotFoundException;
 import org.jgrapht.graph.DirectedSubgraph;
 
 /**
@@ -51,6 +52,7 @@ public class Manager {
      * If we cannot backtrakc anymore the calculation is finished.
      */
     public void calculate(){
+        System.out.println("Standard calc called --> WRONG!");
         boolean finished = false;
         c.propagate();
         //System.err.println("First Propagation finsihed: " + System.currentTimeMillis());
@@ -142,7 +144,9 @@ public class Manager {
             System.err.println("Killed all SCC: " + System.currentTimeMillis());
             //We killed all SCC --> This context is guessfree
             if(c.isSatisfiable()){
-                c.printAnswerSet(filter);
+                if(output){
+                    c.printAnswerSet(filter);
+                }
                 System.out.println("GuessFree Context found 1 AnswerSet");
             }else{
                 System.out.println("GuessFree Context UNSATISFIABLE!");
@@ -161,15 +165,15 @@ public class Manager {
                 
                 if(c.getChoiceUnit().getDecisionLevel() > 0){
                     if(c.isSatisfiable()){
-                        if(c.getChoiceUnit().check4AnswerSet()){
+                        //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
                                 System.out.println("Found AD: " + answerSetCount);
                                 c.printAnswerSet(filter);
                             }
                             answerSetCount++;
+                            System.out.println(answerSetCount);
                             if(answersets != null && answerSetCount == answersets) break;
-                        }else{
-                        }
+                        //}
                     }
                     c.backtrack();
                 }else{

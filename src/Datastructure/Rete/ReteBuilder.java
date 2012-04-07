@@ -155,13 +155,13 @@ public class ReteBuilder {
         //We create variables for the partner, the ChoiceNode and HeadNodeConstraint for this rule
         Atom partner;
         ChoiceNode cN = null;
-        HeadNodeConstraint constraintNode = null;
+        //HeadNodeConstraint constraintNode = null;
         
         
         if(atomsPlus.isEmpty() && operators.isEmpty() && !atomsMinus.isEmpty() && !r.isConstraint()){
             // if the rule consisted only of one positive atom no operators and has a negative body we have to create the choice and constraint Node here.
-            constraintNode = new HeadNodeConstraint(rete, varPositions.get(actual).size());
-            cN = new ChoiceNode(rete, varPositions.get(actual).size(),r,varPositions.get(actual), constraintNode);
+            //constraintNode = new HeadNodeConstraint(rete, varPositions.get(actual).size());
+            cN = new ChoiceNode(rete, varPositions.get(actual).size(),r,varPositions.get(actual), null/*constraintNode*/);
             actualNode.addChild(cN);
         }
         
@@ -184,8 +184,8 @@ public class ReteBuilder {
                     // if atomPlus is now empty  we removed the last atom from here.
                     // If there is a negative part and no operators are within this Rule then we now add the ChoiceNode and constraintNode
                     // since the positive part of the rule is satisfied now
-                    constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
-                    cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(),r,actualNode.tempVarPosition, constraintNode);
+                    //constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
+                    cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(),r,actualNode.tempVarPosition, null/*constraintNode*/);
                     actualNode.addChild(cN);
                 }
             }else{
@@ -214,7 +214,7 @@ public class ReteBuilder {
         System.out.println("SelCrit2: " + Instance.getInstanceAsString(jn.selectionCriterion2));*/
         actualNode.addChild(hN);
         //If we did contruct a constraintNode we add it to the actual Node as well
-        if(constraintNode != null) actualNode.addChild(constraintNode);
+        //if(constraintNode != null) actualNode.addChild(constraintNode);
         //if we did construct a ChoiceNode we add it to the headNode
         if(cN!=null) hN.addChild(cN);
         
