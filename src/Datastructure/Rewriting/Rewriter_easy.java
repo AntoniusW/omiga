@@ -153,7 +153,23 @@ public class Rewriter_easy {
             
             //Since the old head and the new heads are of same size, reteKey will derive same variables for same positions, therefore generating correct rules!
             //TODO: Retebuilder cannot handle negRules with bodysize > 1.
-            ret.addNegRule(new Rule(Atom.getAtom(p.getName(),p.getArity(),heads.get(0).getAtomAsReteKey().getTerms()),new ArrayList<Atom>(),heads,new ArrayList<Operator>()));
+            //ret.addNegRule(new Rule(Atom.getAtom(p.getName(),p.getArity(),heads.get(0).getAtomAsReteKey().getTerms()),new ArrayList<Atom>(),heads,new ArrayList<Operator>()));
+            //TODO The rule above is not correct. We have to generate one such rule for each Rule of the actual HashMapposition
+            for(int i = 0; i < sorted.get(p).size();i++){
+            Rule r1 = sorted.get(p).get(i);
+                ArrayList<Atom> BodyMinus = new ArrayList<Atom>();
+                Atom headAtom = Atom.getAtom(r1.getHead().getName(), r1.getHead().getArity(), r1.getHead().getAtomAsReteKey().getTerms());
+                for(int j = 0; j < sorted.get(p).size();j++){
+                    Rule r2 = sorted.get(p).get(j);
+                    //if(!r1.equals(r2)){
+                        if(r1.getHead().fatherOf(r2.getHead())){
+                            BodyMinus.add(heads.get(j));
+                        }
+                    //}
+                }
+                Rule rule2Add = new Rule(headAtom, new ArrayList<Atom>(), BodyMinus, new ArrayList<Operator>());
+                ret.addNegRule(rule2Add);
+            }
         }
         
         for(Predicate p: c.getAllINFacts().keySet()){

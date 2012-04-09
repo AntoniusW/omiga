@@ -115,4 +115,9 @@ public class Variable extends Term implements OperandI{
         this.value=pa;
     }
     
+    @Override
+    public boolean fatherOf(Term t){
+        return true;
+    }
+    
 }

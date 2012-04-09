@@ -56,8 +56,10 @@ public class HeadNodeNegative extends HeadNode{
         if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 rete.addInstanceMinus(a.getPredicate(),instance2Add);
+                //System.out.println("HeadNodeNegative adds: " + instance2Add + " because of: " + instance);
             }
         }else{
+            //System.out.println("HeadNodeNegative kills Sat!");
             this.rete.satisfiable = false;
         }
     }

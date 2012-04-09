@@ -135,8 +135,8 @@ public class HeadNode extends Node{
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 //if the resolved instance is not contained within our rete we add it
                 rete.addInstancePlus(a.getPredicate(),instance2Add);
-             //   System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
-                //System.err.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
+                //System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
+                //System.out.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
             }else{
                 //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.
                 /*System.out.println("UNSATISFIABLE!: muhu: " + rete.getChoiceUnit().getDecisionLevel()+ " instance: " + instance + " Atom: " + a);

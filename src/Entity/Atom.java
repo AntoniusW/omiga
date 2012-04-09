@@ -242,5 +242,13 @@ public class Atom {
         ret = FuncTerm.getFuncTerm(t.getName(), children);
         return ret;
     }
+    
+    public boolean fatherOf(Atom a){
+        if(!this.getPredicate().equals(a.getPredicate())) return false;
+        for(int i = 0; i < this.terms.length;i++){
+            if(!this.terms[i].fatherOf(a.terms[i])) return false;
+        }
+        return true;
+    }
      
 }

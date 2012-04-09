@@ -111,4 +111,14 @@ public class FuncTerm extends Term{
         return s.substring(0,s.length()-1) + ")";
     }    
     
+    public boolean fatherOf(Term t){
+        if(!this.getClass().equals(t.getClass())) return false;
+        FuncTerm that = (FuncTerm) t;
+        if(!this.name.equals(that.name)) return false;
+        for(int i = 0; i < this.children.size();i++){
+            if(!this.children.get(i).fatherOf(that.children.get(i))) return false;
+        }
+        return true;
+    }
+    
 }

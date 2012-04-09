@@ -86,8 +86,90 @@ public class ReteBuilder {
             actualNode.addChild(hN);
             //this.addHeadNode(actual.getPredicate(), hN);
         }
+    }
+    
+    public void addRuleNeg(Rule r){
+//We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
+        VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
+        HashMap<Atom,HashMap<Variable,Integer>> varPositions = new HashMap<Atom, HashMap<Variable,Integer>>();
         
+        if(r.getHead()!=null) {
+            this.addAtomPlus(r.getHead());
+            varPositions.put(r.getHead(), SelectionNode.getVarPosition(r.getHead()));
+        }
         
+        for(Atom a: r.getBodyPlus()){
+            this.addAtomPlus(a);
+            this.addAtomMinus(a);
+            varPositions.put(a, SelectionNode.getVarPosition(a));
+        }
+        for(Atom a: r.getBodyMinus()){
+            this.addAtomMinus(a);
+            this.addAtomPlus(a); // We also create apositive SelectionNode for each negative one, since then it is easier to look them up for closed nodes.
+            varPositions.put(a, SelectionNode.getVarPosition(a));
+        }
+        
+        // We clone the different parts of the rules body, so we can change them without changing the rule
+        @SuppressWarnings("unchecked") // AW: workaround for array conversion
+        ArrayList<Atom> atomsPlus = (ArrayList<Atom>) r.getBodyPlus().clone();
+        @SuppressWarnings("unchecked") // AW: workaround for array conversion
+        ArrayList<Atom> atomsMinus = (ArrayList<Atom>) r.getBodyMinus().clone();
+        @SuppressWarnings("unchecked") // AW: workaround for array conversion
+        ArrayList<Operator> operators = (ArrayList<Operator>) r.getOperators().clone();
+        
+        //we choose an atom with which we want to start
+        Atom actual;
+        Node actualNode;
+        if(atomsPlus.isEmpty()){
+            actual = getBestNextAtom(atomsMinus);
+            actualNode = this.rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+        }else{
+            actual = getBestNextAtom(atomsPlus);
+            actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+        }
+        this.VarPosNodes.put(actualNode, varPositions.get(actual));
+        //We cast to selectionNode, since this is always a selection Node
+        ((SelectionNode)actualNode).resetVarPosition(actual);
+
+        //We create variables for the partner, the ChoiceNode and HeadNodeConstraint for this rule
+        Atom partner;
+        ChoiceNode cN = null;
+        //HeadNodeConstraint constraintNode = null; 
+        while(!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()){
+            //While there is still seomthing in the rules body
+            if(!atomsPlus.isEmpty()){
+                //There is still something within the positive body of the rule --> take it --> it's the new partner
+                partner = getBestPartner(atomsPlus, actualNode);
+                //Create a joinNode from the actualNode and the partner
+                //System.out.println("RULE: " + r);
+                if(actualNode.getClass().equals(SelectionNode.class)){
+                    actualNode = this.createJoin(actual, partner, true,varPositions);
+                    System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                }else{
+                    actualNode = this.createJoin(actualNode, partner, true,varPositions);
+                    System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                }
+            }else{
+                if(!atomsMinus.isEmpty()){
+                    //There is still something within the negative body of the rule --> take it --> it's the new partner
+                    partner = getBestPartner(atomsMinus, actualNode);
+                    //Create a joinNode from the actualNode and the partner
+                    //System.out.println("RULE: " + r);
+                    if(actualNode.getClass().equals(SelectionNode.class)){
+                        actualNode = this.createJoinNegative(actual, partner, false,varPositions); // TODO createJoinNegative
+                        System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                    }else{
+                        actualNode = this.createJoinNegative(actualNode, partner, false,varPositions); // TODO createJoinNegative
+                        System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                    }
+                }else{
+                    // Negative Rules do not contain operators. At least for our easy rewriting.
+                }
+            }
+        }
+        //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
+        HeadNode hN = new HeadNodeNegative(r.getHead(),rete, this.VarPosNodes.get(actualNode),actualNode);
+        actualNode.addChild(hN);
     }
     
     /*private void addHeadNode(Predicate p, HeadNode hn){

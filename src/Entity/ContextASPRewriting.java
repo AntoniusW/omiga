@@ -45,7 +45,8 @@ public class ContextASPRewriting extends ContextASP{
     
     public void addNegRule(Rule r){
         this.negRules.add(r);
-        reteBuilder.addNegRule(r);
+        //reteBuilder.addNegRule(r);
+        reteBuilder.addRuleNeg(r);
     }
     
     

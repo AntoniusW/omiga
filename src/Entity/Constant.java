@@ -92,4 +92,9 @@ public class Constant extends Term implements OperandI{
         return this.intValue;
     }
     
+    public boolean fatherOf(Term t){
+        if(t.equals(this)) return true;
+        return false;
+    }
+    
 }

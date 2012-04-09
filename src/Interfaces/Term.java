@@ -101,4 +101,9 @@ public abstract class Term {
         return this.usedVariables;
     }
     
+    
+    public boolean fatherOf(Term t){
+        return true;
+    }
+    
 }
