@@ -120,7 +120,6 @@ public class Rule {
                 }
             }
         }
-        
         // we check for each Operator if it is well defined (all Variables in HS)
         for(Operator op: this.operators){
             for(Variable v: op.getUsedVariables()){
@@ -156,9 +155,6 @@ public class Rule {
                 }
             }
         }
-        
-        // TODO: A Rule is also safe if we have an operator
-        
         return true;
     }
     

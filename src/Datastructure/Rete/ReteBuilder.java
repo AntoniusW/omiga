@@ -247,7 +247,6 @@ public class ReteBuilder {
             actualNode.addChild(cN);
         }
         
-        
         while(!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()){
             //While there is still seomthing in the rules body
             if(!atomsPlus.isEmpty()){
@@ -271,19 +270,29 @@ public class ReteBuilder {
                     actualNode.addChild(cN);
                 }
             }else{
-                if(!atomsMinus.isEmpty()){
-                    //There is still something within the negative body of the rule --> take it --> it's the new partner
-                    partner = getBestPartner(atomsMinus, actualNode);
-                    //Create a joinNode from the actualNode and the partner
-                    //System.out.println("RULE: " + r);
-                    if(actualNode.getClass().equals(SelectionNode.class)){
-                        actualNode = this.createJoinNegative(actual, partner, false,varPositions); // TODO createJoinNegative
-                    }else{
-                        actualNode = this.createJoinNegative(actualNode, partner, false,varPositions); // TODO createJoinNegative
+                if(!operators.isEmpty()){
+                    for(Operator op: operators){
+                        if(op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())){
+                            OperatorNode opN = new OperatorNode(this.rete, op, actualNode);
+                            actualNode.addChild(opN);
+                            actualNode = opN;
+                            this.VarPosNodes.put(opN, opN.getVarPositions());
+                            operators.remove(op);
+                            break;
+                        }
                     }
                 }else{
-                    // TODO: Do this before atomsMinus, and create cN Node here as well!
-                    // Do something cool for operators!
+                    if(!atomsMinus.isEmpty()){
+                        //There is still something within the negative body of the rule --> take it --> it's the new partner
+                        partner = getBestPartner(atomsMinus, actualNode);
+                        //Create a joinNode from the actualNode and the partner
+                        //System.out.println("RULE: " + r);
+                        if(actualNode.getClass().equals(SelectionNode.class)){
+                            actualNode = this.createJoinNegative(actual, partner, false,varPositions); // TODO createJoinNegative
+                        }else{
+                            actualNode = this.createJoinNegative(actualNode, partner, false,varPositions); // TODO createJoinNegative
+                        }
+                    }
                 }
             }
         }
@@ -299,7 +308,6 @@ public class ReteBuilder {
         //if(constraintNode != null) actualNode.addChild(constraintNode);
         //if we did construct a ChoiceNode we add it to the headNode
         if(cN!=null) hN.addChild(cN);
-        
         /*if(cN != null){
             this.addChoiceNode(r.getHead().getPredicate(), cN);
         }*/

@@ -46,11 +46,11 @@ public class main_FINAL {
             System.out.println(s);
         }*/
         
-        filename = "strat10.txt";
+        filename = "OP2.txt";
         rewriting = 1;
         answersets = 50000;
         filter = null;
-        outprint =false;
+        outprint =true;
         
         
         File input = new File(filename);

@@ -79,7 +79,7 @@ public class HeadNode extends Node{
             return;
         }
         //We unify the headAtom of the corresponding rule
-        //System.err.println(this + "Atom: " + a + " - instance: " + instance + "tempVarPos: " + tempVarPosition);
+       //System.err.println(this + "Atom: " + a + " - instance: " + instance + "tempVarPos: " + tempVarPosition);
         Instance instance2Add = Unifyer.unifyAtom(a, instance, tempVarPosition);
         
         /*Term[] headInstance = new Term[a.getArity()];

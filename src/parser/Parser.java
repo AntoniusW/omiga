@@ -65,6 +65,7 @@ public class Parser {
         }catch(IOException e){
             e.printStackTrace();
         }
+        //System.out.println("Finished reading COntext!");
         return null;
     }
     
@@ -75,6 +76,7 @@ public class Parser {
         for(String str: arr){
             if(str.contains(":-")){
                 con.addRule(this.readRule(str));
+                //System.out.println("Rule Added to the context!");
             }else{
                 this.readFact(str,con);
             }
@@ -86,6 +88,7 @@ public class Parser {
     }
     
     public void readFact(String s, ContextASP con) throws FactSizeException{
+        //System.out.println("Read Fact");
         String realString = "";
         s.replace("not ", "!N$T");
         for(int i = 0; i < s.length();i++){
@@ -158,6 +161,7 @@ public class Parser {
     }
     
     public Rule readRule(String s){
+        //System.out.println("Read Rule!");
         Rule r = new Rule();
         String realString = "";
         for(int i = 0; i < s.length();i++){
@@ -187,6 +191,7 @@ public class Parser {
                 
             }
         }
+        //System.out.println("Returning Rule: " + r);
         return r;
     }
     
@@ -230,7 +235,7 @@ public class Parser {
         String funcTermName = "";
         while(c != '('){
             funcTermName = funcTermName + c;
-            System.err.println("i++");
+            //System.err.println("i++");
             i++;
             c = s.charAt(i);
         }
@@ -289,7 +294,7 @@ public class Parser {
             }
             strings.add(temp);
             if(i >= s.length()) break;
-            ops.add(OP.valueOf(s.charAt(i)));
+            ops.add(OP.valueOf(s.charAt(i))); // If we reach this charAt is an Operator
             i++;
         }
         //We now have the hole Operator on the string and ops ArrayList.
@@ -301,6 +306,9 @@ public class Parser {
         }
         OperandI tempOpiLeft = null;
         OP fin = null;
+        /*System.out.println("TEST:");
+        System.out.println("STRINGS: " + strings);
+        System.out.println("OPS: " + ops);*/
         for(int j = 0; j < ops.size();j++){
             if(ops.get(j).equals(OP.PLUS) || ops.get(j).equals(OP.MINUS)){
                 if(Character.isLowerCase(s.charAt(0))){
@@ -317,7 +325,7 @@ public class Parser {
                 }else{
                     tempOpi = Variable.getVariable(strings.get(j+1));
                 }
-                j++;
+                //j++;
             }
         }
         Operator ret;
