@@ -20,7 +20,6 @@ import Entity.Predicate;
 import Entity.Rule;
 import Entity.Variable;
 import Exceptions.FactSizeException;
-import Interfaces.Context;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;

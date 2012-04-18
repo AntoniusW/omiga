@@ -19,7 +19,6 @@ import Entity.Predicate;
 import Entity.Rule;
 import Entity.Variable;
 import Exceptions.FactSizeException;
-import Interfaces.Context;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +73,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         this.choiceNodesDecisionLayer.add(new HashMap<ChoiceNode,HashSet<Instance>>());
     }
     
-    private void closeActualSCC(){
+    protected void closeActualSCC(){
         c.getRete().propagate();
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)) {

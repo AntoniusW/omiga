@@ -4,6 +4,7 @@
  */
 package Datastructure.choice;
 
+import Datastructure.Rete.BasicNode;
 import Datastructure.Rete.ChoiceNode;
 import Datastructure.Rete.Node;
 import Datastructure.Rete.Rete;
@@ -135,6 +136,29 @@ public class DecisionMemory {
      */
     public int getDecisonLevel(){
         return this.decisionLevel;
+    }
+    
+    /**
+     * 
+     * @param lvl the Decisionlevel from which on you want all added facts
+     * @return A HashMap of Predicates with corrsponding instances
+     */
+    public HashMap<Predicate, HashSet<Instance>> deriveNewFactsSindsDecisionLevel(int lvl){
+        HashMap<Predicate, HashSet<Instance>> ret = new HashMap<Predicate, HashSet<Instance>>();
+        
+        for(int i = lvl; i < this.decisionLayer.size();i++){
+            for(Node n: this.decisionLayer.get(i).keySet()){
+                if(n.getClass().equals(BasicNode.class)){
+                    BasicNode bn = (BasicNode)n;
+                    if(!ret.containsKey(bn.getPred())){
+                        ret.put(bn.getPred(), new HashSet<Instance>());
+                    }
+                    ret.get(bn.getPred()).addAll(this.decisionLayer.get(i).get(bn));
+                }
+            }
+        }
+        
+        return ret;
     }
     
 }

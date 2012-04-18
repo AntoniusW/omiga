@@ -38,7 +38,7 @@ import java.util.ArrayList;
  * This class is not documented since my hard core java parser gets only discriminated anyway!
  * 
  */
-public class ParserRewrite extends Parser{
+public class ParserMCSRewrite extends Parser{
     
     // TODO: 
     // Operators

@@ -46,11 +46,11 @@ public class main_FINAL {
             System.out.println(s);
         }*/
         
-        filename = "OP2.txt";
+        filename = "Xir2.txt";
         rewriting = 1;
         answersets = 50000;
         filter = null;
-        outprint =true;
+        outprint =false;
         
         
         File input = new File(filename);

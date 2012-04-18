@@ -172,4 +172,12 @@ public class BasicNode extends Node{
         this.toPropagate.clear();
     }
     
+    /**
+     * 
+     * @return the corresponding predicate of this basic Node
+     */
+    public Predicate getPred(){
+        return this.pred;
+    }
+    
 }

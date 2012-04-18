@@ -19,7 +19,6 @@ import Entity.Predicate;
 import Entity.Rule;
 import Entity.Variable;
 import Exceptions.FactSizeException;
-import Interfaces.Context;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -522,6 +521,19 @@ public class ChoiceUnit {
     
     public DecisionMemory getMemory(){
         return this.memory;
+    }
+    
+    /**
+     * used for the MCS calculation. returns wether there is a next alternative to the actual guess
+     * @return 
+     */
+    public boolean nextAlternative(){
+        if(this.nextNode != null) return true;
+        return false;
+    }
+    
+    public HashMap<Predicate, HashSet<Instance>> deriveNewFactsSindsDecisionLevel(int lvl){
+        return this.memory.deriveNewFactsSindsDecisionLevel(lvl);
     }
 
     
