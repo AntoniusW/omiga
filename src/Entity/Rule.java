@@ -124,7 +124,7 @@ public class Rule {
         for(Operator op: this.operators){
             for(Variable v: op.getUsedVariables()){
                 if(!hs.contains(v)) {
-                    System.err.println("Operator not Safe: " + op);
+                    System.err.println("Operator not Safe: " + op + " because of: " + v);
                     return false;
                 }
             }

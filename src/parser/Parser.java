@@ -280,14 +280,15 @@ public class Parser {
     }
     
     public int readOperator(String s, Rule r){
-        //System.out.println("READING OPERATOR!: " + s);
+        System.out.println("READING OPERATOR!: " + s);
+        s = s.split(",")[0];
         ArrayList<String> strings = new ArrayList<String>();
         ArrayList<OP> ops = new ArrayList<OP>();
         int i = 0;
         String temp;
         while(i < s.length() && s.charAt(i) !=',' && s.charAt(i) !='.'){
             temp = "";
-            while(i < s.length() && !isOperator(s.charAt(i)) && s.charAt(i) != '.'){
+            while(i < s.length() && !isOperator(s.charAt(i)) && s.charAt(i) != '.' && s.charAt(i) != ','){
                 //System.out.println(s.charAt(i));
                 temp = temp + s.charAt(i);
                 i++;
@@ -311,19 +312,20 @@ public class Parser {
         System.out.println("OPS: " + ops);*/
         for(int j = 0; j < ops.size();j++){
             if(ops.get(j).equals(OP.PLUS) || ops.get(j).equals(OP.MINUS)){
-                if(Character.isLowerCase(s.charAt(0))){
-                    tempOpi = new Operator(tempOpi, Constant.getConstant(strings.get(j+1)), ops.get(j));
-                }else{
-                    //System.out.println(strings.get(j+1));
+                //if(Character.isUpperCase(s.charAt(0))){
+                if(Character.isUpperCase(strings.get(j+1).charAt(0))){
                     tempOpi = new Operator(tempOpi, Variable.getVariable(strings.get(j+1)), ops.get(j));
+                }else{
+                    tempOpi = new Operator(tempOpi, Constant.getConstant(strings.get(j+1)), ops.get(j));
                 }
             }else{
                 tempOpiLeft = tempOpi;
                 fin = ops.get(j);
-                if(Character.isLowerCase(s.charAt(0))){
-                    tempOpi = Constant.getConstant(strings.get(j+1));
-                }else{
+                //if(Character.isUpperCase(s.charAt(0))){
+                if(Character.isUpperCase(strings.get(j).charAt(0))){
                     tempOpi = Variable.getVariable(strings.get(j+1));
+                }else{
+                    tempOpi = Constant.getConstant(strings.get(j+1));
                 }
                 //j++;
             }

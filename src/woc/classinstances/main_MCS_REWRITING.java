@@ -40,7 +40,7 @@ public class main_MCS_REWRITING {
     public static void main(String arg[]){
         System.out.println("STARTING THE PROGRAM: " + System.currentTimeMillis());
         //File input = new File("Z:\\DLV\\3col.txt");
-        File input = new File("Xir2.txt");
+        File input = new File("Z.txt");
         //File input = new File("3Col\\3Col6AS.txt");
         
         ParserMCSRewrite pars = new ParserMCSRewrite();
