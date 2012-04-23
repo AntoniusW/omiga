@@ -87,8 +87,11 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
     
     protected void openActualSCC(){
         this.actualSCC--;
+        System.out.println("c=" + c);
         for(Predicate p: SCCPreds.get(actualSCC)){
-           if(c.getRete().containsPredicate(p, false)) c.getRete().getBasicNodeMinus(p).unclose();
+           if(c.getRete().containsPredicate(p, false)){
+               c.getRete().getBasicNodeMinus(p).unclose();
+           }
         }
         this.closedAt.pop();
     }
@@ -102,6 +105,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
     int i = 0; //TODO: Remove this counter
     @Override
     public boolean choice(){
+        //System.out.println("CHOICE IS CALLED! : ChoiceUNIT REWRITE");
         //System.out.println(this.choiceNodes);
         /*System.out.println("CHOICE IS CALLED!");
         System.out.println(this.choiceNodes);

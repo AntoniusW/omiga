@@ -7,6 +7,7 @@ package woc.classinstances;
 import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.Rete;
 import Datastructure.Rewriting.Rewriter_easy;
+import Datastructure.Rewriting.Rewriter_easyMCS;
 import Entity.ContextASP;
 import Entity.ContextASPMCS;
 import Entity.ContextASPMCSRewriting;
@@ -40,14 +41,15 @@ public class main_MCS_REWRITING {
     public static void main(String arg[]){
         System.out.println("STARTING THE PROGRAM: " + System.currentTimeMillis());
         //File input = new File("Z:\\DLV\\3col.txt");
-        File input = new File("Z.txt");
+        File input = new File("MCS1.txt");
         //File input = new File("3Col\\3Col6AS.txt");
         
         ParserMCSRewrite pars = new ParserMCSRewrite();
         try {
             ContextASP c = pars.readContext(input);
-            Rewriter_easy rewriter = new Rewriter_easy();
+            Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
             c = rewriter.rewrite(c);
+            ((ContextASPMCSRewriting) c).registerFactFromOutside(Predicate.getPredicate("s", 1));
             c.printContext();
             
             Manager m = new Manager(c);

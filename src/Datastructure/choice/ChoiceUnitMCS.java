@@ -44,8 +44,7 @@ public class ChoiceUnitMCS extends ChoiceUnit{
         this.choiceNodesDecisionLayer.add(new HashMap<ChoiceNode,HashSet<Instance>>());
     }
     
-
-    private boolean closeActualSCC(){
+    protected boolean closeActualSCCWithReturnValue(){
         c.getRete().propagate();
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)) {
@@ -71,7 +70,7 @@ public class ChoiceUnitMCS extends ChoiceUnit{
      */
     int i = 0; //TODO: Remove this counter
     public boolean choice(){
-        //System.out.println("CHOICE IS CALLED!");
+        //System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS");
         //System.out.println("Choice is called!");
         //TODO: replace foreach loops with iterator loops.
         i++;
@@ -149,7 +148,7 @@ public class ChoiceUnitMCS extends ChoiceUnit{
     
     private boolean closeProcedure(){
         boolean flag = false;
-        while(this.SCCSize.get(actualSCC) <= 1 && this.closeActualSCC()){
+        while(this.SCCSize.get(actualSCC) <= 1 && this.closeActualSCCWithReturnValue()){
             flag = true;
         }
         return flag;

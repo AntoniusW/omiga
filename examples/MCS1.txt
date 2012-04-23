@@ -1,0 +1,9 @@
+q(X,Y) :- s(X), s(Y), not p(X,Y).
+p(X,Y) :- s(X), s(Y), not q(X,Y).
+q(X,Y) :- t(X), t(Y), not p(X,Y).
+p(X,Y) :- t(X), t(Y), not q(X,Y).
+s(X) :- o(X), not t(X).
+t(X) :- o(X), not s(X).
+o(1).
+o(2).
+o(3).

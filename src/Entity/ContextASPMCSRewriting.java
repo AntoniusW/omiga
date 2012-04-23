@@ -8,6 +8,7 @@ import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
 import Datastructure.choice.ChoiceUnit;
 import Datastructure.choice.ChoiceUnitMCS;
+import Datastructure.choice.ChoiceUnitMCSRewrite;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.ContextMCSInterface;
@@ -37,7 +38,15 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      * initializes the data structures for rules, facts and rete.
      */
     public ContextASPMCSRewriting(){
-        super();
+        //super();
+        rules = new ArrayList<Rule>();
+        factsIN = new HashMap<Predicate, ArrayList<Instance>>();
+        factsOUT = new HashMap<Predicate, ArrayList<Instance>>();
+        this.choiceUnit = new ChoiceUnitMCSRewrite(this);
+        this.rete = new Rete(choiceUnit);
+        this.reteBuilder = new ReteBuilder(rete);
+        this.id=getNextID();
+        negRules = new ArrayList<Rule>();
         this.fromOutside = new HashMap<Predicate,Boolean>();
     }
     

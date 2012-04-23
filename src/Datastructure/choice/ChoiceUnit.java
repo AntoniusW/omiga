@@ -90,7 +90,7 @@ public class ChoiceUnit {
         this.choiceNodesDecisionLayer.add(new HashMap<ChoiceNode,HashSet<Instance>>());
     }
     
-    private void closeActualSCC(){
+    protected void closeActualSCC(){
         c.getRete().propagate();
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)) {

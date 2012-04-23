@@ -25,7 +25,7 @@ import java.util.HashMap;
  */
 public class ContextASPRewriting extends ContextASP{
     
-    private ArrayList<Rule> negRules;
+    protected ArrayList<Rule> negRules;
     
     /**
      * public constructor
