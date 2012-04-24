@@ -12,9 +12,12 @@ public enum OP {
     PLUS,
     MINUS,
     EQUAL,
+    ASSIGN,
     NOTEQUAL,
     BIGGER,
-    SMALLER;
+    SMALLER,
+    TIMES,
+    DIVIDE;
     
     public static OP valueOf(char c){
         switch(c){
@@ -36,6 +39,9 @@ public enum OP {
             case NOTEQUAL: return "~";
             case BIGGER: return ">";
             case SMALLER: return "<";
+            case ASSIGN: return "is";
+            case TIMES: return "*";
+            case DIVIDE: return "/";
             default: return null;
         }
     }
