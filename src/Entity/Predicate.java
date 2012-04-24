@@ -19,7 +19,7 @@ import java.util.HashMap;
  * @param arity the arity of the predicate
  * @param hash the hashvalue of this predicate
  * 
- * @param predicates Factory pattern: A datastrucutre to store all created predicates so we later on use only one instance for each predicate
+ * @param predicates Factory pattern: A datastructure to store all created predicates so we later on use only one instance for each predicate
  * 
  */
 public class Predicate {
@@ -33,7 +33,7 @@ public class Predicate {
     
     /**
      * if you want to generate a predicate use this method, since the constructor is private in order to prevent generation of
-     * double predicate instances. This method is ment to be called while reading the context and creating it's rules.
+     * double predicate instances. This method is meant to be called while reading the context and creating it's rules.
      * 
      * @param name name of the predicate
      * @param arity arity of the predicate
