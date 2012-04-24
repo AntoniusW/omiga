@@ -66,13 +66,22 @@ public class main_FINAL {
             CommonTokenStream tokens = new CommonTokenStream(lex);
             wocParser parser = new wocParser(tokens);
             
+            // create context
+            ContextASP ctx = new ContextASPRewriting();
+            parser.setContext(ctx);
+            
             try {
-                // parse input
-                parser.woc_program();
+                try {
+                    // parse input
+                    parser.woc_program();
+                    
+                    ctx.printContext();
+                } catch (RuleNotSafeException ex) {
+                    Logger.getLogger(main_FINAL.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (FactSizeException ex) {
+                    Logger.getLogger(main_FINAL.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
-                // parsed rules and facts are stored in parser.asp_rules and parser.asp_facts
-                ArrayList<ParserRule> rules = parser.asp_rules;
-                ArrayList<ParserAtom> atoms = parser.asp_facts;
                 
             } catch (RecognitionException ex) {
                 Logger.getLogger(main_FINAL.class.getName()).log(Level.SEVERE, null, ex);

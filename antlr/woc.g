@@ -4,6 +4,10 @@ grammar woc;
 package parser.antlr;
 
 import java.util.ArrayList;
+
+import Entity.*;
+import Interfaces.Term;
+import Exceptions.*;
 }
 
 @lexer::header{
@@ -104,29 +108,38 @@ public class ParserRule{
 public ArrayList<ParserRule> asp_rules;
 public ArrayList<ParserAtom> asp_facts;
 
+private ContextASP context;
+
+public void setContext(ContextASP context) {
+	this.context=context;
+}
 
 }
 
-woc_program
+woc_program throws RuleNotSafeException, FactSizeException
 @init{
 asp_rules = new ArrayList<ParserRule>();
 asp_facts = new ArrayList<ParserAtom>(); }
 	:	rule_or_fact*
 	;
 	
-rule_or_fact
-	:	atom (':-' {ParserRule r = new ParserRule();} body[r] '.' {r.head=$atom.at; asp_rules.add(r);}
-	|	'.' {asp_facts.add($atom.at);})
+rule_or_fact throws RuleNotSafeException, FactSizeException
+@init{ Atom head=null; }
+	:	atom? {head=$atom.at;}
+		(':-' {Rule r = new Rule();} body[r] '.' {if(head != null) r.setHead(head); context.addRule(r);}
+	|	'.' {	// TODO: throw better exception if there is no head, currently throws NullPointerException
+			context.addFact2IN($atom.at.getPredicate(),Instance.getInstance($atom.at.getTerms()));})
 	;
 	
-body[ParserRule r]
+body[Rule r]
 	:	literal[$r] (',' literal[$r])*
 	;
 	
-literal[ParserRule r]
-	:	a1=atom {$r.posAtoms.add($a1.at);}
-	|	'not' a2=atom {$r.negAtoms.add($a2.at);}
-	|	operation {$r.operations.add($operation.op);}
+literal[Rule r]
+	:	a1=atom {$r.addAtomPlus($a1.at);}
+	|	'not' a2=atom {$r.addAtomMinus($a2.at);}
+	|	operation {//$r.operations.add($operation.op); TODO
+			}
 	;
 	
 operation returns[ParserOperation op]
@@ -152,30 +165,33 @@ primary_expression returns[ParserOperation op]
 	|	'(' expression ')' {$op=$expression.op;}
 	;
 	
-atom	returns[ParserAtom at]
-@init{ $at = new ParserAtom(); }
-	:	(ctx=ID ':' {$at.context_id=$ctx.text;})?	// parsing atoms with context identifier
-		name=ID {$at.name=$name.text;} ( '(' termlist ')' {$at.termlist=$termlist.termlist;})?
+atom	returns[Atom at]
+@init{ String context_id=null; String atom_name; Term[] terms = new Term[0];}
+	:	(ctx=ID ':' {context_id=$ctx.text;})?	// parsing atoms with context identifier
+		name=ID {atom_name=$name.text;}
+		( '(' termlist ')' {terms=(Term[])$termlist.termlist.toArray(new Term[$termlist.termlist.size()]);})?
+		{$at=Atom.getAtom(atom_name, terms.length, terms);}
 	;
 	
-termlist returns[ArrayList<ParserTerm> termlist]
-@init{ $termlist = new ArrayList<ParserTerm>();}
+termlist returns[ArrayList<Term> termlist]
+@init{ $termlist = new ArrayList<Term>();}
 	:	t1=term {$termlist.add($t1.term);}
 		(',' tn=term {$termlist.add($tn.term);})*
 	;
 	
-term	returns[ParserTerm term]
-	:	constant {term=new ParserConstant($constant.text,true);}
-	|	VAR {term=new ParserVariable($VAR.text);}
-	|	function {term=$function.func;}
+term	returns[Term term]
+	:	constant {$term=$constant.constnt;}
+	|	VAR {$term=Variable.getVariable($VAR.text);}
+	|	function {$term=FuncTerm.getFuncTerm($function.name,$function.terms);}
 	;
 	
-function returns[ParserFunction func]
-	:	ID '(' termlist ')' {func=new ParserFunction($ID.text,false,$termlist.termlist.size(),$termlist.termlist);}
+function returns[String name, ArrayList<Term> terms]
+	:	ID '(' termlist ')' {$name=$ID.text; $terms=$termlist.termlist;}
 	;
 	
-constant:	ID
-	|	INT
+constant returns[Constant constnt]
+	:	ID {$constnt=Constant.getConstant($ID.text);}
+	|	INT {$constnt=Constant.getConstant($INT.text);}
 	;
 	
 
