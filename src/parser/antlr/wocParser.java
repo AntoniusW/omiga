@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-04-24 05:12:43
+// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-04-25 02:27:00
 
 package parser.antlr;
 
@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import Entity.*;
 import Interfaces.Term;
+import Interfaces.OperandI;
+import Enumeration.OP;
 import Exceptions.*;
 
 
@@ -17,10 +19,11 @@ import java.util.ArrayList;
 @SuppressWarnings({"all", "warnings", "unchecked"})
 public class wocParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "CHAR", "COMMENT", "COMP", "ESC_SEQ", "EXPONENT", "HEX_DIGIT", "ID", "INT", "OCTAL_ESC", "STRING", "UNICODE_ESC", "VAR", "WS", "'('", "')'", "'*'", "'+'", "','", "'-'", "'.'", "'/'", "':'", "':-'", "'is'", "'not'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "CHAR", "COMMENT", "ESC_SEQ", "EXPONENT", "HEX_DIGIT", "ID", "INT", "OCTAL_ESC", "STRING", "UNICODE_ESC", "VAR", "WS", "'!='", "'('", "')'", "'*'", "'+'", "','", "'-'", "'.'", "'/'", "':'", "':-'", "'<'", "'<='", "'='", "'=>'", "'>'", "'is'", "'not'"
     };
 
     public static final int EOF=-1;
+    public static final int T__16=16;
     public static final int T__17=17;
     public static final int T__18=18;
     public static final int T__19=19;
@@ -33,19 +36,23 @@ public class wocParser extends Parser {
     public static final int T__26=26;
     public static final int T__27=27;
     public static final int T__28=28;
+    public static final int T__29=29;
+    public static final int T__30=30;
+    public static final int T__31=31;
+    public static final int T__32=32;
+    public static final int T__33=33;
     public static final int CHAR=4;
     public static final int COMMENT=5;
-    public static final int COMP=6;
-    public static final int ESC_SEQ=7;
-    public static final int EXPONENT=8;
-    public static final int HEX_DIGIT=9;
-    public static final int ID=10;
-    public static final int INT=11;
-    public static final int OCTAL_ESC=12;
-    public static final int STRING=13;
-    public static final int UNICODE_ESC=14;
-    public static final int VAR=15;
-    public static final int WS=16;
+    public static final int ESC_SEQ=6;
+    public static final int EXPONENT=7;
+    public static final int HEX_DIGIT=8;
+    public static final int ID=9;
+    public static final int INT=10;
+    public static final int OCTAL_ESC=11;
+    public static final int STRING=12;
+    public static final int UNICODE_ESC=13;
+    public static final int VAR=14;
+    public static final int WS=15;
 
     // delegates
     public Parser[] getDelegates() {
@@ -66,99 +73,6 @@ public class wocParser extends Parser {
     public String getGrammarFileName() { return "/home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g"; }
 
 
-
-    public class ParserTerm{
-    	public ParserTerm(String name, boolean isGround) {
-    		this.name=name;
-    		this.isGround=isGround;
-    	}
-    	public boolean isGround;
-    	public String name;
-    }
-    public class ParserFunction extends ParserTerm {
-    	public ParserFunction(String name, boolean isGround, int arity, ArrayList<ParserTerm> termlist) {
-    		super(name,isGround);
-    		this.arity=arity;
-    		this.termlist=termlist;
-    	}
-    	public int arity;
-    	public ArrayList<ParserTerm> termlist; 
-    }
-    public class ParserConstant extends ParserTerm {
-    	public ParserConstant(String name, boolean isGround) {
-    		super(name,isGround);
-    	}
-    }
-    public class ParserVariable extends ParserTerm {
-    	public ParserVariable(String name) {
-    		super(name,false);
-    	}
-    }
-    	
-    public class ParserOperation {}
-
-    public class ParserAssign extends ParserOperation {
-    	public ParserAssign(OpVar var, ParserOperation val) {
-    		this.var=var;
-    		this.val=val;
-    	}
-    	OpVar var;
-    	ParserOperation val;
-    }
-
-    public class ParserComparison extends ParserOperation {
-    	public ParserComparison(OpVar var, ParserOperation val) {
-    		this.var=var;
-    		this.val=val;
-    	}
-    	OpVar var;
-    	ParserOperation val;
-    }
-
-    public class BinOp extends ParserOperation {
-    	ParserOperation left;
-    	ParserOperation right;
-    }
-    public class OpPlus extends BinOp { }
-    public class OpMinus extends BinOp { }
-    public class OpMult extends BinOp { }
-    public class OpDiv extends BinOp { }
-    public class OpInt extends ParserOperation {
-    	public OpInt(String value) {
-    		this.value=Integer.parseInt(value);
-    	}
-    	public int value;
-    }
-    public class OpVar extends ParserOperation {
-    	public OpVar(String name) {
-    		var = new ParserVariable(name);
-    	}
-    	public ParserVariable var;
-    }
-
-    	
-    public class ParserAtom{
-    	public String name;
-    	public int arity;
-    	public String context_id;
-    	public ArrayList<ParserTerm> termlist;
-    }
-    	
-    public class ParserRule{
-    	public ParserRule() {
-    		posAtoms=new ArrayList<ParserAtom>();
-    		negAtoms=new ArrayList<ParserAtom>();
-    		operations=new ArrayList<ParserOperation>();
-    	}
-    	public ParserAtom head;
-    	public ArrayList<ParserAtom> posAtoms;
-    	public ArrayList<ParserAtom> negAtoms;
-    	public ArrayList<ParserOperation> operations;
-    }
-    	
-    public ArrayList<ParserRule> asp_rules;
-    public ArrayList<ParserAtom> asp_facts;
-
     private ContextASP context;
 
     public void setContext(ContextASP context) {
@@ -169,16 +83,13 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "woc_program"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:119:1: woc_program : ( rule_or_fact )* ;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:29:1: woc_program : ( rule_or_fact )* ;
     public final void woc_program() throws RuleNotSafeException, RecognitionException, FactSizeException {
-
-        asp_rules = new ArrayList<ParserRule>();
-        asp_facts = new ArrayList<ParserAtom>(); 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:2: ( ( rule_or_fact )* )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:4: ( rule_or_fact )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:2: ( ( rule_or_fact )* )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:4: ( rule_or_fact )*
             {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:4: ( rule_or_fact )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:4: ( rule_or_fact )*
             loop1:
             do {
                 int alt1=2;
@@ -191,9 +102,9 @@ public class wocParser extends Parser {
 
                 switch (alt1) {
             	case 1 :
-            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:4: rule_or_fact
+            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:4: rule_or_fact
             	    {
-            	    pushFollow(FOLLOW_rule_or_fact_in_woc_program40);
+            	    pushFollow(FOLLOW_rule_or_fact_in_woc_program36);
             	    rule_or_fact();
 
             	    state._fsp--;
@@ -226,17 +137,17 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "rule_or_fact"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:126:1: rule_or_fact : ( atom )? ( ':-' body[r] '.' | '.' ) ;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:33:1: rule_or_fact : ( atom )? ( ':-' body[r] '.' | '.' ) ;
     public final void rule_or_fact() throws RuleNotSafeException, RecognitionException, FactSizeException {
         Atom atom1 =null;
 
 
          Atom head=null; 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:128:2: ( ( atom )? ( ':-' body[r] '.' | '.' ) )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:128:4: ( atom )? ( ':-' body[r] '.' | '.' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:2: ( ( atom )? ( ':-' body[r] '.' | '.' ) )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:4: ( atom )? ( ':-' body[r] '.' | '.' )
             {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:128:4: ( atom )?
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:4: ( atom )?
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -245,9 +156,9 @@ public class wocParser extends Parser {
             }
             switch (alt2) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:128:4: atom
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:4: atom
                     {
-                    pushFollow(FOLLOW_atom_in_rule_or_fact64);
+                    pushFollow(FOLLOW_atom_in_rule_or_fact60);
                     atom1=atom();
 
                     state._fsp--;
@@ -261,7 +172,7 @@ public class wocParser extends Parser {
 
             head=atom1;
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:129:3: ( ':-' body[r] '.' | '.' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:36:3: ( ':-' body[r] '.' | '.' )
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -280,28 +191,28 @@ public class wocParser extends Parser {
             }
             switch (alt3) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:129:4: ':-' body[r] '.'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:36:4: ':-' body[r] '.'
                     {
-                    match(input,26,FOLLOW_26_in_rule_or_fact72); 
+                    match(input,26,FOLLOW_26_in_rule_or_fact68); 
 
                     Rule r = new Rule();
 
-                    pushFollow(FOLLOW_body_in_rule_or_fact76);
+                    pushFollow(FOLLOW_body_in_rule_or_fact72);
                     body(r);
 
                     state._fsp--;
 
 
-                    match(input,23,FOLLOW_23_in_rule_or_fact79); 
+                    match(input,23,FOLLOW_23_in_rule_or_fact75); 
 
                     if(head != null) r.setHead(head); context.addRule(r);
 
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:130:4: '.'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:4: '.'
                     {
-                    match(input,23,FOLLOW_23_in_rule_or_fact86); 
+                    match(input,23,FOLLOW_23_in_rule_or_fact82); 
 
                     	// TODO: throw better exception if there is no head, currently throws NullPointerException
                     			context.addFact2IN(atom1.getPredicate(),Instance.getInstance(atom1.getTerms()));
@@ -330,19 +241,19 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "body"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:134:1: body[Rule r] : literal[$r] ( ',' literal[$r] )* ;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:41:1: body[Rule r] : literal[$r] ( ',' literal[$r] )* ;
     public final void body(Rule r) throws RecognitionException {
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:135:2: ( literal[$r] ( ',' literal[$r] )* )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:135:4: literal[$r] ( ',' literal[$r] )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:2: ( literal[$r] ( ',' literal[$r] )* )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:4: literal[$r] ( ',' literal[$r] )*
             {
-            pushFollow(FOLLOW_literal_in_body102);
+            pushFollow(FOLLOW_literal_in_body98);
             literal(r);
 
             state._fsp--;
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:135:16: ( ',' literal[$r] )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:16: ( ',' literal[$r] )*
             loop4:
             do {
                 int alt4=2;
@@ -355,11 +266,11 @@ public class wocParser extends Parser {
 
                 switch (alt4) {
             	case 1 :
-            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:135:17: ',' literal[$r]
+            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:17: ',' literal[$r]
             	    {
-            	    match(input,21,FOLLOW_21_in_body106); 
+            	    match(input,21,FOLLOW_21_in_body102); 
 
-            	    pushFollow(FOLLOW_literal_in_body108);
+            	    pushFollow(FOLLOW_literal_in_body104);
             	    literal(r);
 
             	    state._fsp--;
@@ -392,17 +303,17 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "literal"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:138:1: literal[Rule r] : (a1= atom | 'not' a2= atom | operation );
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:45:1: literal[Rule r] : (a1= atom | 'not' a2= atom | operation );
     public final void literal(Rule r) throws RecognitionException {
         Atom a1 =null;
 
         Atom a2 =null;
 
-        ParserOperation operation2 =null;
+        Operator operation2 =null;
 
 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:139:2: (a1= atom | 'not' a2= atom | operation )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:46:2: (a1= atom | 'not' a2= atom | operation )
             int alt5=3;
             switch ( input.LA(1) ) {
             case ID:
@@ -410,7 +321,7 @@ public class wocParser extends Parser {
                 alt5=1;
                 }
                 break;
-            case 28:
+            case 33:
                 {
                 alt5=2;
                 }
@@ -430,9 +341,9 @@ public class wocParser extends Parser {
 
             switch (alt5) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:139:4: a1= atom
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:46:4: a1= atom
                     {
-                    pushFollow(FOLLOW_atom_in_literal126);
+                    pushFollow(FOLLOW_atom_in_literal122);
                     a1=atom();
 
                     state._fsp--;
@@ -443,11 +354,11 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:140:4: 'not' a2= atom
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:47:4: 'not' a2= atom
                     {
-                    match(input,28,FOLLOW_28_in_literal133); 
+                    match(input,33,FOLLOW_33_in_literal129); 
 
-                    pushFollow(FOLLOW_atom_in_literal137);
+                    pushFollow(FOLLOW_atom_in_literal133);
                     a2=atom();
 
                     state._fsp--;
@@ -458,16 +369,15 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:141:4: operation
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:48:4: operation
                     {
-                    pushFollow(FOLLOW_operation_in_literal144);
+                    pushFollow(FOLLOW_operation_in_literal140);
                     operation2=operation();
 
                     state._fsp--;
 
 
-                    //r.operations.add(operation2); TODO
-                    			
+                     r.addOperator(operation2); 
 
                     }
                     break;
@@ -489,31 +399,33 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "operation"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:145:1: operation returns [ParserOperation op] : (v1= VAR COMP e1= expression |v2= VAR 'is' e2= expression );
-    public final ParserOperation operation() throws RecognitionException {
-        ParserOperation op = null;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:51:1: operation returns [Operator op] : (v1= VAR comp_sym e1= expression |v2= VAR 'is' e2= expression );
+    public final Operator operation() throws RecognitionException {
+        Operator op = null;
 
 
         Token v1=null;
         Token v2=null;
-        ParserOperation e1 =null;
+        OperandI e1 =null;
 
-        ParserOperation e2 =null;
+        OperandI e2 =null;
+
+        OP comp_sym3 =null;
 
 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:146:2: (v1= VAR COMP e1= expression |v2= VAR 'is' e2= expression )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:52:2: (v1= VAR comp_sym e1= expression |v2= VAR 'is' e2= expression )
             int alt6=2;
             int LA6_0 = input.LA(1);
 
             if ( (LA6_0==VAR) ) {
                 int LA6_1 = input.LA(2);
 
-                if ( (LA6_1==COMP) ) {
-                    alt6=1;
-                }
-                else if ( (LA6_1==27) ) {
+                if ( (LA6_1==32) ) {
                     alt6=2;
+                }
+                else if ( (LA6_1==16||(LA6_1 >= 27 && LA6_1 <= 31)) ) {
+                    alt6=1;
                 }
                 else {
                     NoViableAltException nvae =
@@ -532,36 +444,40 @@ public class wocParser extends Parser {
             }
             switch (alt6) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:146:4: v1= VAR COMP e1= expression
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:52:4: v1= VAR comp_sym e1= expression
                     {
-                    v1=(Token)match(input,VAR,FOLLOW_VAR_in_operation163); 
+                    v1=(Token)match(input,VAR,FOLLOW_VAR_in_operation159); 
 
-                    match(input,COMP,FOLLOW_COMP_in_operation165); 
+                    pushFollow(FOLLOW_comp_sym_in_operation161);
+                    comp_sym3=comp_sym();
 
-                    pushFollow(FOLLOW_expression_in_operation169);
+                    state._fsp--;
+
+
+                    pushFollow(FOLLOW_expression_in_operation165);
                     e1=expression();
 
                     state._fsp--;
 
 
-                    op =new ParserComparison(new OpVar((v1!=null?v1.getText():null)),e1);
+                    op =new Operator(Variable.getVariable((v1!=null?v1.getText():null)),e1,comp_sym3);
 
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:147:4: v2= VAR 'is' e2= expression
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:53:4: v2= VAR 'is' e2= expression
                     {
-                    v2=(Token)match(input,VAR,FOLLOW_VAR_in_operation178); 
+                    v2=(Token)match(input,VAR,FOLLOW_VAR_in_operation174); 
 
-                    match(input,27,FOLLOW_27_in_operation180); 
+                    match(input,32,FOLLOW_32_in_operation176); 
 
-                    pushFollow(FOLLOW_expression_in_operation184);
+                    pushFollow(FOLLOW_expression_in_operation180);
                     e2=expression();
 
                     state._fsp--;
 
 
-                    op =new ParserAssign(new OpVar((v2!=null?v2.getText():null)),e2);
+                    op =new Operator(Variable.getVariable((v2!=null?v2.getText():null)),e2,OP.ASSIGN);
 
                     }
                     break;
@@ -583,19 +499,20 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "expression"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:150:1: expression returns [ParserOperation op] : l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) ;
-    public final ParserOperation expression() throws RecognitionException {
-        ParserOperation op = null;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:56:1: expression returns [OperandI op] : l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) ;
+    public final OperandI expression() throws RecognitionException {
+        OperandI op = null;
 
 
-        ParserOperation l =null;
+        OperandI l =null;
 
-        ParserOperation r =null;
+        OperandI r =null;
 
 
+         OP openu=null; 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:2: (l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:4: l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |)
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:2: (l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:4: l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |)
             {
             pushFollow(FOLLOW_mult_expression_in_expression203);
             l=mult_expression();
@@ -603,7 +520,7 @@ public class wocParser extends Parser {
             state._fsp--;
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:22: ( ( ( '+' | '-' ) r= mult_expression ) |)
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:22: ( ( ( '+' | '-' ) r= mult_expression ) |)
             int alt8=2;
             int LA8_0 = input.LA(1);
 
@@ -622,12 +539,12 @@ public class wocParser extends Parser {
             }
             switch (alt8) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:23: ( ( '+' | '-' ) r= mult_expression )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:23: ( ( '+' | '-' ) r= mult_expression )
                     {
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:23: ( ( '+' | '-' ) r= mult_expression )
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:24: ( '+' | '-' ) r= mult_expression
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:23: ( ( '+' | '-' ) r= mult_expression )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:24: ( '+' | '-' ) r= mult_expression
                     {
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:24: ( '+' | '-' )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:24: ( '+' | '-' )
                     int alt7=2;
                     int LA7_0 = input.LA(1);
 
@@ -646,20 +563,20 @@ public class wocParser extends Parser {
                     }
                     switch (alt7) {
                         case 1 :
-                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:25: '+'
+                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:25: '+'
                             {
                             match(input,20,FOLLOW_20_in_expression208); 
 
-                            op =new OpPlus();
+                            openu=OP.valueOf("+");
 
                             }
                             break;
                         case 2 :
-                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:151:50: '-'
+                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:55: '-'
                             {
                             match(input,22,FOLLOW_22_in_expression213); 
 
-                            op =new OpMinus();
+                            openu=OP.valueOf("-");
 
                             }
                             break;
@@ -673,7 +590,7 @@ public class wocParser extends Parser {
                     state._fsp--;
 
 
-                     ((BinOp)op).left=l; ((BinOp)op).right=r; 
+                     op =new Operator(l,r,openu); 
 
                     }
 
@@ -681,7 +598,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:153:4: 
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:60:4: 
                     {
                     op =l;
 
@@ -709,27 +626,28 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "mult_expression"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:156:1: mult_expression returns [ParserOperation op] : l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) ;
-    public final ParserOperation mult_expression() throws RecognitionException {
-        ParserOperation op = null;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:63:1: mult_expression returns [OperandI op] : l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) ;
+    public final OperandI mult_expression() throws RecognitionException {
+        OperandI op = null;
 
 
-        ParserOperation l =null;
+        OperandI l =null;
 
-        ParserOperation r =null;
+        OperandI r =null;
 
 
+         OP openu=null; 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:2: (l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:4: l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |)
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:2: (l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:4: l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |)
             {
-            pushFollow(FOLLOW_primary_expression_in_mult_expression247);
+            pushFollow(FOLLOW_primary_expression_in_mult_expression251);
             l=primary_expression();
 
             state._fsp--;
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:25: ( ( ( '*' | '/' ) r= primary_expression ) |)
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:25: ( ( ( '*' | '/' ) r= primary_expression ) |)
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -748,12 +666,12 @@ public class wocParser extends Parser {
             }
             switch (alt10) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:26: ( ( '*' | '/' ) r= primary_expression )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:26: ( ( '*' | '/' ) r= primary_expression )
                     {
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:26: ( ( '*' | '/' ) r= primary_expression )
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:27: ( '*' | '/' ) r= primary_expression
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:26: ( ( '*' | '/' ) r= primary_expression )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:27: ( '*' | '/' ) r= primary_expression
                     {
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:27: ( '*' | '/' )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:27: ( '*' | '/' )
                     int alt9=2;
                     int LA9_0 = input.LA(1);
 
@@ -772,20 +690,20 @@ public class wocParser extends Parser {
                     }
                     switch (alt9) {
                         case 1 :
-                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:28: '*'
+                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:28: '*'
                             {
-                            match(input,19,FOLLOW_19_in_mult_expression252); 
+                            match(input,19,FOLLOW_19_in_mult_expression256); 
 
-                            op =new OpMult(); 
+                            openu=OP.valueOf("*"); 
 
                             }
                             break;
                         case 2 :
-                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:54: '/'
+                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:59: '/'
                             {
-                            match(input,24,FOLLOW_24_in_mult_expression257); 
+                            match(input,24,FOLLOW_24_in_mult_expression261); 
 
-                            op =new OpDiv();
+                            openu=OP.valueOf("/");
 
                             }
                             break;
@@ -793,13 +711,13 @@ public class wocParser extends Parser {
                     }
 
 
-                    pushFollow(FOLLOW_primary_expression_in_mult_expression267);
+                    pushFollow(FOLLOW_primary_expression_in_mult_expression271);
                     r=primary_expression();
 
                     state._fsp--;
 
 
-                     ((BinOp)op).left=l; ((BinOp)op).right=r; 
+                     op =new Operator(l,r,openu); 
 
                     }
 
@@ -807,7 +725,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:159:4: 
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:67:4: 
                     {
                     op =l;
 
@@ -835,18 +753,18 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "primary_expression"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:162:1: primary_expression returns [ParserOperation op] : ( INT | VAR | '(' expression ')' );
-    public final ParserOperation primary_expression() throws RecognitionException {
-        ParserOperation op = null;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:70:1: primary_expression returns [OperandI op] : ( INT | VAR | '(' expression ')' );
+    public final OperandI primary_expression() throws RecognitionException {
+        OperandI op = null;
 
 
-        Token INT3=null;
-        Token VAR4=null;
-        ParserOperation expression5 =null;
+        Token INT4=null;
+        Token VAR5=null;
+        OperandI expression6 =null;
 
 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:163:2: ( INT | VAR | '(' expression ')' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:71:2: ( INT | VAR | '(' expression ')' )
             int alt11=3;
             switch ( input.LA(1) ) {
             case INT:
@@ -874,37 +792,37 @@ public class wocParser extends Parser {
 
             switch (alt11) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:163:4: INT
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:71:4: INT
                     {
-                    INT3=(Token)match(input,INT,FOLLOW_INT_in_primary_expression291); 
+                    INT4=(Token)match(input,INT,FOLLOW_INT_in_primary_expression295); 
 
-                    op =new OpInt((INT3!=null?INT3.getText():null));
+                    op =Constant.getConstant((INT4!=null?INT4.getText():null));
 
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:164:4: VAR
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:72:4: VAR
                     {
-                    VAR4=(Token)match(input,VAR,FOLLOW_VAR_in_primary_expression298); 
+                    VAR5=(Token)match(input,VAR,FOLLOW_VAR_in_primary_expression302); 
 
-                    op =new OpVar((VAR4!=null?VAR4.getText():null));
+                    op =Variable.getVariable((VAR5!=null?VAR5.getText():null));
 
                     }
                     break;
                 case 3 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:165:4: '(' expression ')'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:4: '(' expression ')'
                     {
-                    match(input,17,FOLLOW_17_in_primary_expression305); 
+                    match(input,17,FOLLOW_17_in_primary_expression309); 
 
-                    pushFollow(FOLLOW_expression_in_primary_expression307);
-                    expression5=expression();
+                    pushFollow(FOLLOW_expression_in_primary_expression311);
+                    expression6=expression();
 
                     state._fsp--;
 
 
-                    match(input,18,FOLLOW_18_in_primary_expression309); 
+                    match(input,18,FOLLOW_18_in_primary_expression313); 
 
-                    op =expression5;
+                    op =expression6;
 
                     }
                     break;
@@ -926,22 +844,22 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "atom"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:168:1: atom returns [Atom at] : (ctx= ID ':' )? name= ID ( '(' termlist ')' )? ;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:76:1: atom returns [Atom at] : (ctx= ID ':' )? name= ID ( '(' termlist ')' )? ;
     public final Atom atom() throws RecognitionException {
         Atom at = null;
 
 
         Token ctx=null;
         Token name=null;
-        ArrayList<Term> termlist6 =null;
+        ArrayList<Term> termlist7 =null;
 
 
          String context_id=null; String atom_name; Term[] terms = new Term[0];
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:170:2: ( (ctx= ID ':' )? name= ID ( '(' termlist ')' )? )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:170:4: (ctx= ID ':' )? name= ID ( '(' termlist ')' )?
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:2: ( (ctx= ID ':' )? name= ID ( '(' termlist ')' )? )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:4: (ctx= ID ':' )? name= ID ( '(' termlist ')' )?
             {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:170:4: (ctx= ID ':' )?
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:4: (ctx= ID ':' )?
             int alt12=2;
             int LA12_0 = input.LA(1);
 
@@ -954,11 +872,11 @@ public class wocParser extends Parser {
             }
             switch (alt12) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:170:5: ctx= ID ':'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:5: ctx= ID ':'
                     {
-                    ctx=(Token)match(input,ID,FOLLOW_ID_in_atom333); 
+                    ctx=(Token)match(input,ID,FOLLOW_ID_in_atom337); 
 
-                    match(input,25,FOLLOW_25_in_atom335); 
+                    match(input,25,FOLLOW_25_in_atom339); 
 
                     context_id=(ctx!=null?ctx.getText():null);
 
@@ -968,11 +886,11 @@ public class wocParser extends Parser {
             }
 
 
-            name=(Token)match(input,ID,FOLLOW_ID_in_atom346); 
+            name=(Token)match(input,ID,FOLLOW_ID_in_atom350); 
 
             atom_name=(name!=null?name.getText():null);
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:172:3: ( '(' termlist ')' )?
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:3: ( '(' termlist ')' )?
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -981,19 +899,19 @@ public class wocParser extends Parser {
             }
             switch (alt13) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:172:5: '(' termlist ')'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:5: '(' termlist ')'
                     {
-                    match(input,17,FOLLOW_17_in_atom354); 
+                    match(input,17,FOLLOW_17_in_atom358); 
 
-                    pushFollow(FOLLOW_termlist_in_atom356);
-                    termlist6=termlist();
+                    pushFollow(FOLLOW_termlist_in_atom360);
+                    termlist7=termlist();
 
                     state._fsp--;
 
 
-                    match(input,18,FOLLOW_18_in_atom358); 
+                    match(input,18,FOLLOW_18_in_atom362); 
 
-                    terms=(Term[])termlist6.toArray(new Term[termlist6.size()]);
+                    terms=(Term[])termlist7.toArray(new Term[termlist7.size()]);
 
                     }
                     break;
@@ -1021,7 +939,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "termlist"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:176:1: termlist returns [ArrayList<Term> termlist] : t1= term ( ',' tn= term )* ;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:84:1: termlist returns [ArrayList<Term> termlist] : t1= term ( ',' tn= term )* ;
     public final ArrayList<Term> termlist() throws RecognitionException {
         ArrayList<Term> termlist = null;
 
@@ -1033,10 +951,10 @@ public class wocParser extends Parser {
 
          termlist = new ArrayList<Term>();
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:178:2: (t1= term ( ',' tn= term )* )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:178:4: t1= term ( ',' tn= term )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:2: (t1= term ( ',' tn= term )* )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:4: t1= term ( ',' tn= term )*
             {
-            pushFollow(FOLLOW_term_in_termlist387);
+            pushFollow(FOLLOW_term_in_termlist391);
             t1=term();
 
             state._fsp--;
@@ -1044,7 +962,7 @@ public class wocParser extends Parser {
 
             termlist.add(t1);
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:179:3: ( ',' tn= term )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:87:3: ( ',' tn= term )*
             loop14:
             do {
                 int alt14=2;
@@ -1057,11 +975,11 @@ public class wocParser extends Parser {
 
                 switch (alt14) {
             	case 1 :
-            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:179:4: ',' tn= term
+            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:87:4: ',' tn= term
             	    {
-            	    match(input,21,FOLLOW_21_in_termlist394); 
+            	    match(input,21,FOLLOW_21_in_termlist398); 
 
-            	    pushFollow(FOLLOW_term_in_termlist398);
+            	    pushFollow(FOLLOW_term_in_termlist402);
             	    tn=term();
 
             	    state._fsp--;
@@ -1096,19 +1014,19 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "term"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:182:1: term returns [Term term] : ( constant | VAR | function );
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:90:1: term returns [Term term] : ( constant | VAR | function );
     public final Term term() throws RecognitionException {
         Term term = null;
 
 
-        Token VAR8=null;
-        Constant constant7 =null;
+        Token VAR9=null;
+        Constant constant8 =null;
 
-        wocParser.function_return function9 =null;
+        wocParser.function_return function10 =null;
 
 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:183:2: ( constant | VAR | function )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:91:2: ( constant | VAR | function )
             int alt15=3;
             switch ( input.LA(1) ) {
             case ID:
@@ -1150,37 +1068,37 @@ public class wocParser extends Parser {
 
             switch (alt15) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:183:4: constant
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:91:4: constant
                     {
-                    pushFollow(FOLLOW_constant_in_term417);
-                    constant7=constant();
+                    pushFollow(FOLLOW_constant_in_term421);
+                    constant8=constant();
 
                     state._fsp--;
 
 
-                    term =constant7;
+                    term =constant8;
 
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:184:4: VAR
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:92:4: VAR
                     {
-                    VAR8=(Token)match(input,VAR,FOLLOW_VAR_in_term424); 
+                    VAR9=(Token)match(input,VAR,FOLLOW_VAR_in_term428); 
 
-                    term =Variable.getVariable((VAR8!=null?VAR8.getText():null));
+                    term =Variable.getVariable((VAR9!=null?VAR9.getText():null));
 
                     }
                     break;
                 case 3 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:185:4: function
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:4: function
                     {
-                    pushFollow(FOLLOW_function_in_term431);
-                    function9=function();
+                    pushFollow(FOLLOW_function_in_term435);
+                    function10=function();
 
                     state._fsp--;
 
 
-                    term =FuncTerm.getFuncTerm((function9!=null?function9.name:null),(function9!=null?function9.terms:null));
+                    term =FuncTerm.getFuncTerm((function10!=null?function10.name:null),(function10!=null?function10.terms:null));
 
                     }
                     break;
@@ -1207,33 +1125,33 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "function"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:188:1: function returns [String name, ArrayList<Term> terms] : ID '(' termlist ')' ;
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:96:1: function returns [String name, ArrayList<Term> terms] : ID '(' termlist ')' ;
     public final wocParser.function_return function() throws RecognitionException {
         wocParser.function_return retval = new wocParser.function_return();
         retval.start = input.LT(1);
 
 
-        Token ID10=null;
-        ArrayList<Term> termlist11 =null;
+        Token ID11=null;
+        ArrayList<Term> termlist12 =null;
 
 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:189:2: ( ID '(' termlist ')' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:189:4: ID '(' termlist ')'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:97:2: ( ID '(' termlist ')' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:97:4: ID '(' termlist ')'
             {
-            ID10=(Token)match(input,ID,FOLLOW_ID_in_function448); 
+            ID11=(Token)match(input,ID,FOLLOW_ID_in_function452); 
 
-            match(input,17,FOLLOW_17_in_function450); 
+            match(input,17,FOLLOW_17_in_function454); 
 
-            pushFollow(FOLLOW_termlist_in_function452);
-            termlist11=termlist();
+            pushFollow(FOLLOW_termlist_in_function456);
+            termlist12=termlist();
 
             state._fsp--;
 
 
-            match(input,18,FOLLOW_18_in_function454); 
+            match(input,18,FOLLOW_18_in_function458); 
 
-            retval.name =(ID10!=null?ID10.getText():null); retval.terms =termlist11;
+            retval.name =(ID11!=null?ID11.getText():null); retval.terms =termlist12;
 
             }
 
@@ -1256,16 +1174,16 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "constant"
-    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:192:1: constant returns [Constant constnt] : ( ID | INT );
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:100:1: constant returns [Constant constnt] : ( ID | INT );
     public final Constant constant() throws RecognitionException {
         Constant constnt = null;
 
 
-        Token ID12=null;
-        Token INT13=null;
+        Token ID13=null;
+        Token INT14=null;
 
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:193:2: ( ID | INT )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:101:2: ( ID | INT )
             int alt16=2;
             int LA16_0 = input.LA(1);
 
@@ -1284,20 +1202,20 @@ public class wocParser extends Parser {
             }
             switch (alt16) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:193:4: ID
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:101:4: ID
                     {
-                    ID12=(Token)match(input,ID,FOLLOW_ID_in_constant471); 
+                    ID13=(Token)match(input,ID,FOLLOW_ID_in_constant475); 
 
-                    constnt =Constant.getConstant((ID12!=null?ID12.getText():null));
+                    constnt =Constant.getConstant((ID13!=null?ID13.getText():null));
 
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:194:4: INT
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:102:4: INT
                     {
-                    INT13=(Token)match(input,INT,FOLLOW_INT_in_constant478); 
+                    INT14=(Token)match(input,INT,FOLLOW_INT_in_constant482); 
 
-                    constnt =Constant.getConstant((INT13!=null?INT13.getText():null));
+                    constnt =Constant.getConstant((INT14!=null?INT14.getText():null));
 
                     }
                     break;
@@ -1316,60 +1234,186 @@ public class wocParser extends Parser {
     }
     // $ANTLR end "constant"
 
+
+
+    // $ANTLR start "comp_sym"
+    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:129:1: comp_sym returns [OP openu] : ( '<' | '<=' | '=>' | '>' | '=' | '!=' );
+    public final OP comp_sym() throws RecognitionException {
+        OP openu = null;
+
+
+        try {
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:130:2: ( '<' | '<=' | '=>' | '>' | '=' | '!=' )
+            int alt17=6;
+            switch ( input.LA(1) ) {
+            case 27:
+                {
+                alt17=1;
+                }
+                break;
+            case 28:
+                {
+                alt17=2;
+                }
+                break;
+            case 30:
+                {
+                alt17=3;
+                }
+                break;
+            case 31:
+                {
+                alt17=4;
+                }
+                break;
+            case 29:
+                {
+                alt17=5;
+                }
+                break;
+            case 16:
+                {
+                alt17=6;
+                }
+                break;
+            default:
+                NoViableAltException nvae =
+                    new NoViableAltException("", 17, 0, input);
+
+                throw nvae;
+
+            }
+
+            switch (alt17) {
+                case 1 :
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:130:4: '<'
+                    {
+                    match(input,27,FOLLOW_27_in_comp_sym693); 
+
+                    openu =OP.LESS;
+
+                    }
+                    break;
+                case 2 :
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:131:4: '<='
+                    {
+                    match(input,28,FOLLOW_28_in_comp_sym700); 
+
+                    openu =OP.LESS_EQ;
+
+                    }
+                    break;
+                case 3 :
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:132:4: '=>'
+                    {
+                    match(input,30,FOLLOW_30_in_comp_sym707); 
+
+                    openu =OP.GREATER_EQ;
+
+                    }
+                    break;
+                case 4 :
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:133:4: '>'
+                    {
+                    match(input,31,FOLLOW_31_in_comp_sym714); 
+
+                    openu =OP.GREATER;
+
+                    }
+                    break;
+                case 5 :
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:134:4: '='
+                    {
+                    match(input,29,FOLLOW_29_in_comp_sym721); 
+
+                    openu =OP.EQUAL;
+
+                    }
+                    break;
+                case 6 :
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:135:4: '!='
+                    {
+                    match(input,16,FOLLOW_16_in_comp_sym728); 
+
+                    openu =OP.NOTEQUAL;
+
+                    }
+                    break;
+
+            }
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+
+        finally {
+        	// do for sure before leaving
+        }
+        return openu;
+    }
+    // $ANTLR end "comp_sym"
+
     // Delegated rules
 
 
  
 
-    public static final BitSet FOLLOW_rule_or_fact_in_woc_program40 = new BitSet(new long[]{0x0000000004800402L});
-    public static final BitSet FOLLOW_atom_in_rule_or_fact64 = new BitSet(new long[]{0x0000000004800000L});
-    public static final BitSet FOLLOW_26_in_rule_or_fact72 = new BitSet(new long[]{0x0000000010008400L});
-    public static final BitSet FOLLOW_body_in_rule_or_fact76 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_23_in_rule_or_fact79 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_rule_or_fact86 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_literal_in_body102 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_21_in_body106 = new BitSet(new long[]{0x0000000010008400L});
-    public static final BitSet FOLLOW_literal_in_body108 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_atom_in_literal126 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_literal133 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_atom_in_literal137 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_operation_in_literal144 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_operation163 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_COMP_in_operation165 = new BitSet(new long[]{0x0000000000028800L});
-    public static final BitSet FOLLOW_expression_in_operation169 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_operation178 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_operation180 = new BitSet(new long[]{0x0000000000028800L});
-    public static final BitSet FOLLOW_expression_in_operation184 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule_or_fact_in_woc_program36 = new BitSet(new long[]{0x0000000004800202L});
+    public static final BitSet FOLLOW_atom_in_rule_or_fact60 = new BitSet(new long[]{0x0000000004800000L});
+    public static final BitSet FOLLOW_26_in_rule_or_fact68 = new BitSet(new long[]{0x0000000200004200L});
+    public static final BitSet FOLLOW_body_in_rule_or_fact72 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_23_in_rule_or_fact75 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_rule_or_fact82 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_literal_in_body98 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_21_in_body102 = new BitSet(new long[]{0x0000000200004200L});
+    public static final BitSet FOLLOW_literal_in_body104 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_atom_in_literal122 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_33_in_literal129 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_atom_in_literal133 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_operation_in_literal140 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_operation159 = new BitSet(new long[]{0x00000000F8010000L});
+    public static final BitSet FOLLOW_comp_sym_in_operation161 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_operation165 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_operation174 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_32_in_operation176 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_operation180 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_mult_expression_in_expression203 = new BitSet(new long[]{0x0000000000500002L});
-    public static final BitSet FOLLOW_20_in_expression208 = new BitSet(new long[]{0x0000000000028800L});
-    public static final BitSet FOLLOW_22_in_expression213 = new BitSet(new long[]{0x0000000000028800L});
+    public static final BitSet FOLLOW_20_in_expression208 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_22_in_expression213 = new BitSet(new long[]{0x0000000000024400L});
     public static final BitSet FOLLOW_mult_expression_in_expression221 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_primary_expression_in_mult_expression247 = new BitSet(new long[]{0x0000000001080002L});
-    public static final BitSet FOLLOW_19_in_mult_expression252 = new BitSet(new long[]{0x0000000000028800L});
-    public static final BitSet FOLLOW_24_in_mult_expression257 = new BitSet(new long[]{0x0000000000028800L});
-    public static final BitSet FOLLOW_primary_expression_in_mult_expression267 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_in_primary_expression291 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_primary_expression298 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_primary_expression305 = new BitSet(new long[]{0x0000000000028800L});
-    public static final BitSet FOLLOW_expression_in_primary_expression307 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_primary_expression309 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_atom333 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_25_in_atom335 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_ID_in_atom346 = new BitSet(new long[]{0x0000000000020002L});
-    public static final BitSet FOLLOW_17_in_atom354 = new BitSet(new long[]{0x0000000000008C00L});
-    public static final BitSet FOLLOW_termlist_in_atom356 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_atom358 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_term_in_termlist387 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_21_in_termlist394 = new BitSet(new long[]{0x0000000000008C00L});
-    public static final BitSet FOLLOW_term_in_termlist398 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_constant_in_term417 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_term424 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_function_in_term431 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_function448 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_17_in_function450 = new BitSet(new long[]{0x0000000000008C00L});
-    public static final BitSet FOLLOW_termlist_in_function452 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_function454 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_constant471 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_in_constant478 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_primary_expression_in_mult_expression251 = new BitSet(new long[]{0x0000000001080002L});
+    public static final BitSet FOLLOW_19_in_mult_expression256 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_24_in_mult_expression261 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_primary_expression_in_mult_expression271 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_in_primary_expression295 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_primary_expression302 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_17_in_primary_expression309 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_primary_expression311 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_primary_expression313 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_atom337 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_25_in_atom339 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_ID_in_atom350 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_17_in_atom358 = new BitSet(new long[]{0x0000000000004600L});
+    public static final BitSet FOLLOW_termlist_in_atom360 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_atom362 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_term_in_termlist391 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_21_in_termlist398 = new BitSet(new long[]{0x0000000000004600L});
+    public static final BitSet FOLLOW_term_in_termlist402 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_constant_in_term421 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_term428 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_function_in_term435 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_function452 = new BitSet(new long[]{0x0000000000020000L});
+    public static final BitSet FOLLOW_17_in_function454 = new BitSet(new long[]{0x0000000000004600L});
+    public static final BitSet FOLLOW_termlist_in_function456 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_function458 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_constant475 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_in_constant482 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_27_in_comp_sym693 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_comp_sym700 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_30_in_comp_sym707 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_31_in_comp_sym714 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_29_in_comp_sym721 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_16_in_comp_sym728 = new BitSet(new long[]{0x0000000000000002L});
 
 }

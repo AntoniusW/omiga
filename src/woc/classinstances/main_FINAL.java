@@ -30,8 +30,7 @@ import org.antlr.runtime.RecognitionException;
 import parser.Parser;
 import parser.ParserRewrite;
 import parser.antlr.*;
-import parser.antlr.wocParser.ParserAtom;
-import parser.antlr.wocParser.ParserRule;
+
 
 /**
  *

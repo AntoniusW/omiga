@@ -43,10 +43,10 @@ public class Operator implements OperandI{
             case NOTEQUAL:
                 if(left.getIntValue() != right.getIntValue()) return 1;
                 return 0;
-            case BIGGER:
+            case GREATER:
                 if(left.getIntValue() > right.getIntValue()) return 1;
                 return 0;
-            case SMALLER:
+            case LESS:
                 if(left.getIntValue() < right.getIntValue()) return 1;
                 return 0;
             default: return 0;

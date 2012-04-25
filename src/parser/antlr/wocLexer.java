@@ -1,6 +1,7 @@
-// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-04-24 05:12:43
+// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-04-25 02:27:01
 
 package parser.antlr;
+import Enumeration.OP;
 
 
 import org.antlr.runtime.*;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 @SuppressWarnings({"all", "warnings", "unchecked"})
 public class wocLexer extends Lexer {
     public static final int EOF=-1;
+    public static final int T__16=16;
     public static final int T__17=17;
     public static final int T__18=18;
     public static final int T__19=19;
@@ -23,19 +25,23 @@ public class wocLexer extends Lexer {
     public static final int T__26=26;
     public static final int T__27=27;
     public static final int T__28=28;
+    public static final int T__29=29;
+    public static final int T__30=30;
+    public static final int T__31=31;
+    public static final int T__32=32;
+    public static final int T__33=33;
     public static final int CHAR=4;
     public static final int COMMENT=5;
-    public static final int COMP=6;
-    public static final int ESC_SEQ=7;
-    public static final int EXPONENT=8;
-    public static final int HEX_DIGIT=9;
-    public static final int ID=10;
-    public static final int INT=11;
-    public static final int OCTAL_ESC=12;
-    public static final int STRING=13;
-    public static final int UNICODE_ESC=14;
-    public static final int VAR=15;
-    public static final int WS=16;
+    public static final int ESC_SEQ=6;
+    public static final int EXPONENT=7;
+    public static final int HEX_DIGIT=8;
+    public static final int ID=9;
+    public static final int INT=10;
+    public static final int OCTAL_ESC=11;
+    public static final int STRING=12;
+    public static final int UNICODE_ESC=13;
+    public static final int VAR=14;
+    public static final int WS=15;
 
     // delegates
     // delegators
@@ -52,13 +58,36 @@ public class wocLexer extends Lexer {
     }
     public String getGrammarFileName() { return "/home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g"; }
 
+    // $ANTLR start "T__16"
+    public final void mT__16() throws RecognitionException {
+        try {
+            int _type = T__16;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:7:7: ( '!=' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:7:9: '!='
+            {
+            match("!="); 
+
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__16"
+
     // $ANTLR start "T__17"
     public final void mT__17() throws RecognitionException {
         try {
             int _type = T__17;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:6:7: ( '(' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:6:9: '('
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:8:7: ( '(' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:8:9: '('
             {
             match('('); 
 
@@ -78,8 +107,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__18;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:7:7: ( ')' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:7:9: ')'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:9:7: ( ')' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:9:9: ')'
             {
             match(')'); 
 
@@ -99,8 +128,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__19;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:8:7: ( '*' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:8:9: '*'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:10:7: ( '*' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:10:9: '*'
             {
             match('*'); 
 
@@ -120,8 +149,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__20;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:9:7: ( '+' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:9:9: '+'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:11:7: ( '+' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:11:9: '+'
             {
             match('+'); 
 
@@ -141,8 +170,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__21;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:10:7: ( ',' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:10:9: ','
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:12:7: ( ',' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:12:9: ','
             {
             match(','); 
 
@@ -162,8 +191,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__22;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:11:7: ( '-' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:11:9: '-'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:13:7: ( '-' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:13:9: '-'
             {
             match('-'); 
 
@@ -183,8 +212,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__23;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:12:7: ( '.' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:12:9: '.'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:14:7: ( '.' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:14:9: '.'
             {
             match('.'); 
 
@@ -204,8 +233,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__24;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:13:7: ( '/' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:13:9: '/'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:15:7: ( '/' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:15:9: '/'
             {
             match('/'); 
 
@@ -225,8 +254,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__25;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:14:7: ( ':' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:14:9: ':'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:16:7: ( ':' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:16:9: ':'
             {
             match(':'); 
 
@@ -246,8 +275,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__26;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:15:7: ( ':-' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:15:9: ':-'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:17:7: ( ':-' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:17:9: ':-'
             {
             match(":-"); 
 
@@ -269,12 +298,10 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__27;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:16:7: ( 'is' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:16:9: 'is'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:18:7: ( '<' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:18:9: '<'
             {
-            match("is"); 
-
-
+            match('<'); 
 
             }
 
@@ -292,10 +319,10 @@ public class wocLexer extends Lexer {
         try {
             int _type = T__28;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:17:7: ( 'not' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:17:9: 'not'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:19:7: ( '<=' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:19:9: '<='
             {
-            match("not"); 
+            match("<="); 
 
 
 
@@ -310,13 +337,124 @@ public class wocLexer extends Lexer {
     }
     // $ANTLR end "T__28"
 
+    // $ANTLR start "T__29"
+    public final void mT__29() throws RecognitionException {
+        try {
+            int _type = T__29;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:20:7: ( '=' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:20:9: '='
+            {
+            match('='); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__29"
+
+    // $ANTLR start "T__30"
+    public final void mT__30() throws RecognitionException {
+        try {
+            int _type = T__30;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:21:7: ( '=>' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:21:9: '=>'
+            {
+            match("=>"); 
+
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__30"
+
+    // $ANTLR start "T__31"
+    public final void mT__31() throws RecognitionException {
+        try {
+            int _type = T__31;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:22:7: ( '>' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:22:9: '>'
+            {
+            match('>'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__31"
+
+    // $ANTLR start "T__32"
+    public final void mT__32() throws RecognitionException {
+        try {
+            int _type = T__32;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:23:7: ( 'is' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:23:9: 'is'
+            {
+            match("is"); 
+
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__32"
+
+    // $ANTLR start "T__33"
+    public final void mT__33() throws RecognitionException {
+        try {
+            int _type = T__33;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:24:7: ( 'not' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:24:9: 'not'
+            {
+            match("not"); 
+
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "T__33"
+
     // $ANTLR start "ID"
     public final void mID() throws RecognitionException {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:198:5: ( ( 'a' .. 'z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:198:7: ( 'a' .. 'z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:106:5: ( ( 'a' .. 'z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:106:7: ( 'a' .. 'z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -328,7 +466,7 @@ public class wocLexer extends Lexer {
             }
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:198:18: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:106:18: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop1:
             do {
                 int alt1=2;
@@ -378,8 +516,8 @@ public class wocLexer extends Lexer {
         try {
             int _type = VAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:201:5: ( ( 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:201:7: ( 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:5: ( ( 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:7: ( 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||input.LA(1)=='_' ) {
                 input.consume();
@@ -391,7 +529,7 @@ public class wocLexer extends Lexer {
             }
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:201:22: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:22: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop2:
             do {
                 int alt2=2;
@@ -441,10 +579,10 @@ public class wocLexer extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:204:5: ( ( '-' )? ( '0' .. '9' )+ )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:204:7: ( '-' )? ( '0' .. '9' )+
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:112:5: ( ( '-' )? ( '0' .. '9' )+ )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:112:7: ( '-' )? ( '0' .. '9' )+
             {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:204:7: ( '-' )?
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:112:7: ( '-' )?
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -453,7 +591,7 @@ public class wocLexer extends Lexer {
             }
             switch (alt3) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:204:8: '-'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:112:8: '-'
                     {
                     match('-'); 
 
@@ -463,7 +601,7 @@ public class wocLexer extends Lexer {
             }
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:204:14: ( '0' .. '9' )+
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:112:14: ( '0' .. '9' )+
             int cnt4=0;
             loop4:
             do {
@@ -518,7 +656,7 @@ public class wocLexer extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:215:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '%' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '%' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n' | '/*' ( options {greedy=false; } : . )* '*/' )
             int alt10=3;
             int LA10_0 = input.LA(1);
 
@@ -551,13 +689,13 @@ public class wocLexer extends Lexer {
             }
             switch (alt10) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:215:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                     {
                     match("//"); 
 
 
 
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:215:14: (~ ( '\\n' | '\\r' ) )*
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:14: (~ ( '\\n' | '\\r' ) )*
                     loop5:
                     do {
                         int alt5=2;
@@ -591,7 +729,7 @@ public class wocLexer extends Lexer {
                     } while (true);
 
 
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:215:28: ( '\\r' )?
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:28: ( '\\r' )?
                     int alt6=2;
                     int LA6_0 = input.LA(1);
 
@@ -600,7 +738,7 @@ public class wocLexer extends Lexer {
                     }
                     switch (alt6) {
                         case 1 :
-                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:215:28: '\\r'
+                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:28: '\\r'
                             {
                             match('\r'); 
 
@@ -617,11 +755,11 @@ public class wocLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:216:7: '%' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:124:7: '%' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? '\\n'
                     {
                     match('%'); 
 
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:216:11: (~ ( '\\n' | '\\r' ) )*
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:124:11: (~ ( '\\n' | '\\r' ) )*
                     loop7:
                     do {
                         int alt7=2;
@@ -655,7 +793,7 @@ public class wocLexer extends Lexer {
                     } while (true);
 
 
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:216:25: ( '\\r' )?
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:124:25: ( '\\r' )?
                     int alt8=2;
                     int LA8_0 = input.LA(1);
 
@@ -664,7 +802,7 @@ public class wocLexer extends Lexer {
                     }
                     switch (alt8) {
                         case 1 :
-                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:216:25: '\\r'
+                            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:124:25: '\\r'
                             {
                             match('\r'); 
 
@@ -681,13 +819,13 @@ public class wocLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:217:9: '/*' ( options {greedy=false; } : . )* '*/'
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:125:9: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
 
 
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:217:14: ( options {greedy=false; } : . )*
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:125:14: ( options {greedy=false; } : . )*
                     loop9:
                     do {
                         int alt9=2;
@@ -712,7 +850,7 @@ public class wocLexer extends Lexer {
 
                         switch (alt9) {
                     	case 1 :
-                    	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:217:42: .
+                    	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:125:42: .
                     	    {
                     	    matchAny(); 
 
@@ -744,109 +882,13 @@ public class wocLexer extends Lexer {
     }
     // $ANTLR end "COMMENT"
 
-    // $ANTLR start "COMP"
-    public final void mCOMP() throws RecognitionException {
-        try {
-            int _type = COMP;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:221:6: ( '<' | '<=' | '=>' | '>' | '=' )
-            int alt11=5;
-            switch ( input.LA(1) ) {
-            case '<':
-                {
-                int LA11_1 = input.LA(2);
-
-                if ( (LA11_1=='=') ) {
-                    alt11=2;
-                }
-                else {
-                    alt11=1;
-                }
-                }
-                break;
-            case '=':
-                {
-                int LA11_2 = input.LA(2);
-
-                if ( (LA11_2=='>') ) {
-                    alt11=3;
-                }
-                else {
-                    alt11=5;
-                }
-                }
-                break;
-            case '>':
-                {
-                alt11=4;
-                }
-                break;
-            default:
-                NoViableAltException nvae =
-                    new NoViableAltException("", 11, 0, input);
-
-                throw nvae;
-
-            }
-
-            switch (alt11) {
-                case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:221:8: '<'
-                    {
-                    match('<'); 
-
-                    }
-                    break;
-                case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:221:14: '<='
-                    {
-                    match("<="); 
-
-
-
-                    }
-                    break;
-                case 3 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:221:21: '=>'
-                    {
-                    match("=>"); 
-
-
-
-                    }
-                    break;
-                case 4 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:221:28: '>'
-                    {
-                    match('>'); 
-
-                    }
-                    break;
-                case 5 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:221:34: '='
-                    {
-                    match('='); 
-
-                    }
-                    break;
-
-            }
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        	// do for sure before leaving
-        }
-    }
-    // $ANTLR end "COMP"
-
     // $ANTLR start "WS"
     public final void mWS() throws RecognitionException {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:224:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:224:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:138:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:138:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             {
             if ( (input.LA(1) >= '\t' && input.LA(1) <= '\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();
@@ -876,28 +918,28 @@ public class wocLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:232:5: ( '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:232:8: '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"'
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:146:5: ( '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:146:8: '\"' ( ESC_SEQ |~ ( '\\\\' | '\"' ) )* '\"'
             {
             match('\"'); 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:232:12: ( ESC_SEQ |~ ( '\\\\' | '\"' ) )*
-            loop12:
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:146:12: ( ESC_SEQ |~ ( '\\\\' | '\"' ) )*
+            loop11:
             do {
-                int alt12=3;
-                int LA12_0 = input.LA(1);
+                int alt11=3;
+                int LA11_0 = input.LA(1);
 
-                if ( (LA12_0=='\\') ) {
-                    alt12=1;
+                if ( (LA11_0=='\\') ) {
+                    alt11=1;
                 }
-                else if ( ((LA12_0 >= '\u0000' && LA12_0 <= '!')||(LA12_0 >= '#' && LA12_0 <= '[')||(LA12_0 >= ']' && LA12_0 <= '\uFFFF')) ) {
-                    alt12=2;
+                else if ( ((LA11_0 >= '\u0000' && LA11_0 <= '!')||(LA11_0 >= '#' && LA11_0 <= '[')||(LA11_0 >= ']' && LA11_0 <= '\uFFFF')) ) {
+                    alt11=2;
                 }
 
 
-                switch (alt12) {
+                switch (alt11) {
             	case 1 :
-            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:232:14: ESC_SEQ
+            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:146:14: ESC_SEQ
             	    {
             	    mESC_SEQ(); 
 
@@ -905,7 +947,7 @@ public class wocLexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:232:24: ~ ( '\\\\' | '\"' )
+            	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:146:24: ~ ( '\\\\' | '\"' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '!')||(input.LA(1) >= '#' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -921,7 +963,7 @@ public class wocLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop12;
+            	    break loop11;
                 }
             } while (true);
 
@@ -944,31 +986,31 @@ public class wocLexer extends Lexer {
         try {
             int _type = CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:235:5: ( '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\'' )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:235:8: '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\''
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:149:5: ( '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\'' )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:149:8: '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\''
             {
             match('\''); 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:235:13: ( ESC_SEQ |~ ( '\\'' | '\\\\' ) )
-            int alt13=2;
-            int LA13_0 = input.LA(1);
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:149:13: ( ESC_SEQ |~ ( '\\'' | '\\\\' ) )
+            int alt12=2;
+            int LA12_0 = input.LA(1);
 
-            if ( (LA13_0=='\\') ) {
-                alt13=1;
+            if ( (LA12_0=='\\') ) {
+                alt12=1;
             }
-            else if ( ((LA13_0 >= '\u0000' && LA13_0 <= '&')||(LA13_0 >= '(' && LA13_0 <= '[')||(LA13_0 >= ']' && LA13_0 <= '\uFFFF')) ) {
-                alt13=2;
+            else if ( ((LA12_0 >= '\u0000' && LA12_0 <= '&')||(LA12_0 >= '(' && LA12_0 <= '[')||(LA12_0 >= ']' && LA12_0 <= '\uFFFF')) ) {
+                alt12=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 13, 0, input);
+                    new NoViableAltException("", 12, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt13) {
+            switch (alt12) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:235:15: ESC_SEQ
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:149:15: ESC_SEQ
                     {
                     mESC_SEQ(); 
 
@@ -976,7 +1018,7 @@ public class wocLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:235:25: ~ ( '\\'' | '\\\\' )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:149:25: ~ ( '\\'' | '\\\\' )
                     {
                     if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
                         input.consume();
@@ -1010,8 +1052,8 @@ public class wocLexer extends Lexer {
     // $ANTLR start "EXPONENT"
     public final void mEXPONENT() throws RecognitionException {
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:240:10: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:240:12: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:154:10: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:154:12: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1023,14 +1065,14 @@ public class wocLexer extends Lexer {
             }
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:240:22: ( '+' | '-' )?
-            int alt14=2;
-            int LA14_0 = input.LA(1);
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:154:22: ( '+' | '-' )?
+            int alt13=2;
+            int LA13_0 = input.LA(1);
 
-            if ( (LA14_0=='+'||LA14_0=='-') ) {
-                alt14=1;
+            if ( (LA13_0=='+'||LA13_0=='-') ) {
+                alt13=1;
             }
-            switch (alt14) {
+            switch (alt13) {
                 case 1 :
                     // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:
                     {
@@ -1050,19 +1092,19 @@ public class wocLexer extends Lexer {
             }
 
 
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:240:33: ( '0' .. '9' )+
-            int cnt15=0;
-            loop15:
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:154:33: ( '0' .. '9' )+
+            int cnt14=0;
+            loop14:
             do {
-                int alt15=2;
-                int LA15_0 = input.LA(1);
+                int alt14=2;
+                int LA14_0 = input.LA(1);
 
-                if ( ((LA15_0 >= '0' && LA15_0 <= '9')) ) {
-                    alt15=1;
+                if ( ((LA14_0 >= '0' && LA14_0 <= '9')) ) {
+                    alt14=1;
                 }
 
 
-                switch (alt15) {
+                switch (alt14) {
             	case 1 :
             	    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:
             	    {
@@ -1080,12 +1122,12 @@ public class wocLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt15 >= 1 ) break loop15;
+            	    if ( cnt14 >= 1 ) break loop14;
                         EarlyExitException eee =
-                            new EarlyExitException(15, input);
+                            new EarlyExitException(14, input);
                         throw eee;
                 }
-                cnt15++;
+                cnt14++;
             } while (true);
 
 
@@ -1102,7 +1144,7 @@ public class wocLexer extends Lexer {
     // $ANTLR start "HEX_DIGIT"
     public final void mHEX_DIGIT() throws RecognitionException {
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:243:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:157:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
             // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:
             {
             if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'F')||(input.LA(1) >= 'a' && input.LA(1) <= 'f') ) {
@@ -1128,11 +1170,11 @@ public class wocLexer extends Lexer {
     // $ANTLR start "ESC_SEQ"
     public final void mESC_SEQ() throws RecognitionException {
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:247:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
-            int alt16=3;
-            int LA16_0 = input.LA(1);
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:161:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
+            int alt15=3;
+            int LA15_0 = input.LA(1);
 
-            if ( (LA16_0=='\\') ) {
+            if ( (LA15_0=='\\') ) {
                 switch ( input.LA(2) ) {
                 case '\"':
                 case '\'':
@@ -1143,12 +1185,12 @@ public class wocLexer extends Lexer {
                 case 'r':
                 case 't':
                     {
-                    alt16=1;
+                    alt15=1;
                     }
                     break;
                 case 'u':
                     {
-                    alt16=2;
+                    alt15=2;
                     }
                     break;
                 case '0':
@@ -1160,12 +1202,12 @@ public class wocLexer extends Lexer {
                 case '6':
                 case '7':
                     {
-                    alt16=3;
+                    alt15=3;
                     }
                     break;
                 default:
                     NoViableAltException nvae =
-                        new NoViableAltException("", 16, 1, input);
+                        new NoViableAltException("", 15, 1, input);
 
                     throw nvae;
 
@@ -1174,14 +1216,14 @@ public class wocLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 16, 0, input);
+                    new NoViableAltException("", 15, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt16) {
+            switch (alt15) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:247:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:161:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
                     {
                     match('\\'); 
 
@@ -1198,7 +1240,7 @@ public class wocLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:248:9: UNICODE_ESC
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:162:9: UNICODE_ESC
                     {
                     mUNICODE_ESC(); 
 
@@ -1206,7 +1248,7 @@ public class wocLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:249:9: OCTAL_ESC
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:163:9: OCTAL_ESC
                     {
                     mOCTAL_ESC(); 
 
@@ -1226,43 +1268,43 @@ public class wocLexer extends Lexer {
     // $ANTLR start "OCTAL_ESC"
     public final void mOCTAL_ESC() throws RecognitionException {
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:254:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
-            int alt17=3;
-            int LA17_0 = input.LA(1);
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:168:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
+            int alt16=3;
+            int LA16_0 = input.LA(1);
 
-            if ( (LA17_0=='\\') ) {
-                int LA17_1 = input.LA(2);
+            if ( (LA16_0=='\\') ) {
+                int LA16_1 = input.LA(2);
 
-                if ( ((LA17_1 >= '0' && LA17_1 <= '3')) ) {
-                    int LA17_2 = input.LA(3);
+                if ( ((LA16_1 >= '0' && LA16_1 <= '3')) ) {
+                    int LA16_2 = input.LA(3);
 
-                    if ( ((LA17_2 >= '0' && LA17_2 <= '7')) ) {
-                        int LA17_4 = input.LA(4);
+                    if ( ((LA16_2 >= '0' && LA16_2 <= '7')) ) {
+                        int LA16_4 = input.LA(4);
 
-                        if ( ((LA17_4 >= '0' && LA17_4 <= '7')) ) {
-                            alt17=1;
+                        if ( ((LA16_4 >= '0' && LA16_4 <= '7')) ) {
+                            alt16=1;
                         }
                         else {
-                            alt17=2;
+                            alt16=2;
                         }
                     }
                     else {
-                        alt17=3;
+                        alt16=3;
                     }
                 }
-                else if ( ((LA17_1 >= '4' && LA17_1 <= '7')) ) {
-                    int LA17_3 = input.LA(3);
+                else if ( ((LA16_1 >= '4' && LA16_1 <= '7')) ) {
+                    int LA16_3 = input.LA(3);
 
-                    if ( ((LA17_3 >= '0' && LA17_3 <= '7')) ) {
-                        alt17=2;
+                    if ( ((LA16_3 >= '0' && LA16_3 <= '7')) ) {
+                        alt16=2;
                     }
                     else {
-                        alt17=3;
+                        alt16=3;
                     }
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 17, 1, input);
+                        new NoViableAltException("", 16, 1, input);
 
                     throw nvae;
 
@@ -1270,14 +1312,14 @@ public class wocLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 17, 0, input);
+                    new NoViableAltException("", 16, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt17) {
+            switch (alt16) {
                 case 1 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:254:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:168:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     match('\\'); 
 
@@ -1314,7 +1356,7 @@ public class wocLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:255:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:169:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     match('\\'); 
 
@@ -1341,7 +1383,7 @@ public class wocLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:256:9: '\\\\' ( '0' .. '7' )
+                    // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:170:9: '\\\\' ( '0' .. '7' )
                     {
                     match('\\'); 
 
@@ -1370,8 +1412,8 @@ public class wocLexer extends Lexer {
     // $ANTLR start "UNICODE_ESC"
     public final void mUNICODE_ESC() throws RecognitionException {
         try {
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:261:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
-            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:261:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:175:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:175:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
             {
             match('\\'); 
 
@@ -1400,117 +1442,151 @@ public class wocLexer extends Lexer {
     // $ANTLR end "UNICODE_ESC"
 
     public void mTokens() throws RecognitionException {
-        // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:8: ( T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | ID | VAR | INT | COMMENT | COMP | WS | STRING | CHAR )
-        int alt18=20;
+        // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:8: ( T__16 | T__17 | T__18 | T__19 | T__20 | T__21 | T__22 | T__23 | T__24 | T__25 | T__26 | T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | ID | VAR | INT | COMMENT | WS | STRING | CHAR )
+        int alt17=25;
         switch ( input.LA(1) ) {
+        case '!':
+            {
+            alt17=1;
+            }
+            break;
         case '(':
             {
-            alt18=1;
+            alt17=2;
             }
             break;
         case ')':
             {
-            alt18=2;
+            alt17=3;
             }
             break;
         case '*':
             {
-            alt18=3;
+            alt17=4;
             }
             break;
         case '+':
             {
-            alt18=4;
+            alt17=5;
             }
             break;
         case ',':
             {
-            alt18=5;
+            alt17=6;
             }
             break;
         case '-':
             {
-            int LA18_6 = input.LA(2);
+            int LA17_7 = input.LA(2);
 
-            if ( ((LA18_6 >= '0' && LA18_6 <= '9')) ) {
-                alt18=15;
+            if ( ((LA17_7 >= '0' && LA17_7 <= '9')) ) {
+                alt17=21;
             }
             else {
-                alt18=6;
+                alt17=7;
             }
             }
             break;
         case '.':
             {
-            alt18=7;
+            alt17=8;
             }
             break;
         case '/':
             {
-            int LA18_8 = input.LA(2);
+            int LA17_9 = input.LA(2);
 
-            if ( (LA18_8=='*'||LA18_8=='/') ) {
-                alt18=16;
+            if ( (LA17_9=='*'||LA17_9=='/') ) {
+                alt17=22;
             }
             else {
-                alt18=8;
+                alt17=9;
             }
             }
             break;
         case ':':
             {
-            int LA18_9 = input.LA(2);
+            int LA17_10 = input.LA(2);
 
-            if ( (LA18_9=='-') ) {
-                alt18=10;
+            if ( (LA17_10=='-') ) {
+                alt17=11;
             }
             else {
-                alt18=9;
+                alt17=10;
             }
+            }
+            break;
+        case '<':
+            {
+            int LA17_11 = input.LA(2);
+
+            if ( (LA17_11=='=') ) {
+                alt17=13;
+            }
+            else {
+                alt17=12;
+            }
+            }
+            break;
+        case '=':
+            {
+            int LA17_12 = input.LA(2);
+
+            if ( (LA17_12=='>') ) {
+                alt17=15;
+            }
+            else {
+                alt17=14;
+            }
+            }
+            break;
+        case '>':
+            {
+            alt17=16;
             }
             break;
         case 'i':
             {
-            int LA18_10 = input.LA(2);
+            int LA17_14 = input.LA(2);
 
-            if ( (LA18_10=='s') ) {
-                int LA18_24 = input.LA(3);
+            if ( (LA17_14=='s') ) {
+                int LA17_31 = input.LA(3);
 
-                if ( ((LA18_24 >= '0' && LA18_24 <= '9')||(LA18_24 >= 'A' && LA18_24 <= 'Z')||LA18_24=='_'||(LA18_24 >= 'a' && LA18_24 <= 'z')) ) {
-                    alt18=13;
+                if ( ((LA17_31 >= '0' && LA17_31 <= '9')||(LA17_31 >= 'A' && LA17_31 <= 'Z')||LA17_31=='_'||(LA17_31 >= 'a' && LA17_31 <= 'z')) ) {
+                    alt17=19;
                 }
                 else {
-                    alt18=11;
+                    alt17=17;
                 }
             }
             else {
-                alt18=13;
+                alt17=19;
             }
             }
             break;
         case 'n':
             {
-            int LA18_11 = input.LA(2);
+            int LA17_15 = input.LA(2);
 
-            if ( (LA18_11=='o') ) {
-                int LA18_25 = input.LA(3);
+            if ( (LA17_15=='o') ) {
+                int LA17_32 = input.LA(3);
 
-                if ( (LA18_25=='t') ) {
-                    int LA18_27 = input.LA(4);
+                if ( (LA17_32=='t') ) {
+                    int LA17_34 = input.LA(4);
 
-                    if ( ((LA18_27 >= '0' && LA18_27 <= '9')||(LA18_27 >= 'A' && LA18_27 <= 'Z')||LA18_27=='_'||(LA18_27 >= 'a' && LA18_27 <= 'z')) ) {
-                        alt18=13;
+                    if ( ((LA17_34 >= '0' && LA17_34 <= '9')||(LA17_34 >= 'A' && LA17_34 <= 'Z')||LA17_34=='_'||(LA17_34 >= 'a' && LA17_34 <= 'z')) ) {
+                        alt17=19;
                     }
                     else {
-                        alt18=12;
+                        alt17=18;
                     }
                 }
                 else {
-                    alt18=13;
+                    alt17=19;
                 }
             }
             else {
-                alt18=13;
+                alt17=19;
             }
             }
             break;
@@ -1539,7 +1615,7 @@ public class wocLexer extends Lexer {
         case 'y':
         case 'z':
             {
-            alt18=13;
+            alt17=19;
             }
             break;
         case 'A':
@@ -1570,7 +1646,7 @@ public class wocLexer extends Lexer {
         case 'Z':
         case '_':
             {
-            alt18=14;
+            alt17=20;
             }
             break;
         case '0':
@@ -1584,19 +1660,12 @@ public class wocLexer extends Lexer {
         case '8':
         case '9':
             {
-            alt18=15;
+            alt17=21;
             }
             break;
         case '%':
             {
-            alt18=16;
-            }
-            break;
-        case '<':
-        case '=':
-        case '>':
-            {
-            alt18=17;
+            alt17=22;
             }
             break;
         case '\t':
@@ -1604,182 +1673,222 @@ public class wocLexer extends Lexer {
         case '\r':
         case ' ':
             {
-            alt18=18;
+            alt17=23;
             }
             break;
         case '\"':
             {
-            alt18=19;
+            alt17=24;
             }
             break;
         case '\'':
             {
-            alt18=20;
+            alt17=25;
             }
             break;
         default:
             NoViableAltException nvae =
-                new NoViableAltException("", 18, 0, input);
+                new NoViableAltException("", 17, 0, input);
 
             throw nvae;
 
         }
 
-        switch (alt18) {
+        switch (alt17) {
             case 1 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:10: T__17
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:10: T__16
+                {
+                mT__16(); 
+
+
+                }
+                break;
+            case 2 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:16: T__17
                 {
                 mT__17(); 
 
 
                 }
                 break;
-            case 2 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:16: T__18
+            case 3 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:22: T__18
                 {
                 mT__18(); 
 
 
                 }
                 break;
-            case 3 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:22: T__19
+            case 4 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:28: T__19
                 {
                 mT__19(); 
 
 
                 }
                 break;
-            case 4 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:28: T__20
+            case 5 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:34: T__20
                 {
                 mT__20(); 
 
 
                 }
                 break;
-            case 5 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:34: T__21
+            case 6 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:40: T__21
                 {
                 mT__21(); 
 
 
                 }
                 break;
-            case 6 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:40: T__22
+            case 7 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:46: T__22
                 {
                 mT__22(); 
 
 
                 }
                 break;
-            case 7 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:46: T__23
+            case 8 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:52: T__23
                 {
                 mT__23(); 
 
 
                 }
                 break;
-            case 8 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:52: T__24
+            case 9 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:58: T__24
                 {
                 mT__24(); 
 
 
                 }
                 break;
-            case 9 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:58: T__25
+            case 10 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:64: T__25
                 {
                 mT__25(); 
 
 
                 }
                 break;
-            case 10 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:64: T__26
+            case 11 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:70: T__26
                 {
                 mT__26(); 
 
 
                 }
                 break;
-            case 11 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:70: T__27
+            case 12 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:76: T__27
                 {
                 mT__27(); 
 
 
                 }
                 break;
-            case 12 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:76: T__28
+            case 13 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:82: T__28
                 {
                 mT__28(); 
 
 
                 }
                 break;
-            case 13 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:82: ID
+            case 14 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:88: T__29
+                {
+                mT__29(); 
+
+
+                }
+                break;
+            case 15 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:94: T__30
+                {
+                mT__30(); 
+
+
+                }
+                break;
+            case 16 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:100: T__31
+                {
+                mT__31(); 
+
+
+                }
+                break;
+            case 17 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:106: T__32
+                {
+                mT__32(); 
+
+
+                }
+                break;
+            case 18 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:112: T__33
+                {
+                mT__33(); 
+
+
+                }
+                break;
+            case 19 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:118: ID
                 {
                 mID(); 
 
 
                 }
                 break;
-            case 14 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:85: VAR
+            case 20 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:121: VAR
                 {
                 mVAR(); 
 
 
                 }
                 break;
-            case 15 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:89: INT
+            case 21 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:125: INT
                 {
                 mINT(); 
 
 
                 }
                 break;
-            case 16 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:93: COMMENT
+            case 22 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:129: COMMENT
                 {
                 mCOMMENT(); 
 
 
                 }
                 break;
-            case 17 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:101: COMP
-                {
-                mCOMP(); 
-
-
-                }
-                break;
-            case 18 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:106: WS
+            case 23 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:137: WS
                 {
                 mWS(); 
 
 
                 }
                 break;
-            case 19 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:109: STRING
+            case 24 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:140: STRING
                 {
                 mSTRING(); 
 
 
                 }
                 break;
-            case 20 :
-                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:116: CHAR
+            case 25 :
+                // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:1:147: CHAR
                 {
                 mCHAR(); 
 

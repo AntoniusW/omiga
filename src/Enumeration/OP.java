@@ -14,8 +14,10 @@ public enum OP {
     EQUAL,
     ASSIGN,
     NOTEQUAL,
-    BIGGER,
-    SMALLER,
+    GREATER,
+    LESS,
+    GREATER_EQ,
+    LESS_EQ,
     TIMES,
     DIVIDE;
     
@@ -25,8 +27,8 @@ public enum OP {
             case '-': return MINUS;
             case '=': return EQUAL;
             case '~': return NOTEQUAL;
-            case '>': return BIGGER;
-            case '<': return SMALLER;
+            case '>': return GREATER;
+            case '<': return LESS;
             default: return null;
         }
     }
@@ -37,8 +39,10 @@ public enum OP {
             case MINUS: return "-";
             case EQUAL: return "=";
             case NOTEQUAL: return "~";
-            case BIGGER: return ">";
-            case SMALLER: return "<";
+            case GREATER: return ">";
+            case LESS: return "<";
+            case GREATER_EQ: return ">=";
+            case LESS_EQ: return "<=";
             case ASSIGN: return "is";
             case TIMES: return "*";
             case DIVIDE: return "/";

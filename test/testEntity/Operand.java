@@ -75,7 +75,7 @@ public class Operand {
         Constant c3 =  Constant.getConstant("15");
         Constant c4 =  Constant.getConstant("9");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
-        Operator opi3 = new Operator(opi1,opi2,OP.BIGGER);
+        Operator opi3 = new Operator(opi1,opi2,OP.GREATER);
         assertTrue(opi3.getIntValue() == 1);
     }
     
@@ -87,7 +87,7 @@ public class Operand {
         Constant c3 =  Constant.getConstant("15");
         Constant c4 =  Constant.getConstant("9");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
-        Operator opi3 = new Operator(opi1,opi2,OP.SMALLER);
+        Operator opi3 = new Operator(opi1,opi2,OP.LESS);
         assertTrue(opi3.getIntValue() == 0);
     }
 }
