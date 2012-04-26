@@ -5,6 +5,7 @@
 package Interfaces;
 
 import Entity.FuncTerm;
+import Entity.GlobalSettings;
 import Entity.Variable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +57,7 @@ public abstract class Term {
     
     protected String name;
     protected int hash;
+    protected int hashcode;
     protected ArrayList<Variable> usedVariables;
     
     /**
@@ -74,6 +76,7 @@ public abstract class Term {
     public Term(String name){
         this.name = name;  
         this.hash = this.toString().hashCode();
+        this.hashcode = name.hashCode();
         this.usedVariables = new ArrayList<Variable>();
     }
     
@@ -89,7 +92,30 @@ public abstract class Term {
      */
     @Override
     public int hashCode(){
-        return this.hash;
+        if (GlobalSettings.getGlobalSettings().isStringbasedHashCode())
+            return this.hash;
+        else
+            return this.hashcode;
+    }
+    
+    public static int hashCode(Term[] terms) {
+        if(terms.length==0)
+            return 0;
+        int result = 17;
+        for(int i=0; i<terms.length;i++) {
+            result = result*37+terms[i].hashCode();
+        }
+        return result;
+    }
+    
+     public static int hashCode(ArrayList<Term> terms) {
+        if(terms.isEmpty())
+            return 0;
+        int result = 17;
+         for (Term term : terms) {
+             result = result*37+term.hashCode();             
+         }
+         return result;
     }
     
     

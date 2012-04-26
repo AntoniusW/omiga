@@ -12,6 +12,7 @@ import Datastructure.choice.ChoiceUnitRewrite;
 import Entity.ContextASP;
 import Entity.ContextASPRewriting;
 import Entity.FuncTerm;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Predicate;
 import Entity.Variable;
@@ -52,11 +53,14 @@ public class main_FINAL {
             System.out.println(s);
         }*/
         
-        filename = "OP.txt";
+        filename = "birds_ASPERIX_nbb=100.txt";
         rewriting = 1;
         answersets = 50000;
         filter = null;
         outprint =true;
+        
+        // create context
+        ContextASP ctx = new ContextASPRewriting();
         
         // parsing with ANTLR
         try {
@@ -64,9 +68,8 @@ public class main_FINAL {
             wocLexer lex = new wocLexer(new ANTLRFileStream(filename));
             CommonTokenStream tokens = new CommonTokenStream(lex);
             wocParser parser = new wocParser(tokens);
-            
-            // create context
-            ContextASP ctx = new ContextASPRewriting();
+        
+            // set context
             parser.setContext(ctx);
             
             try {
@@ -74,6 +77,7 @@ public class main_FINAL {
                     // parse input
                     parser.woc_program();
                     
+                    System.out.println("Read in program is: ");
                     ctx.printContext();
                 } catch (RuleNotSafeException ex) {
                     Logger.getLogger(main_FINAL.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,12 +95,12 @@ public class main_FINAL {
         }
         
         
-        File input = new File(filename);
+        //File input = new File(filename);
         
         
         System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
         
-        ContextASP c = null;
+       /* ContextASP c = null;
         Parser pars;
         try{
         if(rewriting == 0){
@@ -123,8 +127,11 @@ public class main_FINAL {
             e.printStackTrace();
         }
         
+        //*/
         //c.printContext();
-        Manager m = new Manager(c);
+        GlobalSettings.getGlobalSettings().setStringbasedHashCode(false); // try non-string hash codes
+        
+        Manager m = new Manager(ctx);
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets,outprint,filter);
 

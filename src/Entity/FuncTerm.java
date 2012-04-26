@@ -64,6 +64,9 @@ public class FuncTerm extends Term{
         this.name = name;
         this.children = children;
         this.hash = this.toString().hashCode();
+        this.hashcode = 17;
+        this.hashcode = this.hashcode*37 + name.hashCode();
+        this.hashcode = this.hashcode*37 + Term.hashCode(children);
         this.usedVariables = new ArrayList<Variable>();
         for(int i = 0; i < children.size();i++){
             for(int j = 0; j < children.get(i).getUsedVariables().size();j++){

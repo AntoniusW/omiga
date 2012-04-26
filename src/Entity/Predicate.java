@@ -30,6 +30,7 @@ public class Predicate {
     private String name;
     private int arity;
     private int hash;
+    private int hashcode;
     
     /**
      * if you want to generate a predicate use this method, since the constructor is private in order to prevent generation of
@@ -63,6 +64,8 @@ public class Predicate {
         this.name=name;
         this.arity = arity;
         this.hash = (name+arity).hashCode();
+        this.hashcode = 17*37 + name.hashCode();
+        this.hashcode = this.hashcode*37 + arity;
     }
     
     /**
@@ -72,7 +75,10 @@ public class Predicate {
      */
     @Override
     public int hashCode(){
-        return hash;
+        if(GlobalSettings.getGlobalSettings().isStringbasedHashCode())
+            return hash;
+        else
+            return hashcode;
     }
     
     /**

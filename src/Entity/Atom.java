@@ -32,7 +32,8 @@ public class Atom {
     
     private Predicate p;
     private Term[] terms;
-    int hash;
+    protected int hash;
+    protected int hashcode;
     
     /**
      * if you want to generate an atom use this method, since the constructor is private in order to prevent 
@@ -77,6 +78,9 @@ public class Atom {
         p = Predicate.getPredicate(name, arity);
         this.terms = terms;
         this.hash = (this.p.toString() + Instance.getInstanceAsString(this.terms)).hashCode();
+        this.hashcode = 17;
+        this.hashcode = this.hashcode*37 + p.hashCode();
+        this.hashcode = this.hashcode*37 + Term.hashCode(terms);
         //System.out.println(this + " - ATOMHASHCODE: " + this.hashCode() + " - " + name);
     }
     
@@ -139,7 +143,10 @@ public class Atom {
      */
     @Override
     public int hashCode(){
-        return hash;
+        if(GlobalSettings.getGlobalSettings().isStringbasedHashCode())
+            return hash;
+        else
+            return hashcode;
     }
     /**
      * This method is needed in order to use Atoms as Keys within HashMaps

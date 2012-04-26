@@ -28,6 +28,7 @@ public class Instance {
         
     Term[] terms;
     int hash;
+    int hashcode;
     
     /**
      * if you want to generate an instance use this method, since the constructor is private in order to control
@@ -77,7 +78,8 @@ public class Instance {
         for(int i = 0; i < terms.length;i++){
             s = s + terms[i].toString() + ",";
         }
-        this.hash =  s.hashCode();         
+        this.hash =  s.hashCode();      
+        this.hashcode = Term.hashCode(terms);
     }
     
     /**
@@ -87,7 +89,10 @@ public class Instance {
      */
     @Override
     public int hashCode(){
-        return hash;
+        if(GlobalSettings.getGlobalSettings().isStringbasedHashCode())
+            return hash;
+        else
+            return hashcode;
     }
     /**
      * This method is needed to use Instances in combination with HashMaps/Sets
