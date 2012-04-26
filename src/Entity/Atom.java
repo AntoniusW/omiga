@@ -9,7 +9,6 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import sun.nio.cs.ext.ISCII91;
 
 /**
  *
@@ -32,7 +31,7 @@ public class Atom {
     
     private Predicate p;
     private Term[] terms;
-    protected int hash;
+    //protected int hash;
     protected int hashcode;
     
     /**
@@ -77,7 +76,6 @@ public class Atom {
     private Atom(String name, int arity, Term[] terms){
         p = Predicate.getPredicate(name, arity);
         this.terms = terms;
-        this.hash = (this.p.toString() + Instance.getInstanceAsString(this.terms)).hashCode();
         this.hashcode = 17;
         this.hashcode = this.hashcode*37 + p.hashCode();
         this.hashcode = this.hashcode*37 + Term.hashCode(terms);
@@ -143,10 +141,7 @@ public class Atom {
      */
     @Override
     public int hashCode(){
-        if(GlobalSettings.getGlobalSettings().isStringbasedHashCode())
-            return hash;
-        else
-            return hashcode;
+        return hashcode;
     }
     /**
      * This method is needed in order to use Atoms as Keys within HashMaps

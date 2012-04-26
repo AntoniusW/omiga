@@ -59,6 +59,8 @@ public class main_FINAL {
         filter = null;
         outprint =true;
         
+        //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
+        
         // create context
         ContextASP ctx = new ContextASPRewriting();
         
@@ -100,36 +102,6 @@ public class main_FINAL {
         
         System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
         
-       /* ContextASP c = null;
-        Parser pars;
-        try{
-        if(rewriting == 0){
-            pars = new Parser();
-            c = pars.readContext(input);
-        }else{
-            if(rewriting == 1){
-                pars = new ParserRewrite();
-                Rewriter_easy rewriter = new Rewriter_easy();
-                c = pars.readContext(input);
-                c = rewriter.rewrite(c);
-                System.out.println("REWRITING=1 (We rewrite the context):");
-                c.printContext();
-            }else{
-                if(rewriting == 2){
-                    pars = new ParserRewrite();
-                    c = pars.readContext(input);
-                    System.out.println("REWRITING=2 (The context is already rewritten):");
-                    c.printContext();
-                }
-            }
-        }    
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        
-        //*/
-        //c.printContext();
-        GlobalSettings.getGlobalSettings().setStringbasedHashCode(false); // try non-string hash codes
         
         Manager m = new Manager(ctx);
         long beforeCalc = System.currentTimeMillis();

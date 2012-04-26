@@ -75,7 +75,6 @@ public abstract class Term {
      */
     public Term(String name){
         this.name = name;  
-        this.hash = this.toString().hashCode();
         this.hashcode = name.hashCode();
         this.usedVariables = new ArrayList<Variable>();
     }
@@ -92,10 +91,7 @@ public abstract class Term {
      */
     @Override
     public int hashCode(){
-        if (GlobalSettings.getGlobalSettings().isStringbasedHashCode())
-            return this.hash;
-        else
-            return this.hashcode;
+        return this.hashcode;
     }
     
     public static int hashCode(Term[] terms) {

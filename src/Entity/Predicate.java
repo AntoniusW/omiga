@@ -63,7 +63,6 @@ public class Predicate {
     private Predicate(String name, int arity){
         this.name=name;
         this.arity = arity;
-        this.hash = (name+arity).hashCode();
         this.hashcode = 17*37 + name.hashCode();
         this.hashcode = this.hashcode*37 + arity;
     }
@@ -74,11 +73,8 @@ public class Predicate {
      * @return the hash that was set during creation
      */
     @Override
-    public int hashCode(){
-        if(GlobalSettings.getGlobalSettings().isStringbasedHashCode())
-            return hash;
-        else
-            return hashcode;
+    public int hashCode(){    
+        return hashcode;
     }
     
     /**

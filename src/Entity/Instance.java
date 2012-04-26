@@ -27,7 +27,6 @@ public class Instance {
     private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();
         
     Term[] terms;
-    int hash;
     int hashcode;
     
     /**
@@ -73,12 +72,7 @@ public class Instance {
      * @param terms 
      */
     private Instance(Term[] terms){
-        this.terms = terms;
-        String s = "";
-        for(int i = 0; i < terms.length;i++){
-            s = s + terms[i].toString() + ",";
-        }
-        this.hash =  s.hashCode();      
+        this.terms = terms;    
         this.hashcode = Term.hashCode(terms);
     }
     
@@ -89,10 +83,7 @@ public class Instance {
      */
     @Override
     public int hashCode(){
-        if(GlobalSettings.getGlobalSettings().isStringbasedHashCode())
-            return hash;
-        else
-            return hashcode;
+        return hashcode;
     }
     /**
      * This method is needed to use Instances in combination with HashMaps/Sets

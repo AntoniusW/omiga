@@ -11,7 +11,7 @@ package Entity;
 public class GlobalSettings {
     
     static GlobalSettings instance = null;
-    boolean stringbasedHashCode;
+    //boolean stringbasedHashCode;
     
     public static GlobalSettings getGlobalSettings() {
        if(instance != null) 
@@ -23,9 +23,10 @@ public class GlobalSettings {
     }
     
     private GlobalSettings() {  
-        stringbasedHashCode=true;
+        //stringbasedHashCode=true;
     }
-    
+
+    /*
     public boolean isStringbasedHashCode() {
         return stringbasedHashCode;
     }
@@ -33,6 +34,7 @@ public class GlobalSettings {
     public void setStringbasedHashCode(boolean stringbasedHashCode) {
         this.stringbasedHashCode = stringbasedHashCode;
     }
+     */
 
     
 }

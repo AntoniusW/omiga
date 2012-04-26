@@ -116,11 +116,7 @@ public class Rete {
             return;
         } // TODO: Somehow avoid this if.
         //System.out.println("AddingPLUS: " + p.getName() + "(" + instance + ")");
-        try {
-                    basicLayerPlus.get(p).addInstance(instance);
-        } catch (Exception e) {
-        }
-
+        basicLayerPlus.get(p).addInstance(instance);
     }
     
     /**
