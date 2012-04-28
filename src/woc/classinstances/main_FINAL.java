@@ -54,6 +54,7 @@ public class main_FINAL {
         }*/
         
         filename = "birds_ASPERIX_nbb=100.txt";
+        filename = "network/ctx1.asd";
         rewriting = 1;
         answersets = 50000;
         filter = null;

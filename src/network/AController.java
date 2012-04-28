@@ -4,9 +4,14 @@
  */
 package network;
 
+import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import network.NodeInterface;
 
 /**
@@ -28,12 +33,28 @@ public class AController {
     
     public void mainLoop() {
         try {
-            String name = "Context1";
-            ANodeInterface node = (ANodeInterface) registry.lookup(name);
-        
-            ReplyMessage reply = node.makeChoice(0);
+            Map<String,Remote> nodes = new HashMap<String,Remote>();
             
-            assert (reply == ReplyMessage.SUCCEEDED);
+            // build map of all nodes
+            System.out.println("Looking up nodes.");
+            for(int i=1; i <=2; i++) {
+                String name = "Context_n"+i;
+                nodes.put(name, registry.lookup(name));
+            }
+            
+            // init each node
+            System.out.println("Initializing nodes now.");
+            for (Entry<String,Remote> node : nodes.entrySet()) {
+                ((ANodeInterface)node.getValue()).init(nodes);
+            }
+                
+            
+            //String name = "Context1";
+            //ANodeInterface node = (ANodeInterface) registry.lookup(name);
+        
+            //ReplyMessage reply = node.makeChoice(0);
+            
+            //assert (reply == ReplyMessage.SUCCEEDED);
             
             System.out.println("Got SUCCEEDED");
         }

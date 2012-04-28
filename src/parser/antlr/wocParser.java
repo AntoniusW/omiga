@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-04-25 02:27:00
+// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-04-28 20:04:09
 
 package parser.antlr;
 
@@ -888,7 +888,7 @@ public class wocParser extends Parser {
 
             name=(Token)match(input,ID,FOLLOW_ID_in_atom350); 
 
-            atom_name=(name!=null?name.getText():null);
+            if(context_id==null) { atom_name=(name!=null?name.getText():null); } else {atom_name=context_id+":"+(name!=null?name.getText():null);} 
 
             // /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:3: ( '(' termlist ')' )?
             int alt13=2;

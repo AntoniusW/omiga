@@ -76,7 +76,7 @@ primary_expression returns[OperandI op]
 atom	returns[Atom at]
 @init{ String context_id=null; String atom_name; Term[] terms = new Term[0];}
 	:	(ctx=ID ':' {context_id=$ctx.text;})?	// parsing atoms with context identifier
-		name=ID {atom_name=$name.text;}
+		name=ID {if(context_id==null) { atom_name=$name.text; } else {atom_name=context_id+":"+$name.text;} }
 		( '(' termlist ')' {terms=(Term[])$termlist.termlist.toArray(new Term[$termlist.termlist.size()]);})?
 		{$at=Atom.getAtom(atom_name, terms.length, terms);}
 	;
