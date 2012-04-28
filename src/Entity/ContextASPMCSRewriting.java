@@ -50,7 +50,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
         this.fromOutside = new HashMap<Predicate,Boolean>();
     }
     
-    public void definePredicateFromOutSide(ContextASPMCSRewriting c, Predicate p){
+    /*public void definePredicateFromOutSide(ContextASPMCSRewriting c, Predicate p){
         Predicate toAdd = Predicate.getPredicate(c.getID() +"_"+ p.getName(), p.getArity());
         this.fromOutside.put(toAdd,true);
         this.rete.addPredicateMinus(toAdd);
@@ -59,7 +59,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     public void informOfClosureFromOutside(ContextASPMCSRewriting c, Predicate p){
         Predicate toInform = Predicate.getPredicate(c.getID() +"_"+ p.getName(), p.getArity());
         fromOutside.put(toInform, false);
-    }
+    }*/
     
     /**
      * 

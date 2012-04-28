@@ -290,7 +290,8 @@ public class Rete {
      * @param p the predicate you want to add
      */
     public void addPredicatePlus(Predicate p){
-        this.basicLayerPlus.put(p, new BasicNode(p.getArity(),this,p));
+        if(!this.basicLayerPlus.containsKey(p))
+            this.basicLayerPlus.put(p, new BasicNode(p.getArity(),this,p));
     }
     
     /**
@@ -300,7 +301,8 @@ public class Rete {
      * @param p the predicate you want to add
      */
     public void addPredicateMinus(Predicate p){
-        this.basicLayerMinus.put(p, new BasicNodeNegative(p.getArity(),this,p));
+        if(!this.basicLayerMinus.containsKey(p))
+            this.basicLayerMinus.put(p, new BasicNodeNegative(p.getArity(),this,p));
     }
     
     /**

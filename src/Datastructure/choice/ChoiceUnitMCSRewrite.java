@@ -54,6 +54,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     protected ContextASPMCSRewriting c;
     
     public ChoiceUnitMCSRewrite(){
+        //super();
         //System.out.println("ChoiceUnitMCSRewrite is created!");
     }
     
@@ -64,6 +65,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
      * @param c The ASP Context you want to use this choice unit for
      */
     public ChoiceUnitMCSRewrite(ContextASPMCSRewriting c){
+        super(c);
         this.memory = new DecisionMemory();
         this.choiceNodes = new ArrayList<ChoiceNode>();
         this.c = c;
