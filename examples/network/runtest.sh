@@ -7,17 +7,35 @@ export POLICYFILE=$BASEDIR/examples/network/server.policy
 export CTX1_FILE=$BASEDIR/examples/network/ctx1.asd
 export CTX2_FILE=$BASEDIR/examples/network/ctx2.asd
 
+export STARTUP_WAIT=6
+export PIDFILE=nodes.pid
+
+# start all nodes
+> $PIDFILE      # empty pidfile
+
 # start registry
 echo "Starting registry."
 rmiregistry -J-Djava.class.path=$CLASSPATH &
+echo $! > $PIDFILE
 
-# start all nodes
-echo "Starting nodes."
+
+echo "Starting nodes now ..."
 java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n1 $CTX1_FILE &> ctx1.log &
+echo $! >> $PIDFILE
 java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n2 $CTX2_FILE &> ctx2.log &
+echo $! >> $PIDFILE
 
 # give nodes time to start up and register
-sleep 5
+echo "Giving nodes time to start up," $STARTUP_WAIT "sec."
+sleep 6
 
 # start controller
+echo "Starting controller."
 java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.AController
+
+echo "Running for 10 sec."
+sleep 10
+
+# killing all processes
+echo "Killing created processes."
+cat $PIDFILE | xargs -t -L 1 kill
