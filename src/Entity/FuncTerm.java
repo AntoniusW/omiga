@@ -19,8 +19,9 @@ import java.util.HashSet;
  * 
  */
 public class FuncTerm extends Term{
-    
+        
     private ArrayList<Term> children;
+    private FunctionSymbol function_symbol;
     
     
     /**
@@ -37,6 +38,7 @@ public class FuncTerm extends Term{
      */
     public static FuncTerm getFuncTerm(String name, ArrayList<Term> children){
         FuncTerm t = new FuncTerm(name, children);
+        // TODO AW: check if below code can be removed!
         if(Term.containsTerm(t)){
             return (FuncTerm)Term.getTerm(t);
         }else{
@@ -61,7 +63,8 @@ public class FuncTerm extends Term{
      * @param children a list of Terms representing those terms that are contained within this functerm. (in the ordering of the list)
      */
     private FuncTerm(String name, ArrayList<Term> children){
-        this.name = name;
+        this.function_symbol = FunctionSymbol.getFunctionSymbol(name);
+        this.name = name;   // TODO AW use function_symbol instead of name everywhere, remove this line then
         this.children = children;
         this.hashcode = 17;
         this.hashcode = this.hashcode*37 + name.hashCode();
@@ -89,7 +92,10 @@ public class FuncTerm extends Term{
         if(o.getClass().equals(FuncTerm.class)){
             FuncTerm t = (FuncTerm)o;
             // Functerms of different arity or different name are not equal
-            if(this.name.equals(t.name) && t.children.size() == this.children.size()) {
+            if(
+                    //this.name.equals(t.name) 
+                    function_symbol == t.function_symbol
+                    && t.children.size() == this.children.size()) {
                 for(int i = 0; i < this.children.size(); i++){
                     //if the children of both functerms are not equal, the functerms are not equal
                     if(!this.children.get(i).equals(t.children.get(i))) return false;
@@ -106,7 +112,7 @@ public class FuncTerm extends Term{
      */
     @Override
     public String toString(){
-        String s = name + "(";
+        String s = function_symbol.toString() + "(";
         for(int i = 0; i < children.size(); i++){
              s = s + this.children.get(i).toString() + ",";
         } 
@@ -116,7 +122,8 @@ public class FuncTerm extends Term{
     public boolean fatherOf(Term t){
         if(!this.getClass().equals(t.getClass())) return false;
         FuncTerm that = (FuncTerm) t;
-        if(!this.name.equals(that.name)) return false;
+        if(this.function_symbol != that.function_symbol) return false;
+        //if(!this.name.equals(that.name)) return false;
         for(int i = 0; i < this.children.size();i++){
             if(!this.children.get(i).fatherOf(that.children.get(i))) return false;
         }
