@@ -47,12 +47,13 @@ public class NodeImpl implements NodeInterface {
         }
         
         try {
+            System.out.println("Starting context ");
             // args[0] is the context id
             String name = "Context" + args[0];
             System.out.println("name = " + name);
             NodeInterface local_node = new NodeImpl();
             NodeInterface stub =
-                (NodeInterface) UnicastRemoteObject.exportObject(local_node, 9000);
+                (NodeInterface) UnicastRemoteObject.exportObject(local_node, 0);
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name, stub);
             System.out.println("NodeImpl bound");
