@@ -4,6 +4,7 @@
  */
 package testEntity;
 
+import Entity.Variable;
 import Enumeration.OP;
 import Entity.Constant;
 import Entity.Operator;
@@ -89,5 +90,27 @@ public class Operand {
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
         Operator opi3 = new Operator(opi1,opi2,OP.LESS);
         assertTrue(opi3.getIntValue(null) == 0);
+    }
+       
+    @Test
+    public void testComplexOperand(){
+        
+        // X = 4 + 3 * 4 / 6 - 10 / 5 + 1
+        Constant c1 =  Constant.getConstant("1");
+        Constant c5 =  Constant.getConstant("5");
+        Constant c10 =  Constant.getConstant("10");
+        Constant c4 =  Constant.getConstant("4");
+        Constant c3 =  Constant.getConstant("3");
+        Constant c6 =  Constant.getConstant("6");
+        Operator opi7 = new Operator(c5,c1,OP.PLUS);
+        Operator opi6 = new Operator(c10,opi7,OP.DIVIDE);
+        Operator opi5 = new Operator(c6,opi6,OP.MINUS);
+        Operator opi4 = new Operator(c4,opi5,OP.DIVIDE);
+        Operator opi3 = new Operator(c3,opi4,OP.TIMES);
+        Operator opi2 = new Operator(c4,opi3,OP.PLUS);
+        Operator opi1 = new Operator(Variable.getVariable("X"),opi5,OP.ASSIGN);
+        System.err.println(opi1);
+        System.err.println(opi1.getIntValue(null));
+        assertTrue(opi1.getIntValue(null) == 5);
     }
 }

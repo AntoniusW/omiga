@@ -65,7 +65,7 @@ public class OperatorNode extends Node{
                 System.err.println(instance.get(this.getVarPositions().get(v)));*/
                 v.setValue(instance.get(this.getVarPositions().get(v)));
             }
-            if(op.getIntValue() == 1){
+            if(op.getIntValue(null) == 1){
                 // The instance fullfills the operator
                 /*System.out.println("Passed the Operator check!");
                 System.err.println(this.memory);*/

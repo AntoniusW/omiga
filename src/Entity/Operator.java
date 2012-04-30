@@ -49,30 +49,52 @@ public class Operator implements OperandI{
         switch(op){
             case PLUS: //
                 if(i == null) {
+                    //System.out.println(this + " returns: " + (left.getIntValue(null) + right.getIntValue(null)) );
                     return left.getIntValue(null) + right.getIntValue(null);
                 }else{
+                    //System.out.println(this + " returns: " + (i + right.getIntValue(null)) );
                     return i + right.getIntValue(null);
                 }
             case MINUS:
-                if(i == null) {
-                    return left.getIntValue(null) - right.getIntValue(null);
+                if(right.getClass().equals(Operator.class)){
+                    Operator oper = (Operator)right;
+                    if(i == null) {
+                        int ret = left.getIntValue(null) - oper.getLeft().getIntValue(i);
+                        System.out.println(this + " returns: " + ret );
+                        return left.getIntValue(null) - right.getIntValue(null);
+                    }else{
+                        int ret = i - oper.getLeft().getIntValue(i);
+                        System.out.println(this + " returns: " + ret );
+                        return i - right.getIntValue(null);
+                    }
                 }else{
-                    return i - right.getIntValue(null);
+                    if(i == null) {
+                        System.out.println(this + " returns: " + (left.getIntValue(null) - right.getIntValue(null)) );
+                        return left.getIntValue(null) - right.getIntValue(null);
+                    }else{
+                        System.out.println(this + " returns: " + (i - right.getIntValue(null)) );
+                        return i - right.getIntValue(null);
+                    }
                 }
+                
             case TIMES: 
                 if(right.getClass().equals(Operator.class)){
                     Operator oper = (Operator)right;
                     if(i == null){
                         int ret = left.getIntValue(null) * oper.getLeft().getIntValue(i);
+                        //System.out.println(this + " returns: " + ret );
                         return oper.getIntValue(ret);
                     }else{
                         int ret = i * oper.getLeft().getIntValue(null);
+                        //System.out.println(this + " returns: " + ret );
                         return oper.getIntValue(ret);
                     }
                 }else{
                     if(i == null){
+                        //System.out.println(this + " returns: " + left.getIntValue(null) * right.getIntValue(null) );
                         return left.getIntValue(null) * right.getIntValue(null);
                     }else{
+                        //System.out.println(this + " returns: " + i * right.getIntValue(null) );
                         return i * right.getIntValue(null);
                     }
                 }
@@ -81,15 +103,19 @@ public class Operator implements OperandI{
                     Operator oper = (Operator)right;
                     if(i == null){
                         int ret = left.getIntValue(null) / oper.getLeft().getIntValue(i);
+                        //System.out.println(this + " returns: " + ret );
                         return oper.getIntValue(ret);
                     }else{
                         int ret = i / oper.getLeft().getIntValue(null);
+                        //System.out.println(this + " returns: " + ret );
                         return oper.getIntValue(ret);
                     }
                 }else{
                     if(i == null){
+                        //System.out.println(this + " returns: " + left.getIntValue(null) / right.getIntValue(null) );
                         return left.getIntValue(null) / right.getIntValue(null);
                     }else{
+                        //System.out.println(this + " returns: " + i / right.getIntValue(null) );
                         return i / right.getIntValue(null);
                     }
                 }
@@ -141,7 +167,7 @@ public class Operator implements OperandI{
         }
         //replace all Variable oocurences of v by 0 then replace this op by MINUS and Divide by countRight-countLeft and return
         v.setValue(zero);
-        return (left.getIntValue() - right.getIntValue())/(countRight-countLeft);
+        return (left.getIntValue(null) - right.getIntValue(null))/(countRight-countLeft);
 
         
         //return new Operator(null,null, OP.BIGGER);

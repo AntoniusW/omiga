@@ -89,10 +89,11 @@ public class Constant extends Term implements OperandI{
     
     //TODO: Check if this is correct for numbers!
     @Override
-    public int getIntValue(){
+    public int getIntValue(Integer i){
         return this.intValue;
     }
     
+    @Override
     public boolean fatherOf(Term t){
         if(t.equals(this)) return true;
         return false;
