@@ -21,22 +21,26 @@ public class NodeImpl implements NodeInterface {
     
     @Override
     public ReplyMessage handleAddingFacts() throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
+        throw new UnsupportedOperationException("Not yet supported");                
+        //return ReplyMessage.SUCCEEDED;
     }
 
     @Override
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
+        throw new UnsupportedOperationException("Not yet supported");                
+        //return ReplyMessage.SUCCEEDED;
     }
 
     @Override
-    public ReplyMessage makeAlternative() throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
+    public ReplyMessage makeBranch() throws RemoteException {
+        throw new UnsupportedOperationException("Not yet supported");
+        //return ReplyMessage.SUCCEEDED;
     }
 
     @Override
     public ReplyMessage localBacktrack(int global_level) throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
+        throw new UnsupportedOperationException("Not yet supported");                        
+        //return ReplyMessage.SUCCEEDED;
     }
     
     public static void main(String[] args) {
@@ -61,6 +65,16 @@ public class NodeImpl implements NodeInterface {
             System.err.println("NodeImpl exception:");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean hasMoreChoice() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ReplyMessage hasMoreBranch() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }
