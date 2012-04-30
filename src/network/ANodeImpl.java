@@ -43,6 +43,7 @@ public class ANodeImpl implements ANodeInterface {
     // mappings of other_node_name to predicate/function symbols/constants
     public static Map<String, Map<Integer, Object>> ser_mapping =
             new HashMap<String, Map<Integer, Object>>();    // mapping for deserialization
+    public static String serializingFrom = null;
     public static Map<Object, Integer> out_mapping =
             new HashMap<Object, Integer>();  // mapping for serialization
     // as an integer from a given node uniquely identifies the instance of

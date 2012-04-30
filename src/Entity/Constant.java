@@ -6,10 +6,14 @@ package Entity;
 
 import Interfaces.OperandI;
 import Interfaces.Term;
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import network.ANodeImpl;
 
 /**
  *
@@ -19,7 +23,7 @@ import java.util.Iterator;
  * 
  * @param constants a static List of Constants, used to ensure uniqueness of Constants
  */
-public class Constant extends Term implements OperandI{
+public class Constant extends Term implements OperandI, Serializable {
     
     private Integer intValue;
     
@@ -101,6 +105,35 @@ public class Constant extends Term implements OperandI{
     
     public static Iterator<Constant> getConstantsIterator() {
         return constants.values().iterator();
+    }
+  
+    /* AW temp commit
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();   // TODO AW probably unnecessary, it should just write the intValue, which could be recomputed
+        out.writeInt(ANodeImpl.out_mapping.get(this));
+        
+    }
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        Constant deserialized = (Constant)ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(in.readInt());
+    }
+    
+    private Object writeReplace() throws ObjectStreamException {
+        return new SerializedForm(ANodeImpl.out_mapping.get(this));
+    }*/
+        
+    private static class SerializedForm implements Serializable{
+      
+        private Integer value;
+        
+        public SerializedForm(Integer value) {
+            this.value=value;
+        }
+        
+        private Object readResolve() throws ObjectStreamException {
+            return ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(value);
+    }
+        
     }
     
 }
