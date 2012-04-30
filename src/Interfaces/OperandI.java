@@ -16,7 +16,7 @@ import java.util.HashSet;
  */
 public interface OperandI {
     
-    public int getIntValue();
+    public int getIntValue(Integer i);
     public ArrayList<Variable> getUsedVariables();
     
 }

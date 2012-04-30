@@ -44,7 +44,7 @@ public class Operand {
         Constant c1 =  Constant.getConstant("4");
         Constant c2 =  Constant.getConstant("3");
         Operator opi1 = new Operator(c1,c2,OP.PLUS);
-        assertTrue(opi1.getIntValue() == 7);
+        assertTrue(opi1.getIntValue(null) == 7);
     }
     
     @Test
@@ -52,7 +52,7 @@ public class Operand {
         Constant c1 =  Constant.getConstant("3");
         Constant c2 =  Constant.getConstant("4");
         Operator opi1 = new Operator(c1,c2,OP.MINUS);
-        assertTrue(opi1.getIntValue() == -1);
+        assertTrue(opi1.getIntValue(null) == -1);
     }
     
     @Test
@@ -64,7 +64,7 @@ public class Operand {
         Constant c4 =  Constant.getConstant("8");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
         Operator opi3 = new Operator(opi1,opi2,OP.NOTEQUAL);
-        assertTrue(opi3.getIntValue() == 0);
+        assertTrue(opi3.getIntValue(null) == 0);
     }
     
     @Test
@@ -76,7 +76,7 @@ public class Operand {
         Constant c4 =  Constant.getConstant("9");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
         Operator opi3 = new Operator(opi1,opi2,OP.GREATER);
-        assertTrue(opi3.getIntValue() == 1);
+        assertTrue(opi3.getIntValue(null) == 1);
     }
     
         @Test
@@ -88,6 +88,6 @@ public class Operand {
         Constant c4 =  Constant.getConstant("9");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
         Operator opi3 = new Operator(opi1,opi2,OP.LESS);
-        assertTrue(opi3.getIntValue() == 0);
+        assertTrue(opi3.getIntValue(null) == 0);
     }
 }

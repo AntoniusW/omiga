@@ -30,24 +30,87 @@ public class Operator implements OperandI{
         this.op = op;
     }
     
+    public OperandI getLeft(){
+        return left;
+    }
+    
+    public OperandI getRight(){
+        return right;
+    }
+    
+    public OP getOP(){
+        return op;
+    }
+    
    
     
     @Override
-    public int getIntValue() {
+    public int getIntValue(Integer i) {
         switch(op){
-            case PLUS: return left.getIntValue() + right.getIntValue();
-            case MINUS: return left.getIntValue() - right.getIntValue();
+            case PLUS: //
+                if(i == null) {
+                    return left.getIntValue(null) + right.getIntValue(null);
+                }else{
+                    return i + right.getIntValue(null);
+                }
+            case MINUS:
+                if(i == null) {
+                    return left.getIntValue(null) - right.getIntValue(null);
+                }else{
+                    return i - right.getIntValue(null);
+                }
+            case TIMES: 
+                if(right.getClass().equals(Operator.class)){
+                    Operator oper = (Operator)right;
+                    if(i == null){
+                        int ret = left.getIntValue(null) * oper.getLeft().getIntValue(i);
+                        return oper.getIntValue(ret);
+                    }else{
+                        int ret = i * oper.getLeft().getIntValue(null);
+                        return oper.getIntValue(ret);
+                    }
+                }else{
+                    if(i == null){
+                        return left.getIntValue(null) * right.getIntValue(null);
+                    }else{
+                        return i * right.getIntValue(null);
+                    }
+                }
+            case DIVIDE: 
+                if(right.getClass().equals(Operator.class)){
+                    Operator oper = (Operator)right;
+                    if(i == null){
+                        int ret = left.getIntValue(null) / oper.getLeft().getIntValue(i);
+                        return oper.getIntValue(ret);
+                    }else{
+                        int ret = i / oper.getLeft().getIntValue(null);
+                        return oper.getIntValue(ret);
+                    }
+                }else{
+                    if(i == null){
+                        return left.getIntValue(null) / right.getIntValue(null);
+                    }else{
+                        return i / right.getIntValue(null);
+                    }
+                }
+            case ASSIGN: return this.right.getIntValue(null);
             case EQUAL: 
-                if(left.getIntValue() == right.getIntValue()) return 1;
+                if(left.getIntValue(null) == right.getIntValue(null)) return 1;
                 return 0;
             case NOTEQUAL:
-                if(left.getIntValue() != right.getIntValue()) return 1;
+                if(left.getIntValue(null) != right.getIntValue(null)) return 1;
                 return 0;
             case GREATER:
-                if(left.getIntValue() > right.getIntValue()) return 1;
+                if(left.getIntValue(null) > right.getIntValue(null)) return 1;
                 return 0;
             case LESS:
-                if(left.getIntValue() < right.getIntValue()) return 1;
+                if(left.getIntValue(null) < right.getIntValue(null)) return 1;
+                return 0;
+            case GREATER_EQ:
+                if(left.getIntValue(null) >= right.getIntValue(null)) return 1;
+                return 0;
+            case LESS_EQ:
+                if(left.getIntValue(null) <= right.getIntValue(null)) return 1;
                 return 0;
             default: return 0;
         }

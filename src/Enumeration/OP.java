@@ -33,6 +33,11 @@ public enum OP {
         }
     }
     
+    /*public boolean isPoint(){
+        if(this.equals(TIMES) || this.equals(DIVIDE)) return true;
+        return false;
+    }*/
+    
     public String toString(){
         switch(this){
             case PLUS: return "+";
