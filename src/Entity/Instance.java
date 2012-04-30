@@ -5,6 +5,7 @@
 package Entity;
 
 import Interfaces.Term;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -20,7 +21,7 @@ import java.util.HashSet;
  * 
  * @param instances a HashMap of instances in order to not create duplicate instances
  */
-public class Instance {
+public class Instance implements Serializable {
     
     public static int lol = 0;
     public static int lolra = 0;

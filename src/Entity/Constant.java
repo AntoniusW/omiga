@@ -116,11 +116,11 @@ public class Constant extends Term implements OperandI, Serializable {
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         Constant deserialized = (Constant)ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(in.readInt());
-    }
-    
-    private Object writeReplace() throws ObjectStreamException {
-        return new SerializedForm(ANodeImpl.out_mapping.get(this));
     }*/
+    
+    public Object writeReplace() throws ObjectStreamException {
+        return new SerializedForm(ANodeImpl.out_mapping.get(this));
+    }
         
     private static class SerializedForm implements Serializable{
       
@@ -130,7 +130,7 @@ public class Constant extends Term implements OperandI, Serializable {
             this.value=value;
         }
         
-        private Object readResolve() throws ObjectStreamException {
+        public Object readResolve() throws ObjectStreamException {
             return ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(value);
     }
         

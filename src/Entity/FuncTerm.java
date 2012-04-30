@@ -5,6 +5,7 @@
 package Entity;
 
 import Interfaces.Term;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -18,7 +19,7 @@ import java.util.HashSet;
  * 
  * 
  */
-public class FuncTerm extends Term{
+public class FuncTerm extends Term implements Serializable {
         
     private ArrayList<Term> children;
     private FunctionSymbol function_symbol;

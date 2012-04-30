@@ -4,9 +4,12 @@
  */
 package Entity;
 
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import network.ANodeImpl;
 
 /**
  *
@@ -23,14 +26,13 @@ import java.util.Iterator;
  * @param predicates Factory pattern: A datastructure to store all created predicates so we later on use only one instance for each predicate
  * 
  */
-public class Predicate {
+public class Predicate implements Serializable {
     
     private static ArrayList<Predicate> predicates = new ArrayList<Predicate>();
     
     
     private String name;
     private int arity;
-    private int hash;
     private int hashcode;
     
     /**
@@ -130,5 +132,26 @@ public class Predicate {
         return predicates.iterator();
     }
     
+    public Object writeReplace() throws ObjectStreamException {
+        return new SerializedForm(ANodeImpl.out_mapping.get(this));
+    }
+    
+    /*
+     * An instance of this class is sent over the wire when communicating with
+     * other nodes.
+     */
+    private static class SerializedForm implements Serializable{
+      
+        private Integer value;
+        
+        public SerializedForm(Integer value) {
+            this.value=value;
+        }
+        
+        public Object readResolve() throws ObjectStreamException {
+            return ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(value);
+    }
+        
+    }
     
 }

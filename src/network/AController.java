@@ -51,6 +51,13 @@ public class AController {
             }
                             
             System.out.println("Start up successful.");
+            
+            System.out.println("Calling test exchange on nodes now.");
+            for (Entry<String,Remote> node : nodes.entrySet()) {
+                ReplyMessage repl=((ANodeInterface)node.getValue()).testInstanceExchange();
+                
+                System.out.println("Reply was: "+repl);
+            }
         }
         catch (Exception e) {
             System.err.println("Controller mainLoop ERROR.");

@@ -4,8 +4,11 @@
  */
 package network;
 
+import Entity.Instance;
+import Entity.Predicate;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -24,11 +27,20 @@ public interface ANodeInterface extends Remote {
     public void tell_active_domain(String node_name, Map<Pair<String,Integer>,Integer> predicates,
                        Map<String,Integer> functions, Map<String,Integer> constants) throws RemoteException;
     
-    public ReplyMessage handleAddingFacts() throws RemoteException;
+    /*
+     * This is ugly, but needed to tune the de-serialization of the later
+     * handleAddingFacts, it needs to know where the facts come from, before it
+     * actually starts to deserialize them.
+     */
+    public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException;
+    
+    public ReplyMessage handleAddingFacts(Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException;
     
     public ReplyMessage makeChoice(int global_level) throws RemoteException;
     
     public ReplyMessage makeAlternative() throws RemoteException;
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
+    
+    public ReplyMessage testInstanceExchange() throws RemoteException;
 }

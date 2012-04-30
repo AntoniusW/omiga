@@ -8,6 +8,7 @@ import Entity.Constant;
 import Entity.ContextASP;
 import Entity.ContextASPRewriting;
 import Entity.FunctionSymbol;
+import Entity.Instance;
 import Entity.Predicate;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
@@ -20,8 +21,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -55,6 +58,7 @@ public class ANodeImpl implements ANodeInterface {
     
     
     private static String node_name;
+    private static ContextASP ctx;
     private static String filter;
     private static int rewriting;
     private static String filename;
@@ -66,12 +70,6 @@ public class ANodeImpl implements ANodeInterface {
     }
     
     
-
-    
-    @Override
-    public ReplyMessage handleAddingFacts() throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
-    }
 
     @Override
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
@@ -135,7 +133,7 @@ public class ANodeImpl implements ANodeInterface {
         outprint =true;
         
         // create context
-        ContextASP ctx = new ContextASPRewriting();
+        ctx = new ContextASPRewriting();
         
         // parsing with ANTLR
         try {
@@ -254,6 +252,51 @@ public class ANodeImpl implements ANodeInterface {
         
         System.out.println("Mapping created.");
 
+    }
+
+    @Override
+    public ReplyMessage testInstanceExchange() throws RemoteException {
+        
+        System.out.println("Testing instance exchange now.");
+        
+        // simply send all known facts to all other nodes
+        HashMap<Predicate, ArrayList<Instance>> in_facts = ctx.getAllINFacts();
+        for(Remote other : other_nodes.values()) {
+            ((ANodeInterface)other).receiveNextFactsFrom(node_name);
+            ((ANodeInterface)other).handleAddingFacts(in_facts);
+        }
+        return ReplyMessage.SUCCEEDED;
+    }
+    
+    
+
+    @Override
+    public ReplyMessage handleAddingFacts(Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
+        
+        // we simply print out what we received
+        System.out.println("Received facts from "+serializingFrom +":");
+        for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
+            System.out.println("Predicate "+pred.getKey().getName()+"/"+
+                                pred.getKey().getArity()+ ", "+
+                                pred.getValue().size()+" entries.");
+            for (Iterator it = pred.getValue().iterator(); it.hasNext();) {
+                Instance inst = (Instance)it.next();
+                System.out.println("Instance: "+inst.toString());
+                
+            }
+        }
+        
+        
+        return ReplyMessage.SUCCEEDED;
+    }
+
+    @Override
+    public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException {
+        serializingFrom = from_node;
+        
+        System.out.println("The next facts will come from node "+from_node);
+        
+        return ReplyMessage.SUCCEEDED;
     }
 
     
