@@ -9,6 +9,7 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  *
@@ -95,6 +96,10 @@ public class Constant extends Term implements OperandI{
     public boolean fatherOf(Term t){
         if(t.equals(this)) return true;
         return false;
+    }
+    
+    public static Iterator<Constant> getConstantsIterator() {
+        return constants.values().iterator();
     }
     
 }

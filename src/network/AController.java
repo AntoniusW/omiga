@@ -45,18 +45,12 @@ public class AController {
             // init each node
             System.out.println("Initializing nodes now.");
             for (Entry<String,Remote> node : nodes.entrySet()) {
-                ((ANodeInterface)node.getValue()).init(nodes);
+                Map<String,Remote> nodes_minus_current = new HashMap<String,Remote>(nodes);
+                nodes_minus_current.remove(node.getKey());
+                ((ANodeInterface)node.getValue()).init(nodes_minus_current);
             }
-                
-            
-            //String name = "Context1";
-            //ANodeInterface node = (ANodeInterface) registry.lookup(name);
-        
-            //ReplyMessage reply = node.makeChoice(0);
-            
-            //assert (reply == ReplyMessage.SUCCEEDED);
-            
-            System.out.println("Got SUCCEEDED");
+                            
+            System.out.println("Start up successful.");
         }
         catch (Exception e) {
             System.err.println("Controller mainLoop ERROR.");

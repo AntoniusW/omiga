@@ -7,7 +7,6 @@ package network;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  *
@@ -17,11 +16,12 @@ public interface ANodeInterface extends Remote {
     public void init(Map<String,Remote> other_nodes) throws RemoteException;
     
     /*
+     * node_name: name to which the mapping belongs to
      * predicates: (Name,Arity) -> SerializeInt
      * functions: Name -> SerializeInt
      * constants: Name -> SerializeInt
      */
-    public void inform(Map<Entry<String,Integer>,Integer> predicates,
+    public void tell_active_domain(String node_name, Map<Pair<String,Integer>,Integer> predicates,
                        Map<String,Integer> functions, Map<String,Integer> constants) throws RemoteException;
     
     public ReplyMessage handleAddingFacts() throws RemoteException;

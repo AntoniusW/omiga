@@ -5,6 +5,7 @@
 package Entity;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -30,8 +31,16 @@ public class FunctionSymbol {
             this.name = name;
         }
         
+        @Override
         public String toString() {
             return name;
         }
+
+        public String getName() {
+            return name;
+        }
     
+        public static Iterator<FunctionSymbol> getFunctionSymbolsIterator() {
+            return func_symbols.values().iterator();
+        }
 }
