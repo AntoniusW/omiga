@@ -7,6 +7,7 @@ package network;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import network.NodeInterface;
 
@@ -39,6 +40,27 @@ public class Controller {
         }
     }
     
+    private int findNodeWithChoicePoint()
+    {
+        try
+        {
+            for (int i = 0; i < system_size; i++)
+            {
+                if (nodes.get(i).hasMoreChoice() == true)
+                {
+                    return i;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println("Controller::findNodeWithChoicePoint ERROR.");
+            e.printStackTrace(); 
+        }
+        
+        return -1;
+    }
+    
     private void backTrack(int global_level)
     {
         try
@@ -52,7 +74,7 @@ public class Controller {
         }
         catch (Exception e)
         {
-            System.err.println("Controller global backtrack ERROR.");
+            System.err.println("Controller::backtrack ERROR.");
             e.printStackTrace();            
         }
     }
@@ -63,58 +85,73 @@ public class Controller {
             Action action = Action.MAKE_CHOICE;
             int global_level = 0;
             int current_node = 0;
+            Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
+            Pair<Integer, Integer> p;
             
             while (action != Action.FINISH)
             {                
                 if (action == Action.MAKE_CHOICE)
                 {
-                    global_level++;
-                    System.out.println("Controller::mainLoop(). Requesting makeChoice(" + global_level + ") to node[" + current_node + "]");
-                    ReplyMessage reply = nodes.get(current_node).makeChoice(global_level);
-                    System.out.println("Controller::mainLoop(). Got reply = " + reply);
-                    if (reply == ReplyMessage.NO_MORE_CHOICE)
+                    current_node = findNodeWithChoicePoint();
+                    
+                    if (current_node != -1)
                     {
-                        if (current_node < system_size - 1) current_node++;
-                        else
+                        global_level++;
+                        stack.push(new Pair(global_level, current_node));
+                        
+                        ReplyMessage reply = nodes.get(current_node).makeChoice(global_level);
+                        if (reply == ReplyMessage.INCONSISTENT)
                         {
-                            /* An answer set found */
-                            global_level--;
-                            System.out.println("An answer set found. global_level = " + global_level);
-                            action = Action.MAKE_ALTERNATIVE;
+                            p = stack.pop();
+                            global_level = p.getArg1();
+                            current_node = p.getArg2();
+                            action = Action.MAKE_BRANCH;
                         }
                     }
-                    else if (reply == ReplyMessage.INCONSISTENT)
+                    else
                     {
-                        //global_level--;
-                        //backTrack(global_level);
-                        action = Action.MAKE_ALTERNATIVE;
+                        System.out.println("An answer set found!");
+                        p = stack.pop();
+                        global_level = p.getArg1();
+                        current_node = p.getArg2();
+                        action = Action.MAKE_BRANCH;
                     }
                 }
-                else if (action == Action.MAKE_ALTERNATIVE)
+                else if (action == Action.MAKE_BRANCH)
                 {                    
-                    System.out.println("Will make alternative. global_level = " + global_level);
                     backTrack(global_level-1);
-                    System.out.println("Controller::mainLoop(). Requesting makeAlternative(" + global_level + ") to node[" + current_node + "]");
-                    ReplyMessage reply = nodes.get(current_node).makeAlternative();
+                    ReplyMessage reply = nodes.get(current_node).hasMoreBranch();
                     switch (reply)
                     {
-                        case SUCCEEDED:
-                            action = Action.MAKE_CHOICE;
+                        case HAS_BRANCH:
+                            reply = nodes.get(current_node).makeBranch();
+                            if (reply == ReplyMessage.SUCCEEDED)
+                            {
+                                stack.push(new Pair(global_level, current_node));
+                                action = Action.MAKE_CHOICE;
+                            }
                             break;
                         case NO_MORE_BRANCH:
-                            global_level--;
-                            //backTrack(global_level);                           
+                            p = stack.pop();
+                            global_level = p.getArg1();
+                            current_node = p.getArg2();
                             break;
                         case NO_MORE_ALTERNATIVE:
-                            if (current_node == 0) action = Action.FINISH;
-                            else current_node--;
+                            if (stack.empty())
+                                action = Action.FINISH;
+                            else
+                            {
+                                p = stack.pop();
+                                global_level = p.getArg1();
+                                current_node = p.getArg2();
+                            }
                             break;
                     }
                 }
             }
         }        
         catch (Exception e) {
-            System.err.println("Controller mainLoop ERROR.");
+            System.err.println("Controller::mainLoop ERROR.");
             e.printStackTrace();
         }        
     }

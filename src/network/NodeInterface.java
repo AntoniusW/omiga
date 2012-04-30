@@ -14,9 +14,13 @@ import java.rmi.RemoteException;
 public interface NodeInterface extends Remote {
     public ReplyMessage handleAddingFacts() throws RemoteException;
     
-    public ReplyMessage makeChoice(int global_level) throws RemoteException;
+    public boolean hasMoreChoice() throws RemoteException;
     
-    public ReplyMessage makeAlternative() throws RemoteException;
+    public ReplyMessage makeChoice(int global_level) throws RemoteException;
+
+    public ReplyMessage hasMoreBranch() throws RemoteException;
+    
+    public ReplyMessage makeBranch() throws RemoteException;
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
 }

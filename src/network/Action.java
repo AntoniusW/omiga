@@ -10,6 +10,6 @@ package network;
  */
 public enum Action {
     MAKE_CHOICE,
-    MAKE_ALTERNATIVE,
+    MAKE_BRANCH,
     FINISH
 }

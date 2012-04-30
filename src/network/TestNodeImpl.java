@@ -27,6 +27,27 @@ public class TestNodeImpl implements NodeInterface {
     public ReplyMessage handleAddingFacts() throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    @Override
+    public boolean hasMoreChoice() throws RemoteException {
+        count++;
+        
+        switch (count)
+        {
+            case 1:
+            case 3:
+            case 14:
+                System.out.println("TestNodeImpl::hasMoreChoice()? count = " + count + ". return TRUE.");
+                return true;
+            case 5:
+            case 19:
+                System.out.println("TestNodeImpl::hasMoreChoice()? count = " + count + ". return FALSE.");
+                return false;
+            default:
+                throw new UnsupportedOperationException("TestNodeImpl::hasMoreChoice()? ERROR with count = " + count);
+        }
+    }
+
 
     @Override
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
@@ -35,47 +56,58 @@ public class TestNodeImpl implements NodeInterface {
         
         switch (count)
         {
-            case 1:
             case 2:
-            case 9:
+            case 4:
                 System.out.println("TestNodeImpl::makechoice(" + global_level + "). count = " + count + ". return SUCCEEDED.");
                 return ReplyMessage.SUCCEEDED;
-            case 3:
-            case 13:
-                System.out.println("TestNodeImpl::makechoice(" + global_level + "). count = " + count + ". return NO_MORE_CHOICE.");
-                return ReplyMessage.NO_MORE_CHOICE;
-            case 10:
+            case 15:
                 System.out.println("TestNodeImpl::makechoice(" + global_level + "). count = " + count + ". return INCONSISTENT.");              
                 return ReplyMessage.INCONSISTENT;
             default:
                 throw new UnsupportedOperationException("TestNodeImpl::makeChoice(" + global_level + "). ERROR with count = " + count);                
         }
     }
+    
+    @Override
+    public ReplyMessage hasMoreBranch() throws RemoteException {
+        count++;
+        
+        switch (count)
+        {
+            case 7:
+            case 12:
+            case 17:
+                System.out.println("TestNodeImpl::hasMoreBranch()? count = " + count + ". return HAS_BRANCH.");
+                return ReplyMessage.HAS_BRANCH;
+            case 10:
+            case 21:
+                System.out.println("TestNodeImpl::hasMoreBranch()? count = " + count + ". return NO_MORE_BRANCH.");
+                return ReplyMessage.NO_MORE_BRANCH;
+            case 23:
+                System.out.println("TestNodeImpl::hasMoreBranch()? count = " + count + ". return NO_MORE_ALTERNATIVE.");
+                return ReplyMessage.NO_MORE_ALTERNATIVE;
+            default:
+                throw new UnsupportedOperationException("TestNodeImpl::hasMoreBranch()? ERROR with count = " + count);
+        }
+    }  
 
     @Override
-    public ReplyMessage makeAlternative() throws RemoteException {
+    public ReplyMessage makeBranch() throws RemoteException {
         count++;
         switch (count)
         {
-            case 5:
-                System.out.println("TestNodeImpl::makeAlternative. count = " + count + ". return INCONSISTENT.");
+            case 8:
+                System.out.println("TestNodeImpl::makeBranch. count = " + count + ". return INCONSISTENT.");
                 return ReplyMessage.INCONSISTENT;
-            case 7:
-            case 15:                
-                System.out.println("TestNodeImpl::makeAlternative. count = " + count + ". return NO_MORE_BRANCH.");                
-                return ReplyMessage.NO_MORE_BRANCH;
-            case 9:
-            case 12:
-                System.out.println("TestNodeImpl::makeAlternative. count = " + count + ". return SUCCEEDED.");               
+            case 13:
+            case 18:
+                System.out.println("TestNodeImpl::makeBranch. count = " + count + ". return SUCCEEDED.");               
                 return ReplyMessage.SUCCEEDED;
-            case 17:
-                System.out.println("TestNodeImpl::makeAlternative. count = " + count + ". return NO_MORE_ALTERNATIVE.");                
-                return ReplyMessage.NO_MORE_ALTERNATIVE;
             default:
-                throw new UnsupportedOperationException("TestNodeImpl::makeAlternative. ERROR with count = " + count);                                
+                throw new UnsupportedOperationException("TestNodeImpl::makeBranch. ERROR with count = " + count);                                
         }
     }
-
+    
     @Override
     public ReplyMessage localBacktrack(int global_level) throws RemoteException {
         count++;
