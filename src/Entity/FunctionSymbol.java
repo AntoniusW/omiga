@@ -8,6 +8,7 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+import network.AExternalizedForm;
 import network.ANodeImpl;
 
 /**
@@ -48,20 +49,7 @@ public class FunctionSymbol implements Serializable {
         }
         
     public Object writeReplace() throws ObjectStreamException {
-        return new SerializedForm(ANodeImpl.out_mapping.get(this));
+        return new AExternalizedForm(ANodeImpl.out_mapping.get(this));
     }
-        
-    private static class SerializedForm implements Serializable {
-      
-        private Integer value;
-        
-        public SerializedForm(Integer value) {
-            this.value=value;
-        }
-        
-        public Object readResolve() throws ObjectStreamException {
-            return ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(value);
-    }
-        
-    }
+
 }

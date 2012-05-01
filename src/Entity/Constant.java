@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import network.AExternalizedForm;
 import network.ANodeImpl;
 
 /**
@@ -108,33 +109,10 @@ public class Constant extends Term implements OperandI, Serializable {
         return constants.values().iterator();
     }
   
-    /* AW temp commit
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();   // TODO AW probably unnecessary, it should just write the intValue, which could be recomputed
-        out.writeInt(ANodeImpl.out_mapping.get(this));
-        
-    }
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        Constant deserialized = (Constant)ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(in.readInt());
-    }*/
-    
+   
     public Object writeReplace() throws ObjectStreamException {
-        return new SerializedForm(ANodeImpl.out_mapping.get(this));
+        return new AExternalizedForm(ANodeImpl.out_mapping.get(this));
     }
-        
-    private static class SerializedForm implements Serializable{
-      
-        private Integer value;
-        
-        public SerializedForm(Integer value) {
-            this.value=value;
-        }
-        
-        public Object readResolve() throws ObjectStreamException {
-            return ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(value);
-    }
-        
-    }
+
     
 }
