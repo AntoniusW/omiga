@@ -64,6 +64,7 @@ public class OperatorNode extends Node{
         
     }
     
+    @Override
     public void addInstance(Instance instance, boolean from){
         
         //System.out.println("AddInstance in OPNode called!: " + instance);
@@ -76,7 +77,7 @@ public class OperatorNode extends Node{
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
                 v.setValue(instance.get(this.getVarPositions().get(v)));
             }
-            ((Variable)op.getLeft()).setValue(Constant.getConstant(String.valueOf(op.getIntValue(0, 0, null))));
+            ((Variable)op.getLeft()).setValue(Constant.getConstant(String.valueOf(op.getIntValue())));
             Term instanceArray[] = new Term[this.tempVarPosition.size()];
             for(Variable v: this.getVarPositions().keySet()){
                 instanceArray[this.getVarPositions().get(v)] = v.getValue();
@@ -95,7 +96,7 @@ public class OperatorNode extends Node{
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
                 v.setValue(instance.get(this.getVarPositions().get(v)));
             }
-            if(op.getIntValue(0,0,null) == 1){
+            if(op.getIntValue() == 1){
                 // The instance fullfills the operator
                 this.memory.addInstance(instance);
                 super.addInstance(instance, from); // Register this instance in our backtracking structure.

@@ -94,7 +94,7 @@ public class Constant extends Term implements OperandI, Serializable {
     
     //TODO: Check if this is correct for numbers!
     @Override
-    public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP){
+    public int getIntValue(){
         return this.intValue;
     }
     

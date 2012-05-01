@@ -103,8 +103,8 @@ public class Variable extends Term implements OperandI{
      * @return The integer representation of this variables value.
      */
     @Override
-    public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP){
-        return ((Constant)this.value).getIntValue(ergebnis,punktrechnung,lastPunktOP);
+    public int getIntValue(){
+        return ((Constant)this.value).getIntValue();
     }
     /**
      * This method is needed within the rete network's selection nodes. There we assign values to variables, til we can build a hole variable assignment

@@ -17,7 +17,7 @@ import java.util.HashSet;
  */
 public interface OperandI {
     
-    public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP);
+    public int getIntValue();
     public ArrayList<Variable> getUsedVariables();
     
 }

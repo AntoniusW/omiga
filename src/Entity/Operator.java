@@ -60,6 +60,36 @@ public class Operator implements OperandI{
        if(this.op.equals(OP.DIVIDE) || this.op.equals(OP.TIMES)) return true;
        return false;
    }
+   
+    @Override
+    public int getIntValue() {
+        switch(op){
+            case PLUS: return left.getIntValue() + right.getIntValue();
+            case MINUS: return left.getIntValue() - right.getIntValue();  
+            case TIMES: return left.getIntValue() * right.getIntValue();
+            case DIVIDE: return left.getIntValue() / right.getIntValue();
+            case ASSIGN: return right.getIntValue();
+            case EQUAL: 
+                if(left.getIntValue() == right.getIntValue()) return 1;
+                return 0;
+            case NOTEQUAL:
+                if(left.getIntValue() != right.getIntValue()) return 1;
+                return 0;
+            case GREATER:
+                if(left.getIntValue() > right.getIntValue()) return 1;
+                return 0;
+            case LESS:
+                if(left.getIntValue() < right.getIntValue()) return 1;
+                return 0;
+            case GREATER_EQ:
+                if(left.getIntValue() >= right.getIntValue()) return 1;
+                return 0;
+            case LESS_EQ:
+                if(left.getIntValue() <= right.getIntValue()) return 1;
+                return 0;
+            default: return 0;
+        }
+    }
 
     /**
     * 
@@ -73,7 +103,7 @@ public class Operator implements OperandI{
     * @param lastPunktOP the value before the actual DIVIDE/TIMES calculation
     * @return the integer value of this Operator (0,1 for comparsim operators)
     */
-    @Override
+    /*@Override
     public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP) {
         switch(op){
             case PLUS: 
@@ -163,9 +193,9 @@ public class Operator implements OperandI{
                 return 0;
             default: return 0;
         }
-    }
+    }*/
     
-    private int calc(OperandI oper){
+    /*private int calc(OperandI oper){
         if(oper.getClass().equals(Operator.class)){
             Operator opi = (Operator)oper;
             if(opi.isPunktRechnung()){
@@ -176,7 +206,7 @@ public class Operator implements OperandI{
         }else{
             return oper.getIntValue(0, 0, null);
         }
-    }
+    }*/
 
     @Override
     public ArrayList<Variable> getUsedVariables() {
@@ -192,7 +222,7 @@ public class Operator implements OperandI{
         return left.toString() + " " + op.toString() + " " + right.toString();
     }
     
-    public int calculate(Variable v){
+    /*public int calculate(Variable v){
         int countLeft = 0;
         int countRight = 0;
         for(Variable v1: this.left.getUsedVariables()){
@@ -207,7 +237,7 @@ public class Operator implements OperandI{
 
         
         //return new Operator(null,null, OP.BIGGER);
-    }
+    }*/
     
     public boolean isInstanciated(Collection<Variable> vars){
         for(Variable v: this.getUsedVariables()){
