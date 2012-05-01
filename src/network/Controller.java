@@ -46,8 +46,11 @@ public class Controller {
         {
             for (int i = 0; i < system_size; i++)
             {
+                System.out.println("Controller::findNodeWithChoicePhoit(): checking, i = " + i);
+
                 if (nodes.get(i).hasMoreChoice() == true)
                 {
+                    System.out.println("Controller::findNodeWithChoicePhoit(): return " + i);
                     return i;
                 }
             }
@@ -93,6 +96,7 @@ public class Controller {
                 if (action == Action.MAKE_CHOICE)
                 {
                     current_node = findNodeWithChoicePoint();
+                    
                     
                     if (current_node != -1)
                     {
@@ -163,7 +167,10 @@ public class Controller {
             System.setSecurityManager(new SecurityManager());
         }
         
-        Controller controller = new Controller(1);
+        int size = Integer.parseInt(args[0]);
+        System.out.println("system size = " + size);
+        
+        Controller controller = new Controller(size);
         controller.mainLoop();
     }
 }
