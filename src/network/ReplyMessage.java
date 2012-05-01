@@ -11,8 +11,9 @@ package network;
 public enum ReplyMessage {
     SUCCEEDED,
     HAS_BRANCH,
-    NO_MORE_CHOICE,
+    HAS_CHOICE,    
     NO_MORE_BRANCH,
+    NO_MORE_CHOICE,
     NO_MORE_ALTERNATIVE,
     INCONSISTENT
 }

@@ -11,6 +11,7 @@ import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import network.ReplyMessage;
 
 /**
  *
@@ -212,6 +213,10 @@ public class ContextASP {
     
     public void resetSatisfiable(){
         this.rete.satisfiable = true;
+    }
+
+    public ReplyMessage choicePlusInfo() {
+        return this.choiceUnit.choicePlusInfo();
     }
     
     

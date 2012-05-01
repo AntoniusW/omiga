@@ -4,6 +4,8 @@
  */
 package network;
 
+import Entity.ContextASP;
+import Entity.ContextASPRewriting;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -14,9 +16,14 @@ import java.rmi.server.UnicastRemoteObject;
  * @author Minh Dao-Tran
  */
 public class NodeImpl implements NodeInterface {
+    
+    private ContextASP c;
 
-    public NodeImpl() {
+    public NodeImpl(ContextASP c) {
         super();
+        this.c = c;
+        
+        c.propagate();
     }            
     
     @Override
@@ -24,9 +31,16 @@ public class NodeImpl implements NodeInterface {
         throw new UnsupportedOperationException("Not yet supported");                
         //return ReplyMessage.SUCCEEDED;
     }
+    
+    @Override
+    public boolean hasMoreChoice() throws RemoteException {
+        throw new UnsupportedOperationException("Not yet supported");   
+    }
 
     @Override
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
+        
+
         throw new UnsupportedOperationException("Not yet supported");                
         //return ReplyMessage.SUCCEEDED;
     }
@@ -55,7 +69,8 @@ public class NodeImpl implements NodeInterface {
             // args[0] is the context id
             String name = "Context" + args[0];
             System.out.println("name = " + name);
-            NodeInterface local_node = new NodeImpl();
+            ContextASP c = new ContextASPRewriting();
+            NodeInterface local_node = new NodeImpl(c);
             NodeInterface stub =
                 (NodeInterface) UnicastRemoteObject.exportObject(local_node, 0);
             Registry registry = LocateRegistry.getRegistry();
@@ -67,10 +82,7 @@ public class NodeImpl implements NodeInterface {
         }
     }
 
-    @Override
-    public boolean hasMoreChoice() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+
 
     @Override
     public ReplyMessage hasMoreBranch() throws RemoteException {

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
+import network.ReplyMessage;
 import org.jgrapht.graph.DirectedSubgraph;
 
 
@@ -537,6 +538,7 @@ public class ChoiceUnit {
         return this.memory.deriveNewFactsSindsDecisionLevel(lvl);
     }
 
-    
-    
+    public ReplyMessage choicePlusInfo() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }    
 }

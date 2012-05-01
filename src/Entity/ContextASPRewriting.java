@@ -13,6 +13,7 @@ import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import network.ReplyMessage;
 
 /**
  *
@@ -78,7 +79,9 @@ public class ContextASPRewriting extends ContextASP{
         }
     }
     
-
+    public ReplyMessage choicePlusInfo() {
+        return this.choiceUnit.choicePlusInfo();
+    }
     
     
 }
