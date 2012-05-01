@@ -8,6 +8,7 @@ import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.Rete;
 import Datastructure.Rewriting.Rewriter_easy;
 import Datastructure.Rewriting.Rewriter_easyMCS;
+import Entity.Constant;
 import Entity.ContextASP;
 import Entity.ContextASPMCS;
 import Entity.ContextASPMCSRewriting;
@@ -41,20 +42,54 @@ public class main_MCS_REWRITING {
     public static void main(String arg[]){
         System.out.println("STARTING THE PROGRAM: " + System.currentTimeMillis());
         //File input = new File("Z:\\DLV\\3col.txt");
-        File input = new File("MCS1.txt");
+        File input = new File("MCSTest.txt");
         //File input = new File("3Col\\3Col6AS.txt");
         
         ParserMCSRewrite pars = new ParserMCSRewrite();
         try {
-            ContextASP c = pars.readContext(input);
+            ContextASPMCSRewriting c = pars.readContext(input);
             Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
             c = rewriter.rewrite(c);
             ((ContextASPMCSRewriting) c).registerFactFromOutside(Predicate.getPredicate("s", 1));
             c.printContext();
             
+            c.propagate();
+            c.getChoiceUnit().DeriveSCC();
+            
+            
+            System.out.println("Decisonlevel @ STartUp: " + c.getDecisionLevel());
+            c.choice();
+            c.propagate();
+            c.printAnswerSet(null);
+            Term[] terms = new Term[1];
+            terms[0] = Constant.getConstant("2");
+            Instance inz = Instance.getInstance(terms);
+            //c.addFact2IN(Predicate.getPredicate("t", 1), inz);
+            c.addFactFromOutside(Predicate.getPredicate("t", 1), inz);
+            c.printAnswerSet(null);
+            System.out.println("C is sat: " + c.isSatisfiable());
+            System.out.println("Decisonlevel: " + c.getDecisionLevel());
+            c.backtrack();
+            c.backtrack();
+            System.out.println("NEXT ALTERNATIVE: " + c.nextAlternative());
+            c.printAnswerSet(null);
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            System.out.println(c.choice());
+            c.printAnswerSet(null);
+            System.out.println("Decisonlevel: " + c.getDecisionLevel());
+            System.out.println("C is sat: " + c.isSatisfiable());
+            
             Manager m = new Manager(c);
             System.out.println("Starting calculation: " + System.currentTimeMillis());
-            m.calculate(null, false, null);
+            //m.calculate(null, false, null);
             System.out.println("Program finished: " + System.currentTimeMillis());
             
         } catch (FactSizeException ex) {

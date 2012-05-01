@@ -211,6 +211,12 @@ public class ContextASP {
         this.choiceUnit.backtrack3();
     }
     
+    public void backtrackTo(int decisionlevel){
+        while(this.rete.getChoiceUnit().getDecisionLevel() > decisionlevel){
+            backtrack();
+        }
+    }
+    
     public void resetSatisfiable(){
         this.rete.satisfiable = true;
     }

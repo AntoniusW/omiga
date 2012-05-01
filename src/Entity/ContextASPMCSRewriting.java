@@ -112,8 +112,8 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      */
     @Override
     public void addFactFromOutside(Predicate p, Instance inz) {
+        ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
         this.rete.addInstancePlus(p, inz);
-        this.choiceUnit.IncreasechoiceNodesDecisionLayer();
     }
 
     /**
@@ -153,6 +153,11 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     @Override
     public HashMap<Predicate, HashSet<Instance>> deriveNewFacts(int since) {
         return this.choiceUnit.deriveNewFactsSindsDecisionLevel(since);
+    }
+    
+    @Override
+    public void backtrack(){
+        this.choiceUnit.backtrack();
     }
 
     

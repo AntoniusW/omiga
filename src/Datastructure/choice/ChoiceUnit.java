@@ -188,7 +188,7 @@ public class ChoiceUnit {
         return choice();
     }
     
-    protected void addChoicePoint(){
+    public void addChoicePoint(){
         this.memory.addChoicePoint();
         this.IncreasechoiceNodesDecisionLayer();
     }
