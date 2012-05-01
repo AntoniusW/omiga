@@ -44,18 +44,26 @@ public class ANodeImpl implements ANodeInterface {
     private Map<String,Remote> other_nodes;
     
     // mappings of other_node_name to predicate/function symbols/constants
+    // mapping for deserialization
     public static Map<String, Map<Integer, Object>> ser_mapping =
-            new HashMap<String, Map<Integer, Object>>();    // mapping for deserialization
+            new HashMap<String, Map<Integer, Object>>();
+    
     public static String serializingFrom = null;
+    
+    // mapping for serialization
     public static Map<Object, Integer> out_mapping =
-            new HashMap<Object, Integer>();  // mapping for serialization
+            new HashMap<Object, Integer>();
     // as an integer from a given node uniquely identifies the instance of
     // the specific class, we only need one map
     // TODO AW something more specific than Object would be nice
-    //private Map<String, Map<Integer, Predicate>> predicates;
-    //private Map<String, Map<Integer, FunctionSymbol>> functions;
-    //private Map<String, Map<Integer, Constant>> constants;
+
+    // list of predicates required at other nodes used for out-projection of predicates
+    private static Map<String, ArrayList<Predicate>> required_predicates =
+            new HashMap<String, ArrayList<Predicate>>();
     
+    // the local import interface, i.e., which predicates are imported from where
+    private static Map<String, ArrayList<Predicate>> import_predicates =
+            new HashMap<String, ArrayList<Predicate>>();
     
     private static String node_name;
     private static ContextASP ctx;
@@ -181,6 +189,7 @@ public class ANodeImpl implements ANodeInterface {
         
         // collect predicate symbols
         Map<Pair<String,Integer>,Integer> predicates = new HashMap<Pair<String,Integer>,Integer>();
+        // also init required predicates (import interface)
         for (Iterator<Predicate> it = Predicate.getPredicatesIterator(); it.hasNext();) {
             Predicate pred = it.next();
             String name = pred.getName();
@@ -189,6 +198,25 @@ public class ANodeImpl implements ANodeInterface {
             
             predicates.put(new Pair<String, Integer>(name,arity), ser_id);
             out_mapping.put(pred,ser_id);
+            
+            // collect import interface
+            if(pred.getNodeId()!=null) {
+                String from_node = pred.getNodeId();
+                ArrayList<Predicate> preds_from_node;
+                
+                // check if other node is already listed
+                if(import_predicates.containsKey(from_node)) {
+                    preds_from_node = import_predicates.get(from_node);
+                } else {
+                    preds_from_node = new ArrayList<Predicate>();
+                    import_predicates.put(from_node, preds_from_node);
+                }
+                
+                // add import predicate
+                preds_from_node.add(pred);
+            }
+                
+                
         }
         
         // collect constants
@@ -214,7 +242,12 @@ public class ANodeImpl implements ANodeInterface {
         }
 
         for (Entry<String, Remote> node : other_nodes.entrySet()) {
-            ((ANodeInterface) node.getValue()).tell_active_domain(node_name,predicates, functions, constants);
+            // tell active domain
+            ((ANodeInterface) node.getValue()).tell_active_domain(node_name,
+                    predicates, functions, constants);
+            
+            // tell import interface
+            ((ANodeInterface)node.getValue()).tell_import_domain(node_name,import_predicates.get(node.getKey()));
         }
         
     }
@@ -297,6 +330,11 @@ public class ANodeImpl implements ANodeInterface {
         System.out.println("The next facts will come from node "+from_node);
         
         return ReplyMessage.SUCCEEDED;
+    }
+
+    @Override
+    public void tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException {
+        this.required_predicates.put(from, (ArrayList<Predicate>)required_predicates);
     }
 
     

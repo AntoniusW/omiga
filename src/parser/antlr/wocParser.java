@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-04-28 20:04:09
+// $ANTLR 3.4 /home/as/incman/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-05-01 20:54:13
 
 package parser.antlr;
 
@@ -919,7 +919,7 @@ public class wocParser extends Parser {
             }
 
 
-            at =Atom.getAtom(atom_name, terms.length, terms);
+            at =Atom.getAtom(atom_name, terms.length, terms); if(context_id !=null) { at.getPredicate().setNodeId(context_id); }
 
             }
 

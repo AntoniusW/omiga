@@ -9,6 +9,7 @@ import Entity.Predicate;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,8 +25,16 @@ public interface ANodeInterface extends Remote {
      * functions: Name -> SerializeInt
      * constants: Name -> SerializeInt
      */
-    public void tell_active_domain(String node_name, Map<Pair<String,Integer>,Integer> predicates,
-                       Map<String,Integer> functions, Map<String,Integer> constants) throws RemoteException;
+    public void tell_active_domain(String node_name,
+            Map<Pair<String,Integer>,Integer> predicates,
+            Map<String,Integer> functions,
+            Map<String,Integer> constants ) throws RemoteException;
+    
+    /*
+     * Node gets informed about the predicates required from another node
+     * required_predicates: SerializeInt of the required predicates
+     */
+    public void tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException;
     
     /*
      * This is ugly, but needed to tune the de-serialization of the later

@@ -35,6 +35,18 @@ public class Predicate implements Serializable {
     private String name;
     private int arity;
     private int hashcode;
+    private String nodeId; // if this predicate is taken from another node
+
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    /*
+     * This should only be called when creating a non-local predicate 
+     */
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
     
     /**
      * if you want to generate a predicate use this method, since the constructor is private in order to prevent generation of
@@ -69,6 +81,7 @@ public class Predicate implements Serializable {
         this.arity = arity;
         this.hashcode = 17*37 + name.hashCode();
         this.hashcode = this.hashcode*37 + arity;
+        this.nodeId=null;
     }
     
     /**
