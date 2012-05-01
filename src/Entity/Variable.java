@@ -104,7 +104,15 @@ public class Variable extends Term implements OperandI{
      */
     @Override
     public int getIntValue(){
-        return ((Constant)this.value).getIntValue();
+        try{
+           return ((Constant)this.value).getIntValue(); 
+        }catch(Exception ex){
+            System.err.println("ABORT: There was a functionterm involved within an Operator calculation!");
+            ex.printStackTrace();
+            System.exit(0);
+            return 0;
+        }
+        
     }
     /**
      * This method is needed within the rete network's selection nodes. There we assign values to variables, til we can build a hole variable assignment
