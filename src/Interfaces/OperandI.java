@@ -5,6 +5,7 @@
 package Interfaces;
 
 import Entity.Variable;
+import Enumeration.OP;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -16,7 +17,7 @@ import java.util.HashSet;
  */
 public interface OperandI {
     
-    public int getIntValue(Integer i);
+    public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP);
     public ArrayList<Variable> getUsedVariables();
     
 }

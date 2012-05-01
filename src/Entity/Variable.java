@@ -4,6 +4,7 @@
  */
 package Entity;
 
+import Enumeration.OP;
 import Interfaces.OperandI;
 import Interfaces.Term;
 import java.util.ArrayList;
@@ -102,8 +103,8 @@ public class Variable extends Term implements OperandI{
      * @return The integer representation of this variables value.
      */
     @Override
-    public int getIntValue(Integer i){
-        return ((Constant)this.value).getIntValue(null);
+    public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP){
+        return ((Constant)this.value).getIntValue(ergebnis,punktrechnung,lastPunktOP);
     }
     /**
      * This method is needed within the rete network's selection nodes. There we assign values to variables, til we can build a hole variable assignment

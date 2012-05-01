@@ -9,6 +9,7 @@ import Entity.Constant;
 import Entity.Instance;
 import Entity.Operator;
 import Entity.Variable;
+import Enumeration.OP;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,16 +20,27 @@ import java.util.HashMap;
  */
 public class OperatorNode extends Node{
     
-    private Operator op; // not that this can only be equals, notequals, bigger or smaller if allSet is true, and only PLUS or MINUS if allSet is false
-    private boolean allSet;
-    Variable badOne = null;
+    private Operator op; // note that this can only be equals, notequals, bigger or smaller if allSet is true, and only PLUS or MINUS if allSet is false
+    //private boolean allSet;
+    //Variable badOne = null;
     
     public OperatorNode(Rete rete, Operator op, Node from){
         super(rete);
         //System.out.println("CREATIGN OP NODE!");
         this.op = op;
         
-        allSet = true;
+        if(op.getOP().equals(Enumeration.OP.ASSIGN)){
+            // There is one Variable that has to be calculated by the Operator therefore we add one further Variable into this VarPositions
+            this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
+            this.tempVarPosition.put((Variable)op.getLeft(), tempVarPosition.size());
+            this.memory = new Storage(tempVarPosition.size());
+        }else{
+            // All Variables of the Operator are set
+            this.tempVarPosition = from.getVarPositions();
+            this.memory = new Storage(tempVarPosition.size());
+        }
+        
+        /*allSet = true;
         for(Variable v: op.getUsedVariables()){
             //System.out.println("v= " + v);
             if(!from.getVarPositions().containsKey(v)){
@@ -48,7 +60,7 @@ public class OperatorNode extends Node{
             this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
             this.tempVarPosition.put(badOne, tempVarPosition.size());
             this.memory = new Storage(tempVarPosition.size());
-        }
+        }*/
         
     }
     
@@ -56,19 +68,57 @@ public class OperatorNode extends Node{
         
         //System.out.println("AddInstance in OPNode called!: " + instance);
         //System.out.println("AllSet = " + allSet);
-        if(this.allSet){
+        
+        if(op.getOP().equals(Enumeration.OP.ASSIGN)){
+            ArrayList<Variable> temp = op.getUsedVariables();
+            temp.remove((Variable)op.getLeft());
+            for(Variable v: temp){
+                //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
+                v.setValue(instance.get(this.getVarPositions().get(v)));
+            }
+            ((Variable)op.getLeft()).setValue(Constant.getConstant(String.valueOf(op.getIntValue(0, 0, null))));
+            Term instanceArray[] = new Term[this.tempVarPosition.size()];
+            for(Variable v: this.getVarPositions().keySet()){
+                instanceArray[this.getVarPositions().get(v)] = v.getValue();
+            }
+            Instance instance2Add = Instance.getInstance(instanceArray);
+            this.memory.addInstance(instance);
+            super.addInstance(instance2Add, from); // Register this instance in our backtracking structure.
+            for(int i = 0; i < this.children.size();i++){
+                this.children.get(i).addInstance(instance2Add, false);
+            }
+            for(int i = 0; i < this.childrenR.size();i++){
+                this.childrenR.get(i).addInstance(instance2Add, true);
+            }
+        }else{
             for(Variable v: op.getUsedVariables()){
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
-                /*System.err.println(v);
-                System.err.println(instance);
-                System.err.println(this.getVarPositions());
-                System.err.println(instance.get(this.getVarPositions().get(v)));*/
+                v.setValue(instance.get(this.getVarPositions().get(v)));
+            }
+            if(op.getIntValue(0,0,null) == 1){
+                // The instance fullfills the operator
+                this.memory.addInstance(instance);
+                super.addInstance(instance, from); // Register this instance in our backtracking structure.
+                for(int i = 0; i < this.children.size();i++){
+                    this.children.get(i).addInstance(instance, false);
+                }
+                for(int i = 0; i < this.childrenR.size();i++){
+                    this.childrenR.get(i).addInstance(instance, true);
+                }
+            }else{
+                //else we do not add the instance
+                //System.out.println("Operatorcheck not passed!");
+            }
+        }
+            
+        
+        /*if(this.allSet){
+            for(Variable v: op.getUsedVariables()){
+                //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
                 v.setValue(instance.get(this.getVarPositions().get(v)));
             }
             if(op.getIntValue(null) == 1){
                 // The instance fullfills the operator
-                /*System.out.println("Passed the Operator check!");
-                System.err.println(this.memory);*/
                 this.memory.addInstance(instance);
                 super.addInstance(instance, from); // Register this instance in our backtracking structure.
                 for(int i = 0; i < this.children.size();i++){
@@ -88,10 +138,6 @@ public class OperatorNode extends Node{
             temp.remove(this.badOne);
             for(Variable v: temp){
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
-                /*System.err.println(v);
-                System.err.println(instance);
-                System.err.println(this.getVarPositions());
-                System.err.println(instance.get(this.getVarPositions().get(v)));*/
                 v.setValue(instance.get(this.getVarPositions().get(v)));
             }
             badOne.setValue(Constant.getConstant(String.valueOf(op.calculate(badOne))));
@@ -108,7 +154,7 @@ public class OperatorNode extends Node{
                 for(int i = 0; i < this.childrenR.size();i++){
                     this.childrenR.get(i).addInstance(instance2Add, true);
                 }
-        }
+        }*/
         
         
         //this.memory.addInstance(instance);

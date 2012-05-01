@@ -4,6 +4,7 @@
  */
 package Entity;
 
+import Enumeration.OP;
 import Interfaces.OperandI;
 import Interfaces.Term;
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class Constant extends Term implements OperandI, Serializable {
     
     //TODO: Check if this is correct for numbers!
     @Override
-    public int getIntValue(Integer i){
+    public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP){
         return this.intValue;
     }
     

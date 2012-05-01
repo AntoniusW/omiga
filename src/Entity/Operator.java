@@ -42,103 +42,139 @@ public class Operator implements OperandI{
         return op;
     }
     
+   private int punktrechnung = 0;
+   private OP lastPunktOP = null;
+   private int summe = 0;
+   private Operator actual = null;
    
-    
+   private void doIt(){
+       if(lastPunktOP == OP.PLUS){
+           summe = summe + punktrechnung;
+       }else{
+           summe = summe - punktrechnung;
+       }
+       punktrechnung = 0;
+   }
+   
+   public boolean isPunktRechnung(){
+       if(this.op.equals(OP.DIVIDE) || this.op.equals(OP.TIMES)) return true;
+       return false;
+   }
+
+    /**
+    * 
+    * Please be aware that the operator class was intended to support a treestructure to easily 
+    * represent infix/postfix notation. But in favor for easy parsing we use it now just as a
+    * chain of Operators, where the leftside of a PLUS/MINUS/DIVIDE/TIMES Operator can only be
+    * a constant or a variable, so we can calculate from left to right.
+    * 
+    * @param ergebnis the value of the previous finsihed calculation
+    * @param punktrechnung the value of the actual DIVIDE/TIMES calculation
+    * @param lastPunktOP the value before the actual DIVIDE/TIMES calculation
+    * @return the integer value of this Operator (0,1 for comparsim operators)
+    */
     @Override
-    public int getIntValue(Integer i) {
+    public int getIntValue(int ergebnis, int punktrechnung, OP lastPunktOP) {
         switch(op){
-            case PLUS: //
-                if(i == null) {
-                    //System.out.println(this + " returns: " + (left.getIntValue(null) + right.getIntValue(null)) );
-                    return left.getIntValue(null) + right.getIntValue(null);
+            case PLUS: 
+                //System.out.println("ARRIVED: Ergebnis= " + ergebnis + " _ punktrechnung = " + punktrechnung + " _ lastOP = " + lastPunktOP);
+                if(lastPunktOP.equals(OP.PLUS)){
+                    ergebnis = ergebnis + punktrechnung;
                 }else{
-                    //System.out.println(this + " returns: " + (i + right.getIntValue(null)) );
-                    return i + right.getIntValue(null);
+                    ergebnis = ergebnis - punktrechnung;
+                }
+                punktrechnung = 0;
+                if(right.getClass().equals(Operator.class)){
+                    Operator opi = (Operator) right;
+                    if(opi.isPunktRechnung()){
+                        return opi.getIntValue(ergebnis, opi.left.getIntValue(0, 0, lastPunktOP), OP.PLUS);
+                    }else{
+                        ergebnis = ergebnis + opi.left.getIntValue(0, 0, OP.PLUS);
+                        return opi.getIntValue(ergebnis, punktrechnung, OP.PLUS);
+                    }
+                }else{
+                    ergebnis = ergebnis + right.getIntValue(ergebnis, punktrechnung, lastPunktOP);
+                    return ergebnis;
                 }
             case MINUS:
+                //System.out.println("ARRIVED: Ergebnis= " + ergebnis + " _ punktrechnung = " + punktrechnung + " _ lastOP = " + lastPunktOP);
+                if(lastPunktOP.equals(OP.PLUS)){
+                    ergebnis = ergebnis + punktrechnung;
+                }else{
+                    ergebnis = ergebnis - punktrechnung;
+                }
+                punktrechnung = 0;
                 if(right.getClass().equals(Operator.class)){
-                    Operator oper = (Operator)right;
-                    if(i == null) {
-                        int ret = left.getIntValue(null) - oper.getLeft().getIntValue(i);
-                        System.out.println(this + " returns: " + ret );
-                        return left.getIntValue(null) - right.getIntValue(null);
+                    Operator opi = (Operator) right;
+                    if(opi.isPunktRechnung()){
+                        return opi.getIntValue(ergebnis, opi.left.getIntValue(0, 0, lastPunktOP), OP.MINUS);
                     }else{
-                        int ret = i - oper.getLeft().getIntValue(i);
-                        System.out.println(this + " returns: " + ret );
-                        return i - right.getIntValue(null);
+                        ergebnis = ergebnis + opi.left.getIntValue(0, 0, OP.MINUS);
+                        return opi.getIntValue(ergebnis, punktrechnung, OP.MINUS);
                     }
                 }else{
-                    if(i == null) {
-                        System.out.println(this + " returns: " + (left.getIntValue(null) - right.getIntValue(null)) );
-                        return left.getIntValue(null) - right.getIntValue(null);
-                    }else{
-                        System.out.println(this + " returns: " + (i - right.getIntValue(null)) );
-                        return i - right.getIntValue(null);
-                    }
+                    ergebnis = ergebnis - right.getIntValue(ergebnis, punktrechnung, lastPunktOP);
+                    return ergebnis;
                 }
-                
             case TIMES: 
                 if(right.getClass().equals(Operator.class)){
-                    Operator oper = (Operator)right;
-                    if(i == null){
-                        int ret = left.getIntValue(null) * oper.getLeft().getIntValue(i);
-                        //System.out.println(this + " returns: " + ret );
-                        return oper.getIntValue(ret);
-                    }else{
-                        int ret = i * oper.getLeft().getIntValue(null);
-                        //System.out.println(this + " returns: " + ret );
-                        return oper.getIntValue(ret);
-                    }
+                    Operator opi = (Operator)right;
+                    punktrechnung = punktrechnung * opi.left.getIntValue(0, 0, lastPunktOP);
+                    return opi.getIntValue(ergebnis, punktrechnung, lastPunktOP);
                 }else{
-                    if(i == null){
-                        //System.out.println(this + " returns: " + left.getIntValue(null) * right.getIntValue(null) );
-                        return left.getIntValue(null) * right.getIntValue(null);
+                    if(lastPunktOP.equals(OP.PLUS)){
+                        ergebnis = ergebnis + punktrechnung * right.getIntValue(0, 0, lastPunktOP);
                     }else{
-                        //System.out.println(this + " returns: " + i * right.getIntValue(null) );
-                        return i * right.getIntValue(null);
+                        ergebnis = ergebnis - punktrechnung * right.getIntValue(0, 0, lastPunktOP);
                     }
-                }
+                    return ergebnis;
+                }     
             case DIVIDE: 
                 if(right.getClass().equals(Operator.class)){
-                    Operator oper = (Operator)right;
-                    if(i == null){
-                        int ret = left.getIntValue(null) / oper.getLeft().getIntValue(i);
-                        //System.out.println(this + " returns: " + ret );
-                        return oper.getIntValue(ret);
-                    }else{
-                        int ret = i / oper.getLeft().getIntValue(null);
-                        //System.out.println(this + " returns: " + ret );
-                        return oper.getIntValue(ret);
-                    }
+                    Operator opi = (Operator)right;
+                    punktrechnung = punktrechnung / opi.left.getIntValue(0, 0, lastPunktOP);
+                    return opi.getIntValue(ergebnis, punktrechnung, lastPunktOP);
                 }else{
-                    if(i == null){
-                        //System.out.println(this + " returns: " + left.getIntValue(null) / right.getIntValue(null) );
-                        return left.getIntValue(null) / right.getIntValue(null);
+                    if(lastPunktOP.equals(OP.PLUS)){
+                        ergebnis = ergebnis + punktrechnung / right.getIntValue(0, 0, lastPunktOP);
                     }else{
-                        //System.out.println(this + " returns: " + i / right.getIntValue(null) );
-                        return i / right.getIntValue(null);
+                        ergebnis = ergebnis - punktrechnung / right.getIntValue(0, 0, lastPunktOP);
                     }
-                }
-            case ASSIGN: return this.right.getIntValue(null);
+                    return ergebnis;
+                }     
+            case ASSIGN: return this.calc(this.right);
             case EQUAL: 
-                if(left.getIntValue(null) == right.getIntValue(null)) return 1;
+                if(calc(left) == calc(right)) return 1;
                 return 0;
             case NOTEQUAL:
-                if(left.getIntValue(null) != right.getIntValue(null)) return 1;
+                if(calc(left) != calc(right)) return 1;
                 return 0;
             case GREATER:
-                if(left.getIntValue(null) > right.getIntValue(null)) return 1;
+                if(calc(left) > calc(right)) return 1;
                 return 0;
             case LESS:
-                if(left.getIntValue(null) < right.getIntValue(null)) return 1;
+                if(calc(left) < calc(right)) return 1;
                 return 0;
             case GREATER_EQ:
-                if(left.getIntValue(null) >= right.getIntValue(null)) return 1;
+                if(calc(left) >= calc(right)) return 1;
                 return 0;
             case LESS_EQ:
-                if(left.getIntValue(null) <= right.getIntValue(null)) return 1;
+                if(calc(left) <= calc(right)) return 1;
                 return 0;
             default: return 0;
+        }
+    }
+    
+    private int calc(OperandI oper){
+        if(oper.getClass().equals(Operator.class)){
+            Operator opi = (Operator)oper;
+            if(opi.isPunktRechnung()){
+                return opi.getIntValue(0, opi.left.getIntValue(0, 0, null), OP.PLUS);
+            }else{
+                return opi.getIntValue(opi.left.getIntValue(0, 0, null),0, OP.PLUS);
+            }
+        }else{
+            return oper.getIntValue(0, 0, null);
         }
     }
 
@@ -167,7 +203,7 @@ public class Operator implements OperandI{
         }
         //replace all Variable oocurences of v by 0 then replace this op by MINUS and Divide by countRight-countLeft and return
         v.setValue(zero);
-        return (left.getIntValue(null) - right.getIntValue(null))/(countRight-countLeft);
+        return (left.getIntValue(0,0,null) - right.getIntValue(0,0,null))/(countRight-countLeft);
 
         
         //return new Operator(null,null, OP.BIGGER);

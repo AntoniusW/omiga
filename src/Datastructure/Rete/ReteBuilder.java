@@ -272,13 +272,22 @@ public class ReteBuilder {
             }else{
                 if(!operators.isEmpty()){
                     for(Operator op: operators){
-                        if(op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())){
+                        if(op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())){
                             OperatorNode opN = new OperatorNode(this.rete, op, actualNode);
                             actualNode.addChild(opN);
                             actualNode = opN;
                             this.VarPosNodes.put(opN, opN.getVarPositions());
                             operators.remove(op);
                             break;
+                        }else{
+                            if(op.isInstanciated(actualNode.tempVarPosition.keySet())){
+                                OperatorNode opN = new OperatorNode(this.rete, op, actualNode);
+                                actualNode.addChild(opN);
+                                actualNode = opN;
+                                this.VarPosNodes.put(opN, opN.getVarPositions());
+                                operators.remove(op);
+                                break;
+                            }
                         }
                     }
                 }else{

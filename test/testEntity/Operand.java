@@ -41,22 +41,6 @@ public class Operand {
     }
     
     @Test
-    public void testOperandPlus(){
-        Constant c1 =  Constant.getConstant("4");
-        Constant c2 =  Constant.getConstant("3");
-        Operator opi1 = new Operator(c1,c2,OP.PLUS);
-        assertTrue(opi1.getIntValue(null) == 7);
-    }
-    
-    @Test
-    public void testOperandMinus(){
-        Constant c1 =  Constant.getConstant("3");
-        Constant c2 =  Constant.getConstant("4");
-        Operator opi1 = new Operator(c1,c2,OP.MINUS);
-        assertTrue(opi1.getIntValue(null) == -1);
-    }
-    
-    @Test
     public void testOperandNOTEQUAL(){
         Constant c1 =  Constant.getConstant("4");
         Constant c2 =  Constant.getConstant("3");
@@ -65,7 +49,7 @@ public class Operand {
         Constant c4 =  Constant.getConstant("8");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
         Operator opi3 = new Operator(opi1,opi2,OP.NOTEQUAL);
-        assertTrue(opi3.getIntValue(null) == 0);
+        assertTrue(opi3.getIntValue(0,0,null) == 0);
     }
     
     @Test
@@ -77,10 +61,10 @@ public class Operand {
         Constant c4 =  Constant.getConstant("9");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
         Operator opi3 = new Operator(opi1,opi2,OP.GREATER);
-        assertTrue(opi3.getIntValue(null) == 1);
+        assertTrue(opi3.getIntValue(0,0,null) == 1);
     }
     
-        @Test
+    @Test
     public void testOperandSMALLER(){
         Constant c1 =  Constant.getConstant("4");
         Constant c2 =  Constant.getConstant("3");
@@ -89,7 +73,7 @@ public class Operand {
         Constant c4 =  Constant.getConstant("9");
         Operator opi2 = new Operator(c3,c4,OP.MINUS);
         Operator opi3 = new Operator(opi1,opi2,OP.LESS);
-        assertTrue(opi3.getIntValue(null) == 0);
+        assertTrue(opi3.getIntValue(0,0,null) == 0);
     }
        
     @Test
@@ -108,9 +92,9 @@ public class Operand {
         Operator opi4 = new Operator(c4,opi5,OP.DIVIDE);
         Operator opi3 = new Operator(c3,opi4,OP.TIMES);
         Operator opi2 = new Operator(c4,opi3,OP.PLUS);
-        Operator opi1 = new Operator(Variable.getVariable("X"),opi5,OP.ASSIGN);
-        System.err.println(opi1);
-        System.err.println(opi1.getIntValue(null));
-        assertTrue(opi1.getIntValue(null) == 5);
+        Operator opi1 = new Operator(Variable.getVariable("X"),opi2,OP.ASSIGN);
+        /*System.out.println(opi1);
+        System.out.println(opi1.getIntValue(0,0,null));*/
+        assertTrue(opi1.getIntValue(0,0,null) == 5);
     }
 }
