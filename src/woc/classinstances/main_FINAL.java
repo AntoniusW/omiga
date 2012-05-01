@@ -53,8 +53,9 @@ public class main_FINAL {
             System.out.println(s);
         }*/
         
-        filename = "birds_ASPERIX_nbb=100.txt";
-        filename = "network/ctx1.asd";
+        //filename = "birds_ASPERIX_nbb=100.txt";
+        //filename = "network/ctx1.asd";
+        filename = "OP.txt";
         rewriting = 1;
         answersets = 50000;
         filter = null;
