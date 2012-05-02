@@ -8,14 +8,9 @@ package woc.classinstances;
 import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.Rete;
 import Datastructure.Rewriting.Rewriter_easy;
+import Datastructure.Rewriting.Rewriter_easyMCS;
 import Datastructure.choice.ChoiceUnitRewrite;
-import Entity.ContextASP;
-import Entity.ContextASPRewriting;
-import Entity.FuncTerm;
-import Entity.GlobalSettings;
-import Entity.Instance;
-import Entity.Predicate;
-import Entity.Variable;
+import Entity.*;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
@@ -64,8 +59,7 @@ public class main_FINAL {
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         
         // create context
-        ContextASP ctx = new ContextASPRewriting();
-        
+        ContextASPMCSRewriting ctx = new ContextASPMCSRewriting();
         // parsing with ANTLR
         try {
             // setting up lexer and parser
@@ -80,6 +74,9 @@ public class main_FINAL {
                 try {
                     // parse input
                     parser.woc_program();
+                    
+                    Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
+                    ctx = rewriter.rewrite(ctx);
                     
                     System.out.println("Read in program is: ");
                     ctx.printContext();
@@ -100,7 +97,8 @@ public class main_FINAL {
         
         
         //File input = new File(filename);
-        
+
+
         
         System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
         

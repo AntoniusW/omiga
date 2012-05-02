@@ -138,7 +138,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     }
     
     @Override
-    public boolean nextAlternative(){
+    public boolean nextBranch(){
         if(this.nextNode != null){
             //There is a next node. This means we have to make a negative guess since we returned at this point because of backtracking
             //We add a choicepoint since we are doing a guess

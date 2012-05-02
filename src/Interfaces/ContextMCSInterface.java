@@ -10,6 +10,7 @@ import Entity.Rule;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import network.ReplyMessage;
 
 /**
  *
@@ -18,7 +19,7 @@ import java.util.HashSet;
 public interface ContextMCSInterface {
     
     public void propagate();
-    public boolean nextAlternative();
+    public ReplyMessage nextBranch();
     public boolean choice();
     public void backtrack();
     public void backtrackTo(int level);

@@ -15,6 +15,7 @@ import Interfaces.ContextMCSInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import network.ReplyMessage;
 
 /**
  *
@@ -75,11 +76,21 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
 
     /**
      * 
-     * @return wether there is a next alternative or not (So is there a false guess or not left)
+     * @return whether there is a next alternative or not (So is there a false guess or not left)
      */
     @Override
-    public boolean nextAlternative() {
-        return this.choiceUnit.nextAlternative();
+    public ReplyMessage nextBranch() {
+        if (this.choiceUnit.nextBranch())
+        {
+            return ReplyMessage.HAS_BRANCH;
+        }
+        else
+        {
+            if (this.choiceUnit.getDecisionLevel() == 0)
+                return ReplyMessage.NO_MORE_ALTERNATIVE;
+            else
+                return ReplyMessage.NO_MORE_BRANCH;
+        }
     }
 
     /**

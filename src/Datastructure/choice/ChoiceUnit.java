@@ -529,7 +529,7 @@ public class ChoiceUnit {
      * used for the MCS calculation. returns wether there is a next alternative to the actual guess
      * @return 
      */
-    public boolean nextAlternative(){
+    public boolean nextBranch(){
         if(this.nextNode != null) return true;
         return false;
     }
