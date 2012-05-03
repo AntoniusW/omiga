@@ -31,10 +31,10 @@ sleep 6
 
 # start controller
 echo "Starting controller."
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.AController
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.AController 2
 
-echo "Running for 10 sec."
-sleep 10
+echo "Running for 5 sec."
+sleep 5
 
 # killing all processes
 echo "Killing created processes."

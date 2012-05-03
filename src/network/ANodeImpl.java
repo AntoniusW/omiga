@@ -4,16 +4,16 @@
  */
 package network;
 
+import Datastructure.Rewriting.Rewriter_easyMCS;
 import Entity.Constant;
 import Entity.ContextASP;
+import Entity.ContextASPMCSRewriting;
 import Entity.ContextASPRewriting;
 import Entity.FunctionSymbol;
 import Entity.Instance;
 import Entity.Predicate;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
-import Interfaces.Term;
-import Manager.Manager;
 import java.io.IOException;
 import java.rmi.RMISecurityManager;
 import java.rmi.Remote;
@@ -37,11 +37,13 @@ import parser.antlr.wocParser;
 
 /**
  *
- * @author Minh Dao-Tran
+ * @author Minh Dao-Tran, Antonius Weinzierl
  */
 public class ANodeImpl implements ANodeInterface {
     
-    private Map<String,Remote> other_nodes;
+    private ArrayList<Pair<String,ANodeInterface>> other_nodes;
+    // TODO AW changed other_nodes to now containing all nodes, including this
+    // one. Check if this broke something
     
     // mappings of other_node_name to predicate/function symbols/constants
     // mapping for deserialization
@@ -65,8 +67,8 @@ public class ANodeImpl implements ANodeInterface {
     private static Map<String, ArrayList<Predicate>> import_predicates =
             new HashMap<String, ArrayList<Predicate>>();
     
+    private static ContextASPMCSRewriting ctx;
     private static String node_name;
-    private static ContextASP ctx;
     private static String filter;
     private static int rewriting;
     private static String filename;
@@ -78,41 +80,18 @@ public class ANodeImpl implements ANodeInterface {
     }
     
     
-
-    @Override
-    public ReplyMessage makeChoice(int global_level) throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
-    }
-
-    @Override
-    public ReplyMessage makeAlternative() throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
-    }
-
-    @Override
-    public ReplyMessage localBacktrack(int global_level) throws RemoteException {
-        return ReplyMessage.SUCCEEDED;
-    }
-    
     public static void main(String[] args) {
-        node_name = args[0]; //"ctx1";
-        filename = args[1]; //"../../examples/birds_ASPERIX_nbb=100.txt";
+        node_name = args[0];
+        filename = args[1];
         System.out.println("Starting NodeImpl.main(). args[0] = " + node_name);
         
         System.out.println("Input file is: " +filename);
         
         if (System.getSecurityManager() == null) {
-            // create anonymous sub-class of SecurityManager, which accepts everything from everywhere
-            System.setSecurityManager(new RMISecurityManager() /*{
-                @Override
-                    public void checkConnect (String host, int port) {}
-                @Override
-                    public void checkConnect (String host, int port, Object context) {}
-                }*/ );
+            System.setSecurityManager(new RMISecurityManager() );
         }
         
         try {
-            // args[0] is the context id
             String name = "Context_" + node_name;
             System.out.println("name = " + name);
             ANodeInterface local_node = new ANodeImpl();
@@ -128,8 +107,9 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     @Override
-    public void init(Map<String, Remote> other_nodes) throws RemoteException {
+    public void init(String node_name, ArrayList<Pair<String, ANodeInterface>> other_nodes) throws RemoteException {
         this.other_nodes = other_nodes;
+        ANodeImpl.node_name = node_name;
         
         System.out.println("Node "+ node_name + " received " + other_nodes.size() +" other nodes.");
         
@@ -141,7 +121,7 @@ public class ANodeImpl implements ANodeInterface {
         outprint =true;
         
         // create context
-        ctx = new ContextASPRewriting();
+        ctx = new ContextASPMCSRewriting();
         
         // parsing with ANTLR
         try {
@@ -157,6 +137,11 @@ public class ANodeImpl implements ANodeInterface {
             
             System.out.println("Read in program is: ");
             ctx.printContext();
+            
+            // rewrite context
+            Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
+            ctx = rewriter.rewrite(ctx);
+            
         } catch (RuleNotSafeException ex) {
             Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FactSizeException ex) {
@@ -169,18 +154,7 @@ public class ANodeImpl implements ANodeInterface {
             Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        /* below code is running the node stand-alone
-        System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
-                
-        Manager m = new Manager(ctx);
-        long beforeCalc = System.currentTimeMillis();
-        m.calculate(answersets,outprint,filter);
-
-        System.out.println("Termianted final Calculation");
-        System.out.println("Time needed overAll: " + (1.0F*(System.currentTimeMillis()-start)/1000));
-        System.out.println("Time needed for calculation: " +(1.0F*(System.currentTimeMillis()-beforeCalc)/1000));
-        */
-        
+      
         System.out.println("Initialized node, informing other nodes now.");
 
         // get list of predicate/functions/constants        
@@ -214,6 +188,8 @@ public class ANodeImpl implements ANodeInterface {
                 
                 // add import predicate
                 preds_from_node.add(pred);
+                // register predicate at local solver to come from outside
+                ANodeImpl.ctx.registerFactFromOutside(pred);
             }
                 
                 
@@ -241,13 +217,15 @@ public class ANodeImpl implements ANodeInterface {
             out_mapping.put(func, ser_id);
         }
 
-        for (Entry<String, Remote> node : other_nodes.entrySet()) {
-            // tell active domain
-            ((ANodeInterface) node.getValue()).tell_active_domain(node_name,
-                    predicates, functions, constants);
+        for (Pair<String, ANodeInterface> pair : other_nodes) {
+            // tell active domain to other nodes
+            if(!pair.getArg1().equals(node_name)) {
+                pair.getArg2().tell_active_domain(node_name, predicates,
+                        functions, constants);
+            }
             
-            // tell import interface
-            ((ANodeInterface)node.getValue()).tell_import_domain(node_name,import_predicates.get(node.getKey()));
+            // tell import interface to all nodes
+            pair.getArg2().tell_import_domain(node_name,import_predicates.get(pair.getArg1()));
         }
         
     }
@@ -287,7 +265,7 @@ public class ANodeImpl implements ANodeInterface {
 
     }
 
-    @Override
+    /*@Override
     public ReplyMessage testInstanceExchange() throws RemoteException {
         
         System.out.println("Testing instance exchange now.");
@@ -299,16 +277,19 @@ public class ANodeImpl implements ANodeInterface {
             ((ANodeInterface)other).handleAddingFacts(in_facts);
         }
         return ReplyMessage.SUCCEEDED;
-    }
+    }*/
     
     
 
     @Override
     public ReplyMessage handleAddingFacts(Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
         
+        // TODO AW acutal implementation, add those facts
         // we simply print out what we received
         System.out.println("Received facts from "+serializingFrom +":");
         for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
+            
+            // print out what was received
             System.out.println("Predicate "+pred.getKey().getName()+"/"+
                                 pred.getKey().getArity()+ ", "+
                                 pred.getValue().size()+" entries.");
@@ -316,6 +297,8 @@ public class ANodeImpl implements ANodeInterface {
                 Instance inst = (Instance)it.next();
                 System.out.println("Instance: "+inst.toString());
                 
+                // actual adding of the facts
+                ANodeImpl.ctx.addFactFromOutside(pred.getKey(), inst);
             }
         }
         
@@ -334,8 +317,39 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public void tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException {
-        this.required_predicates.put(from, (ArrayList<Predicate>)required_predicates);
+        ANodeImpl.required_predicates.put(from, (ArrayList<Predicate>)required_predicates);
     }
 
+    @Override
+    public boolean hasMoreChoice() throws RemoteException {
+        //return ANodeImpl.ctx.choicePlusInfo();
+        throw new UnsupportedOperationException("Not yet supported");   
+    }
+
+    @Override
+    public ReplyMessage makeChoice(int global_level) throws RemoteException {
+        //return ANodeImpl.ctx.choice();
+
+        throw new UnsupportedOperationException("Not yet supported");                
+        //return ReplyMessage.SUCCEEDED;
+    }
+
+    @Override
+    public ReplyMessage makeBranch() throws RemoteException {
+        //return ANodeImpl.ctx.nextBranch();
+        throw new UnsupportedOperationException("Not yet supported");
+        //return ReplyMessage.SUCCEEDED;
+    }
+
+    @Override
+    public ReplyMessage localBacktrack(int global_level) throws RemoteException {
+        throw new UnsupportedOperationException("Not yet supported");                        
+        //return ReplyMessage.SUCCEEDED;
+    }     
+
+    @Override
+    public ReplyMessage hasMoreBranch() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

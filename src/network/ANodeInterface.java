@@ -17,7 +17,12 @@ import java.util.Map;
  * @author Minh Dao-Tran
  */
 public interface ANodeInterface extends Remote {
-    public void init(Map<String,Remote> other_nodes) throws RemoteException;
+    
+    /*
+     * node_name: the name assigned to this node
+     * other_nodes: all the other nodes in the system as (name,remote) pairs
+     */
+    public void init(String node_name, ArrayList<Pair<String,ANodeInterface>> other_nodes) throws RemoteException;
     
     /*
      * node_name: name to which the mapping belongs to
@@ -45,11 +50,14 @@ public interface ANodeInterface extends Remote {
     
     public ReplyMessage handleAddingFacts(Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException;
     
-    public ReplyMessage makeChoice(int global_level) throws RemoteException;
+    public boolean hasMoreChoice() throws RemoteException;
     
-    public ReplyMessage makeAlternative() throws RemoteException;
+    public ReplyMessage makeChoice(int global_level) throws RemoteException;
+
+    public ReplyMessage hasMoreBranch() throws RemoteException;
+    
+    public ReplyMessage makeBranch() throws RemoteException;
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
     
-    public ReplyMessage testInstanceExchange() throws RemoteException;
 }
