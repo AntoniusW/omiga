@@ -101,7 +101,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     public void backtrackTo(int level) {
         this.resetSatisfiable();
         while(this.choiceUnit.getDecisionLevel() > level){
-            this.choiceUnit.backtrack3();
+            this.choiceUnit.backtrack();
         }
     }
 
