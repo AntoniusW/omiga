@@ -81,6 +81,8 @@ public class ANodeImpl implements ANodeInterface {
 
     public ANodeImpl() {
         super();
+        
+        global_to_local_dc.put(0, 0);
     }
     
     
