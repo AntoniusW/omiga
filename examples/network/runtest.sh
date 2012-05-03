@@ -2,7 +2,7 @@
 
 # start this file from WOC base directory
 export BASEDIR=.
-export CLASSPATH=$BASEDIR/build/classes/:$BASEDIR/lib/antlr-3.4-complete.jar
+export CLASSPATH=$BASEDIR/build/classes/:$BASEDIR/dist/lib/antlr-3.4-complete.jar:$BASEDIR/dist/lib/jgrapht-jdk1.6.jar
 export POLICYFILE=$BASEDIR/examples/network/server.policy
 export CTX1_FILE=$BASEDIR/examples/network/ctx1.asd
 export CTX2_FILE=$BASEDIR/examples/network/ctx2.asd
