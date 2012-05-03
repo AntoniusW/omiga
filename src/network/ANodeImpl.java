@@ -330,7 +330,12 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public boolean hasMoreChoice() throws RemoteException {
+        System.out.println("Node[" + node_name + "]: before checking choice: local_dc = " + ctx.getDecisionLevel());
+        
         boolean moreChoice = ctx.choice();
+
+        System.out.println("Node[" + node_name + "]: after checking choice: local_dc = " + ctx.getDecisionLevel());
+
         
         if (moreChoice)
         {
@@ -346,10 +351,18 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
+        
         int local_dc = ctx.getDecisionLevel();
+        
+        System.out.println("Node[" + node_name + "]: before makeChoice. local_dc = " + local_dc);
+        
         global_to_local_dc.put(global_level, local_dc);
         
+        System.out.println("Node[" + node_name + "]: makeChoice. put(" + global_level + ", " + local_dc + ").");
+        
         ctx.propagate();
+        
+        System.out.println("Node[" + node_name + "]: after makeChoice. local_dc = " + local_dc);
         
         if (ctx.isSatisfiable())
         {
@@ -358,14 +371,19 @@ public class ANodeImpl implements ANodeInterface {
         }
         else
         {
-            System.out.println("Node[" + node_name + "]: makeChoice. Return SUCCEEDED.");
+            System.out.println("Node[" + node_name + "]: makeChoice. Return INCONSISTENT. local_dc = " + local_dc);
             return ReplyMessage.INCONSISTENT;
         }        
     }
     
     @Override
     public ReplyMessage hasMoreBranch() throws RemoteException {
+        System.out.println("Node[" + node_name + "]: before checking branch: local_dc = " + ctx.getDecisionLevel());
+
+        
         ReplyMessage moreBranch = ctx.nextBranch();
+        
+        System.out.println("Node[" + node_name + "]: fater checking branch: local_dc = " + ctx.getDecisionLevel());
         
         switch (moreBranch)
         {
@@ -384,8 +402,17 @@ public class ANodeImpl implements ANodeInterface {
 
 
     @Override
-    public ReplyMessage makeBranch() throws RemoteException {
+    public ReplyMessage makeBranch(int global_level) throws RemoteException {
+        int local_dc = ctx.getDecisionLevel();
+        System.out.println("Node[" + node_name + "]: before makeBranch. local_dc = " + local_dc);
+
+        global_to_local_dc.put(global_level, local_dc);        
+        
+        System.out.println("Node[" + node_name + "]: makeBranch. put(" + global_level + ", " + local_dc + ").");
+        
         ctx.propagate();
+        
+        System.out.println("Node[" + node_name + "]: after makeBranch. local_dc = " + local_dc);
         
         if (ctx.isSatisfiable())
         {
@@ -394,7 +421,7 @@ public class ANodeImpl implements ANodeInterface {
         }
         else
         {   
-            System.out.println("Node[" + node_name + "]: makeBranch. Return INCONSISTENT.");
+            System.out.println("Node[" + node_name + "]: makeBranch. Return INCONSISTENT. local_dc = " + local_dc);
             return ReplyMessage.INCONSISTENT;
         }   
     }
@@ -402,6 +429,8 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage localBacktrack(int global_level) throws RemoteException {
+        System.out.println("Node[" + node_name + "]: start in backtrack. local_dc = " + ctx.getDecisionLevel());
+        
         Integer local_dc = global_to_local_dc.get(global_level);
         
         System.out.println("Node[" + node_name + "]: backtrack to global_level = " + global_level);
@@ -411,7 +440,13 @@ public class ANodeImpl implements ANodeInterface {
             System.out.println("Node[" + node_name + "]: corresponding local level = " + local_dc);
         
             ctx.backtrackTo(local_dc.intValue());
-            global_to_local_dc.remove(global_level);
+            global_to_local_dc.remove(global_level+1);
+            
+            int gl1 = global_level+1;
+            
+            System.out.println("Node[" + node_name + "]: makeBranch. remove(" + gl1 + ").");
+            
+            System.out.println("After backtracking. Current local decision level = " + ctx.getDecisionLevel());
         }
         else
         {

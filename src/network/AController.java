@@ -143,8 +143,12 @@ public class AController {
                         stack.push(new Pair(global_level, current_node));
                         
                         ReplyMessage reply = nodes.get(current_node).getArg2().makeChoice(global_level);
+                        
+                        System.out.println("makeChoice done");
+                        
                         if (reply == ReplyMessage.INCONSISTENT)
                         {
+                            System.out.println("Node[" + current_node + "].makeChoice returned INCONSISTENT");
                             p = stack.pop();
                             global_level = p.getArg1();
                             current_node = p.getArg2();
@@ -168,7 +172,7 @@ public class AController {
                     switch (reply)
                     {
                         case HAS_BRANCH:
-                            reply = nodes.get(current_node).getArg2().makeBranch();
+                            reply = nodes.get(current_node).getArg2().makeBranch(global_level);
                             if (reply == ReplyMessage.SUCCEEDED)
                             {
                                 stack.push(new Pair(global_level, current_node));
