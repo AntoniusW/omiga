@@ -71,7 +71,7 @@ public class main_MCS_REWRITING {
             System.out.println("Decisonlevel: " + c.getDecisionLevel());
             c.backtrack();
             c.backtrack();
-            System.out.println("NEXT ALTERNATIVE: " + c.nextAlternative());
+            System.out.println("NEXT ALTERNATIVE: " + c.nextBranch());
             c.printAnswerSet(null);
             System.out.println(c.choice());
             System.out.println(c.choice());

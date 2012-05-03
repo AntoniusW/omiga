@@ -83,8 +83,25 @@ public class AController {
             System.err.println("Controller.backtrack ERROR.");
             e.printStackTrace();            
         }
-    }    
+    }
 
+    
+    private void printAnswer()
+    {
+        try
+        {
+            for (int i = 0; i < system_size; i++)
+            {
+                System.out.println("Request node[" + i + "] to print answer.");
+                nodes.get(i).getArg2().printAnswer();
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println("Controller.printAnswer ERROR.");
+            e.printStackTrace();
+        }
+    }
     
     public void mainLoop() {
         try {
@@ -137,6 +154,7 @@ public class AController {
                     else
                     {
                         System.out.println("An answer set found!");
+                        printAnswer();
                         p = stack.pop();
                         global_level = p.getArg1();
                         current_node = p.getArg2();

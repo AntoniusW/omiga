@@ -60,4 +60,5 @@ public interface ANodeInterface extends Remote {
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
     
+    public void printAnswer() throws RemoteException;    
 }

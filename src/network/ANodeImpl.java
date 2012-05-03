@@ -67,6 +67,10 @@ public class ANodeImpl implements ANodeInterface {
     private static Map<String, ArrayList<Predicate>> import_predicates =
             new HashMap<String, ArrayList<Predicate>>();
     
+    // mapping from global to local decision levels
+    private Map<Integer, Integer> global_to_local_dc =
+            new HashMap<Integer, Integer>();
+    
     private static ContextASPMCSRewriting ctx;
     private static String node_name;
     private static String filter;
@@ -85,7 +89,7 @@ public class ANodeImpl implements ANodeInterface {
         filename = args[1];
         System.out.println("Starting NodeImpl.main(). args[0] = " + node_name);
         
-        System.out.println("Input file is: " +filename);
+        System.out.println("Input file is: " + filename);
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager() );
@@ -93,7 +97,7 @@ public class ANodeImpl implements ANodeInterface {
         
         try {
             String name = "Context_" + node_name;
-            System.out.println("name = " + name);
+
             ANodeInterface local_node = new ANodeImpl();
             ANodeInterface stub =
                 (ANodeInterface) UnicastRemoteObject.exportObject(local_node,0);  // use anonymous/no port
@@ -154,6 +158,10 @@ public class ANodeImpl implements ANodeInterface {
             Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        ctx.propagate();
+        //System.err.println("First Propagation finsihed: " + System.currentTimeMillis());
+        ctx.getChoiceUnit().DeriveSCC();
+        ctx.getChoiceUnit().killSoloSCC();
       
         System.out.println("Initialized node, informing other nodes now.");
 
@@ -310,7 +318,7 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException {
         serializingFrom = from_node;
         
-        System.out.println("The next facts will come from node "+from_node);
+        System.out.println("The next facts will come from node " + from_node);
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -322,34 +330,101 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public boolean hasMoreChoice() throws RemoteException {
-        //return ANodeImpl.ctx.choicePlusInfo();
-        throw new UnsupportedOperationException("Not yet supported");   
+        boolean moreChoice = ctx.choice();
+        
+        if (moreChoice)
+        {
+            System.out.println("Node[" + node_name + "]: hasMoreChoice. Return TRUE.");
+        }
+        else
+        {
+            System.out.println("Node[" + node_name + "]: hasMoreChoice. Return FALSE.");
+        }
+        
+        return moreChoice;
     }
 
     @Override
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
-        //return ANodeImpl.ctx.choice();
-
-        throw new UnsupportedOperationException("Not yet supported");                
-        //return ReplyMessage.SUCCEEDED;
+        int local_dc = ctx.getDecisionLevel();
+        global_to_local_dc.put(global_level, local_dc);
+        
+        ctx.propagate();
+        
+        if (ctx.isSatisfiable())
+        {
+            System.out.println("Node[" + node_name + "]: makeChoice. Return SUCCEEDED.");
+            return ReplyMessage.SUCCEEDED;
+        }
+        else
+        {
+            System.out.println("Node[" + node_name + "]: makeChoice. Return SUCCEEDED.");
+            return ReplyMessage.INCONSISTENT;
+        }        
     }
+    
+    @Override
+    public ReplyMessage hasMoreBranch() throws RemoteException {
+        ReplyMessage moreBranch = ctx.nextBranch();
+        
+        switch (moreBranch)
+        {
+            case HAS_BRANCH:
+                System.out.println("Node[" + node_name + "]: hasMoreBranch. Return HAS_BRANCH.");
+                break;
+            case NO_MORE_BRANCH:
+                System.out.println("Node[" + node_name + "]: hasMoreBranch. Return NO_MORE_BRANCH.");
+                break;
+            case NO_MORE_ALTERNATIVE:
+                System.out.println("Node[" + node_name + "]: hasMoreBranch. Return NO_MORE_ALTERNATIVE.");
+                break;
+        }
+        return moreBranch;
+    }
+
 
     @Override
     public ReplyMessage makeBranch() throws RemoteException {
-        //return ANodeImpl.ctx.nextBranch();
-        throw new UnsupportedOperationException("Not yet supported");
-        //return ReplyMessage.SUCCEEDED;
+        ctx.propagate();
+        
+        if (ctx.isSatisfiable())
+        {
+            System.out.println("Node[" + node_name + "]: makeBranch. Return SUCCEEDED.");
+            return ReplyMessage.SUCCEEDED;
+        }
+        else
+        {   
+            System.out.println("Node[" + node_name + "]: makeBranch. Return INCONSISTENT.");
+            return ReplyMessage.INCONSISTENT;
+        }   
     }
+    
 
     @Override
     public ReplyMessage localBacktrack(int global_level) throws RemoteException {
-        throw new UnsupportedOperationException("Not yet supported");                        
-        //return ReplyMessage.SUCCEEDED;
-    }     
+        Integer local_dc = global_to_local_dc.get(global_level);
+        
+        System.out.println("Node[" + node_name + "]: backtrack to global_level = " + global_level);
+        
+        if (local_dc != null)
+        {
+            System.out.println("Node[" + node_name + "]: corresponding local level = " + local_dc);
+        
+            ctx.backtrackTo(local_dc.intValue());
+            global_to_local_dc.remove(global_level);
+        }
+        else
+        {
+            System.out.println("Node[" + node_name + "]: no corresponding local level found.");
+        }
+        
+        return ReplyMessage.SUCCEEDED;
+    }
 
     @Override
-    public ReplyMessage hasMoreBranch() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void printAnswer() throws RemoteException {
+        ctx.printAnswerSet(null);
     }
+
     
 }
