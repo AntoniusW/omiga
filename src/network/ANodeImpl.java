@@ -68,6 +68,7 @@ public class ANodeImpl implements ANodeInterface {
             new HashMap<Integer, Integer>();
     
     private static ContextASPMCSRewriting ctx;
+    private static int decision_level_before_push;
     private static String node_name;
     private static String filter;
     private static int rewriting;
@@ -249,7 +250,7 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage tell_active_domain(String node_name, Map<Pair<String, Integer>, Integer> predicates,
                     Map<String, Integer> functions,
                     Map<String, Integer> constants) throws RemoteException {
-        
+       
         System.out.println("Got informed by node " + node_name);
         
         Map<Integer, Object> mapping = new HashMap<Integer, Object>();
@@ -281,7 +282,7 @@ public class ANodeImpl implements ANodeInterface {
         // fill mapping: constants
         for(Entry<String, Integer> con_desc : constants.entrySet()) {
             Constant con = Constant.getConstant(con_desc.getKey());
-            mapping.put(con_desc.getValue(), con);
+            mapping.put(con_desc.getValue(), con); 
         }
         
         ser_mapping.put(node_name, mapping);
@@ -309,8 +310,10 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
-        
+               
         System.out.println("Received facts from "+serializingFrom +":");
+        System.out.println("HAF: ctx.decisionLevel = "+ctx.getDecisionLevel());
+        decision_level_before_push = ctx.getDecisionLevel();
         for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
             
             // print out what was received
@@ -328,6 +331,7 @@ public class ANodeImpl implements ANodeInterface {
         }
         
         System.out.println("Received facts end.");
+        System.out.println("HAF: ctx.decisionLevel = "+ctx.getDecisionLevel());
         
         // TODO AW find global decision level
         return this.makeChoice(global_level);
@@ -493,9 +497,9 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     private void pushDerivedFacts(int global_level) {
-        int current_level = ctx.getDecisionLevel();
-        current_level = (current_level == 0) ? 0 : current_level-1;
-        HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(current_level);
+        //int current_level = ctx.getDecisionLevel();
+        //current_level = (current_level == 0) ? 0 : current_level-1;
+        HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(decision_level_before_push);
         
         System.out.println("PushDerivedFacts: required_predicates ="+required_predicates);
         System.out.println("PushDerivedFacts: new_facts ="+new_facts);
