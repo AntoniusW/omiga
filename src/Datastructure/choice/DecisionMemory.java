@@ -84,7 +84,7 @@ public class DecisionMemory {
      * @param instance the instance you want to add
      */
     public void addInstance(Node n, Instance instance){
-        if(this.decisionLevel < 1) return;
+        //if(this.decisionLevel < 1) return;  // TODO AW out-commented this, as it leads to ignoring all facts, was there another reason for this?
         this.decisionLayer.get(this.decisionLevel).get(n).add(instance);
     }
     
@@ -146,6 +146,8 @@ public class DecisionMemory {
     public HashMap<Predicate, HashSet<Instance>> deriveNewFactsSindsDecisionLevel(int lvl){
         HashMap<Predicate, HashSet<Instance>> ret = new HashMap<Predicate, HashSet<Instance>>();
         
+        //System.out.println("DNFSDL: decisionLayer.size() = "+this.decisionLayer.size());
+        //System.out.println("DNFSDL: lvl = "+lvl);
         for(int i = lvl; i < this.decisionLayer.size();i++){
             for(Node n: this.decisionLayer.get(i).keySet()){
                 if(n.getClass().equals(BasicNode.class)){
@@ -154,6 +156,7 @@ public class DecisionMemory {
                         ret.put(bn.getPred(), new HashSet<Instance>());
                     }
                     ret.get(bn.getPred()).addAll(this.decisionLayer.get(i).get(bn));
+                    //System.out.println("DNFSDL: decisionLayer.get(i).get(bn) = "+this.decisionLayer.get(i).get(bn));
                 }
             }
         }

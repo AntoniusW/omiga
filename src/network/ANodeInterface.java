@@ -22,7 +22,7 @@ public interface ANodeInterface extends Remote {
      * node_name: the name assigned to this node
      * other_nodes: all the other nodes in the system as (name,remote) pairs
      */
-    public void init(String node_name, ArrayList<Pair<String,ANodeInterface>> other_nodes) throws RemoteException;
+    public ReplyMessage init(String node_name, ArrayList<Pair<String,ANodeInterface>> other_nodes) throws RemoteException;
     
     /*
      * node_name: name to which the mapping belongs to
@@ -30,7 +30,7 @@ public interface ANodeInterface extends Remote {
      * functions: Name -> SerializeInt
      * constants: Name -> SerializeInt
      */
-    public void tell_active_domain(String node_name,
+    public ReplyMessage tell_active_domain(String node_name,
             Map<Pair<String,Integer>,Integer> predicates,
             Map<String,Integer> functions,
             Map<String,Integer> constants ) throws RemoteException;
@@ -39,7 +39,7 @@ public interface ANodeInterface extends Remote {
      * Node gets informed about the predicates required from another node
      * required_predicates: SerializeInt of the required predicates
      */
-    public void tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException;
+    public ReplyMessage tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException;
     
     /*
      * This is ugly, but needed to tune the de-serialization of the later
@@ -48,7 +48,7 @@ public interface ANodeInterface extends Remote {
      */
     public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException;
     
-    public ReplyMessage handleAddingFacts(Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException;
+    public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException;
     
     public boolean hasMoreChoice() throws RemoteException;
     
@@ -60,5 +60,5 @@ public interface ANodeInterface extends Remote {
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
     
-    public void printAnswer() throws RemoteException;    
+    public ReplyMessage printAnswer() throws RemoteException;    
 }

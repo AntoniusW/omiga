@@ -147,6 +147,8 @@ public class Predicate implements Serializable {
     }
     
     public Object writeReplace() throws ObjectStreamException {
+        System.out.println("RMI: Externalizing: "+this.name);
+        System.out.println("RMI: Mapping is: "+ANodeImpl.out_mapping.get(this));
         return new AExternalizedForm(ANodeImpl.out_mapping.get(this));
     }
     

@@ -81,8 +81,13 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
      */
     @Override
     public boolean choice(){
-        //System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
-        //System.out.println("SCCMAXSize= " + SCC.size());
+        System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
+        System.out.println("SCCMAXSize= " + SCC.size());
+        System.out.println("Current SCC = "+actualSCC);
+        
+        if(actualSCC >= SCC.size()) {
+            return false;
+        }
         
         //We need to do a positive guess
         for(ChoiceNode cN: SCC.get(actualSCC)){

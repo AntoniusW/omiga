@@ -21,11 +21,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,7 +94,7 @@ public class ANodeImpl implements ANodeInterface {
         }
         
         try {
-            String name = "Context_" + node_name;
+            String name = node_name;
 
             ANodeInterface local_node = new ANodeImpl();
             ANodeInterface stub =
@@ -113,7 +109,7 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     @Override
-    public void init(String node_name, ArrayList<Pair<String, ANodeInterface>> other_nodes) throws RemoteException {
+    public ReplyMessage init(String node_name, ArrayList<Pair<String, ANodeInterface>> other_nodes) throws RemoteException {
         this.other_nodes = other_nodes;
         ANodeImpl.node_name = node_name;
         
@@ -175,7 +171,7 @@ public class ANodeImpl implements ANodeInterface {
         Map<Pair<String,Integer>,Integer> predicates = new HashMap<Pair<String,Integer>,Integer>();
         // also init required predicates (import interface)
         for (Iterator<Predicate> it = Predicate.getPredicatesIterator(); it.hasNext();) {
-            Predicate pred = it.next();
+            Predicate pred = it.next();       
             String name = pred.getName();
             Integer arity=pred.getArity();
             Integer ser_id = counter++;
@@ -183,26 +179,32 @@ public class ANodeImpl implements ANodeInterface {
             predicates.put(new Pair<String, Integer>(name,arity), ser_id);
             out_mapping.put(pred,ser_id);
             
-            // collect import interface
+            // if this predicate is external one, tell it to others
             if(pred.getNodeId()!=null) {
+            
+                // collect import interface
                 String from_node = pred.getNodeId();
                 ArrayList<Predicate> preds_from_node;
                 
                 // check if other node is already listed
                 if(import_predicates.containsKey(from_node)) {
+                    //System.out.println("Node "+from_node+" already recorded at import interface.");
                     preds_from_node = import_predicates.get(from_node);
                 } else {
+                    //System.out.println("Node "+from_node+" not recorded at import interface, creating it.");
                     preds_from_node = new ArrayList<Predicate>();
                     import_predicates.put(from_node, preds_from_node);
                 }
                 
+                System.out.println("Predicate is from outside: "+pred.toString());
+                
                 // add import predicate
                 preds_from_node.add(pred);
+               // System.out.println("Currently listed predicates are: "+preds_from_node);
+                
                 // register predicate at local solver to come from outside
-                ANodeImpl.ctx.registerFactFromOutside(pred);
+                ANodeImpl.ctx.registerFactFromOutside(pred);                
             }
-                
-                
         }
         
         // collect constants
@@ -228,20 +230,23 @@ public class ANodeImpl implements ANodeInterface {
         }
 
         for (Pair<String, ANodeInterface> pair : other_nodes) {
-            // tell active domain to other nodes
+            // tell active domain to other nodes except self
             if(!pair.getArg1().equals(node_name)) {
                 pair.getArg2().tell_active_domain(node_name, predicates,
                         functions, constants);
             }
             
             // tell import interface to all nodes
+            pair.getArg2().receiveNextFactsFrom(node_name);     // needed to de-serialize predicates at other node
             pair.getArg2().tell_import_domain(node_name,import_predicates.get(pair.getArg1()));
         }
+        
+        return ReplyMessage.SUCCEEDED;
         
     }
 
     @Override
-    public void tell_active_domain(String node_name, Map<Pair<String, Integer>, Integer> predicates,
+    public ReplyMessage tell_active_domain(String node_name, Map<Pair<String, Integer>, Integer> predicates,
                     Map<String, Integer> functions,
                     Map<String, Integer> constants) throws RemoteException {
         
@@ -251,8 +256,18 @@ public class ANodeImpl implements ANodeInterface {
         
         // fill mapping: predicates
         for (Entry<Pair<String,Integer>,Integer> pred_desc: predicates.entrySet()) {
-            // localize predicate name
-            String local_pred_name = node_name+":"+pred_desc.getKey().getArg1();
+            
+            // TODO AW hack to normalize predicate names
+            // n2:q occuring in context n1 locally is q
+            String local_pred_name;
+            if(pred_desc.getKey().getArg1().contains(":")) {
+                //local_pred_name = "Context_"+pred_desc.getKey().getArg1();    // this is the global name
+                local_pred_name = pred_desc.getKey().getArg1().replaceFirst(".*:", "");
+                System.out.println("Localized predicate "+pred_desc.getKey().getArg1() + " to "+local_pred_name);
+            } else {
+                // localize predicate name
+                local_pred_name = node_name+":"+pred_desc.getKey().getArg1();
+            }
             Predicate pred = Predicate.getPredicate(local_pred_name, pred_desc.getKey().getArg2());
             mapping.put( pred_desc.getValue(), pred);
         }
@@ -272,7 +287,8 @@ public class ANodeImpl implements ANodeInterface {
         ser_mapping.put(node_name, mapping);
         
         System.out.println("Mapping created.");
-
+        
+        return ReplyMessage.SUCCEEDED;
     }
 
     /*@Override
@@ -292,10 +308,8 @@ public class ANodeImpl implements ANodeInterface {
     
 
     @Override
-    public ReplyMessage handleAddingFacts(Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
+    public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
         
-        // TODO AW acutal implementation, add those facts
-        // we simply print out what we received
         System.out.println("Received facts from "+serializingFrom +":");
         for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
             
@@ -308,12 +322,16 @@ public class ANodeImpl implements ANodeInterface {
                 System.out.println("Instance: "+inst.toString());
                 
                 // actual adding of the facts
+                System.out.println("Adding Predicate / Instance = "+pred.getKey()+"/"+inst);
                 ANodeImpl.ctx.addFactFromOutside(pred.getKey(), inst);
             }
         }
         
+        System.out.println("Received facts end.");
         
-        return ReplyMessage.SUCCEEDED;
+        // TODO AW find global decision level
+        return this.makeChoice(global_level);
+        //return ReplyMessage.SUCCEEDED;
     }
 
     @Override
@@ -326,8 +344,13 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     @Override
-    public void tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException {
+    public ReplyMessage tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException {
+        System.out.println("Node[" + node_name + "]: got import domain from Node[" + from+"]");
+        System.out.println("Node[" + node_name + "]: required predicates are: "+required_predicates);
+
         ANodeImpl.required_predicates.put(from, (ArrayList<Predicate>)required_predicates);
+        
+        return ReplyMessage.SUCCEEDED;
     }
 
     @Override
@@ -368,6 +391,10 @@ public class ANodeImpl implements ANodeInterface {
         
         if (ctx.isSatisfiable())
         {
+            System.out.println("Node[" + node_name + "]: makeChoice. Pushing.");
+            
+            pushDerivedFacts(global_level);
+            
             System.out.println("Node[" + node_name + "]: makeChoice. Return SUCCEEDED.");
             return ReplyMessage.SUCCEEDED;
         }
@@ -459,8 +486,59 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     @Override
-    public void printAnswer() throws RemoteException {
+    public ReplyMessage printAnswer() throws RemoteException {
         ctx.printAnswerSet(null);
+        
+        return ReplyMessage.SUCCEEDED;
+    }
+
+    private void pushDerivedFacts(int global_level) {
+        int current_level = ctx.getDecisionLevel();
+        current_level = (current_level == 0) ? 0 : current_level-1;
+        HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(current_level);
+        
+        System.out.println("PushDerivedFacts: required_predicates ="+required_predicates);
+        System.out.println("PushDerivedFacts: new_facts ="+new_facts);
+        
+        // for all other nodes
+        for (Iterator<Pair<String, ANodeInterface>> it = other_nodes.iterator(); it.hasNext();) {
+            Pair<String,ANodeInterface>  node = it.next();
+            
+            // skip other node if it does not require facts from this one
+            if(!required_predicates.containsKey(node.getArg1()) || required_predicates.get(node.getArg1())==null) {
+                System.out.println("Skipping "+node.getArg1());
+                continue;
+            }
+            
+            HashMap<Predicate,ArrayList<Instance>> to_push = new HashMap<Predicate, ArrayList<Instance>>();
+            // for all predicates having new facts 
+            for (Entry<Predicate, HashSet<Instance>> pred : new_facts.entrySet()) {
+                
+
+                
+                //System.out.println("pushDerivedFacts:  pred: "+pred.toString());
+                
+                // add facts if this predicate is imported
+                if( required_predicates.get(node.getArg1()).contains(pred.getKey())) {
+                    System.out.println("PushDerivedFacts: HashSet of Instances size "+pred.getValue().size());
+                    to_push.put(pred.getKey(), new ArrayList<Instance>(pred.getValue()));
+                }
+            }
+            
+            // send new facts to other node
+            try {
+                System.out.println("PushDerivedFacts: to_push ="+to_push);
+                
+                node.getArg2().receiveNextFactsFrom(node_name);
+                node.getArg2().handleAddingFacts(global_level, to_push);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+
+       
+        
     }
 
     

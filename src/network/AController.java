@@ -28,7 +28,7 @@ public class AController {
             /* Get remote interface to all nodes */
             for (int i = 0; i < system_size; i++)
             {
-                String name = "Context_n" + (i+1);
+                String name = "n" + (i+1);
                 System.out.println("Looking for node with name = " + name);
                 ANodeInterface node = (ANodeInterface) registry.lookup(name);
                 nodes.add(new Pair(name, node));
@@ -115,6 +115,11 @@ public class AController {
                             
             System.out.println("Start up successful.");
             
+            // let all nodes propagate
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().makeChoice(0);   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
+            }
+            
             /*
             System.out.println("Calling test exchange on nodes now.");
             for (Entry<String,Remote> node : nodes.entrySet()) {
@@ -159,6 +164,13 @@ public class AController {
                     {
                         System.out.println("An answer set found!");
                         printAnswer();
+                        
+                        // TODO AW stack may be empty at this time, is this a bug in the algorithm?
+                        if (stack.empty()) {
+                            action = Action.FINISH;
+                            continue;
+                        }
+                        
                         p = stack.pop();
                         global_level = p.getArg1();
                         current_node = p.getArg2();
