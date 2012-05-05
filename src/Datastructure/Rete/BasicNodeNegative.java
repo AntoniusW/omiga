@@ -72,7 +72,7 @@ public class BasicNodeNegative extends BasicNode{
                 }
             }*/
             for(int i = 0; i < sN.getChildrenR().size();i++){
-                if(sN.getChildrenR().get(i).getClass().equals(JoinNode.class)){
+                if(sN.getChildrenR().get(i).getClass().equals(JoinNodeNegative.class)){
                     //System.err.println("Closed --> Inform JoinNode right");
                     JoinNode jn = (JoinNode)sN.getChildrenR().get(i);
                     jn.informOfClosure(sN,true);

@@ -96,7 +96,10 @@ public class Constant extends Term implements OperandI, Serializable {
     //TODO: Check if this is correct for numbers!
     @Override
     public int getIntValue(){
-        return this.intValue;
+        if(this.intValue != null){
+            return this.intValue;
+        }
+        return this.hashCode(); // TODO: This can lead to trouble for cnstants that are not int, since hashCode is not unique!
     }
     
     @Override

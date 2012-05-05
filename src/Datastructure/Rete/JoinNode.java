@@ -340,10 +340,20 @@ public class JoinNode extends Node{
         //System.err.println("informed of closure: " + this + " #instances: " + temp.size() + " time: " + System.currentTimeMillis());
         //System.err.println("EXAMPLE INSTANCE: " + temp.get(0));
         for(int i = 0; i < temp.size();i++){
+            
+            for(int j = 0; j < selectionCriterion1.length;j++){
+                if (selectionCriterion1[j] == null){
+                    selCrit1[j] = tempVar;
+                }else{
+                    selCrit1[j] = temp.get(i).get( selectionCriterion1[j]);
+                }
+            }
+            
             //rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i));
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
             //if(!rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i))){
-            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i)) ){
+            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))) ){
+
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
                 //System.out.println("Rete contains: " + sN.getAtom().getPredicate() + "(" + temp.get(i) + ")" + "SN = " + sN.getAtom());
                 this.memory.addInstance(temp.get(i));

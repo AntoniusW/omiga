@@ -1,5 +1,4 @@
-p(X,Y) :- s(X), t(Y), X>Y.
-s(f(g,1)). %triggers exception while evaluation
+p(X,f(Y)) :- s(X), t(Y), X>Y.
 s(2).
-t(1).
+t(f(1)).
 

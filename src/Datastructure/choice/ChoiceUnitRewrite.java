@@ -88,7 +88,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
     
     protected void openActualSCC(){
         this.actualSCC--;
-        System.out.println("c=" + c);
+        //System.out.println("c=" + c);
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)){
                c.getRete().getBasicNodeMinus(p).unclose();
