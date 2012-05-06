@@ -312,7 +312,7 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
                
         System.out.println("Received facts from "+serializingFrom +":");
-        System.out.println("HAF: ctx.decisionLevel = "+ctx.getDecisionLevel());
+        System.out.println("HAF: ctx.decisionLevel (decision_level_before_push) = "+ctx.getDecisionLevel());
         decision_level_before_push = ctx.getDecisionLevel();
         for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
             
@@ -472,6 +472,7 @@ public class ANodeImpl implements ANodeInterface {
     private void pushDerivedFacts(int global_level) {
         //int current_level = ctx.getDecisionLevel();
         //current_level = (current_level == 0) ? 0 : current_level-1;
+        System.out.println("Decision level before push = " + decision_level_before_push);
         HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(decision_level_before_push);
         
         System.out.println("PushDerivedFacts: required_predicates ="+required_predicates);
@@ -487,6 +488,7 @@ public class ANodeImpl implements ANodeInterface {
                 continue;
             }
             
+            boolean will_push = false;
             HashMap<Predicate,ArrayList<Instance>> to_push = new HashMap<Predicate, ArrayList<Instance>>();
             // for all predicates having new facts 
             for (Entry<Predicate, HashSet<Instance>> pred : new_facts.entrySet()) {
@@ -497,17 +499,27 @@ public class ANodeImpl implements ANodeInterface {
                 
                 // add facts if this predicate is imported
                 if( required_predicates.get(node.getArg1()).contains(pred.getKey())) {
-                    System.out.println("PushDerivedFacts: HashSet of Instances size "+pred.getValue().size());
-                    to_push.put(pred.getKey(), new ArrayList<Instance>(pred.getValue()));
+                    if (pred.getValue().size() > 0)
+                    {
+                        will_push = true;
+                        System.out.println("PushDerivedFacts: HashSet of Instances size "+pred.getValue().size());
+                        to_push.put(pred.getKey(), new ArrayList<Instance>(pred.getValue()));
+                    }
                 }
             }
             
             // send new facts to other node
             try {
-                System.out.println("PushDerivedFacts: to_push ="+to_push);
-                
-                node.getArg2().receiveNextFactsFrom(node_name);
-                node.getArg2().handleAddingFacts(global_level, to_push);
+                if (will_push)
+                {
+                    System.out.println("PushDerivedFacts: to_push ="+to_push);
+                    node.getArg2().receiveNextFactsFrom(node_name);
+                    node.getArg2().handleAddingFacts(global_level, to_push);
+                }
+                else
+                {
+                    System.out.println("Nothing to push");
+                }
             } catch (RemoteException ex) {
                 Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
