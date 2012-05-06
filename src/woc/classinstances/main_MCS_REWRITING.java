@@ -50,14 +50,23 @@ public class main_MCS_REWRITING {
             ContextASPMCSRewriting c = pars.readContext(input);
             Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
             c = rewriter.rewrite(c);
-            ((ContextASPMCSRewriting) c).registerFactFromOutside(Predicate.getPredicate("s", 1));
+            //((ContextASPMCSRewriting) c).registerFactFromOutside(Predicate.getPredicate("s", 1));
+            ((ContextASPMCSRewriting) c).registerFactFromOutside(Predicate.getPredicate("p", 1));
             c.printContext();
             
             c.propagate();
             c.getChoiceUnit().DeriveSCC();
             
+            Term[] terms = new Term[1];
+            terms[0] = Constant.getConstant("0");
+            Instance inz = Instance.getInstance(terms);
+            c.addFactFromOutside(Predicate.getPredicate("p", 1), inz);
+            c.printAnswerSet(null);
+            c.propagate();
             
-            System.out.println("Decisonlevel @ STartUp: " + c.getDecisionLevel());
+            
+            
+            /*System.out.println("Decisonlevel @ STartUp: " + c.getDecisionLevel());
             c.choice();
             c.propagate();
             c.printAnswerSet(null);
@@ -90,7 +99,7 @@ public class main_MCS_REWRITING {
             Manager m = new Manager(c);
             System.out.println("Starting calculation: " + System.currentTimeMillis());
             //m.calculate(null, false, null);
-            System.out.println("Program finished: " + System.currentTimeMillis());
+            System.out.println("Program finished: " + System.currentTimeMillis());*/
             
         } catch (FactSizeException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);

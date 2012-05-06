@@ -133,7 +133,8 @@ public class Rete {
             //System.out.println("BLING!: DOUBLE ADD!");
             return;
         } // TODO: Somehow avoid this if.
-        //System.out.println("AddingMINUS: " + p.getName() + "(" + instance + ")");
+        /*System.err.println("AddingMINUS: " + p.getName() + "(" + instance + ")");
+        System.err.println(basicLayerMinus.get(p));*/
         basicLayerMinus.get(p).addInstance(instance);
     }
     
@@ -290,8 +291,12 @@ public class Rete {
      * @param p the predicate you want to add
      */
     public void addPredicatePlus(Predicate p){
-        if(!this.basicLayerPlus.containsKey(p))
+        //System.err.println("AddintPredicatePlus: " + p);
+        if(!this.basicLayerPlus.containsKey(p)){
             this.basicLayerPlus.put(p, new BasicNode(p.getArity(),this,p));
+            addPredicateMinus(p);
+        }
+            
     }
     
     /**
@@ -301,8 +306,12 @@ public class Rete {
      * @param p the predicate you want to add
      */
     public void addPredicateMinus(Predicate p){
-        if(!this.basicLayerMinus.containsKey(p))
+        //System.err.println("AddintPredicateMinus: " + p);
+        if(!this.basicLayerMinus.containsKey(p)){
             this.basicLayerMinus.put(p, new BasicNodeNegative(p.getArity(),this,p));
+            addPredicatePlus(p);
+        }
+            
     }
     
     /**
