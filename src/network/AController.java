@@ -117,7 +117,7 @@ public class AController {
             
             // let all nodes propagate
             for (Pair<String, ANodeInterface> pair : nodes) {
-                pair.getArg2().makeChoice(0);   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
+                pair.getArg2().propagate(0);   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
             }
             
             /*
@@ -147,7 +147,7 @@ public class AController {
                         global_level++;
                         stack.push(new Pair(global_level, current_node));
                         
-                        ReplyMessage reply = nodes.get(current_node).getArg2().makeChoice(global_level);
+                        ReplyMessage reply = nodes.get(current_node).getArg2().propagate(global_level);
                         
                         System.out.println("makeChoice done");
                         
@@ -184,7 +184,7 @@ public class AController {
                     switch (reply)
                     {
                         case HAS_BRANCH:
-                            reply = nodes.get(current_node).getArg2().makeBranch(global_level);
+                            reply = nodes.get(current_node).getArg2().propagate(global_level);
                             if (reply == ReplyMessage.SUCCEEDED)
                             {
                                 stack.push(new Pair(global_level, current_node));

@@ -334,7 +334,7 @@ public class ANodeImpl implements ANodeInterface {
         System.out.println("HAF: ctx.decisionLevel = "+ctx.getDecisionLevel());
         
         // TODO AW find global decision level
-        return this.makeChoice(global_level);
+        return this.propagate(global_level);
         //return ReplyMessage.SUCCEEDED;
     }
 
@@ -377,34 +377,34 @@ public class ANodeImpl implements ANodeInterface {
         
         return moreChoice;
     }
-
+    
     @Override
-    public ReplyMessage makeChoice(int global_level) throws RemoteException {
+    public ReplyMessage propagate(int global_level) throws RemoteException {
         
         int local_dc = ctx.getDecisionLevel();
         
-        System.out.println("Node[" + node_name + "]: before makeChoice. local_dc = " + local_dc);
+        System.out.println("Node[" + node_name + "]: before propagate. local_dc = " + local_dc);
         
         global_to_local_dc.put(global_level, local_dc);
         
-        System.out.println("Node[" + node_name + "]: makeChoice. put(" + global_level + ", " + local_dc + ").");
+        System.out.println("Node[" + node_name + "]: propagate. put(" + global_level + ", " + local_dc + ").");
         
         ctx.propagate();
         
-        System.out.println("Node[" + node_name + "]: after makeChoice. local_dc = " + local_dc);
+        System.out.println("Node[" + node_name + "]: after propagate. local_dc = " + local_dc);
         
         if (ctx.isSatisfiable())
         {
-            System.out.println("Node[" + node_name + "]: makeChoice. Pushing.");
+            System.out.println("Node[" + node_name + "]: propagate. Pushing.");
             
             pushDerivedFacts(global_level);
             
-            System.out.println("Node[" + node_name + "]: makeChoice. Return SUCCEEDED.");
+            System.out.println("Node[" + node_name + "]: propagate. Return SUCCEEDED.");
             return ReplyMessage.SUCCEEDED;
         }
         else
         {
-            System.out.println("Node[" + node_name + "]: makeChoice. Return INCONSISTENT. local_dc = " + local_dc);
+            System.out.println("Node[" + node_name + "]: propagate. Return INCONSISTENT. local_dc = " + local_dc);
             return ReplyMessage.INCONSISTENT;
         }        
     }
@@ -431,34 +431,7 @@ public class ANodeImpl implements ANodeInterface {
                 break;
         }
         return moreBranch;
-    }
-
-
-    @Override
-    public ReplyMessage makeBranch(int global_level) throws RemoteException {
-        int local_dc = ctx.getDecisionLevel();
-        System.out.println("Node[" + node_name + "]: before makeBranch. local_dc = " + local_dc);
-
-        global_to_local_dc.put(global_level, local_dc);        
-        
-        System.out.println("Node[" + node_name + "]: makeBranch. put(" + global_level + ", " + local_dc + ").");
-        
-        ctx.propagate();
-        
-        System.out.println("Node[" + node_name + "]: after makeBranch. local_dc = " + local_dc);
-        
-        if (ctx.isSatisfiable())
-        {
-            System.out.println("Node[" + node_name + "]: makeBranch. Return SUCCEEDED.");
-            return ReplyMessage.SUCCEEDED;
-        }
-        else
-        {   
-            System.out.println("Node[" + node_name + "]: makeBranch. Return INCONSISTENT. local_dc = " + local_dc);
-            return ReplyMessage.INCONSISTENT;
-        }   
-    }
-    
+    }    
 
     @Override
     public ReplyMessage localBacktrack(int global_level) throws RemoteException {

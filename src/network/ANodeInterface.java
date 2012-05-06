@@ -52,11 +52,9 @@ public interface ANodeInterface extends Remote {
     
     public boolean hasMoreChoice() throws RemoteException;
     
-    public ReplyMessage makeChoice(int global_level) throws RemoteException;
+    public ReplyMessage propagate(int global_level) throws RemoteException;
 
     public ReplyMessage hasMoreBranch() throws RemoteException;
-    
-    public ReplyMessage makeBranch(int global_level) throws RemoteException;
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
     
