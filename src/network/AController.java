@@ -205,12 +205,19 @@ public class AController {
                                 action = Action.MAKE_CHOICE;
                             }
                             break;
-                        case NO_MORE_BRANCH:                            
+                        case NO_MORE_BRANCH:
+                            if (global_level == 1)
+                            {
+                                System.out.println("Controller. makeBranch: Terminate because of NO_MORE_BRANCH and global_level-1 == 0");
+                                action = Action.FINISH;
+                                break;
+                            }
+                            
                             p = stack.pop();
                             global_level = p.getArg1();
                             current_node = p.getArg2();
                             
-                            System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of no more branch!");
+                            System.out.println("Controller. makeBranch: stack.pop (" + global_level + "," + current_node + ") because of no more branch!");
                             break;
                         case NO_MORE_ALTERNATIVE:
                             if (stack.empty())
@@ -220,7 +227,7 @@ public class AController {
                                 p = stack.pop();
                                 global_level = p.getArg1();
                                 current_node = p.getArg2();
-                                System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of no more alternative! will FINISH");                                
+                                System.out.println("Controller. makeBranch: stack.pop (" + global_level + "," + current_node + ") because of no more alternative! will FINISH");                                
                             }
                             break;
                     }
