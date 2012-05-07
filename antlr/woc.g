@@ -55,14 +55,14 @@ operation returns[Operator op]
 	
 expression returns[OperandI op]
 @init{ OP openu=null; }
-	:	l=mult_expression ((('+' {openu=OP.valueOf("+");}| '-'{openu=OP.valueOf("-");})
+	:	l=mult_expression ((('+' {openu=OP.PLUS;}| '-'{openu=OP.MINUS;})
 		r=mult_expression { $op=new Operator($l.op,$r.op,openu); })
 	|	{$op=$l.op;})
 	;
 	
 mult_expression returns[OperandI op]
 @init{ OP openu=null; }
-	:	l=primary_expression ((('*' {openu=OP.valueOf("*"); }| '/' {openu=OP.valueOf("/");} )
+	:	l=primary_expression ((('*' {openu=OP.TIMES; }| '/' {openu=OP.DIVIDE;} )
 		r=primary_expression { $op=new Operator($l.op,$r.op,openu); })
 	|	{$op=$l.op;})
 	;

@@ -22,6 +22,7 @@ echo $! > $PIDFILE
 
 echo "Starting nodes now ..."
 java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n1 $CTX1_FILE &
+echo $! >> $PIDFILE
 java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n2 $CTX2_FILE &
 echo $! >> $PIDFILE
 
