@@ -1,3 +1,5 @@
 r(X) :- not p(X), dom(X).
 s(X) :- not q(X), dom(X).
 dom(0).
+dom(1).
+dom(2).
