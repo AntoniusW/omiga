@@ -108,8 +108,9 @@ public class AController {
             
             // init each node
             System.out.println("Controller. Initializing nodes now.");
+            int serialize_lower = 0;
             for (Pair<String, ANodeInterface> pair : nodes) {
-                pair.getArg2().init(pair.getArg1(),nodes);
+                serialize_lower = pair.getArg2().init(pair.getArg1(),nodes,serialize_lower+1);
                 
             }
                             

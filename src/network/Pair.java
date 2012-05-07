@@ -35,6 +35,23 @@ public class Pair<T1,T2> implements Serializable {
     public void setArg2(T2 arg2) {
         this.arg2 = arg2;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if( obj instanceof Pair) {
+            Pair pair = (Pair) obj;
+            if( this.arg1.equals(pair.arg1) && this.arg2.equals(pair.arg2))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Pair("+arg1.toString()+","+arg2.toString()+")";
+    }
+    
+    
     
     
     

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package network;
 
 import java.io.Externalizable;
@@ -11,7 +7,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 
 /**
- * This class is used as a substitute for Predicates/Functions/Constants
+ * This class is used as a substitute for Functions/Constants
  * whenever they are sent to another node.
  * It uses the more efficient Externalizable version of serialization.
  * 
@@ -42,6 +38,6 @@ public class AExternalizedForm implements Externalizable {
      * corresponding object from the mapping.
      */
     public Object readResolve() throws ObjectStreamException {
-        return ANodeImpl.ser_mapping.get(ANodeImpl.serializingFrom).get(value);
+        return ANodeImpl.deser_mapping.get(value);
     }
 }

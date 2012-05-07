@@ -7,9 +7,8 @@ package Entity;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import network.AExternalizedForm;
+import network.AExternalizedPredicate;
 import network.ANodeImpl;
 
 /**
@@ -147,9 +146,9 @@ public class Predicate implements Serializable {
     }
     
     public Object writeReplace() throws ObjectStreamException {
-        System.out.println("RMI: Externalizing: "+this.name);
-        System.out.println("RMI: Mapping is: "+ANodeImpl.out_mapping.get(this));
-        return new AExternalizedForm(ANodeImpl.out_mapping.get(this));
+        System.out.println("RMI: Predicate Externalizing: "+this.name);
+        System.out.println("RMI: Predicate Mapping is: "+ANodeImpl.out_mapping.get(this));
+        return new AExternalizedPredicate(ANodeImpl.out_mapping.get(this));
     }
     
     

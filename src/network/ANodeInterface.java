@@ -21,11 +21,13 @@ public interface ANodeInterface extends Remote {
     /*
      * node_name: the name assigned to this node
      * other_nodes: all the other nodes in the system as (name,remote) pairs
+     * serialize_start: lower boundary for serialization
+     * returns: upper boundary of serialization
      */
-    public ReplyMessage init(String node_name, ArrayList<Pair<String,ANodeInterface>> other_nodes) throws RemoteException;
+    public int init(String node_name, ArrayList<Pair<String,ANodeInterface>> other_nodes, int serlialize_start) throws RemoteException;
     
     /*
-     * node_name: name to which the mapping belongs to
+     * node_name: from where this domain is
      * predicates: (Name,Arity) -> SerializeInt
      * functions: Name -> SerializeInt
      * constants: Name -> SerializeInt
@@ -41,12 +43,7 @@ public interface ANodeInterface extends Remote {
      */
     public ReplyMessage tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException;
     
-    /*
-     * This is ugly, but needed to tune the de-serialization of the later
-     * handleAddingFacts, it needs to know where the facts come from, before it
-     * actually starts to deserialize them.
-     */
-    public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException;
+    public ReplyMessage receiveNextFactsFrom(String node_name) throws RemoteException;
     
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException;
     

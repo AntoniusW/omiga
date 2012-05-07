@@ -41,17 +41,21 @@ public class ANodeImpl implements ANodeInterface {
     // TODO AW changed other_nodes to now containing all nodes, including this
     // one. Check if this broke something
     
-    // mappings of other_node_name to predicate/function symbols/constants
-    // mapping for deserialization
-    public static Map<String, Map<Integer, Object>> ser_mapping =
-            new HashMap<String, Map<Integer, Object>>();
+    // mapping for deserialization:
+    // integer to predicate/function symbols/constants
+    public static Map<Integer, Object> deser_mapping =
+            new HashMap<Integer, Object>();
     
+    // separate map to localize predicate names
     public static String serializingFrom = null;
+    public static Map<String,HashMap<Integer,Predicate>> predicate_mapping =
+            new HashMap<String,HashMap<Integer, Predicate>>();
     
-    // mapping for serialization
+    // mapping for serialization:
+    // predicates/function symbols/constants to integers
     public static Map<Object, Integer> out_mapping =
             new HashMap<Object, Integer>();
-    // as an integer from a given node uniquely identifies the instance of
+    // as an integer uniquely identifies the instance of
     // the specific class, we only need one map
     // TODO AW something more specific than Object would be nice
 
@@ -110,7 +114,7 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     @Override
-    public ReplyMessage init(String node_name, ArrayList<Pair<String, ANodeInterface>> other_nodes) throws RemoteException {
+    public int init(String node_name, ArrayList<Pair<String, ANodeInterface>> other_nodes, int serialize_start) throws RemoteException {
         this.other_nodes = other_nodes;
         ANodeImpl.node_name = node_name;
         
@@ -165,7 +169,7 @@ public class ANodeImpl implements ANodeInterface {
         System.out.println("Node[" + node_name +"]: Initialized node, informing other nodes now.");
 
         // get list of predicate/functions/constants        
-        int counter=0;  // this will contain the id that a certain instance
+        int counter=serialize_start;  // this will contain the id that a certain instance
                         // is mapped to, we make it unique over all types.
         
         // collect predicate symbols
@@ -217,6 +221,7 @@ public class ANodeImpl implements ANodeInterface {
              
              constants.put(name, ser_id);
              out_mapping.put(con, ser_id);
+             deser_mapping.put(ser_id, con);
         }
         
         // collect function symbols
@@ -228,21 +233,22 @@ public class ANodeImpl implements ANodeInterface {
             
             functions.put(name, ser_id);
             out_mapping.put(func, ser_id);
+            deser_mapping.put(ser_id, func);
         }
 
-        for (Pair<String, ANodeInterface> pair : other_nodes) {
+        for (Pair<String, ANodeInterface> other : other_nodes) {
             // tell active domain to other nodes except self
-            if(!pair.getArg1().equals(node_name)) {
-                pair.getArg2().tell_active_domain(node_name, predicates,
+            if(!other.getArg1().equals(node_name)) {
+                other.getArg2().tell_active_domain(node_name, predicates,
                         functions, constants);
             }
             
             // tell import interface to all nodes
-            pair.getArg2().receiveNextFactsFrom(node_name);     // needed to de-serialize predicates at other node
-            pair.getArg2().tell_import_domain(node_name,import_predicates.get(pair.getArg1()));
+            other.getArg2().receiveNextFactsFrom(node_name);     // needed to de-serialize predicates at other node
+            other.getArg2().tell_import_domain(node_name,import_predicates.get(other.getArg1()));
         }
         
-        return ReplyMessage.SUCCEEDED;
+        return counter;
         
     }
 
@@ -253,16 +259,20 @@ public class ANodeImpl implements ANodeInterface {
        
         System.out.println("Node[" + node_name +"]: Got informed by node " + node_name);
         
-        Map<Integer, Object> mapping = new HashMap<Integer, Object>();
+        System.out.println("Adding predicates: "+predicates);
+        
         
         // fill mapping: predicates
+        HashMap<Integer,Predicate> pred_map = new HashMap<Integer, Predicate>();
         for (Entry<Pair<String,Integer>,Integer> pred_desc: predicates.entrySet()) {
             
             // TODO AW hack to normalize predicate names
             // n2:q occuring in context n1 locally is q
             String local_pred_name;
             if(pred_desc.getKey().getArg1().contains(":")) {
-                //local_pred_name = "Context_"+pred_desc.getKey().getArg1();    // this is the global name
+                //local_pred_name = "n"+pred_desc.getKey().getArg1();    // this is the global name
+                if(!pred_desc.getKey().getArg1().startsWith(ANodeImpl.node_name+":"))
+                    throw new RemoteException("Node identifier of received external predicate ["+pred_desc.getKey().getArg1()+"] differs from local name ["+ANodeImpl.node_name+"]");
                 local_pred_name = pred_desc.getKey().getArg1().replaceFirst(".*:", "");
                 System.out.println("Node[" + node_name +"]: Localized predicate "+ pred_desc.getKey().getArg1() + " to "+local_pred_name);
             } else {
@@ -270,22 +280,30 @@ public class ANodeImpl implements ANodeInterface {
                 local_pred_name = node_name+":"+pred_desc.getKey().getArg1();
             }
             Predicate pred = Predicate.getPredicate(local_pred_name, pred_desc.getKey().getArg2());
-            mapping.put( pred_desc.getValue(), pred);
+            pred_map.put( pred_desc.getValue(), pred);
+            System.out.println("Added to mapping: "+pred+" with value "+pred_desc.getValue()+" from "+node_name);
+            //out_mapping.put(pred, pred_desc.getValue());
         }
+        predicate_mapping.put(node_name, pred_map);
+        
+        System.out.println("Adding function symbols: "+functions);
         
         // fill mapping: function symbols
         for(Entry<String, Integer> func_desc : functions.entrySet()) {
             FunctionSymbol fun = FunctionSymbol.getFunctionSymbol(func_desc.getKey());
-            mapping.put(func_desc.getValue(), fun);
+            deser_mapping.put(func_desc.getValue(), fun);
+            out_mapping.put(fun, func_desc.getValue());
         }
+        
+        System.out.println("Adding constants: "+constants);
         
         // fill mapping: constants
         for(Entry<String, Integer> con_desc : constants.entrySet()) {
             Constant con = Constant.getConstant(con_desc.getKey());
-            mapping.put(con_desc.getValue(), con); 
+            deser_mapping.put(con_desc.getValue(), con); 
+            out_mapping.put(con, con_desc.getValue());
+            
         }
-        
-        ser_mapping.put(node_name, mapping);
         
         System.out.println("Node[" + node_name +"]: Mapping created.");
         
