@@ -86,9 +86,9 @@ public class ANodeImpl implements ANodeInterface {
     public static void main(String[] args) {
         node_name = args[0];
         filename = args[1];
-        System.out.println("Starting NodeImpl.main(). args[0] = " + node_name);
+        System.out.println("Node[" + node_name +"]: Starting NodeImpl.main(). args[0] = " + node_name);
         
-        System.out.println("Input file is: " + filename);
+        System.out.println("Node[" + node_name +"]: Input file is: " + filename);
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager() );
@@ -102,9 +102,9 @@ public class ANodeImpl implements ANodeInterface {
                 (ANodeInterface) UnicastRemoteObject.exportObject(local_node,0);  // use anonymous/no port
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name, stub);
-            System.out.println("NodeImpl bound.");
+            System.out.println("Node[" + node_name +"]: NodeImpl bound.");
         } catch (Exception e) {
-            System.err.println("ANodeImpl exception:");
+            System.err.println("Node[" + node_name +"]: ANodeImpl exception:");
             e.printStackTrace();
         }
     }
@@ -114,7 +114,7 @@ public class ANodeImpl implements ANodeInterface {
         this.other_nodes = other_nodes;
         ANodeImpl.node_name = node_name;
         
-        System.out.println("Node "+ node_name + " received " + other_nodes.size() +" other nodes.");
+        System.out.println("Node[" + node_name +"]: received " + other_nodes.size() +" other nodes.");
         
         // startup of local server here (read program, etc.)
         long start = System.currentTimeMillis();
@@ -138,7 +138,7 @@ public class ANodeImpl implements ANodeInterface {
             // parse input
             parser.woc_program();
             
-            System.out.println("Read in program is: ");
+            System.out.println("Node[" + node_name +"]: Read in program is: ");
             ctx.printContext();
             
             // rewrite context
@@ -162,7 +162,7 @@ public class ANodeImpl implements ANodeInterface {
         ctx.getChoiceUnit().DeriveSCC();
         ctx.getChoiceUnit().killSoloSCC();
       
-        System.out.println("Initialized node, informing other nodes now.");
+        System.out.println("Node[" + node_name +"]: Initialized node, informing other nodes now.");
 
         // get list of predicate/functions/constants        
         int counter=0;  // this will contain the id that a certain instance
@@ -197,7 +197,7 @@ public class ANodeImpl implements ANodeInterface {
                     import_predicates.put(from_node, preds_from_node);
                 }
                 
-                System.out.println("Predicate is from outside: "+pred.toString());
+                System.out.println("Node[" + node_name +"]: Predicate is from outside: "+pred.toString());
                 
                 // add import predicate
                 preds_from_node.add(pred);
@@ -251,7 +251,7 @@ public class ANodeImpl implements ANodeInterface {
                     Map<String, Integer> functions,
                     Map<String, Integer> constants) throws RemoteException {
        
-        System.out.println("Got informed by node " + node_name);
+        System.out.println("Node[" + node_name +"]: Got informed by node " + node_name);
         
         Map<Integer, Object> mapping = new HashMap<Integer, Object>();
         
@@ -264,7 +264,7 @@ public class ANodeImpl implements ANodeInterface {
             if(pred_desc.getKey().getArg1().contains(":")) {
                 //local_pred_name = "Context_"+pred_desc.getKey().getArg1();    // this is the global name
                 local_pred_name = pred_desc.getKey().getArg1().replaceFirst(".*:", "");
-                System.out.println("Localized predicate "+pred_desc.getKey().getArg1() + " to "+local_pred_name);
+                System.out.println("Node[" + node_name +"]: Localized predicate "+ pred_desc.getKey().getArg1() + " to "+local_pred_name);
             } else {
                 // localize predicate name
                 local_pred_name = node_name+":"+pred_desc.getKey().getArg1();
@@ -287,7 +287,7 @@ public class ANodeImpl implements ANodeInterface {
         
         ser_mapping.put(node_name, mapping);
         
-        System.out.println("Mapping created.");
+        System.out.println("Node[" + node_name +"]: Mapping created.");
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -311,27 +311,27 @@ public class ANodeImpl implements ANodeInterface {
     @Override
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
                
-        System.out.println("Received facts from "+serializingFrom +":");
-        System.out.println("HAF: ctx.decisionLevel (decision_level_before_push) = "+ctx.getDecisionLevel());
+        System.out.println("Node[" + node_name +"]: Received facts from "+serializingFrom +":");
+        System.out.println("Node[" + node_name +"]: HAF: ctx.decisionLevel (decision_level_before_push) = "+ctx.getDecisionLevel());
         decision_level_before_push = ctx.getDecisionLevel();
         for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
             
             // print out what was received
-            System.out.println("Predicate "+pred.getKey().getName()+"/"+
+            System.out.println("Node[" + node_name +"]: Predicate "+pred.getKey().getName()+"/"+
                                 pred.getKey().getArity()+ ", "+
                                 pred.getValue().size()+" entries.");
             for (Iterator it = pred.getValue().iterator(); it.hasNext();) {
                 Instance inst = (Instance)it.next();
-                System.out.println("Instance: "+inst.toString());
+                System.out.println("Node[" + node_name +"]: Instance: "+inst.toString());
                 
                 // actual adding of the facts
-                System.out.println("Adding Predicate / Instance = "+pred.getKey()+"/"+inst);
+                System.out.println("Node[" + node_name +"]: Adding Predicate / Instance = "+pred.getKey()+"/"+inst);
                 ANodeImpl.ctx.addFactFromOutside(pred.getKey(), inst);
             }
         }
         
-        System.out.println("Received facts end.");
-        System.out.println("HAF: ctx.decisionLevel = "+ctx.getDecisionLevel());
+        System.out.println("Node[" + node_name +"]: Received facts end.");
+        System.out.println("Node[" + node_name +"]: HAF: ctx.decisionLevel = "+ctx.getDecisionLevel());
         
         // TODO AW find global decision level
         return this.propagate(global_level);
@@ -342,7 +342,7 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException {
         serializingFrom = from_node;
         
-        System.out.println("The next facts will come from node " + from_node);
+        System.out.println("Node[" + node_name +"]: The next facts will come from node " + from_node);
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -416,7 +416,7 @@ public class ANodeImpl implements ANodeInterface {
         
         ReplyMessage moreBranch = ctx.nextBranch();
         
-        System.out.println("Node[" + node_name + "]: fater checking branch: local_dc = " + ctx.getDecisionLevel());
+        System.out.println("Node[" + node_name + "]: after checking branch: local_dc = " + ctx.getDecisionLevel());
         
         switch (moreBranch)
         {
@@ -472,11 +472,11 @@ public class ANodeImpl implements ANodeInterface {
     private void pushDerivedFacts(int global_level) {
         //int current_level = ctx.getDecisionLevel();
         //current_level = (current_level == 0) ? 0 : current_level-1;
-        System.out.println("Decision level before push = " + decision_level_before_push);
+        System.out.println("Node[" + node_name +"]: Decision level before push = " + decision_level_before_push);
         HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(decision_level_before_push);
         
-        System.out.println("PushDerivedFacts: required_predicates ="+required_predicates);
-        System.out.println("PushDerivedFacts: new_facts ="+new_facts);
+        System.out.println("Node[" + node_name +"]: PushDerivedFacts: required_predicates ="+required_predicates);
+        System.out.println("Node[" + node_name +"]: PushDerivedFacts: new_facts ="+new_facts);
         
         // for all other nodes
         for (Iterator<Pair<String, ANodeInterface>> it = other_nodes.iterator(); it.hasNext();) {
@@ -484,7 +484,7 @@ public class ANodeImpl implements ANodeInterface {
             
             // skip other node if it does not require facts from this one
             if(!required_predicates.containsKey(node.getArg1()) || required_predicates.get(node.getArg1())==null) {
-                System.out.println("Skipping "+node.getArg1());
+                System.out.println("Node[" + node_name +"]: Skipping " + node.getArg1());
                 continue;
             }
             
@@ -502,7 +502,7 @@ public class ANodeImpl implements ANodeInterface {
                     if (pred.getValue().size() > 0)
                     {
                         will_push = true;
-                        System.out.println("PushDerivedFacts: HashSet of Instances size "+pred.getValue().size());
+                        System.out.println("Node[" + node_name +"]: PushDerivedFacts: to " + node.getArg1() + ". HashSet of Instances size " + pred.getValue().size());
                         to_push.put(pred.getKey(), new ArrayList<Instance>(pred.getValue()));
                     }
                 }
@@ -512,13 +512,13 @@ public class ANodeImpl implements ANodeInterface {
             try {
                 if (will_push)
                 {
-                    System.out.println("PushDerivedFacts: to_push ="+to_push);
+                    System.out.println("Node[" + node_name +"]: PushDerivedFacts: to_push = "+to_push);
                     node.getArg2().receiveNextFactsFrom(node_name);
                     node.getArg2().handleAddingFacts(global_level, to_push);
                 }
                 else
                 {
-                    System.out.println("Nothing to push");
+                    System.out.println("Node[" + node_name +"]: Nothing to push to " + node.getArg1());
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);

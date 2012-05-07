@@ -29,7 +29,7 @@ public class AController {
             for (int i = 0; i < system_size; i++)
             {
                 String name = "n" + (i+1);
-                System.out.println("Looking for node with name = " + name);
+                System.out.println("Controller. Looking for node with name = " + name);
                 ANodeInterface node = (ANodeInterface) registry.lookup(name);
                 nodes.add(new Pair(name, node));
             }
@@ -47,18 +47,18 @@ public class AController {
         {
             for (int i = 0; i < system_size; i++)
             {
-                System.out.println("Controller.findNodeWithChoicePoint(): checking, i = " + i);
+                System.out.println("Controller. findNodeWithChoicePoint(): checking, i = " + i);
 
                 if (nodes.get(i).getArg2().hasMoreChoice() == true)
                 {
-                    System.out.println("Controller.findNodeWithChoicePoint(): return " + i);
+                    System.out.println("Controller. findNodeWithChoicePoint(): return " + i);
                     return i;
                 }
             }
         }
         catch (Exception e)
         {
-            System.err.println("Controller.findNodeWithChoicePoint ERROR.");
+            System.err.println("Controller. findNodeWithChoicePoint ERROR.");
             e.printStackTrace(); 
         }
         
@@ -72,7 +72,7 @@ public class AController {
         {
             for (int i = 0; i < system_size; i++)
             {
-                System.out.println("Controller.backTrack(). "
+                System.out.println("Controller. backTrack(). "
                         + "Requesting backTrack(" + global_level + ") to node[" + i + "]");                  
                 ReplyMessage reply = nodes.get(i).getArg2().localBacktrack(global_level);
                 assert (reply == ReplyMessage.SUCCEEDED);
@@ -80,7 +80,7 @@ public class AController {
         }
         catch (Exception e)
         {
-            System.err.println("Controller.backtrack ERROR.");
+            System.err.println("Controller. backtrack ERROR.");
             e.printStackTrace();            
         }
     }
@@ -92,13 +92,13 @@ public class AController {
         {
             for (int i = 0; i < system_size; i++)
             {
-                System.out.println("Request node[" + i + "] to print answer.");
+                System.out.println("Controller. Request node[" + i + "] to print answer.");
                 nodes.get(i).getArg2().printAnswer();
             }
         }
         catch (Exception e)
         {
-            System.err.println("Controller.printAnswer ERROR.");
+            System.err.println("Controller. printAnswer ERROR.");
             e.printStackTrace();
         }
     }
@@ -107,13 +107,13 @@ public class AController {
         try {
             
             // init each node
-            System.out.println("Initializing nodes now.");
+            System.out.println("Controller. Initializing nodes now.");
             for (Pair<String, ANodeInterface> pair : nodes) {
                 pair.getArg2().init(pair.getArg1(),nodes);
                 
             }
                             
-            System.out.println("Start up successful.");
+            System.out.println("Controller. Start up successful.");
             
             // let all nodes propagate
             for (Pair<String, ANodeInterface> pair : nodes) {
@@ -145,24 +145,30 @@ public class AController {
                     if (current_node != -1)
                     {
                         global_level++;
+                        System.out.println("Controller. makeChoice: stack.push (" + global_level + "," + current_node + ")");
                         stack.push(new Pair(global_level, current_node));
                         
                         ReplyMessage reply = nodes.get(current_node).getArg2().propagate(global_level);
                         
-                        System.out.println("makeChoice done");
+                        System.out.println("Controller. makeChoice done");
+                        
+                        System.out.println("Interpretation at nodes after this choice:");
+                        printAnswer();                        
                         
                         if (reply == ReplyMessage.INCONSISTENT)
                         {
-                            System.out.println("Node[" + current_node + "].makeChoice returned INCONSISTENT");
+                            System.out.println("Controller. Node[" + current_node + "].makeChoice returned INCONSISTENT");
                             p = stack.pop();
                             global_level = p.getArg1();
                             current_node = p.getArg2();
+                            
+                            System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of inconsistency!");
                             action = Action.MAKE_BRANCH;
                         }
                     }
                     else
                     {
-                        System.out.println("An answer set found!");
+                        System.out.println("Controller. An answer set found!");
                         printAnswer();
                         
                         // TODO AW stack may be empty at this time, is this a bug in the algorithm?
@@ -174,6 +180,9 @@ public class AController {
                         p = stack.pop();
                         global_level = p.getArg1();
                         current_node = p.getArg2();
+                        
+                        System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because an answer set found!");
+                        
                         action = Action.MAKE_BRANCH;
                     }
                 }
@@ -185,16 +194,23 @@ public class AController {
                     {
                         case HAS_BRANCH:
                             reply = nodes.get(current_node).getArg2().propagate(global_level);
+                            
+                            System.out.println("Interpretation at nodes after making branch:");
+                            printAnswer();                            
+                            
                             if (reply == ReplyMessage.SUCCEEDED)
                             {
+                                System.out.println("Controller. makeBranch: stack.push (" + global_level + "," + current_node + ")");
                                 stack.push(new Pair(global_level, current_node));
                                 action = Action.MAKE_CHOICE;
                             }
                             break;
-                        case NO_MORE_BRANCH:
+                        case NO_MORE_BRANCH:                            
                             p = stack.pop();
                             global_level = p.getArg1();
                             current_node = p.getArg2();
+                            
+                            System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of no more branch!");
                             break;
                         case NO_MORE_ALTERNATIVE:
                             if (stack.empty())
@@ -204,6 +220,7 @@ public class AController {
                                 p = stack.pop();
                                 global_level = p.getArg1();
                                 current_node = p.getArg2();
+                                System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of no more alternative! will FINISH");                                
                             }
                             break;
                     }
@@ -211,20 +228,20 @@ public class AController {
             }            
         }
         catch (Exception e) {
-            System.err.println("Controller mainLoop ERROR.");
+            System.err.println("Controller. Controller mainLoop ERROR.");
             e.printStackTrace();
         }        
     }
     
     public static void main(String[] args) {
-        System.out.println("Starting Controller.main()");
+        System.out.println("Controller. Starting Controller.main()");
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
         
         int size = Integer.parseInt(args[0]);
-        System.out.println("System size = " + size);
+        System.out.println("Controller. System size = " + size);
         
         AController controller = new AController(size);
         controller.mainLoop();
