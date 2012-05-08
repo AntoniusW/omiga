@@ -73,8 +73,8 @@ public class BasicNodeNegative extends BasicNode{
             }*/
             for(int i = 0; i < sN.getChildrenR().size();i++){
                 if(sN.getChildrenR().get(i).getClass().equals(JoinNodeNegative.class)){
-                    //System.err.println("Closed --> Inform JoinNode right");
                     JoinNode jn = (JoinNode)sN.getChildrenR().get(i);
+                    //System.err.println("Closed --> Inform JoinNode right: " + jn);
                     jn.informOfClosure(sN,true);
                 }else{
                 //cant be a headnode since only negative nodes are closed, which must result in a joinNode. If it results in a headnode the rule would not be save

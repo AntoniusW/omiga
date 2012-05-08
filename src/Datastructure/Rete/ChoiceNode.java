@@ -54,7 +54,11 @@ public class ChoiceNode extends Node{
     public ChoiceNode(Rete rete, int arity, Rule r, HashMap<Variable,Integer> varPosition, HeadNodeConstraint constraintNode){
         super(rete);
         this.r = r;
-        this.memory = new Storage(arity);
+        if(arity == 0){
+            this.memory = new Storage(100);
+        }else{
+            this.memory = new Storage(arity);
+        }
         //System.out.println("ChoiceNode created!");
         rete.getChoiceUnit().addChoiceNode(this); // The choiceNode is registered on creation within the choiceUnit
         this.tempVarPosition = varPosition;

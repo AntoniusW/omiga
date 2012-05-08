@@ -139,7 +139,12 @@ public class JoinNode extends Node{
         this.instanceOrdering = new int[temp.size()];
         
         //We initialize this nodes memory
-        this.memory = new Storage(instanceOrdering.length);
+        if(instanceOrdering.length == 0){
+            this.memory = new Storage(a.getMemory().arity + b.getMemory().arity);
+        }else{
+            this.memory = new Storage(instanceOrdering.length);
+        }
+        
         
         //We register this joinNode within it's two partners as child
         this.a.addChildR(this);
@@ -339,6 +344,7 @@ public class JoinNode extends Node{
         //System.out.println("ACTUAL = " + actual);
         //System.err.println("informed of closure: " + this + " #instances: " + temp.size() + " time: " + System.currentTimeMillis());
         //System.err.println("EXAMPLE INSTANCE: " + temp.get(0));
+        //System.out.println("TEMPSIZE: " + temp.size() + "of node: " + actual);
         for(int i = 0; i < temp.size();i++){
             
             for(int j = 0; j < selectionCriterion1.length;j++){
@@ -352,10 +358,12 @@ public class JoinNode extends Node{
             //rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i));
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
             //if(!rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i))){
+            //System.out.println("Does rete not contain: " + temp.get(i) + ": " + !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))));
             if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))) ){
 
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
                 //System.out.println("Rete contains: " + sN.getAtom().getPredicate() + "(" + temp.get(i) + ")" + "SN = " + sN.getAtom());
+                //System.err.println("ADDING: " + temp.get(i) + " to this join node");
                 this.memory.addInstance(temp.get(i));
                 super.addInstance(temp.get(i), true); // register the adding of this variableassignment within the choiceUnit
                 //System.out.println("Dervied through Closure: " + temp.get(i));

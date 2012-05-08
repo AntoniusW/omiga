@@ -513,8 +513,11 @@ public class ChoiceUnit {
     }
     
     public boolean killSoloSCC(){
-        if(SCCSize.isEmpty()) return false;
+        if(SCCSize.isEmpty()) {
+            return false;
+        }
         while(SCCSize.get(actualSCC)<=1){
+            //System.out.println("Calling close SCC!");
             this.closeActualSCC();
             if(actualSCC >= SCC.size()) return false;
         }

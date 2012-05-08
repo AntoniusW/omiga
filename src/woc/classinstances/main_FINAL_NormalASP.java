@@ -49,12 +49,13 @@ public class main_FINAL_NormalASP {
         }*/
         
         //filename = "birds_ASPERIX_nbb=100.txt";
-        filename = "StableMarriage\\01-stable_marriage-0-0.txt";
+        //filename = "StableMarriage\\01-stable_marriage-0-0.txt";
         //filename = "funcTermTest.txt";
+        filename = "noAs.txt";
         rewriting = 1;
         answersets = 50000;
         filter = null;
-        outprint =false;
+        outprint =true;
         
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         

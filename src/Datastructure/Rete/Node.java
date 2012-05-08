@@ -217,6 +217,10 @@ public abstract class Node {
         if (!this.childrenR.contains(n)) this.childrenR.add(n);
     }
     
+    public Storage getMemory(){
+        return this.memory;
+    }
+    
 
     
     

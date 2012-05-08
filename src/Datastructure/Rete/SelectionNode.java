@@ -95,6 +95,22 @@ public class SelectionNode extends Node{
      */
     @Override
     public void addInstance(Instance instance, boolean from){
+        //System.err.println("Trying to add instance: " + instance);
+        
+        if(varOrdering.length == 0){
+            Instance instance2Add = Instance.getInstance(this.atom.getTerms());
+            this.memory.addInstance(instance2Add);
+            
+            for(int i = 0; i < this.children.size();i++){
+                children.get(i).addInstance(instance2Add, false);
+            }
+            for(int i = 0; i < this.childrenR.size();i++){
+                childrenR.get(i).addInstance(instance2Add, true);
+            }
+            
+            return;
+        }
+        
         for(int i = 0; i < varOrdering.length;i++){
             // All Variable values used in this nodes atom are set to null
             varOrdering[i].setValue(null);
@@ -114,6 +130,9 @@ public class SelectionNode extends Node{
             // we create our variable assignment by taking all the values of the variables of our varOrdering.
             varAssignment2Add[i] = varOrdering[i].getValue();
         }
+        /*System.err.println("SIZE of varOrderong: "  + varOrdering.length);
+        System.err.println("SIZE of varAss: " + varAssignment2Add.length);
+        System.err.println("varAssighnment2Add: " + Instance.getInstanceAsString(varAssignment2Add));*/
         Instance instance2Add = Instance.getInstance(varAssignment2Add);
         super.addInstance(instance2Add, true); // registering the adding of an instance within the choiceUnit
         //System.err.println(this + " Adding Instance: " + instance2Add);
