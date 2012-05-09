@@ -52,11 +52,13 @@ public class main_FINAL_NormalASP {
         //filename = "StableMarriage\\01-stable_marriage-0-0.txt";
         //filename = "funcTermTest.txt";
         filename = "Hanoi\\00-hanoi.txt";
-        filename = "maze generation\\00-maze_genearation.txt";
+        //filename = "maze generation\\00-maze_genearation.txt";
+        //filename = "maze generation\\01-maze_generation-0-0.txt";
+        //filename = "Partner Units Polynomial\\00-partner.txt";
         rewriting = 1;
         answersets = 50000;
         filter = null;
-        outprint =true;
+        outprint =false;
         
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         
