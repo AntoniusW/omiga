@@ -50,6 +50,8 @@ public class ANodeImpl implements ANodeInterface {
     public static String serializingFrom = null;
     public static Map<String,HashMap<Integer,Predicate>> predicate_mapping =
             new HashMap<String,HashMap<Integer, Predicate>>();
+    public static HashSet< Predicate > external_predicates =
+            new HashSet<Predicate>();
     
     // mapping for serialization:
     // predicates/function symbols/constants to integers
@@ -154,6 +156,10 @@ public class ANodeImpl implements ANodeInterface {
             Integer arity=pred.getArity();
             Integer ser_id = counter++;
             
+            // ignore this predicate if it was imported
+            if(external_predicates.contains(pred))
+                continue;
+            
             predicates.put(new Pair<String, Integer>(name,arity), ser_id);
             out_mapping.put(pred,ser_id);
             
@@ -178,7 +184,7 @@ public class ANodeImpl implements ANodeInterface {
                 
                 // add import predicate
                 preds_from_node.add(pred);
-               // System.out.println("Currently listed predicates are: "+preds_from_node);
+                System.out.println("Node[" + node_name +"]: Currently listed predicates of node ["+from_node+"]: "+preds_from_node);
                 
                 // register predicate at local solver to come from outside
                 ANodeImpl.ctx.registerFactFromOutside(pred);                
@@ -230,9 +236,9 @@ public class ANodeImpl implements ANodeInterface {
                     Map<String, Integer> functions,
                     Map<String, Integer> constants) throws RemoteException {
        
-        System.out.println("Node[" + node_name +"]: Got informed by node " + node_name);
+        System.out.println("Node[" + ANodeImpl.node_name +"]: Receiving active domain from " + node_name);
         
-        System.out.println("Adding predicates: "+predicates);
+        System.out.println("Node[" + ANodeImpl.node_name +"]: Adding predicates: "+predicates);
         
         
         // fill mapping: predicates
@@ -245,16 +251,17 @@ public class ANodeImpl implements ANodeInterface {
             if(pred_desc.getKey().getArg1().contains(":")) {
                 //local_pred_name = "n"+pred_desc.getKey().getArg1();    // this is the global name
                 if(!pred_desc.getKey().getArg1().startsWith(ANodeImpl.node_name+":"))
-                    throw new RemoteException("Node identifier of received external predicate ["+pred_desc.getKey().getArg1()+"] differs from local name ["+ANodeImpl.node_name+"]");
+                    throw new RemoteException("Node[" + ANodeImpl.node_name +"]: Node identifier of received external predicate ["+pred_desc.getKey().getArg1()+"] differs from local name ["+ANodeImpl.node_name+"]");
                 local_pred_name = pred_desc.getKey().getArg1().replaceFirst(".*:", "");
-                System.out.println("Node[" + node_name +"]: Localized predicate "+ pred_desc.getKey().getArg1() + " to "+local_pred_name);
+                System.out.println("Node[" + ANodeImpl.node_name +"]: Localized predicate "+ pred_desc.getKey().getArg1() + " to "+local_pred_name);
             } else {
                 // localize predicate name
                 local_pred_name = node_name+":"+pred_desc.getKey().getArg1();
             }
             Predicate pred = Predicate.getPredicate(local_pred_name, pred_desc.getKey().getArg2());
             pred_map.put( pred_desc.getValue(), pred);
-            System.out.println("Added to mapping: "+pred+" with value "+pred_desc.getValue()+" from "+node_name);
+            external_predicates.add(pred);  // record external
+            System.out.println("Node[" + ANodeImpl.node_name +"]: Added to mapping: "+pred+" with value "+pred_desc.getValue()+" from "+node_name);
             //out_mapping.put(pred, pred_desc.getValue());
         }
         predicate_mapping.put(node_name, pred_map);
@@ -278,7 +285,7 @@ public class ANodeImpl implements ANodeInterface {
             
         }
         
-        System.out.println("Node[" + node_name +"]: Mapping created.");
+        System.out.println("Node[" + ANodeImpl.node_name +"]: Active domain mapping wrt. node "+node_name+" created.");
         
         return ReplyMessage.SUCCEEDED;
     }
