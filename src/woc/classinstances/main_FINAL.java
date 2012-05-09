@@ -15,6 +15,7 @@ import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
 import Manager.Manager;
+import Manager.ManagerMCS;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,8 +50,9 @@ public class main_FINAL {
         }*/
         
         //filename = "birds_ASPERIX_nbb=100.txt";
-        filename = "network/ctx1.asd";
+        //filename = "network/ctx1.asd";
         //filename = "funcTermTest.txt";
+        filename = "simpleChoice.txt";
         rewriting = 1;
         answersets = 50000;
         filter = null;
@@ -103,7 +105,7 @@ public class main_FINAL {
         System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
         
         
-        Manager m = new Manager(ctx);
+        ManagerMCS m = new ManagerMCS(ctx);
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets,outprint,filter);
 

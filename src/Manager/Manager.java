@@ -141,7 +141,7 @@ public class Manager {
         c.propagate();
         c.getChoiceUnit().DeriveSCC();
         if(!c.getChoiceUnit().killSoloSCC()){
-            System.err.println("Killed all SCC: " + System.currentTimeMillis());
+            //System.err.println("Killed all SCC: " + System.currentTimeMillis());
             //We killed all SCC --> This context is guessfree
             if(c.isSatisfiable()){
                 if(output){
