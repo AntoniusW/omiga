@@ -85,33 +85,6 @@ public class ANodeImpl implements ANodeInterface {
         
         global_to_local_dc.put(0, 0);
     }
-    
-    
-    public static void main(String[] args) {
-        node_name = args[0];
-        filename = args[1];
-        System.out.println("Node[" + node_name +"]: Starting NodeImpl.main(). args[0] = " + node_name);
-        
-        System.out.println("Node[" + node_name +"]: Input file is: " + filename);
-        
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new RMISecurityManager() );
-        }
-        
-        try {
-            String name = node_name;
-
-            ANodeInterface local_node = new ANodeImpl();
-            ANodeInterface stub =
-                (ANodeInterface) UnicastRemoteObject.exportObject(local_node,0);  // use anonymous/no port
-            Registry registry = LocateRegistry.getRegistry();
-            registry.rebind(name, stub);
-            System.out.println("Node[" + node_name +"]: NodeImpl bound.");
-        } catch (Exception e) {
-            System.err.println("Node[" + node_name +"]: ANodeImpl exception:");
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public int init(String node_name, ArrayList<Pair<String, ANodeInterface>> other_nodes, int serialize_start) throws RemoteException {
@@ -542,11 +515,33 @@ public class ANodeImpl implements ANodeInterface {
                 Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-
-       
-        
     }
-
     
+    
+        
+    public static void main(String[] args) {
+        node_name = args[0];
+        filename = args[1];
+        System.out.println("Node[" + node_name +"]: Starting NodeImpl.main(). args[0] = " + node_name);
+        
+        System.out.println("Node[" + node_name +"]: Input file is: " + filename);
+        
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new RMISecurityManager() );
+        }
+        
+        try {
+            String name = node_name;
+
+            ANodeInterface local_node = new ANodeImpl();
+            ANodeInterface stub =
+                (ANodeInterface) UnicastRemoteObject.exportObject(local_node,0);  // use anonymous/no port
+            Registry registry = LocateRegistry.getRegistry();
+            registry.rebind(name, stub);
+            System.out.println("Node[" + node_name +"]: NodeImpl bound.");
+        } catch (Exception e) {
+            System.err.println("Node[" + node_name +"]: ANodeImpl exception:");
+            e.printStackTrace();
+        }
+    }
 }
