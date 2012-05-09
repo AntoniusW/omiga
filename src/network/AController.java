@@ -17,12 +17,14 @@ import java.util.Stack;
 public class AController {
     private Registry registry;
     private int system_size;
+    private int answer_count;
     private ArrayList<Pair<String,ANodeInterface>> nodes =
             new ArrayList<Pair<String,ANodeInterface>>();
     
     public AController(int size) {
         try {
             system_size = size;
+            answer_count = 0;
             registry = LocateRegistry.getRegistry("127.0.0.1");
             
             /* Get remote interface to all nodes */
@@ -153,8 +155,8 @@ public class AController {
                         
                         System.out.println("Controller. makeChoice done");
                         
-                        System.out.println("Interpretation at nodes after this choice:");
-                        printAnswer();                        
+                        //System.out.println("Interpretation at nodes after this choice:");
+                        //printAnswer();                        
                         
                         if (reply == ReplyMessage.INCONSISTENT)
                         {
@@ -170,6 +172,7 @@ public class AController {
                     else
                     {
                         System.out.println("Controller. An answer set found!");
+                        answer_count++;
                         printAnswer();
                         
                         // TODO AW stack may be empty at this time, is this a bug in the algorithm?
@@ -196,8 +199,8 @@ public class AController {
                         case HAS_BRANCH:
                             reply = nodes.get(current_node).getArg2().propagate(global_level);
                             
-                            System.out.println("Interpretation at nodes after making branch:");
-                            printAnswer();                            
+                            //System.out.println("Interpretation at nodes after making branch:");
+                            //printAnswer();                            
                             
                             if (reply == ReplyMessage.SUCCEEDED)
                             {
@@ -233,8 +236,9 @@ public class AController {
                             break;
                     }
                 }
-            }            
-        }
+            }
+            System.out.println("Total number of answer = " + answer_count);
+        } 
         catch (Exception e) {
             System.err.println("Controller. Controller mainLoop ERROR.");
             e.printStackTrace();
