@@ -99,7 +99,16 @@ function returns[String name, ArrayList<Term> terms]
 	
 constant returns[Constant constnt]
 	:	ID {$constnt=Constant.getConstant($ID.text);}
-	|	INT {$constnt=Constant.getConstant($INT.text);}
+	|	('-')? INT {$constnt=Constant.getConstant($INT.text);}
+	;
+
+comp_sym returns[OP openu]
+	:	'<' {$openu=OP.LESS;}
+	|	'<=' {$openu=OP.LESS_EQ;}
+	|	'=>' {$openu=OP.GREATER_EQ;}
+	|	'>' {$openu=OP.GREATER;}
+	|	'=' {$openu=OP.EQUAL;}
+	|	'!=' {$openu=OP.NOTEQUAL;}
 	;
 	
 
@@ -109,7 +118,7 @@ ID  :	('a'..'z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 VAR	:	('A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 	;
 
-INT :	('-')? '0'..'9'+
+INT :	'0'..'9'+
     ;
 
 /*FLOAT
@@ -125,15 +134,6 @@ COMMENT
     |   '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;}
     ;
     
-    	
-comp_sym returns[OP openu]
-	:	'<' {$openu=OP.LESS;}
-	|	'<=' {$openu=OP.LESS_EQ;}
-	|	'=>' {$openu=OP.GREATER_EQ;}
-	|	'>' {$openu=OP.GREATER;}
-	|	'=' {$openu=OP.EQUAL;}
-	|	'!=' {$openu=OP.NOTEQUAL;}
-	;
 
 WS  :   ( ' '
         | '\t'
