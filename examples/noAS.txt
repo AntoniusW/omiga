@@ -1,0 +1,3 @@
+c(t,f,g,h).
+:- b(t).
+b(t) :- c(t,f,g,h), not a(t).

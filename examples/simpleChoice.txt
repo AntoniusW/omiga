@@ -1,0 +1,4 @@
+a(X) :- p(X), not b(X).
+b(X) :- p(X), not a(X).
+
+p(0).

@@ -1,0 +1,85 @@
+zone(Z) :- zone2sensor(Z,D).
+doorSensor(D) :- zone2sensor(Z,D).
+
+unit2zone(U,Z) :- zone(Z), comUnit(U), not nounit2zone(U,Z).
+nounit2zone(U,Z) :- zone(Z), comUnit(U), not unit2zone(U,Z).
+
+:- unit2zone(U,Z1), unit2zone(U,Z2), unit2zone(U,Z3), Z1!=Z2, Z2!=Z3,Z1!=Z3.
+:- unit2zone(U1,Z), unit2zone(U2,Z), U1!=U2.
+atLeastOneUnit(Z):- unit2zone(Fv1,Z).
+:- zone(Z), not atLeastOneUnit(Z).
+
+unit2sensor(U,D) :- doorSensor(D), comUnit(U), not nounit2sensor(U,D).
+nounit2sensor(U,D) :- doorSensor(D), comUnit(U), not unit2sensor(U,D).
+
+:- unit2sensor(U,D1), unit2sensor(U,D2), unit2sensor(U,D3), D1!=D2, D2!=D3,D1!=D3.
+:- unit2sensor(U1,D), unit2sensor(U2,D), U1!=U2.
+atLeastOneSensor(D):- unit2sensor(Fv1,D).
+:- doorSensor(D), not atLeastOneSensor(D).
+
+partnerunits(U,P) :- unit2zone(U,Z), unit2sensor(P,D), zone2sensor(Z,D), U!=P.
+partnerunits(U,P) :- partnerunits(P,U).
+
+:- partnerunits(U,P1), partnerunits(U,P2), partnerunits(U,P3), P1!=P2, P2!=P3,P1!=P3.
+	
+maxPU(2).
+
+comUnit(1). comUnit(2). comUnit(3). comUnit(4). comUnit(5). comUnit(6). comUnit(7). comUnit(8). comUnit(9). comUnit(10). comUnit(11). comUnit(12). comUnit(13). comUnit(14). 
+
+% relation between zones and door sensors
+zone2sensor(1,1).
+zone2sensor(1,2).
+zone2sensor(2,1).
+zone2sensor(2,3).
+zone2sensor(2,4).
+zone2sensor(3,3).
+zone2sensor(3,5).
+zone2sensor(3,6).
+zone2sensor(4,5).
+zone2sensor(4,7).
+zone2sensor(4,8).
+zone2sensor(5,7).
+zone2sensor(5,9).
+zone2sensor(5,10).
+zone2sensor(6,9).
+zone2sensor(6,11).
+zone2sensor(6,12).
+zone2sensor(7,11).
+zone2sensor(7,13).
+zone2sensor(7,14).
+zone2sensor(8,13).
+zone2sensor(8,15).
+zone2sensor(8,16).
+zone2sensor(9,15).
+zone2sensor(9,17).
+zone2sensor(9,18).
+zone2sensor(10,17).
+zone2sensor(10,19).
+zone2sensor(11,2).
+zone2sensor(11,20).
+zone2sensor(12,4).
+zone2sensor(12,20).
+zone2sensor(12,21).
+zone2sensor(13,6).
+zone2sensor(13,21).
+zone2sensor(13,22).
+zone2sensor(14,8).
+zone2sensor(14,22).
+zone2sensor(14,23).
+zone2sensor(15,10).
+zone2sensor(15,23).
+zone2sensor(15,24).
+zone2sensor(16,12).
+zone2sensor(16,24).
+zone2sensor(16,25).
+zone2sensor(17,14).
+zone2sensor(17,25).
+zone2sensor(17,26).
+zone2sensor(18,16).
+zone2sensor(18,26).
+zone2sensor(18,27).
+zone2sensor(19,18).
+zone2sensor(19,27).
+zone2sensor(19,28).
+zone2sensor(20,19).
+zone2sensor(20,28).
