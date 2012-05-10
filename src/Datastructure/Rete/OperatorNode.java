@@ -33,7 +33,7 @@ public class OperatorNode extends Node{
             // There is one Variable that has to be calculated by the Operator therefore we add one further Variable into this VarPositions
             this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
             this.tempVarPosition.put((Variable)op.getLeft(), tempVarPosition.size());
-            this.memory = new Storage(tempVarPosition.size());
+            this.memory = new Storage(tempVarPosition.size()+1);
         }else{
             // All Variables of the Operator are set
             this.tempVarPosition = from.getVarPositions();
@@ -83,7 +83,7 @@ public class OperatorNode extends Node{
                 instanceArray[this.getVarPositions().get(v)] = v.getValue();
             }
             Instance instance2Add = Instance.getInstance(instanceArray);
-            this.memory.addInstance(instance);
+            this.memory.addInstance(instance2Add);
             super.addInstance(instance2Add, from); // Register this instance in our backtracking structure.
             for(int i = 0; i < this.children.size();i++){
                 this.children.get(i).addInstance(instance2Add, false);
