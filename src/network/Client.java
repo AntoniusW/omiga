@@ -46,9 +46,14 @@ public class Client {
             }
             
             System.out.println("Client. Initialize all NODES");
+            // startup all nodes
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().init(nodes);
+            }
+            
             int serialize_lower = 0;
             for (Pair<String, ANodeInterface> pair : nodes) {
-                serialize_lower = pair.getArg2().init(pair.getArg1(),nodes,serialize_lower+1);                
+                serialize_lower = pair.getArg2().exchange_active_domain(serialize_lower+1);                
             }            
         }
         catch (Exception e) {

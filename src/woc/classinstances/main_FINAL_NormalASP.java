@@ -49,16 +49,18 @@ public class main_FINAL_NormalASP {
         }*/
         
         //filename = "birds_ASPERIX_nbb=100.txt";
-        //filename = "StableMarriage\\01-stable_marriage-0-0.txt";
+        //filename = "StableMarriage/01-stable_marriage-0-0.txt";
         //filename = "funcTermTest.txt";
-        filename = "Hanoi/00-hanoi.txt";
+        //filename = "Hanoi/00-hanoi.txt";
         //filename = "maze generation\\00-maze_genearation.txt";
         //filename = "maze generation\\01-maze_generation-0-0.txt";
-        //filename = "Partner Units Polynomial\\00-partner.txt";
+        //filename = "Partner Units Polynomial/00-partner.txt";
+        //filename = "Partner Units Polynomial/07-partner_units_polynomial-28-0.txt";
+        filename = "graph colouring/00-graph-colouring.txt";
         rewriting = 1;
-        answersets = 50000;
+        answersets = 600;
         filter = null;
-        outprint =false;
+        outprint =true;
         
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         

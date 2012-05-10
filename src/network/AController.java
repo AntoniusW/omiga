@@ -110,10 +110,21 @@ public class AController {
             
             // init each node
             System.out.println("Controller. Initializing nodes now.");
+            
+            // startup all nodes
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().init(nodes);
+            }
+            
+            // let all nodes exchange domains
             int serialize_lower = 0;
             for (Pair<String, ANodeInterface> pair : nodes) {
-                serialize_lower = pair.getArg2().init(pair.getArg1(),nodes,serialize_lower+1);
-                
+                serialize_lower = pair.getArg2().exchange_active_domain(serialize_lower+1);
+            }
+            
+            // let all nodes exchange import domains
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().exchange_import_domain();
             }
                             
             System.out.println("Controller. Start up successful.");

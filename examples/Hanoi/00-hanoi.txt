@@ -45,12 +45,12 @@ diskWhere(T) :- where(T,Fv1).
 :- on(T,N,N1), where(T,N).
 
 % no disk is moved in two consecutive moves
-:- move(T,N), move(TM1,N), TM1=T-1.
+:- move(T,N), move(TM1,N), TM1 is T-1.
 
 % Specify effects of a move
-on(TP1,N1,N) :- move(T,N), where(T,N1), TP1 = T + 1.
+on(TP1,N1,N) :- move(T,N), where(T,N1), TP1 is T + 1.
 
-on(TP1,N,N1) :- time(T), steps(K), T<K, on(T,N,N1), not move(T,N1), TP1 = T + 1.
+on(TP1,N,N1) :- time(T), steps(K), T<K, on(T,N,N1), not move(T,N1), TP1 is T + 1.
 
 % Goal description
 :- not on(K,N,N1), onG(K,N,N1), steps(K).

@@ -1,3 +1,4 @@
+%#hide.
 % Guess colours.
 chosenColour(N,C) :- node(N), colour(C), not notChosenColour(N,C).
 notChosenColour(N,C) :- node(N), colour(C), not chosenColour(N,C).
@@ -16,6 +17,12 @@ colored(X) :- chosenColour(X,Fv1).
 node(1).
 node(2).
 node(3).
+node(4).
+node(5).
+node(6).
+node(7).
+link(4,5).
+link(1,4).
 link(1,2).
 link(2,1).
 link(2,3).

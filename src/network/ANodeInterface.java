@@ -19,12 +19,23 @@ import java.util.Map;
 public interface ANodeInterface extends Remote {
     
     /*
+     * Initialize local node and read in local program.
      * node_name: the name assigned to this node
      * other_nodes: all the other nodes in the system as (name,remote) pairs
-     * serialize_start: lower boundary for serialization
-     * returns: upper boundary of serialization
      */
-    public int init(String node_name, ArrayList<Pair<String,ANodeInterface>> other_nodes, int serlialize_start) throws RemoteException;
+    public ReplyMessage init(ArrayList<Pair<String,ANodeInterface>> other_nodes) throws RemoteException;
+    
+    /*
+     * Send active domain and import domain to other nodes.
+     * serialize_start: lower boundary for serialization
+     *  returns: upper boundary of serialization
+     */
+    public int exchange_active_domain(int serialize_start) throws RemoteException;
+    
+    /*
+     * Send import domains to all other nodes.
+     */
+    public ReplyMessage exchange_import_domain() throws RemoteException;
     
     /*
      * node_name: from where this domain is
@@ -32,7 +43,7 @@ public interface ANodeInterface extends Remote {
      * functions: Name -> SerializeInt
      * constants: Name -> SerializeInt
      */
-    public ReplyMessage tell_active_domain(String node_name,
+    public ReplyMessage receive_active_domain(String node_name,
             Map<Pair<String,Integer>,Integer> predicates,
             Map<String,Integer> functions,
             Map<String,Integer> constants ) throws RemoteException;
@@ -41,7 +52,7 @@ public interface ANodeInterface extends Remote {
      * Node gets informed about the predicates required from another node
      * required_predicates: SerializeInt of the required predicates
      */
-    public ReplyMessage tell_import_domain(String from, List<Predicate> required_predicates) throws RemoteException;
+    public ReplyMessage receive_import_domain(String from, List<Predicate> required_predicates) throws RemoteException;
     
     public ReplyMessage receiveNextFactsFrom(String node_name) throws RemoteException;
     
