@@ -290,7 +290,7 @@ public class ParserMCS {
             }
             strings.add(temp);
             if(i >= s.length()) break;
-            ops.add(OP.valueOf(s.charAt(i)));
+//            ops.add(OP.valueOf(s.charAt(i)));
             i++;
         }
         //We now have the hole Operator on the string and ops ArrayList.

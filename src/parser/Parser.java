@@ -295,7 +295,7 @@ public class Parser {
             }
             strings.add(temp);
             if(i >= s.length()) break;
-            ops.add(OP.valueOf(s.charAt(i))); // If we reach this charAt is an Operator
+//            ops.add(OP.valueOf(s.charAt(i))); // If we reach this charAt is an Operator
             i++;
         }
         //We now have the hole Operator on the string and ops ArrayList.

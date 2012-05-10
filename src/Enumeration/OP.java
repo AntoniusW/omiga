@@ -21,17 +21,17 @@ public enum OP {
     TIMES,
     DIVIDE;
     
-    public static OP valueOf(char c){
+/*    public static OP valueOf(char c){
         switch(c){
             case '+': return PLUS;
             case '-': return MINUS;
             case '=': return EQUAL;
-            case '~': return NOTEQUAL;
+            case '!=': return NOTEQUAL;
             case '>': return GREATER;
             case '<': return LESS;
             default: return null;
         }
-    }
+    }*/
     
     /*public boolean isPoint(){
         if(this.equals(TIMES) || this.equals(DIVIDE)) return true;
@@ -43,7 +43,7 @@ public enum OP {
             case PLUS: return "+";
             case MINUS: return "-";
             case EQUAL: return "=";
-            case NOTEQUAL: return "~";
+            case NOTEQUAL: return "!=";
             case GREATER: return ">";
             case LESS: return "<";
             case GREATER_EQ: return ">=";
