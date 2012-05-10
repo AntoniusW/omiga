@@ -105,7 +105,7 @@ constant returns[Constant constnt]
 comp_sym returns[OP openu]
 	:	'<' {$openu=OP.LESS;}
 	|	'<=' {$openu=OP.LESS_EQ;}
-	|	'=>' {$openu=OP.GREATER_EQ;}
+	|	'>=' {$openu=OP.GREATER_EQ;}
 	|	'>' {$openu=OP.GREATER;}
 	|	'=' {$openu=OP.EQUAL;}
 	|	'!=' {$openu=OP.NOTEQUAL;}
