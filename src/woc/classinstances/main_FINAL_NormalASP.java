@@ -81,6 +81,8 @@ public class main_FINAL_NormalASP {
                     // parse input
                     parser.woc_program();
                     
+                    System.out.println("Parsed program, starting rewriting...");
+                    
                     Rewriter_easy rewriter = new Rewriter_easy();
                     ctx = rewriter.rewrite(ctx);
                     

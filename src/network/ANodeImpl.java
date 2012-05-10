@@ -58,8 +58,8 @@ public class ANodeImpl implements ANodeInterface {
             new HashMap<String, ArrayList<Predicate>>();
     
     // the local import interface, i.e., which predicates are imported from where
-    private static Map<String, ArrayList<Predicate>> import_predicates =
-            new HashMap<String, ArrayList<Predicate>>();
+    private static Map<String, ArrayList<Pair<String,Integer>>> import_predicates =
+            new HashMap<String, ArrayList<Pair<String,Integer>>>();
     
     // mapping from global to local decision levels
     private Map<Integer, Integer> global_to_local_dc =
@@ -67,7 +67,7 @@ public class ANodeImpl implements ANodeInterface {
     
     private static ContextASPMCSRewriting ctx;
     private static int decision_level_before_push;
-    private String local_name;
+    public static String local_name;
     private static String filter;
     private static int rewriting;
     private String filename;
@@ -161,27 +161,27 @@ public class ANodeImpl implements ANodeInterface {
             
                 // collect import interface
                 String from_node = pred.getNodeId();
-                ArrayList<Predicate> preds_from_node;
+                ArrayList<Pair<String,Integer>> preds_from_node;
                 
                 // check if other node is already listed
                 if(import_predicates.containsKey(from_node)) {
                     preds_from_node = import_predicates.get(from_node);
                 } else {
-                    preds_from_node = new ArrayList<Predicate>();
+                    preds_from_node = new ArrayList<Pair<String, Integer>>();
                     import_predicates.put(from_node, preds_from_node);
                 }
                 
                 System.out.println("Node[" + local_name +"]: Predicate is from outside: "+pred.toString());
                 
                 // add import predicate
-                preds_from_node.add(pred);
+                preds_from_node.add(new Pair<String, Integer>(pred.getName(),pred.getArity()));
                 //System.out.println("Node[" + node_name +"]: Currently listed predicates of node ["+from_node+"]: "+preds_from_node);
                 
                 // register predicate at local solver to come from outside
                 ANodeImpl.ctx.registerFactFromOutside(pred);
             }
         }
-        
+        System.out.println("Node[" + local_name +"]: import predicates: "+import_predicates);
       
         System.out.println("Node[" + local_name +"]: Initialized node.");
 
@@ -198,6 +198,7 @@ public class ANodeImpl implements ANodeInterface {
         
         // collect predicate symbols
         Map<Pair<String,Integer>,Integer> predicates = new HashMap<Pair<String,Integer>,Integer>();
+        predicate_mapping.put(local_name, new HashMap<Integer, Predicate>());   // mapping to de-serialize local predicates (for receiving import domain)
         for (Iterator<Predicate> it = local_predicates.iterator(); it.hasNext();) {
             Predicate pred = it.next();
             
@@ -209,6 +210,7 @@ public class ANodeImpl implements ANodeInterface {
             Integer arity=pred.getArity();
             Integer ser_id = counter++;
             predicates.put(new Pair<String, Integer>(name,arity), ser_id);
+            //predicate_mapping.get(local_name).put(ser_id, pred);
             out_mapping.put(pred,ser_id);
         }
         
@@ -252,8 +254,13 @@ public class ANodeImpl implements ANodeInterface {
         System.out.println("Node[" + local_name +"]: Exchanging import domain.");
         // tell import interface to all nodes
         for(Pair<String,ANodeInterface> other : other_nodes) {
-            other.getArg2().receiveNextFactsFrom(local_name);     // needed to de-serialize predicates at other node
-            other.getArg2().receive_import_domain(local_name,import_predicates.get(other.getArg1()));
+            System.out.println("Node[" + local_name +"]: Import predicates from Node["+other.getArg1()+"]: "
+                    +import_predicates.get(other.getArg1()));
+            // only exchange import if it is non-empty
+            if(import_predicates.get(other.getArg1())!=null) {   
+                other.getArg2().receiveNextFactsFrom(local_name);     // needed to de-serialize predicates at other node
+                other.getArg2().receive_import_domain(local_name,import_predicates.get(other.getArg1()));
+            }
         }
         return ReplyMessage.SUCCEEDED;
     }
@@ -278,18 +285,13 @@ public class ANodeImpl implements ANodeInterface {
             // n2:q occuring in context n1 locally is q
             String local_pred_name;
             if(pred_desc.getKey().getArg1().contains(":")) {
-                //local_pred_name = "n"+pred_desc.getKey().getArg1();    // this is the global name
-                if(!pred_desc.getKey().getArg1().startsWith(local_name+":"))
-                    throw new RemoteException("Node[" + local_name +"]: Node identifier of received external predicate ["+pred_desc.getKey().getArg1()+"] differs from local name ["+local_name+"]");
-                local_pred_name = pred_desc.getKey().getArg1().replaceFirst(".*:", "");
-                System.out.println("Node[" + local_name +"]: Localized predicate "+ pred_desc.getKey().getArg1() + " to "+local_pred_name);
-            } else {
+                throw new RemoteException("Node[" + local_name +"]: Received external predicate from Node["+other_node+"]");
+             } else {
                 // localize predicate name
                 local_pred_name = other_node+":"+pred_desc.getKey().getArg1();
             }
             Predicate pred = Predicate.getPredicate(local_pred_name, pred_desc.getKey().getArg2());
             pred_map.put( pred_desc.getValue(), pred);
-            out_mapping.put(pred, pred_desc.getValue());
             System.out.println("Node[" + local_name +"]: Added to mapping: "+pred+" with value "+pred_desc.getValue()+" from "+other_node);
         }
         predicate_mapping.put(other_node, pred_map);
@@ -357,17 +359,27 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException {
         serializingFrom = from_node;
         
-        System.out.println("Node[" + local_name +"]: The next facts will come from node " + from_node);
+        System.out.println("Node[" + local_name +"]: The next facts will come from Node[" + from_node+"]");
         
         return ReplyMessage.SUCCEEDED;
     }
 
     @Override
-    public ReplyMessage receive_import_domain(String from, List<Predicate> required_predicates) throws RemoteException {
+    public ReplyMessage receive_import_domain(String from, List<Pair<String,Integer>> required_predicates) throws RemoteException {
         System.out.println("Node[" + local_name + "]: got import domain from Node[" + from+"]");
         System.out.println("Node[" + local_name + "]: required predicates are: "+required_predicates);
 
-        ANodeImpl.required_predicates.put(from, (ArrayList<Predicate>)required_predicates);
+        ArrayList<Predicate> required_preds = new ArrayList<Predicate>();
+        for (Iterator<Pair<String, Integer>> it = required_predicates.iterator(); it.hasNext();) {
+            Pair<String, Integer> pair = it.next();
+            if(!pair.getArg1().startsWith(local_name+":"))
+                    throw new RemoteException("Node[" + local_name +"]: Node identifier of received import predicate ["+pair.getArg1()+"] differs from local name ["+local_name+"]");
+            String local_pred_name = pair.getArg1().replaceFirst(".*:", "");
+            System.out.println("Node[" + local_name +"]: Localized predicate "+ pair.getArg1() + " to "+local_pred_name);
+            required_preds.add(Predicate.getPredicate(local_pred_name, pair.getArg2()));
+            
+        }
+        ANodeImpl.required_predicates.put(from, (ArrayList<Predicate>)required_preds);
         
         return ReplyMessage.SUCCEEDED;
     }

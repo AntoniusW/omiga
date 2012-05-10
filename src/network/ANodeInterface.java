@@ -50,9 +50,9 @@ public interface ANodeInterface extends Remote {
     
     /*
      * Node gets informed about the predicates required from another node
-     * required_predicates: SerializeInt of the required predicates
+     * required_predicates:  List of Name/Arity of the required predicates
      */
-    public ReplyMessage receive_import_domain(String from, List<Predicate> required_predicates) throws RemoteException;
+    public ReplyMessage receive_import_domain(String from, List<Pair<String,Integer>> required_predicates) throws RemoteException;
     
     public ReplyMessage receiveNextFactsFrom(String node_name) throws RemoteException;
     
