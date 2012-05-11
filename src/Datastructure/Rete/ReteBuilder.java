@@ -290,6 +290,14 @@ public class ReteBuilder {
                             }
                         }
                     }
+                    if(atomsPlus.isEmpty() && operators.isEmpty() && !atomsMinus.isEmpty() && !r.isConstraint()){
+                        // if atomPlus is now empty  we removed the last atom from here.
+                        // If there is a negative part and no operators are within this Rule then we now add the ChoiceNode and constraintNode
+                        // since the positive part of the rule is satisfied now
+                        //constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
+                        cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(),r,actualNode.tempVarPosition, null/*constraintNode*/);
+                        actualNode.addChild(cN);
+                    }
                 }else{
                     if(!atomsMinus.isEmpty()){
                         //There is still something within the negative body of the rule --> take it --> it's the new partner

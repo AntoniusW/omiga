@@ -36,8 +36,9 @@ public class OperatorNode extends Node{
             this.memory = new Storage(tempVarPosition.size()+1);
         }else{
             // All Variables of the Operator are set
-            this.tempVarPosition = from.getVarPositions();
+            this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
             this.memory = new Storage(tempVarPosition.size());
+            System.err.println("OMGraraga: " + op +" - "+ tempVarPosition + " - from: " + from);
         }
         
         /*allSet = true;
@@ -94,6 +95,9 @@ public class OperatorNode extends Node{
         }else{
             for(Variable v: op.getUsedVariables()){
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
+                /*System.err.println(this.op);
+                System.err.println(this.getVarPositions());
+                System.err.println(v + " - " + this.getVarPositions().get(v));*/
                 v.setValue(instance.get(this.getVarPositions().get(v)));
             }
             if(op.getIntValue() == 1){
