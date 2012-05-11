@@ -352,7 +352,6 @@ public class ANodeImpl implements ANodeInterface {
         
         // TODO AW find global decision level
         return this.propagate(global_level);
-        //return ReplyMessage.SUCCEEDED;
     }
 
     @Override
@@ -419,15 +418,26 @@ public class ANodeImpl implements ANodeInterface {
         ctx.propagate();
         
         System.out.println("Node[" + local_name + "]: after propagate. local_dc = " + local_dc);
+        System.out.println("Node[" + local_name + "]: after propagate. interpretation = ");
+        ctx.printAnswerSet(null);
+        
         
         if (ctx.isSatisfiable())
         {
             System.out.println("Node[" + local_name + "]: propagate. Pushing.");
             
-            pushDerivedFacts(global_level);
+            ReplyMessage reply = pushDerivedFacts(global_level);
             
-            System.out.println("Node[" + local_name + "]: propagate. Return SUCCEEDED.");
-            return ReplyMessage.SUCCEEDED;
+            if (reply == ReplyMessage.SUCCEEDED)
+            {
+                System.out.println("Node[" + local_name + "]: All neighbors propagated successfully. Return SUCCEEDED");
+                return ReplyMessage.SUCCEEDED;
+            }
+            else
+            {
+                System.out.println("Node[" + local_name + "]: A neighbor got inconsistent. Return INCONSISTENT");
+                return ReplyMessage.INCONSISTENT;
+            }
         }
         else
         {
@@ -496,7 +506,7 @@ public class ANodeImpl implements ANodeInterface {
         return ReplyMessage.SUCCEEDED;
     }
 
-    private void pushDerivedFacts(int global_level) {
+    private ReplyMessage pushDerivedFacts(int global_level) {
         //int current_level = ctx.getDecisionLevel();
         //current_level = (current_level == 0) ? 0 : current_level-1;
         System.out.println("Node[" + local_name +"]: Decision level before push = " + decision_level_before_push);
@@ -541,7 +551,12 @@ public class ANodeImpl implements ANodeInterface {
                 {
                     System.out.println("Node[" + local_name +"]: PushDerivedFacts: to_push = "+to_push);
                     node.getArg2().receiveNextFactsFrom(local_name);
-                    node.getArg2().handleAddingFacts(global_level, to_push);
+                    ReplyMessage reply = node.getArg2().handleAddingFacts(global_level, to_push);
+                    if (reply == ReplyMessage.INCONSISTENT)
+                    {
+                        return ReplyMessage.INCONSISTENT;
+                    }
+                    assert (reply == ReplyMessage.SUCCEEDED);
                 }
                 else
                 {
@@ -551,6 +566,8 @@ public class ANodeImpl implements ANodeInterface {
                 Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        return ReplyMessage.SUCCEEDED;
     }
     
     
