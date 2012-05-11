@@ -166,8 +166,8 @@ public class AController {
                         
                         System.out.println("Controller. makeChoice done");
                         
-                        //System.out.println("Interpretation at nodes after this choice:");
-                        //printAnswer();                        
+                        System.out.println("Interpretation at nodes after this choice:");
+                        printAnswer();                        
                         
                         if (reply == ReplyMessage.INCONSISTENT)
                         {
@@ -210,8 +210,8 @@ public class AController {
                         case HAS_BRANCH:
                             reply = nodes.get(current_node).getArg2().propagate(global_level);
                             
-                            //System.out.println("Interpretation at nodes after making branch:");
-                            //printAnswer();                            
+                            System.out.println("Interpretation at nodes after making branch:");
+                            printAnswer();                            
                             
                             if (reply == ReplyMessage.SUCCEEDED)
                             {

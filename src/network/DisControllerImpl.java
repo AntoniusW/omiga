@@ -17,7 +17,6 @@ import java.util.Stack;
  * @author Minh Dao-Tran, Antonius Weinzierl
  */
 public class DisControllerImpl implements DisControllerInterface {
-    private Registry registry;
     private int myid;
     private int system_size;
     private ANodeInterface local_node;        
@@ -25,15 +24,16 @@ public class DisControllerImpl implements DisControllerInterface {
     
     Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
     
-    public DisControllerImpl(int id, int size)
+    public DisControllerImpl(int id, int size, String filename)
     {
         try {
             myid = id;
             system_size = size;
-            String local_name = "n" + myid;
+            String local_name = "n" + (myid+1);
             
-            registry = LocateRegistry.getRegistry("127.0.0.1");
-            local_node = (ANodeInterface) registry.lookup(local_name);            
+            //registry = LocateRegistry.getRegistry("127.0.0.1");
+            //local_node = (ANodeInterface) registry.lookup(local_name);
+            local_node = new ANodeImpl(local_name, filename);
         }
         catch (Exception e) {
             System.err.println("Controller ctor ERROR.");
@@ -42,7 +42,7 @@ public class DisControllerImpl implements DisControllerInterface {
     }
     
     // called by Client
-    public ReplyMessage init(String node_name, ArrayList<Pair<String, DisControllerInterface>> controllers) throws RemoteException
+    public ReplyMessage init(ArrayList<Pair<String, DisControllerInterface>> controllers) throws RemoteException
     {
         all_controllers = controllers;
         
@@ -225,6 +225,7 @@ public class DisControllerImpl implements DisControllerInterface {
         
         int myid = Integer.parseInt(args[0]);
         int size = Integer.parseInt(args[1]);
+        String filename = args[2];
         String controller_name = "d" + myid;
         
         System.out.println("DisController. MyID = " + myid);
@@ -236,14 +237,14 @@ public class DisControllerImpl implements DisControllerInterface {
         }
         
         try {
-            DisControllerInterface local_controller = new DisControllerImpl(myid, size);
+            DisControllerInterface local_controller = new DisControllerImpl(myid, size, filename);
             DisControllerInterface stub =
                 (DisControllerInterface) UnicastRemoteObject.exportObject(local_controller,0);  // use anonymous/no port
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(controller_name, stub);
-            System.out.println("Controller[" + controller_name +"]: DisControllerImpl bound.");
+            System.out.println("DisController[" + controller_name +"]: DisControllerImpl bound.");
         } catch (Exception e) {
-            System.err.println("Controller[" + controller_name +"]: DisControllerImpl exception:");
+            System.err.println("DisController[" + controller_name +"]: DisControllerImpl exception:");
             e.printStackTrace();
         }        
         

@@ -30,7 +30,7 @@ public class Client {
             System.out.println("Client. Get remote interface to all DISTRIBUTED CONTROLLERS");
             for (int i = 0; i < system_size; i++)
             {
-                String name = "d" + (i+1);
+                String name = "d" + i;
                 System.out.println("Client. Looking for discontroller with name = " + name);
                 DisControllerInterface controller = (DisControllerInterface) registry.lookup(name);
                 all_controllers.add(new Pair(name, controller));
@@ -54,7 +54,12 @@ public class Client {
             int serialize_lower = 0;
             for (Pair<String, ANodeInterface> pair : nodes) {
                 serialize_lower = pair.getArg2().exchange_active_domain(serialize_lower+1);                
-            }            
+            } 
+            
+                        // let all nodes exchange import domains
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().exchange_import_domain();
+            }
         }
         catch (Exception e) {
             System.err.println("Client ctor ERROR.");
@@ -65,6 +70,11 @@ public class Client {
     public void start()
     {
         try {
+            for (int i = 0; i < system_size; i++)
+            {
+                all_controllers.get(i).getArg2().init(all_controllers);
+            }
+            
             all_controllers.get(0).getArg2().makeChoice(0, 0);
         }
         catch (Exception e) {

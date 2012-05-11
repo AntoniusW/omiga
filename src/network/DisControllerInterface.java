@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public interface DisControllerInterface extends Remote {
     
-    public ReplyMessage init(String node_name, ArrayList<Pair<String, DisControllerInterface>> controller) throws RemoteException;
+    public ReplyMessage init(ArrayList<Pair<String, DisControllerInterface>> controller) throws RemoteException;
     
     public void makeChoice(int global_level, int last_guy) throws RemoteException;
     
