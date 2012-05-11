@@ -8,6 +8,7 @@ import Entity.Atom;
 import Entity.Constant;
 import Entity.FuncTerm;
 import Entity.Instance;
+import Entity.Rule;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class HeadNode extends Node{
     protected Atom a;
     protected int[] instanceOrdering;
     Node from;
+    public Rule r; // debug stuff, set in the retebuilder
     
     /**
      * 
@@ -73,7 +75,7 @@ public class HeadNode extends Node{
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             rete.satisfiable = false;
-            //System.err.println("UNSATISFIABLE!: " + instance);
+            System.err.println("UNSATISFIABLE!: " + instance);
             //rete.printAnswerSet();
             //rete.printAnswerSet();
             return;

@@ -76,6 +76,7 @@ public class ReteBuilder {
             SelectionNode actualNode = this.rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
             actualNode.resetVarPosition(actual);
             HeadNode hN = new HeadNodeNegative(r.getHead(),rete, SelectionNode.getVarPosition(actual),actualNode);
+            hN.r = r;
             actualNode.addChild(hN);
             //this.addHeadNode(actual.getPredicate(), hN);
         }else{
@@ -83,6 +84,7 @@ public class ReteBuilder {
             SelectionNode actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
             actualNode.resetVarPosition(actual);
             HeadNode hN = new HeadNodeNegative(r.getHead(),rete, SelectionNode.getVarPosition(actual),actualNode);
+            hN.r=r;
             actualNode.addChild(hN);
             //this.addHeadNode(actual.getPredicate(), hN);
         }
@@ -169,6 +171,7 @@ public class ReteBuilder {
         }
         //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
         HeadNode hN = new HeadNodeNegative(r.getHead(),rete, this.VarPosNodes.get(actualNode),actualNode);
+        hN.r=r;
         actualNode.addChild(hN);
     }
     
@@ -315,6 +318,7 @@ public class ReteBuilder {
         }
         //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
         HeadNode hN = new HeadNode(r.getHead(),rete, this.VarPosNodes.get(actualNode),actualNode);
+        hN.r = r;
         //this.addHeadNode(r.getHead().getPredicate(), hN);
         /*System.out.println("BLING!: " + r + " derives head: " + hN);
         JoinNode jn = (JoinNode)actualNode;
