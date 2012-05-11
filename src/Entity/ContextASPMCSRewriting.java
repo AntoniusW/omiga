@@ -168,6 +168,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     
     @Override
     public void backtrack(){
+        this.resetSatisfiable();
         this.choiceUnit.backtrack();
     }
 

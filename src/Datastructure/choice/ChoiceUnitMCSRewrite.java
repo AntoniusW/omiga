@@ -51,7 +51,7 @@ import org.jgrapht.graph.DirectedSubgraph;
 public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
 
-    protected ContextASPMCSRewriting c;
+    public ContextASPMCSRewriting c;
     
     public ChoiceUnitMCSRewrite(){
         //super();
@@ -81,9 +81,10 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
      */
     @Override
     public boolean choice(){
-        System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
-        System.out.println("SCCMAXSize= " + SCC.size());
-        System.out.println("Current SCC = "+actualSCC);
+        //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        //System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
+        /*System.out.println("SCCMAXSize= " + SCC.size());
+        System.out.println("Current SCC = "+actualSCC);*/
         
         if(actualSCC >= SCC.size()) {
             return false;
@@ -115,7 +116,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             //The SCC could be closed --> start guessing with the next SCC
             return choice();
         }
-        
+        //System.out.println("Going into higher SCC!");
         //We have nothing to guess within our current SCC, therefore we have to do a positive guess in a higher SCC so we go through all SCC if nessacary.
         //System.out.println("Reached the next level guess!");
         int x = actualSCC+1;
@@ -144,6 +145,8 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
     @Override
     public boolean nextBranch(){
+        //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        //System.out.println("nextBranch called!");
         if(this.nextNode != null){
             //There is a next node. This means we have to make a negative guess since we returned at this point because of backtracking
             //We add a choicepoint since we are doing a guess
@@ -320,6 +323,8 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
     @Override
     public void backtrack(){
+        //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        //System.out.println("BACKTRACK CALLED!: " + this.getDecisionLevel());
         if(this.getMemory().getDecisonLevel() == 0) return; // there is nothing to backtrack since there was no guess.
         this.backtrackchoiceNodesDecisionLayer();
         this.memory.backtrack();

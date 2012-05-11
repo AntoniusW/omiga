@@ -75,7 +75,7 @@ public class HeadNode extends Node{
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             rete.satisfiable = false;
-            System.err.println("UNSATISFIABLE!: " + instance);
+            //System.out.println("UNSATISFIABLE!: " + instance + " Rule: " + r);
             //rete.printAnswerSet();
             //rete.printAnswerSet();
             return;

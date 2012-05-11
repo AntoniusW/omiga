@@ -56,7 +56,9 @@ public class main_FINAL_NormalASP {
         //filename = "maze generation\\01-maze_generation-0-0.txt";
         //filename = "Partner Units Polynomial/00-partner.txt";
         //filename = "Partner Units Polynomial/07-partner_units_polynomial-28-0.txt";
-        filename = "graph colouring/00-graph-colouring.txt";
+        //filename = "graph colouring/00-graph-colouring.txt";
+        //filename ="single_import_pos.txt";
+        filename ="single_import_neg.txt";
         //filename = "Xir2.txt";
         rewriting = 1;
         answersets = 600;

@@ -30,7 +30,7 @@ import org.jgrapht.graph.DirectedSubgraph;
 
 public class ChoiceUnitMCS extends ChoiceUnit{
     
-    ContextASPMCS c;
+    public ContextASPMCS c;
     
     public ChoiceUnitMCS(ContextASPMCS c){
         super();

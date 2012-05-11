@@ -66,43 +66,53 @@ public class ManagerMCS {
         //c.printAnswerSet();
         int i = 0;
         while(!finished){
-            i++;
             boolean flag = false;
-            ReplyMessage lol = c.nextBranch();
-            if(lol.equals(ReplyMessage.NO_MORE_ALTERNATIVE)) {
-                if(i > 1){
-                    //System.out.println("YYYYYYYYYYYYYYYYYY NO_MORE_ALTERNATIVE YYYYYYYYYYYYYYYYYYY");
-                    finished = true;
-                }
-                
-            }
-            if(lol.equals(ReplyMessage.HAS_BRANCH)){
-                flag = true;
-            }else{
-                if(c.choice()){
-                    flag = true;
-                }
-            }
-            if(flag){
+            
+            //c.propagate();
+            if(c.choice()){
                 c.propagate();
                 if(!c.isSatisfiable()){
                     c.backtrack();
+                    ReplyMessage rm = c.nextBranch();
+                    while(!rm.equals(ReplyMessage.HAS_BRANCH) && !finished){
+                        if(rm.equals(ReplyMessage.NO_MORE_ALTERNATIVE)) finished = true;
+                        c.backtrack();
+                        rm = c.nextBranch();
+                        c.propagate();
+                        if(!c.isSatisfiable()) rm = ReplyMessage.NO_MORE_BRANCH; // we backtrack since the new branch directly lead to unsatisfiability
+                        //System.out.println("RM= " + rm);
+                    }
+                    
                 }
             }else{
                 
                 if(c.getChoiceUnit().getDecisionLevel() > 0){
+                    //System.out.println("REACHED AN END");
+                    c.propagate();
                     if(c.isSatisfiable()){
+                        //System.out.println("That is satisfiable");
                         //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
-                                System.out.println("Found AD: " + answerSetCount);
+                                System.out.println("Found Answerset: " + answerSetCount);
                                 c.printAnswerSet(filter);
                             }
                             answerSetCount++;
                             System.out.println(answerSetCount);
                             if(answersets != null && answerSetCount == answersets) break;
                         //}
+                    }else{
+                        //System.out.println("That is NOT satisfiable!");
                     }
                     c.backtrack();
+                    ReplyMessage rm = c.nextBranch();
+                    while(!rm.equals(ReplyMessage.HAS_BRANCH) && !finished){
+                        if(rm.equals(ReplyMessage.NO_MORE_ALTERNATIVE)) finished = true;
+                        c.backtrack();
+                        rm = c.nextBranch();
+                        c.propagate();
+                        if(!c.isSatisfiable()) rm = ReplyMessage.NO_MORE_BRANCH; // we backtrack since the new branch directly lead to unsatisfiability
+                        //System.out.println("RM= " + rm);
+                    }
                 }else{
                     finished = true;
                 }

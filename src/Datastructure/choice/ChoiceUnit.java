@@ -56,7 +56,7 @@ public class ChoiceUnit {
     
     // TODO: HeadNodeCOnstraints are not treated correctly (remove is called to often why?
     
-    protected ContextASP c;
+    public ContextASP c;
     protected ArrayList<ChoiceNode> choiceNodes;
     protected DecisionMemory memory;
     

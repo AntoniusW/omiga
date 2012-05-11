@@ -108,7 +108,7 @@ public class Rete {
      */ 
     public void addInstancePlus(Predicate p, Instance instance){
         if(this.containsInstance(p, instance, false)) {
-            System.out.println("HAHA UNSAT! via plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
+            //System.out.println("HAHA UNSAT! via plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
         if(this.containsInstance(p, instance, true)) {
@@ -126,7 +126,7 @@ public class Rete {
      */ 
     public void addInstanceMinus(Predicate p,Instance instance){
         if(this.containsInstance(p, instance, true)) {
-            System.out.println("HAHA UNSAT via minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
+            //System.out.println("HAHA UNSAT via minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
         if(this.containsInstance(p, instance, false)) {
