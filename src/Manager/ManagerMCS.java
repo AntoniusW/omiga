@@ -64,11 +64,17 @@ public class ManagerMCS {
         }
         System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
+        int i = 0;
         while(!finished){
+            i++;
             boolean flag = false;
             ReplyMessage lol = c.nextBranch();
             if(lol.equals(ReplyMessage.NO_MORE_ALTERNATIVE)) {
-                finished = true;
+                if(i > 1){
+                    //System.out.println("YYYYYYYYYYYYYYYYYY NO_MORE_ALTERNATIVE YYYYYYYYYYYYYYYYYYY");
+                    finished = true;
+                }
+                
             }
             if(lol.equals(ReplyMessage.HAS_BRANCH)){
                 flag = true;
