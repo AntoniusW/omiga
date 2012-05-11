@@ -4,6 +4,7 @@
  */
 package Entity;
 
+import Enumeration.OP;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -115,9 +116,18 @@ public class Rule {
                 for(Variable v: op2.getUsedVariables()){
                     if(hs.contains(v)) i++;
                 }
-                if(i >= op2.getUsedVariables().size()-1){ // All but one Variables of this operator are fixed --> Add the new one
+                if(op2.getOP().equals(OP.ASSIGN) && (i >= op2.getUsedVariables().size()-1)){
                     hs.addAll(op2.getUsedVariables());
+                }else{
+                    if(i == op2.getUsedVariables().size()){
+                        hs.addAll(op2.getUsedVariables());
+                    }else{
+                        
+                    }
                 }
+                /*if(i >= op2.getUsedVariables().size()-1){ // All but one Variables of this operator are fixed --> Add the new one
+                    hs.addAll(op2.getUsedVariables());
+                }*/
             }
         }
         // we check for each Operator if it is well defined (all Variables in HS)

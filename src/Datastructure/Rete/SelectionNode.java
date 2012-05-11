@@ -98,6 +98,7 @@ public class SelectionNode extends Node{
         //System.err.println("Trying to add instance: " + instance);
         
         if(varOrdering.length == 0){
+            // if this node encapsulates a fact atom
             Instance instance2Add = Instance.getInstance(this.atom.getTerms());
             this.memory.addInstance(instance2Add);
             
