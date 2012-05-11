@@ -90,7 +90,7 @@ public class HeadNodeConstraint extends Node{
             
         if(this.memory.containsInstance(instance)){
             rete.satisfiable = false;
-            //System.out.println("UNSATISFIABLE because of HeadConstraintNode! Printing AnswerSet: " + instance);
+            System.out.println("UNSATISFIABLE because of HeadConstraintNode! Printing interpretation: " + instance);
             //rete.printAnswerSet();
         }
     }

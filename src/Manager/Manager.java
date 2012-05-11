@@ -157,23 +157,33 @@ public class Manager {
         //c.printAnswerSet();
         while(!finished){
             if(c.choice()){
+                System.out.println("Found a choice. Now propagate");
                 c.propagate();
+                System.out.println("After propagation. Interpretation is:");
+                c.printAnswerSet(null);
                 if(!c.isSatisfiable()){
+                    System.out.println("UNSAT. Backtrack now!");
                     c.backtrack();
+                    System.out.println("After backtracking. Interpretation is:");
+                    c.printAnswerSet(null);
                 }
             }else{
-                
+                System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
                 if(c.getChoiceUnit().getDecisionLevel() > 0){
                     if(c.isSatisfiable()){
                         //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
-                                System.out.println("Found AD: " + answerSetCount);
+                                System.out.println("Found Answer: " + answerSetCount);
                                 c.printAnswerSet(filter);
                             }
                             answerSetCount++;
                             System.out.println(answerSetCount);
                             if(answersets != null && answerSetCount == answersets) break;
                         //}
+                    }
+                    else
+                    {
+                        System.out.println("No more choice but UNSAT");
                     }
                     c.backtrack();
                 }else{

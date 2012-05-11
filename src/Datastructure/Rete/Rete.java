@@ -108,7 +108,7 @@ public class Rete {
      */ 
     public void addInstancePlus(Predicate p, Instance instance){
         if(this.containsInstance(p, instance, false)) {
-            //System.out.println("HAHA UNSAT! durch plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
+            System.out.println("HAHA UNSAT! via plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
         if(this.containsInstance(p, instance, true)) {
@@ -126,7 +126,7 @@ public class Rete {
      */ 
     public void addInstanceMinus(Predicate p,Instance instance){
         if(this.containsInstance(p, instance, true)) {
-            //System.out.println("HAHA UNSAT durch minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
+            System.out.println("HAHA UNSAT via minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
         if(this.containsInstance(p, instance, false)) {
@@ -143,7 +143,7 @@ public class Rete {
      * @param p the predicate of the fact
      * @param instance the instance of the fact
      * @param positive negative or positive occurance?
-     * @return wether the fact is contained within the neg/pos memory of the retenetwork or not
+     * @return whether the fact is contained within the neg/pos memory of the retenetwork or not
      */
     public boolean containsInstance(Predicate p, Instance instance, boolean positive){
         if(positive){
@@ -165,8 +165,8 @@ public class Rete {
      * 
      * @param p the predicate of the fact
      * @param instance the instance of the fact
-     * @param positive negative or positive occurance?
-     * @return wether the fact is contained within the neg/pos memory of the retenetwork or not
+     * @param positive negative or positive occurrence?
+     * @return whether the fact is contained within the neg/pos memory of the retenetwork or not
      */
     public boolean containsInstance(Atom a, Instance instance, boolean positive){
         if(positive){
@@ -221,7 +221,7 @@ public class Rete {
      * prints the actual Answersets (=All Instances) to standard Out
      */
     public void printAnswerSet(String filter){
-        System.out.println("Printing Answerset: ");
+        //System.out.println("Printing Answerset: ");
         System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         System.out.println("Positive Facts: ");
         if(filter == null){
