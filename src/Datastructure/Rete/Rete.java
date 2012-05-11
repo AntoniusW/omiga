@@ -133,8 +133,8 @@ public class Rete {
             //System.out.println("BLING!: DOUBLE ADD!");
             return;
         } // TODO: Somehow avoid this if.
-        /*System.err.println("AddingMINUS: " + p.getName() + "(" + instance + ")");
-        System.err.println(basicLayerMinus.get(p));*/
+        //System.err.println("AddingMINUS: " + p.getName() + "(" + instance + ")");
+        /*System.err.println(basicLayerMinus.get(p));*/
         basicLayerMinus.get(p).addInstance(instance);
     }
     

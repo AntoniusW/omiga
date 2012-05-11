@@ -38,7 +38,7 @@ public class OperatorNode extends Node{
             // All Variables of the Operator are set
             this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
             this.memory = new Storage(tempVarPosition.size());
-            System.err.println("OMGraraga: " + op +" - "+ tempVarPosition + " - from: " + from);
+            //System.err.println("OMGraraga: " + op +" - "+ tempVarPosition + " - from: " + from);
         }
         
         /*allSet = true;
@@ -68,7 +68,9 @@ public class OperatorNode extends Node{
     @Override
     public void addInstance(Instance instance, boolean from){
         
-        //System.out.println("AddInstance in OPNode called!: " + instance);
+        /*System.err.println("AddInstance in OPNode called!: " + instance);
+        System.err.println("OP= " + op);
+        System.err.println("TempVar= " + this.tempVarPosition);*/
         //System.out.println("AllSet = " + allSet);
         
         if(op.getOP().equals(Enumeration.OP.ASSIGN)){
@@ -77,12 +79,19 @@ public class OperatorNode extends Node{
             for(Variable v: temp){
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
                 v.setValue(instance.get(this.getVarPositions().get(v)));
+                //System.err.println("Setting Value of: " + v + " = " + v.getValue());
             }
-            ((Variable)op.getLeft()).setValue(Constant.getConstant(String.valueOf(op.getIntValue())));
+            Variable x = ((Variable)op.getLeft());
+            x.setValue(Constant.getConstant(String.valueOf(op.getIntValue())));
             Term instanceArray[] = new Term[this.tempVarPosition.size()];
             for(Variable v: this.getVarPositions().keySet()){
-                instanceArray[this.getVarPositions().get(v)] = v.getValue();
+                if(!v.equals(x)) {
+                    //System.err.println("Setting: " + v + " = " + instance.get(this.getVarPositions().get(v)));
+                    v.setValue(instance.get(this.getVarPositions().get(v)));
+                }
+                    instanceArray[this.getVarPositions().get(v)] = v.getValue();
             }
+            //System.err.println(Instance.getInstanceAsString(instanceArray));
             Instance instance2Add = Instance.getInstance(instanceArray);
             this.memory.addInstance(instance2Add);
             super.addInstance(instance2Add, from); // Register this instance in our backtracking structure.

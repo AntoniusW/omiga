@@ -157,15 +157,15 @@ public class Manager {
         //c.printAnswerSet();
         while(!finished){
             if(c.choice()){
-                System.out.println("Found a choice. Now propagate");
+                //System.out.println("Found a choice. Now propagate");
                 c.propagate();
-                System.out.println("After propagation. Interpretation is:");
-                c.printAnswerSet(null);
+                //System.out.println("After propagation. Interpretation is:");
+                //c.printAnswerSet(null);
                 if(!c.isSatisfiable()){
-                    System.out.println("UNSAT. Backtrack now!");
+                    //System.out.println("UNSAT. Backtrack now!");
                     c.backtrack();
-                    System.out.println("After backtracking. Interpretation is:");
-                    c.printAnswerSet(null);
+                    //System.out.println("After backtracking. Interpretation is:");
+                    //c.printAnswerSet(null);
                 }
             }else{
                 System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());

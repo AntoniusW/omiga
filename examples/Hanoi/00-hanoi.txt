@@ -13,51 +13,57 @@
 % steps(T), which is the number of time steps T, required to reach the goal (provided part of Input data)
 
 % Read in data 
-on(0,N1,N) :- on0(N,N1).
-onG(K,N1,N) :- ongoal(N,N1), steps(K).
-		   
+ 	on(0,N1,N) :- on0(N,N1).
+    onG(K,N1,N) :- ongoal(N,N1), steps(K).
+ 
 % Specify valid arrangements of disks
-% Basic condition. Smaller disks are on larger ones
-:- time(T), on(T,N1,N), N1=>N.
+ 	% Basic condition. Smaller disks are on larger ones
+ 	:- time(T), on(T,N1,N), N1>=N.
  	
 % Specify a valid move (only for T<t)
-% pick a disk to move
-move(T,N) :- disk(N), time(T), steps(K), T<K, not noMove(T,N).
-noMove(T,N) :- disk(N), time(T), steps(K), T<K, not move(T,N).
-:- move(T,N1), move(T,N2), N1 != N2.
-:- time(T), steps(K), T<K, not diskMoved(T).
-diskMoved(T) :- move(T,Fv1).
+ 	% pick a disk to move
+	
+	move(T,N) :- disk(N), time(T), steps(K), T<K, not noMove(T,N).
+	noMove(T,N) :- disk(N), time(T), steps(K), T<K, not move(T,N).
+	
+    :- move(T,N1), move(T,N2), N1 != N2.
+    :- time(T), steps(K), T<K, not diskMoved(T).
+    diskMoved(T) :- move(T,N).
 
-% pick a disk onto which to move
-where(T,N) :- disk(N), time(T), steps(K), T < K, not noWhere(T,N).
-noWhere(T,N) :- disk(N), time(T), steps(K), T < K, not where(T,N).
-:- where(T,N1), where(T,N2), N1 != N2.
-:- time(T), steps(K), T<K, not diskWhere(T).
-diskWhere(T) :- where(T,Fv1).
+ 	% pick a disk onto which to move
+	
+    where(T,N) :- disk(N), time(T), steps(K), T<K, not noWhere(T,N).
+	noWhere(T,N) :- disk(N), time(T), steps(K), T<K, not where(T,N).
+	
+    :- where(T,N1), where(T,N2), N1 != N2.
+    :- time(T), steps(K), T<K, not diskWhere(T).
+    diskWhere(T) :- where(T,N1).
 
-% pegs cannot be moved
-:- move(T,N), N<5.
+ 	% pegs cannot be moved
+ 	:- move(T,N), N<5.
 
-% only top disk can be moved
-:- on(T,N,N1), move(T,N).
+ 	% only top disk can be moved
+ 	:- on(T,N,N1), move(T,N).
 
-% a disk can be placed on top only.
-:- on(T,N,N1), where(T,N).
+ 	% a disk can be placed on top only.
+ 	:- on(T,N,N1), where(T,N).
 
-% no disk is moved in two consecutive moves
-:- move(T,N), move(TM1,N), TM1 is T-1.
+ 	% no disk is moved in two consecutive moves
+ 	:- move(T,N), move(TM1,N), TM1=T-1.
 
 % Specify effects of a move
-on(TP1,N1,N) :- move(T,N), where(T,N1), TP1 is T + 1.
+ 	on(TP1,N1,N) :- move(T,N), where(T,N1), TP1 is T+1.
 
-on(TP1,N,N1) :- time(T), steps(K), T<K, on(T,N,N1), not move(T,N1), TP1 is T + 1.
+ 	on(TP1,N,N1) :- time(T), steps(K), T<K, on(T,N,N1), not move(T,N1), TP1 is T+1.
 
 % Goal description
-:- not on(K,N,N1), onG(K,N,N1), steps(K).
-:- on(K,N,N1), not onG(K,N,N1),steps(K).
+	:- not on(K,N,N1), onG(K,N,N1), steps(K).
+	:- on(K,N,N1), not onG(K,N,N1),steps(K).
 
 % Solution
-put(T,M,N) :- move(T,N), where(T,M), steps(K), T < K.
+	put(T,M,N) :- move(T,N), where(T,M), steps(K), T<K.
+
+
 
 steps(3).
 time(0).
