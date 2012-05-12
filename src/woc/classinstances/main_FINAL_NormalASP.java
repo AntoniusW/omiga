@@ -60,7 +60,7 @@ public class main_FINAL_NormalASP {
         //filename ="single_import_pos.txt";
         //filename ="single_import_neg.txt";
         //filename = "Xir2.txt";
-        filename = "Hanoi\\06-hanoi_tower-60-0.txt";
+        filename = "scholarship.txt";
         rewriting = 1;
         answersets = 600;
         filter = null;

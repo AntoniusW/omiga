@@ -233,7 +233,7 @@ public class Rete {
                 System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
                 this.basicLayerPlus.get(p).printAllInstances();
             }
-            /*System.out.println("Negative Facts: ");
+            System.out.println("Negative Facts: ");
             for(Predicate p: this.basicLayerMinus.keySet()){
                 Term[] selectionCriteria = new Term[p.getArity()];
                 for(int i = 0; i < p.getArity();i++){
@@ -241,7 +241,7 @@ public class Rete {
                 }
                 System.out.println("Instances for: " + this.basicLayerMinus.get(p));// + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
                 this.basicLayerMinus.get(p).printAllInstances();
-            }*/
+            }
         }else{
             for(Predicate p: this.basicLayerPlus.keySet()){
                 if(p.getName().equals(filter)){

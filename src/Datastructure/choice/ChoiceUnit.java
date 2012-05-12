@@ -517,7 +517,7 @@ public class ChoiceUnit {
             return false;
         }
         while(SCCSize.get(actualSCC)<=1){
-            //System.out.println("Calling close SCC!");
+            System.out.println("Calling close SCC!");
             this.closeActualSCC();
             if(actualSCC >= SCC.size()) return false;
         }

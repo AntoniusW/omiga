@@ -70,7 +70,11 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      * @return 
      */
     public boolean getClosureStatusForOutside(Predicate p){
-        if(!this.fromOutside.containsKey(p)) return false;
+        if(!this.fromOutside.containsKey(p)) {
+            //System.out.println("getClosureStatus returning: True");
+            return true;
+        }
+        //System.out.println("getClosureStatus returning: " + this.fromOutside.get(p));
         return this.fromOutside.get(p);
     }
 
