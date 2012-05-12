@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
+import network.Pair;
 import org.jgrapht.graph.DirectedSubgraph;
 
 
@@ -52,6 +53,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
 
     public ContextASPMCSRewriting c;
+    public Stack<Pair<Integer,Predicate>> closedfromoutside;
     
     public ChoiceUnitMCSRewrite(){
         //super();
@@ -74,6 +76,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         this.stackyInstance = new Stack<Instance>();
         this.choiceNodesDecisionLayer = new ArrayList<HashMap<ChoiceNode,HashSet<Instance>>>();
         this.choiceNodesDecisionLayer.add(new HashMap<ChoiceNode,HashSet<Instance>>());
+        this.closedfromoutside = new Stack<Pair<Integer,Predicate>> ();
     }
     
     /**
@@ -351,6 +354,10 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         return flag;
     }
     
+    public void pushClosureFromOutside(Predicate p){
+        this.closedfromoutside.push(new Pair<Integer,Predicate>(this.getDecisionLevel(),p));
+    }
+    
     @Override
     public void backtrack(){
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
@@ -358,6 +365,12 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         if(this.getMemory().getDecisonLevel() == 0) return; // there is nothing to backtrack since there was no guess.
         this.backtrackchoiceNodesDecisionLayer();
         this.memory.backtrack();
+        
+        //backtrack closure from outside
+        if(this.closedfromoutside.peek().getArg1() >= this.getDecisionLevel()){
+            Pair<Integer,Predicate> pa =this.closedfromoutside.pop();
+            this.c.openFactFromOutside(pa.getArg2());
+        }
         
         //TODO: backtracking on SCC
         while(!this.closedAt.isEmpty() && this.closedAt.peek() >= this.memory.getDecisonLevel()){

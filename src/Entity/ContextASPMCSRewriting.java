@@ -139,8 +139,10 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     @Override
     public void closeFactFromOutside(Predicate p) {
         this.fromOutside.put(p, false);
+        ((ChoiceUnitMCSRewrite)this.choiceUnit).pushClosureFromOutside(p);
     }
     
+    //Do not use this method for reopening on backtracking. This is done by the sover himself.
     public void openFactFromOutside(Predicate p) {
         this.fromOutside.put(p,true);
     }
