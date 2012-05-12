@@ -115,7 +115,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      */
     @Override
     public void registerFactFromOutside(Predicate p) {
-        this.fromOutside.put(p,true);
+        this.fromOutside.put(p,false);
         this.rete.addPredicateMinus(p);
         this.rete.addPredicatePlus(p);
     }
@@ -139,6 +139,10 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     @Override
     public void closeFactFromOutside(Predicate p) {
         this.fromOutside.put(p, false);
+    }
+    
+    public void openFactFromOutside(Predicate p) {
+        this.fromOutside.put(p,true);
     }
     
     @Override
