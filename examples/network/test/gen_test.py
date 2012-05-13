@@ -18,27 +18,28 @@ def copy_content(source, target):
 def create_script(script_fn, 
                   n_org, n_provider, n_student, 
                   org_file_name, provider_file_name, student_file_name, 
+                  absolute_path,
                   start_template_fn, main_entry):
 
     # reading in templates ********************
     script_input = ''
-    with open('templates/script-input-files.tpl', 'r') as script_input_file:
+    with open(absolute_path + '/templates/script-input-files.tpl', 'r') as script_input_file:
         script_input = script_input_file.readline()
     script_input_file.closed
 
     script_start_node = ''
-    with open(start_template_fn, 'r') as script_start_node_file:
+    with open(absolute_path + '/' + start_template_fn, 'r') as script_start_node_file:
         script_start_node = script_start_node_file.readlines()
     script_start_node_file.closed
 
     script_main_entry = ''
-    with open('templates/script-main-entry.tpl', 'r') as script_main_entry_file:
+    with open(absolute_path + '/templates/script-main-entry.tpl', 'r') as script_main_entry_file:
         script_main_entry = script_main_entry_file.readline()
     script_main_entry_file.closed
 
     # writing to files
-    with open(script_fn, 'w') as f:
-        copy_content('templates/script-header.tpl', f)
+    with open(absolute_path + '/' + script_fn, 'w') as f:
+        copy_content(absolute_path + '/templates/script-header.tpl', f)
 
         # export input file name
         for i in range(0,n_org):
@@ -51,23 +52,23 @@ def create_script(script_fn,
             f.write(script_input.format(i + n_org + n_provider + 1, student_file_name[i]))
 
         # copy middle to f
-        copy_content('templates/script-middle.tpl', f)
+        copy_content(absolute_path + '/templates/script-middle.tpl', f)
 
         # start node
         for i in range(0,n_org + n_provider + n_student):
             for line in script_start_node:
                 f.write(line.format(i+1, i, n_org + n_provider + n_student))
 
-        copy_content('templates/script-second-middle.tpl', f)
+        copy_content(absolute_path + '/templates/script-second-middle.tpl', f)
 
         f.write(script_main_entry.format(main_entry, n_org + n_provider + n_student))
 
-        copy_content('templates/script-footer.tpl', f)
+        copy_content(absolute_path + '/templates/script-footer.tpl', f)
 
         f.closed
 
 
-def create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, instance):
+def create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, instance, absolute_path):
     # setting up the nodes' name and file names *************************
     org_node_name = []
     provider_node_name = []
@@ -158,13 +159,13 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
     # write to org files ****************************************************************************************************
     constraint = ''
 
-    with open('templates/constraint.tpl', 'r') as constraint_file:
+    with open(absolute_path + '/templates/constraint.tpl', 'r') as constraint_file:
         constraint = constraint_file.readline()
     constraint_file.closed
 
     for i in range(0,n_org):
         n_child_providers = len(org_funds_providers[i])
-        with open(org_file_name[i], 'w') as f:
+        with open(absolute_path + '/' + org_file_name[i], 'w') as f:
             for j in range(0, n_child_providers-1):
                 for k in range(j+1, n_child_providers):
                     f.write(constraint.format(provider_node_name[j], provider_node_name[k]))
@@ -173,12 +174,12 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
     # write to provider files ***********************************************************************************************
     provider_template = ''
 
-    with open('templates/provider.tpl', 'r') as provider_file:
+    with open(absolute_path + '/templates/provider.tpl', 'r') as provider_file:
         provider_template = provider_file.readlines()
     provider_file.closed
 
     for i in range(0,n_provider):
-        with open(provider_file_name[i], 'w') as f:
+        with open(absolute_path + '/' + provider_file_name[i], 'w') as f:
             for s in provider_got_student_apps[i]:
                 for line in provider_template:
                     f.write(line.format(student_node_name[s]))
@@ -188,12 +189,12 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
     # write to student files ***********************************************************************************************
     student_template = ''
 
-    with open('templates/student.tpl', 'r') as student_file:
+    with open(absolute_path + '/templates/student.tpl', 'r') as student_file:
         student_template = student_file.readlines()
     student_file.closed    
 
     for i in range(0,n_student):
-        with open(student_file_name[i], 'w') as f:
+        with open(absolute_path + '/' + student_file_name[i], 'w') as f:
             for p in student_applies_providers[i]:
                 for line in student_template:
                     f.write(line.format(provider_node_name[p], student_node_name[i]))
@@ -204,11 +205,13 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
     create_script(central_script_file_name, 
                   n_org, n_provider, n_student, 
                   org_file_name, provider_file_name, student_file_name, 
+                  absolute_path,
                   'templates/script-start-node.tpl', 'AController')
 
     create_script(distributed_script_file_name, 
                   n_org, n_provider, n_student, 
                   org_file_name, provider_file_name, student_file_name, 
+                  absolute_path,
                   'templates/script-start-dis-controller.tpl', 'Client')
 
 def main(argv):
@@ -231,8 +234,14 @@ def main(argv):
     org_provider_density = 3*density / 4
     n_instance = string.atoi(options.num)
 
+    absolute_path = os.path.abspath( __file__ )
+    print absolute_path
+    last_slash = absolute_path.rfind('/')
+    absolute_path = absolute_path[:last_slash]
+    print absolute_path
+
     for i in range(0,n_instance):
-        create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, chr(97+i))
+        create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, chr(97+i), absolute_path)
 
 if __name__ == "__main__":
     import sys

@@ -1,1 +1,1 @@
-export NODE{0}_FILE=$BASEDIR/examples/network/{1}
+export NODE{0}_FILE=$BASEDIR/examples/network/test/{1}
