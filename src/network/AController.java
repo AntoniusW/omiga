@@ -94,7 +94,7 @@ public class AController {
         {
             for (int i = 0; i < system_size; i++)
             {
-                System.out.println("Controller. Request node[" + i + "] to print answer.");
+                System.out.println("Controller. Request node[" + i + "] to print interpretation.");
                 nodes.get(i).getArg2().printAnswer();
             }
         }
