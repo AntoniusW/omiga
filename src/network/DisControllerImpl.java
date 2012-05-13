@@ -168,6 +168,13 @@ public class DisControllerImpl implements DisControllerInterface {
     public void makeBranch(int global_level) throws RemoteException {
         try {
             System.out.println("DisController[" + myid + "]. Backtrack the whole system to global level = " + global_level);
+            
+            if (global_level == 0)
+            {
+                System.out.println("DisController[" + myid + "].Ask for branch at global_level = 0. Get out now");
+                return;
+            }
+            
             backTrack(global_level-1);
             
             Pair<Integer, Integer> p = stack.pop();
