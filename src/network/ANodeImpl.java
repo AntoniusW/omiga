@@ -322,7 +322,7 @@ public class ANodeImpl implements ANodeInterface {
 
     
     @Override
-    public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts) throws RemoteException {
+    public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts, List<Predicate> closed_predicates) throws RemoteException {
         
         // TODO AW exchange closed predicates!
         //Predicate pred;
@@ -345,6 +345,11 @@ public class ANodeImpl implements ANodeInterface {
                 System.out.println("Node[" + local_name +"]: Adding Predicate / Instance = "+pred.getKey()+"/"+inst);
                 ANodeImpl.ctx.addFactFromOutside(pred.getKey(), inst);
             }
+        }
+        
+        System.out.println("Node["+local_name+"]: Closed predicates are: "+closed_predicates);
+        for (Predicate predicate : closed_predicates) {
+            ctx.closeFactFromOutside(predicate);
         }
         
         System.out.println("Node[" + local_name +"]: Received facts end.");
@@ -544,6 +549,14 @@ public class ANodeImpl implements ANodeInterface {
                     }
                 }
             }
+            ArrayList<Predicate> closed_preds = new ArrayList<Predicate>();
+            for (Predicate pred : required_predicates.get(node.getArg1())) {
+                if ( ctx.getClosureStatusForOutside(pred) == true ) {
+                    System.out.println("Node[" + local_name +"]: PushDerivedFacts: Predicate closed "+pred.toString());
+                    will_push = true;
+                    closed_preds.add(pred);
+                }
+            }
             
             // send new facts to other node
             try {
@@ -551,7 +564,7 @@ public class ANodeImpl implements ANodeInterface {
                 {
                     System.out.println("Node[" + local_name +"]: PushDerivedFacts: to_push = "+to_push);
                     node.getArg2().receiveNextFactsFrom(local_name);
-                    ReplyMessage reply = node.getArg2().handleAddingFacts(global_level, to_push);
+                    ReplyMessage reply = node.getArg2().handleAddingFacts(global_level, to_push,closed_preds);
                     if (reply == ReplyMessage.INCONSISTENT)
                     {
                         return ReplyMessage.INCONSISTENT;
