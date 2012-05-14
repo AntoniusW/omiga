@@ -13,6 +13,7 @@ import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.ContextMCSInterface;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import network.ReplyMessage;
@@ -67,7 +68,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      * returns wether predicate p can come from outside or not
      * 
      * @param p
-     * @return 
+     * @return true if the predicate cannot come from outside and false otherwise
      */
     public boolean getClosureStatusForOutside(Predicate p){
         if(!this.fromOutside.containsKey(p)) {
@@ -130,6 +131,19 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
         ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
         this.rete.addInstancePlus(p, inz);
     }
+    
+     /**
+     * pushes all facts into the context. Pleas be aware that the predicates of these facts have to be registred at startup!
+     * @param facts a HashMap containing all the facts (Instances for predicates)
+     */
+    public void addFactsFromOutside(HashMap<Predicate,Collection<Instance>> facts) {
+        ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
+        for(Predicate p: facts.keySet()){
+            for(Instance inz: facts.get(p)){
+                this.rete.addInstancePlus(p, inz);
+            }
+        }
+    }
 
     /**
      * tell the context that a predicate p cannot be derived from outside anymore
@@ -138,6 +152,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      */
     @Override
     public void closeFactFromOutside(Predicate p) {
+        ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
         this.fromOutside.put(p, false);
         ((ChoiceUnitMCSRewrite)this.choiceUnit).pushClosureFromOutside(p);
     }

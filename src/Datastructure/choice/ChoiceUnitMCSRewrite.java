@@ -258,7 +258,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
     @Override
     protected void closeActualSCC(){
-        c.getRete().propagate();
+        c.getRete().propagate(); //think this is not really needed anymore
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
                 return;
@@ -272,6 +272,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         }
         this.actualSCC++;
         this.closedAt.add(this.memory.getDecisonLevel());
+        c.getRete().propagate();
        /* c.getRete().propagate();
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)) {
@@ -286,7 +287,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     }
     
     private boolean closeActualSCCWithReturnValue(){
-        c.getRete().propagate();
+        c.getRete().propagate(); //think this is not really needed anymore
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
                 //System.out.println("Returning false because: " + !c.getClosureStatusForOutside(p) + " - " + p);
@@ -301,6 +302,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         }
         this.actualSCC++;
         this.closedAt.add(this.memory.getDecisonLevel());
+        c.getRete().propagate();
         return true;
     }
     
@@ -356,6 +358,8 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
     public void pushClosureFromOutside(Predicate p){
         this.closedfromoutside.push(new Pair<Integer,Predicate>(this.getDecisionLevel(),p));
+        this.closeActualSCC();
+        this.closeProcedure();
     }
     
     @Override
@@ -367,7 +371,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         this.memory.backtrack();
         
         //backtrack closure from outside
-        if(this.closedfromoutside.peek().getArg1() >= this.getDecisionLevel()){
+        if(!this.closedfromoutside.isEmpty() && this.closedfromoutside.peek().getArg1() >= this.getDecisionLevel()){
             Pair<Integer,Predicate> pa =this.closedfromoutside.pop();
             this.c.openFactFromOutside(pa.getArg2());
         }
