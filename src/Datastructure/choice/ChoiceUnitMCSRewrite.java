@@ -293,6 +293,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         System.out.println("Closing SCC! lv: " + this.actualSCC + " : " + this.SCCPreds.get(this.actualSCC));
         for(ChoiceNode cN: SCC.get(actualSCC)){
             if(!cN.getAllInstances().isEmpty()){
+                System.out.println("Returning false because we still have choicepoints!; " + cN);
                 return false;
             }
         }
@@ -300,12 +301,14 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
                 //System.out.println("Returning false because: " + !c.getClosureStatusForOutside(p) + " - " + p);
+                System.out.println("Returning false because its not closed from outside; " + p);
                 return false;
             }
         }
         for(Predicate p: SCCPreds.get(actualSCC)){
            //if(c.getRete().containsPredicate(p, false)) {
                //System.out.println("Closing Predicate: " + p);
+                System.out.println("Closing: " + p);
                    c.getRete().getBasicNodeMinus(p).close();
            //}
         }
@@ -407,11 +410,14 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
        
             this.closedfromoutside.push(new Pair<Integer,Predicate>(this.getDecisionLevel(),p));
         
-        //if (this.SCCPreds.size()<= this.actualSCC){
+            System.out.println("SCCSIZE: " + this.SCCPreds.size() + " vs. " + this.actualSCC);
+        if (this.actualSCC < this.SCCPreds.size()){
             
             this.closeActualSCCFromOutside();
-        //}
-            this.closeProcedure();
+            //System.out.println("CloseProcedure: " + this.SCCSize.get(actualSCC) + " - " + this.closeActualSCCWithReturnValue());
+            while(actualSCC < this.SCCSize.size() && this.closeActualSCCWithReturnValue()){
+            }
+        }
     }
     
     @Override

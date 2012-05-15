@@ -509,6 +509,7 @@ public class ANodeImpl implements ANodeInterface {
             System.out.println("Node[" + local_name + "]: makeBranch. remove(" + gl1 + ").");
             
             System.out.println("After backtracking. Current local decision level = " + ctx.getDecisionLevel());
+            decision_level_before_push = ctx.getDecisionLevel();
         }
         else
         {
@@ -621,6 +622,24 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage finalClosing() throws RemoteException {
+        int dec = ctx.getDecisionLevel()+1;
+        for (Predicate predicate : local_predicates) {
+            if( predicate.getNodeId()!= null)
+                ctx.closeFactFromOutside(predicate);
+        }
+        
+        HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(dec);
+        System.out.println("Node["+local_name+"]: finalClosing, new_facts: "+new_facts);
+
+        for (HashSet<Instance> hashSet : new_facts.values()) {
+            if( !hashSet.isEmpty() )
+                return ReplyMessage.INCONSISTENT;  
+        }
+        
+        if (!ctx.isSatisfiable())
+        {
+            return ReplyMessage.INCONSISTENT;
+        }
         
         return ReplyMessage.SUCCEEDED;
     }

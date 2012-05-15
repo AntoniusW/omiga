@@ -15,6 +15,9 @@ import java.util.Stack;
  * @author Minh Dao-Tran, Antonius Weinzierl
  */
 public class AController {
+    
+    private int potential_count;
+    
     private Registry registry;
     private int system_size;
     private int answer_count;
@@ -23,6 +26,7 @@ public class AController {
     
     public AController(int size) {
         try {
+            potential_count=1;
             system_size = size;
             answer_count = 0;
             registry = LocateRegistry.getRegistry("127.0.0.1");
@@ -182,13 +186,16 @@ public class AController {
                     }
                     else
                     {
-                        System.out.println("Controller. A potential answer set found. Now do final closing");
+                        System.out.println("Controller. A potential answer set  No.["+potential_count+"] found. Now do final closing");
+                        potential_count++;
+                        printAnswer();
                         boolean is_an_answer = true;
                         for (int i = 0; i < system_size; i++)
                         {
                             System.out.println("Controller. Final closing at node[" + i + "]");
                             if (nodes.get(i).getArg2().finalClosing() == ReplyMessage.INCONSISTENT)
                             {
+                                System.out.println("Controller. Killing answer set after finalClosing.");
                                 is_an_answer = false;
                                 break;
                             }
