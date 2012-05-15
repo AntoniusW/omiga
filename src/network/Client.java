@@ -60,6 +60,11 @@ public class Client {
             for (Pair<String, ANodeInterface> pair : nodes) {
                 pair.getArg2().exchange_import_domain();
             }
+            
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().propagate(0);   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
+            }            
+            
         }
         catch (Exception e) {
             System.err.println("Client ctor ERROR.");
@@ -74,7 +79,9 @@ public class Client {
             {
                 all_controllers.get(i).getArg2().init(all_controllers);
             }
+           
             
+            System.out.println("Client. Issue the request to the first node");
             all_controllers.get(0).getArg2().makeChoice(0, 0);
         }
         catch (Exception e) {

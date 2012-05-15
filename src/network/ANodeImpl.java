@@ -148,7 +148,12 @@ public class ANodeImpl implements ANodeInterface {
         ctx.propagate();
         System.out.println("First Propagation finished: " + System.currentTimeMillis());
         ctx.getChoiceUnit().DeriveSCC();
+        
+        System.out.println("Call killSoloSCC");
         ctx.getChoiceUnit().killSoloSCC();
+        
+        System.out.println("After killSoloSCC");
+        ctx.printAnswerSet(null);
         
         // collecting local predicates
         System.out.println("Node[" + local_name +"]: Collecting local predicates.");
@@ -327,8 +332,8 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts, List<Predicate> closed_predicates) throws RemoteException {
         
         // TODO AW exchange closed predicates!
-        //Predicate pred;
-        //ctx.getRete().getBasicLayerMinus().get(pred).isClosed();
+        //Predicate pred1;
+        //ctx.getRete().getBasicLayerMinus().get(pred1).isClosed();
                
         System.out.println("Node[" + local_name +"]: Received facts from "+serializingFrom +":");
         System.out.println("Node[" + local_name +"]: HAF: ctx.decisionLevel (decision_level_before_push) = "+ctx.getDecisionLevel());
@@ -612,5 +617,11 @@ public class ANodeImpl implements ANodeInterface {
         
         // create and export the local node
         ANodeImpl local_node= new ANodeImpl(local_name, filename);
+    }
+
+    @Override
+    public ReplyMessage finalClosing() throws RemoteException {
+        
+        return ReplyMessage.SUCCEEDED;
     }
 }

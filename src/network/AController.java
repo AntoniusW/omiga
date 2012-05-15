@@ -182,9 +182,24 @@ public class AController {
                     }
                     else
                     {
-                        System.out.println("Controller. An answer set found!");
-                        answer_count++;
-                        printAnswer();
+                        System.out.println("Controller. A potential answer set found. Now do final closing");
+                        boolean is_an_answer = true;
+                        for (int i = 0; i < system_size; i++)
+                        {
+                            System.out.println("Controller. Final closing at node[" + i + "]");
+                            if (nodes.get(i).getArg2().finalClosing() == ReplyMessage.INCONSISTENT)
+                            {
+                                is_an_answer = false;
+                                break;
+                            }
+                        }
+                        
+                        if (is_an_answer)
+                        {
+                            System.out.println("Controller. An answer set found!");
+                            answer_count++;
+                            printAnswer();
+                        }
                         
                         // TODO AW stack may be empty at this time, is this a bug in the algorithm?
                         if (stack.empty()) {
