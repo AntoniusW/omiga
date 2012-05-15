@@ -34,6 +34,12 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     
     //TODO: DANGER: Choice: No more false guesses on same decion level! Does this matter?! ATM only positive guesses increase the decision level
     // sinc ebakctrack only removes decision levels for positive guesses!
+
+    public HashMap<Predicate, Boolean> getFromOutside() {
+        return fromOutside;
+    }
+    
+    
     
     /**
      * public constructor
@@ -116,6 +122,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      */
     @Override
     public void registerFactFromOutside(Predicate p) {
+        System.out.println("Registering fact from outside: "+p);
         this.fromOutside.put(p,false);
         this.rete.addPredicateMinus(p);
         this.rete.addPredicatePlus(p);
@@ -136,7 +143,7 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      * pushes all facts into the context. Pleas be aware that the predicates of these facts have to be registred at startup!
      * @param facts a HashMap containing all the facts (Instances for predicates)
      */
-    public void addFactsFromOutside(HashMap<Predicate,Collection<Instance>> facts) {
+    public void addFactsFromOutside(HashMap<Predicate,ArrayList<Instance>> facts) {
         ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
         for(Predicate p: facts.keySet()){
             for(Instance inz: facts.get(p)){
@@ -152,14 +159,15 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      */
     @Override
     public void closeFactFromOutside(Predicate p) {
+        System.out.println("Closing fact from outside: "+p);
         ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
-        this.fromOutside.put(p, false);
+        this.fromOutside.put(p, true);
         ((ChoiceUnitMCSRewrite)this.choiceUnit).pushClosureFromOutside(p);
     }
     
     //Do not use this method for reopening on backtracking. This is done by the sover himself.
     public void openFactFromOutside(Predicate p) {
-        this.fromOutside.put(p,true);
+        this.fromOutside.put(p,false);
     }
     
     @Override

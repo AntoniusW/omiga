@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-05-10 16:16:21
+// $ANTLR 3.4 /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-05-15 15:35:37
 
 package parser.antlr;
 
@@ -73,9 +73,9 @@ public class wocParser extends Parser {
     public String getGrammarFileName() { return "/home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g"; }
 
 
-    private ContextASP context;
+    private ContextASPMCSRewriting context;
 
-    public void setContext(ContextASP context) {
+    public void setContext(ContextASPMCSRewriting context) {
     	this.context=context;
     }
 
@@ -919,7 +919,9 @@ public class wocParser extends Parser {
             }
 
 
-            at =Atom.getAtom(atom_name, terms.length, terms); if(context_id !=null) { at.getPredicate().setNodeId(context_id); }
+            at =Atom.getAtom(atom_name, terms.length, terms);
+            		if(context_id !=null) {at.getPredicate().setNodeId(context_id); context.registerFactFromOutside(at.getPredicate());
+            				}
 
             }
 
@@ -939,7 +941,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "termlist"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:84:1: termlist returns [ArrayList<Term> termlist] : t1= term ( ',' tn= term )* ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:1: termlist returns [ArrayList<Term> termlist] : t1= term ( ',' tn= term )* ;
     public final ArrayList<Term> termlist() throws RecognitionException {
         ArrayList<Term> termlist = null;
 
@@ -951,8 +953,8 @@ public class wocParser extends Parser {
 
          termlist = new ArrayList<Term>();
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:2: (t1= term ( ',' tn= term )* )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:4: t1= term ( ',' tn= term )*
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:88:2: (t1= term ( ',' tn= term )* )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:88:4: t1= term ( ',' tn= term )*
             {
             pushFollow(FOLLOW_term_in_termlist391);
             t1=term();
@@ -962,7 +964,7 @@ public class wocParser extends Parser {
 
             termlist.add(t1);
 
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:87:3: ( ',' tn= term )*
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:89:3: ( ',' tn= term )*
             loop14:
             do {
                 int alt14=2;
@@ -975,7 +977,7 @@ public class wocParser extends Parser {
 
                 switch (alt14) {
             	case 1 :
-            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:87:4: ',' tn= term
+            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:89:4: ',' tn= term
             	    {
             	    match(input,21,FOLLOW_21_in_termlist398); 
 
@@ -1014,7 +1016,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "term"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:90:1: term returns [Term term] : ( constant | VAR | function );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:92:1: term returns [Term term] : ( constant | VAR | function );
     public final Term term() throws RecognitionException {
         Term term = null;
 
@@ -1026,7 +1028,7 @@ public class wocParser extends Parser {
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:91:2: ( constant | VAR | function )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:2: ( constant | VAR | function )
             int alt15=3;
             switch ( input.LA(1) ) {
             case ID:
@@ -1069,7 +1071,7 @@ public class wocParser extends Parser {
 
             switch (alt15) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:91:4: constant
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:4: constant
                     {
                     pushFollow(FOLLOW_constant_in_term421);
                     constant8=constant();
@@ -1082,7 +1084,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:92:4: VAR
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:94:4: VAR
                     {
                     VAR9=(Token)match(input,VAR,FOLLOW_VAR_in_term428); 
 
@@ -1091,7 +1093,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:4: function
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:95:4: function
                     {
                     pushFollow(FOLLOW_function_in_term435);
                     function10=function();
@@ -1126,7 +1128,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "function"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:96:1: function returns [String name, ArrayList<Term> terms] : ID '(' termlist ')' ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:98:1: function returns [String name, ArrayList<Term> terms] : ID '(' termlist ')' ;
     public final wocParser.function_return function() throws RecognitionException {
         wocParser.function_return retval = new wocParser.function_return();
         retval.start = input.LT(1);
@@ -1137,8 +1139,8 @@ public class wocParser extends Parser {
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:97:2: ( ID '(' termlist ')' )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:97:4: ID '(' termlist ')'
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:99:2: ( ID '(' termlist ')' )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:99:4: ID '(' termlist ')'
             {
             ID11=(Token)match(input,ID,FOLLOW_ID_in_function452); 
 
@@ -1175,7 +1177,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "constant"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:100:1: constant returns [Constant constnt] : ( ID | ( '-' )? INT );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:102:1: constant returns [Constant constnt] : ( ID | ( '-' )? INT );
     public final Constant constant() throws RecognitionException {
         Constant constnt = null;
 
@@ -1184,7 +1186,7 @@ public class wocParser extends Parser {
         Token INT14=null;
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:101:2: ( ID | ( '-' )? INT )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:2: ( ID | ( '-' )? INT )
             int alt17=2;
             int LA17_0 = input.LA(1);
 
@@ -1203,7 +1205,7 @@ public class wocParser extends Parser {
             }
             switch (alt17) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:101:4: ID
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:4: ID
                     {
                     ID13=(Token)match(input,ID,FOLLOW_ID_in_constant475); 
 
@@ -1212,9 +1214,9 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:102:4: ( '-' )? INT
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:4: ( '-' )? INT
                     {
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:102:4: ( '-' )?
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:4: ( '-' )?
                     int alt16=2;
                     int LA16_0 = input.LA(1);
 
@@ -1223,7 +1225,7 @@ public class wocParser extends Parser {
                     }
                     switch (alt16) {
                         case 1 :
-                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:102:5: '-'
+                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:5: '-'
                             {
                             match(input,22,FOLLOW_22_in_constant483); 
 
@@ -1257,13 +1259,13 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "comp_sym"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:105:1: comp_sym returns [OP openu] : ( '<' | '<=' | '>=' | '>' | '=' | '!=' );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:107:1: comp_sym returns [OP openu] : ( '<' | '<=' | '>=' | '>' | '=' | '!=' );
     public final OP comp_sym() throws RecognitionException {
         OP openu = null;
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:106:2: ( '<' | '<=' | '>=' | '>' | '=' | '!=' )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:2: ( '<' | '<=' | '>=' | '>' | '=' | '!=' )
             int alt18=6;
             switch ( input.LA(1) ) {
             case 27:
@@ -1306,7 +1308,7 @@ public class wocParser extends Parser {
 
             switch (alt18) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:106:4: '<'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:4: '<'
                     {
                     match(input,27,FOLLOW_27_in_comp_sym503); 
 
@@ -1315,7 +1317,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:107:4: '<='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:4: '<='
                     {
                     match(input,28,FOLLOW_28_in_comp_sym510); 
 
@@ -1324,7 +1326,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:4: '>='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:110:4: '>='
                     {
                     match(input,31,FOLLOW_31_in_comp_sym517); 
 
@@ -1333,7 +1335,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:4: '>'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:111:4: '>'
                     {
                     match(input,30,FOLLOW_30_in_comp_sym524); 
 
@@ -1342,7 +1344,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:110:4: '='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:112:4: '='
                     {
                     match(input,29,FOLLOW_29_in_comp_sym531); 
 
@@ -1351,7 +1353,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:111:4: '!='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:113:4: '!='
                     {
                     match(input,16,FOLLOW_16_in_comp_sym538); 
 

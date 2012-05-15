@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Stack;
 import network.Pair;
 import org.jgrapht.graph.DirectedSubgraph;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 /**
@@ -258,6 +259,8 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
     @Override
     protected void closeActualSCC(){
+        // TODO AW fix/delete
+        if(true) throw new NotImplementedException();
         c.getRete().propagate(); //think this is not really needed anymore
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
@@ -265,10 +268,10 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             }
         }
         for(Predicate p: SCCPreds.get(actualSCC)){
-           if(c.getRete().containsPredicate(p, false)) {
+           //if(c.getRete().containsPredicate(p, false)) {
                //System.out.println("Closing Predicate: " + p);
                    c.getRete().getBasicNodeMinus(p).close();
-           }
+           //}
         }
         this.actualSCC++;
         this.closedAt.add(this.memory.getDecisonLevel());
@@ -286,7 +289,13 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         this.closedAt.add(this.memory.getDecisonLevel());*/
     }
     
-    private boolean closeActualSCCWithReturnValue(){
+    private boolean closeActualSCCFromOutside(){
+        System.out.println("Closing SCC! lv: " + this.actualSCC + " : " + this.SCCPreds.get(this.actualSCC));
+        for(ChoiceNode cN: SCC.get(actualSCC)){
+            if(!cN.getAllInstances().isEmpty()){
+                return false;
+            }
+        }
         c.getRete().propagate(); //think this is not really needed anymore
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
@@ -295,10 +304,33 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             }
         }
         for(Predicate p: SCCPreds.get(actualSCC)){
-           if(c.getRete().containsPredicate(p, false)) {
+           //if(c.getRete().containsPredicate(p, false)) {
                //System.out.println("Closing Predicate: " + p);
                    c.getRete().getBasicNodeMinus(p).close();
-           }
+           //}
+        }
+        this.actualSCC++;
+        this.closedAt.add(this.memory.getDecisonLevel());
+        c.getRete().propagate();
+        return true;
+    }
+    
+    private boolean closeActualSCCWithReturnValue(){
+        System.out.println("Closing SCC! lv: " + this.actualSCC + " : " + this.SCCPreds.get(this.actualSCC));
+        c.getRete().propagate(); //think this is not really needed anymore
+        for(Predicate p: SCCPreds.get(actualSCC)){
+            if(!c.getClosureStatusForOutside(p)){
+                System.out.println("Returning false because: " + !c.getClosureStatusForOutside(p) + " - " + p);
+                return false;
+            }else{
+                System.out.println(p +" :  "+ c.getClosureStatusForOutside(p));
+            }
+        }
+        for(Predicate p: SCCPreds.get(actualSCC)){
+           //if(c.getRete().containsPredicate(p, false)) {
+               //System.out.println("Closing Predicate: " + p);
+                   c.getRete().getBasicNodeMinus(p).close();
+           //}
         }
         this.actualSCC++;
         this.closedAt.add(this.memory.getDecisonLevel());
@@ -321,6 +353,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
     @Override
         public void DeriveSCC(){
+        System.out.println("DeriveSCC called.");
         SCC = new ArrayList<ArrayList<ChoiceNode>>();
         SCCPreds = new ArrayList<ArrayList<Predicate>>();
         SCCSize = new ArrayList<Integer>();
@@ -345,6 +378,20 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
              SCCSize.add(SCC.get(i).size());
         }
         
+        System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
+        for(int i = 0; i < this.SCC.size();i++){
+            System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i));
+        }
+        for(int i = 0; i < this.SCC.size();i++){
+            System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i) + " :::: " + this.SCC.get(i));
+        }
+        int i = 0;
+        for(DirectedSubgraph gsg: g.getSCCs()){
+            i++;
+            System.out.println("SCC: " + i);
+            System.out.println(gsg.vertexSet());
+        }
+        
     }
     
     private boolean closeProcedure(){
@@ -357,9 +404,14 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     }
     
     public void pushClosureFromOutside(Predicate p){
-        this.closedfromoutside.push(new Pair<Integer,Predicate>(this.getDecisionLevel(),p));
-        this.closeActualSCC();
-        this.closeProcedure();
+       
+            this.closedfromoutside.push(new Pair<Integer,Predicate>(this.getDecisionLevel(),p));
+        
+        //if (this.SCCPreds.size()<= this.actualSCC){
+            
+            this.closeActualSCCFromOutside();
+        //}
+            this.closeProcedure();
     }
     
     @Override

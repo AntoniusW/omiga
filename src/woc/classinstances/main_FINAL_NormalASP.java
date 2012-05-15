@@ -69,7 +69,7 @@ public class main_FINAL_NormalASP {
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         
         // create context
-        ContextASPRewriting ctx = new ContextASPRewriting();
+        ContextASPMCSRewriting ctx = new ContextASPMCSRewriting();
         // parsing with ANTLR
         try {
             // setting up lexer and parser
@@ -87,7 +87,7 @@ public class main_FINAL_NormalASP {
                     
                     System.out.println("Parsed program, starting rewriting...");
                     
-                    Rewriter_easy rewriter = new Rewriter_easy();
+                    Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
                     ctx = rewriter.rewrite(ctx);
                     
                     System.out.println("Read in program is: ");

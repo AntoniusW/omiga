@@ -473,6 +473,7 @@ public class ChoiceUnit {
     protected int actualSCC;
     protected Stack<Integer> closedAt;
     public void DeriveSCC(){
+        System.out.println("DeriveSCC called in ChoiceUnit.");
         SCC = new ArrayList<ArrayList<ChoiceNode>>();
         SCCPreds = new ArrayList<ArrayList<Predicate>>();
         SCCSize = new ArrayList<Integer>();

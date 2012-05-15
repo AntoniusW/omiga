@@ -42,7 +42,7 @@ public class Rewriter_easyMCS {
      * @param c The context you want to rewrite
      * @return the rewritten context
      */
-    public ContextASPMCSRewriting rewrite(ContextASP c) throws RuleNotSafeException, FactSizeException{
+    public ContextASPMCSRewriting rewrite(ContextASPMCSRewriting c) throws RuleNotSafeException, FactSizeException{
         int counter = 0;
         ContextASPMCSRewriting ret = new ContextASPMCSRewriting();
         //ret.setINFActs(c.getAllINFacts());
@@ -182,6 +182,10 @@ public class Rewriter_easyMCS {
             for(Instance inz: c.getAllINFacts().get(p)){
                 ret.addFact2OUT(p, inz);
             }
+        }
+        
+        for (Predicate predicate : c.getFromOutside().keySet()) {
+            ret.registerFactFromOutside(predicate);
         }
         
         return ret;

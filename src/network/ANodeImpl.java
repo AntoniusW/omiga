@@ -146,7 +146,7 @@ public class ANodeImpl implements ANodeInterface {
         }
         
         ctx.propagate();
-        //System.err.println("First Propagation finsihed: " + System.currentTimeMillis());
+        System.out.println("First Propagation finished: " + System.currentTimeMillis());
         ctx.getChoiceUnit().DeriveSCC();
         ctx.getChoiceUnit().killSoloSCC();
         
@@ -331,7 +331,10 @@ public class ANodeImpl implements ANodeInterface {
         System.out.println("Node[" + local_name +"]: Received facts from "+serializingFrom +":");
         System.out.println("Node[" + local_name +"]: HAF: ctx.decisionLevel (decision_level_before_push) = "+ctx.getDecisionLevel());
         decision_level_before_push = ctx.getDecisionLevel();
-        for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
+        
+        HashMap<Predicate,ArrayList<Instance>> in_facts_map = (HashMap<Predicate,ArrayList<Instance>>) in_facts;
+        ctx.addFactsFromOutside(in_facts_map);
+        /*for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
             
             // print out what was received
             System.out.println("Node[" + local_name +"]: Predicate "+pred.getKey().getName()+"/"+
@@ -345,7 +348,7 @@ public class ANodeImpl implements ANodeInterface {
                 System.out.println("Node[" + local_name +"]: Adding Predicate / Instance = "+pred.getKey()+"/"+inst);
                 ANodeImpl.ctx.addFactFromOutside(pred.getKey(), inst);
             }
-        }
+        }*/
         
         System.out.println("Node["+local_name+"]: Closed predicates are: "+closed_predicates);
         for (Predicate predicate : closed_predicates) {
@@ -551,7 +554,12 @@ public class ANodeImpl implements ANodeInterface {
             }
             ArrayList<Predicate> closed_preds = new ArrayList<Predicate>();
             for (Predicate pred : required_predicates.get(node.getArg1())) {
-                if ( ctx.getClosureStatusForOutside(pred) == true ) {
+                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx: "+ ctx);
+                System.out.println("Node["+local_name+"]: PushDerivedFacts: pred: "+ pred);
+                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete: "+ ctx.getRete());
+                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicLayerMinus: "+ ctx.getRete().getBasicLayerMinus());
+                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicNodeMinus: "+ ctx.getRete().getBasicNodeMinus(pred));
+                if ( ctx.getRete().getBasicNodeMinus(pred).isClosed()) {
                     System.out.println("Node[" + local_name +"]: PushDerivedFacts: Predicate closed "+pred.toString());
                     will_push = true;
                     closed_preds.add(pred);
