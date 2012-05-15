@@ -178,7 +178,8 @@ public class ANodeImpl implements ANodeInterface {
                 //System.out.println("Node[" + node_name +"]: Currently listed predicates of node ["+from_node+"]: "+preds_from_node);
                 
                 // register predicate at local solver to come from outside
-                ANodeImpl.ctx.registerFactFromOutside(pred);
+                // is done in parser already
+                //ANodeImpl.ctx.registerFactFromOutside(pred);
             }
         }
         System.out.println("Node[" + local_name +"]: import predicates: "+import_predicates);
