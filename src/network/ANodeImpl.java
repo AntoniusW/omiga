@@ -291,6 +291,7 @@ public class ANodeImpl implements ANodeInterface {
                 local_pred_name = other_node+":"+pred_desc.getKey().getArg1();
             }
             Predicate pred = Predicate.getPredicate(local_pred_name, pred_desc.getKey().getArg2());
+            //ctx.getRete().addPredicatePlus(pred);
             pred_map.put( pred_desc.getValue(), pred);
             System.out.println("Node[" + local_name +"]: Added to mapping: "+pred+" with value "+pred_desc.getValue()+" from "+other_node);
         }
@@ -383,6 +384,10 @@ public class ANodeImpl implements ANodeInterface {
                     throw new RemoteException("Node[" + local_name +"]: Node identifier of received import predicate ["+pair.getArg1()+"] differs from local name ["+local_name+"]");
             String local_pred_name = pair.getArg1().replaceFirst(".*:", "");
             System.out.println("Node[" + local_name +"]: Localized predicate "+ pair.getArg1() + " to "+local_pred_name);
+            // check that the imported predicate exists locally
+            if(!local_predicates.contains(Predicate.getPredicate(local_pred_name, pair.getArg2()))) {
+                throw new RemoteException("Node["+local_name+"]: requested non-existent predicate "+pair.getArg1()+"/"+pair.getArg2()+" from Node "+from);
+            }
             required_preds.add(Predicate.getPredicate(local_pred_name, pair.getArg2()));
             
         }
@@ -554,11 +559,15 @@ public class ANodeImpl implements ANodeInterface {
             }
             ArrayList<Predicate> closed_preds = new ArrayList<Predicate>();
             for (Predicate pred : required_predicates.get(node.getArg1())) {
-                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx: "+ ctx);
-                System.out.println("Node["+local_name+"]: PushDerivedFacts: pred: "+ pred);
-                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete: "+ ctx.getRete());
-                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicLayerMinus: "+ ctx.getRete().getBasicLayerMinus());
-                System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicNodeMinus: "+ ctx.getRete().getBasicNodeMinus(pred));
+                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx: "+ ctx);
+                //System.out.println("Node["+local_name+"]: PushDerivedFacts: Predicate" +pred+" arity: "+pred.getArity()+" hashCode: "+ pred.hashCode());
+                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete: "+ ctx.getRete());
+                //System.out.println("Outputing hash codes:");
+                //for (Predicate predicate : ctx.getRete().getBasicLayerMinus().keySet()) {
+                //    System.out.println("Predicate "+predicate+" arity: "+predicate.getArity()+" hashCode: "+ predicate.hashCode());
+                //}
+                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicLayerMinus: "+ ctx.getRete().getBasicLayerMinus().keySet());
+                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicNodeMinus: "+ ctx.getRete().getBasicNodeMinus(pred));
                 if ( ctx.getRete().getBasicNodeMinus(pred).isClosed()) {
                     System.out.println("Node[" + local_name +"]: PushDerivedFacts: Predicate closed "+pred.toString());
                     will_push = true;

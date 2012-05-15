@@ -4,7 +4,7 @@ neg_offer(n2,S) :- n2:apply(S), not offer(n2,S).
 wait_list(n2,S) :- n2:apply(S), neg_offer(n2,S), not out(n2,S).
 out(n2,S) :- n2:apply(S), neg_offer(n2,S), not wait_list(n2,S).
 
-refuse(S) :- offer(n2,S), n2:refuse(S).
+refuse(S) :- offer(n2,S), n2:refuse(n2,S).
 
 second_offer(n2,S) :- wait_list(n2,S), refuse(S).
 
@@ -15,7 +15,7 @@ neg_offer(n3,S) :- n3:apply(S), not offer(n3,S).
 wait_list(n3,S) :- n3:apply(S), neg_offer(n3,S), not out(n3,S).
 out(n3,S) :- n3:apply(S), neg_offer(n3,S), not wait_list(n3,S).
 
-refuse(S) :- offer(n3,S), n3:refuse(S).
+refuse(S) :- offer(n3,S), n3:refuse(n3,S).
 
 second_offer(n3,S) :- wait_list(n3,S), refuse(S).
 
