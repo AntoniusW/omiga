@@ -14,6 +14,12 @@ import java.util.ArrayList;
  */
 public interface DisControllerInterface extends Remote {
     
+    public int getCountAnswers()  throws RemoteException;
+    
+    public int getCountPotentialAnswers()  throws RemoteException;
+    
+    public ReplyMessage finalClosing() throws RemoteException;
+    
     public ReplyMessage init(ArrayList<Pair<String, DisControllerInterface>> controller) throws RemoteException;
     
     public void makeChoice(int global_level, int last_guy) throws RemoteException;

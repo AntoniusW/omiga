@@ -63,8 +63,13 @@ public class Client {
             
             for (Pair<String, ANodeInterface> pair : nodes) {
                 pair.getArg2().propagate(0);   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
-            }            
+            }
             
+            System.out.println("Client. Interpretation after first round of all propagation");
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().printAnswer();
+            }
+            System.out.println("*************************************************************");
         }
         catch (Exception e) {
             System.err.println("Client ctor ERROR.");

@@ -21,6 +21,8 @@ public class DisControllerImpl implements DisControllerInterface {
     private int system_size;
     private ANodeInterface local_node;        
     private ArrayList<Pair<String, DisControllerInterface>> all_controllers;
+    private int count_answer;
+    private int count_potential_answer;
     
     Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
     
@@ -31,6 +33,9 @@ public class DisControllerImpl implements DisControllerInterface {
             system_size = size;
             String local_name = "n" + (myid+1);
             
+            count_answer = 0;
+            count_potential_answer = 0;
+            
             //registry = LocateRegistry.getRegistry("127.0.0.1");
             //local_node = (ANodeInterface) registry.lookup(local_name);
             local_node = new ANodeImpl(local_name, filename, filter);
@@ -39,6 +44,16 @@ public class DisControllerImpl implements DisControllerInterface {
             System.err.println("Controller ctor ERROR.");
             e.printStackTrace();
         }
+    }
+    
+    public int getCountAnswers() throws RemoteException 
+    {
+        return count_answer;
+    }
+    
+    public int getCountPotentialAnswers() throws RemoteException 
+    {
+        return count_potential_answer;
     }
     
     // called by Client
@@ -108,7 +123,40 @@ public class DisControllerImpl implements DisControllerInterface {
             System.err.println("DisController. printAnswer ERROR.");
             e.printStackTrace();
         }        
-    }    
+    }
+    
+    @Override
+    public ReplyMessage finalClosing() throws RemoteException
+    {
+        return local_node.finalClosing();
+    }
+    
+    private ReplyMessage doClosing()
+    {
+        try
+        {
+            assert (myid == system_size - 1);
+            
+            for (int i = 0; i < system_size - 1; i++)
+            {
+                System.out.println("Controller. Final closing at node[" + i + "]");
+                if (all_controllers.get(i).getArg2().finalClosing() == ReplyMessage.INCONSISTENT)
+                {
+                    System.out.println("Controller. Killing answer set after finalClosing.");
+                    return ReplyMessage.INCONSISTENT;
+                }
+            }
+            
+            return local_node.finalClosing();
+        }
+        catch (Exception e)
+        {
+            System.err.println("DisController. finalClosing ERROR.");
+            e.printStackTrace();
+        }
+        
+        return ReplyMessage.SUCCEEDED;
+    }
 
     @Override
     public void makeChoice(int global_level, int last_guy) throws RemoteException {
@@ -133,12 +181,13 @@ public class DisControllerImpl implements DisControllerInterface {
                     Pair<Integer, Integer> p = stack.pop();
                     global_level = p.getArg1();
                     assert (myid == p.getArg2());
+                    System.out.println("DisController[" + myid + "]. makeChoice got inconsistent. pop (global_level,last_guy) = (" + global_level + "," + myid + ")");
                     makeBranch(global_level);
                 }
                 else
                 {
                     assert (reply == ReplyMessage.SUCCEEDED);
-                    System.out.println("Ask first controller to do the next choice.");
+                    System.out.println("Ask first controller to do the next choice. global_level = " + global_level + ". myid = " + myid);
                     all_controllers.get(0).getArg2().makeChoice(global_level, myid);
                 }
             }
@@ -146,8 +195,14 @@ public class DisControllerImpl implements DisControllerInterface {
             {
                 if (myid == system_size - 1)
                 {
-                    System.out.println("DisController[" + myid + "]. AN ANSWER FOUND");
-                    printAnswer();
+                    count_potential_answer++;
+                    System.out.println("DisController[" + myid + "]. A POTENTIAL ANSWER FOUND. Now do final closing.");                    
+                    if (doClosing() == ReplyMessage.SUCCEEDED)
+                    {
+                        System.out.println("DisController[" + myid + "]. AN ANSWER FOUND");
+                        count_answer++;
+                        printAnswer();
+                    }
                     System.out.println("DisController[" + myid + "]. Request last guy = " + last_guy + " to make a branch");
                     all_controllers.get(last_guy).getArg2().makeBranch(global_level);
                 }
@@ -167,7 +222,8 @@ public class DisControllerImpl implements DisControllerInterface {
     @Override
     public void makeBranch(int global_level) throws RemoteException {
         try {
-            System.out.println("DisController[" + myid + "]. Backtrack the whole system to global level = " + global_level);
+            int glmo = global_level-1;
+            System.out.println("DisController[" + myid + "]. Backtrack the whole system to global level = " + glmo);
             
             if (global_level == 0)
             {
@@ -177,11 +233,12 @@ public class DisControllerImpl implements DisControllerInterface {
             
             backTrack(global_level-1);
             
-            Pair<Integer, Integer> p = stack.pop();
-            assert (p.getArg2() == myid);
-            assert (p.getArg1() == global_level-1);
+            //Pair<Integer, Integer> p = stack.pop();
+            //assert (p.getArg2() == myid);
+            //assert (p.getArg1() == global_level-1);
+            //System.out.println("DisController[" + myid + "]. pop(global_level,myid) = (" + global_level + "," + myid + ")");
             
-            global_level--;
+            //global_level--;
             
             ReplyMessage reply = local_node.hasMoreBranch();
             switch (reply)
@@ -201,20 +258,32 @@ public class DisControllerImpl implements DisControllerInterface {
                 case NO_MORE_BRANCH:
                     if (global_level > 1)
                     {
-                        p = stack.pop();
+                        Pair<Integer, Integer> p = stack.pop();
                         assert (p.getArg1() == global_level-1);
+                        global_level--;
                         int last_guy = p.getArg2();
                         all_controllers.get(last_guy).getArg2().makeBranch(global_level);
+                    }
+                    else
+                    {
+                        System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
+                        System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());                        
                     }
                     // otherwise global_level == 1 ~~> FINISH
                     break;
                 case NO_MORE_ALTERNATIVE:
                     if (!stack.empty())
                     {
-                        p = stack.pop();
+                        Pair<Integer, Integer> p = stack.pop();
                         assert (p.getArg1() == global_level-1);
+                        global_level--;
                         int last_guy = p.getArg2();
                         all_controllers.get(last_guy).getArg2().makeBranch(global_level);
+                    }
+                    else
+                    {
+                        System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + count_potential_answer);
+                        System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + count_answer);
                     }
                     // FINISH
                     break;
@@ -222,7 +291,7 @@ public class DisControllerImpl implements DisControllerInterface {
         }
         catch (Exception e)
         {
-            System.err.println("DisController. makeChoice ERROR.");
+            System.err.println("DisController. makeBranch ERROR.");
             e.printStackTrace();
         }        
     }
