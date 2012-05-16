@@ -38,9 +38,9 @@ public class AExternalizedPredicate implements Externalizable {
      * corresponding object from the mapping.
      */
     public Object readResolve() throws ObjectStreamException {
-        System.out.println("Node["+ANodeImpl.local_name+"] deserializing from Node["+ANodeImpl.serializingFrom+"]");
-        System.out.println("Local predicate_mapping is: "+ANodeImpl.predicate_mapping.get(ANodeImpl.serializingFrom));
-        System.out.println("Received Predicate-int "+value+ ", mapped to "+ANodeImpl.predicate_mapping.get(ANodeImpl.serializingFrom).get(value));
+        //System.out.println("Node["+ANodeImpl.local_name+"] deserializing from Node["+ANodeImpl.serializingFrom+"]");
+        //System.out.println("Local predicate_mapping is: "+ANodeImpl.predicate_mapping.get(ANodeImpl.serializingFrom));
+        //System.out.println("Received Predicate-int "+value+ ", mapped to "+ANodeImpl.predicate_mapping.get(ANodeImpl.serializingFrom).get(value));
         return ANodeImpl.predicate_mapping.get(ANodeImpl.serializingFrom).get(value);
     }
 }

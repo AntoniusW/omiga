@@ -114,8 +114,8 @@ public class Constant extends Term implements OperandI, Serializable {
   
    
     public Object writeReplace() throws ObjectStreamException {
-        System.out.println("RMI: Externalizing: "+this.name);
-        System.out.println("RMI: Mapping is: "+ANodeImpl.out_mapping.get(this));
+        //System.out.println("RMI: Externalizing: "+this.name);
+        //System.out.println("RMI: Mapping is: "+ANodeImpl.out_mapping.get(this));
         return new AExternalizedForm(ANodeImpl.out_mapping.get(this));
     }
 

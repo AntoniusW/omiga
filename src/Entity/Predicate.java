@@ -146,8 +146,8 @@ public class Predicate implements Serializable {
     }
     
     public Object writeReplace() throws ObjectStreamException {
-        System.out.println("RMI: Predicate Externalizing: "+this.name);
-        System.out.println("RMI: Predicate Mapping is: "+ANodeImpl.out_mapping.get(this));
+        //System.out.println("RMI: Predicate Externalizing: "+this.name);
+        //System.out.println("RMI: Predicate Mapping is: "+ANodeImpl.out_mapping.get(this));
         return new AExternalizedPredicate(ANodeImpl.out_mapping.get(this));
     }
     
