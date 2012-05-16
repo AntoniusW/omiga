@@ -302,7 +302,17 @@ public class DisControllerImpl implements DisControllerInterface {
         int myid = Integer.parseInt(args[0]);
         int size = Integer.parseInt(args[1]);
         String filename = args[2];
-        String filter = args[3];
+        
+        String filter;
+        if (args.length == 4)
+        {
+            filter = args[3];
+        }
+        else
+        {
+            filter = "";
+        }
+        
         String controller_name = "d" + myid;
         
         System.out.println("DisController. MyID = " + myid);

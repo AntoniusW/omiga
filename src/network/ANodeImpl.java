@@ -642,7 +642,17 @@ public class ANodeImpl implements ANodeInterface {
     public static void main(String[] args) {
         String local_name = args[0];
         String filename = args[1];
-        String filter = args[2];
+        
+        String filter;
+        if (args.length == 3)
+        {
+            filter = args[2];
+        }
+        else
+        {
+            filter = "";
+        }
+        
         System.out.println("Node[" + local_name +"]: Starting NodeImpl.main(). args[0] = " + local_name);
         
         System.out.println("Node[" + local_name +"]: Input file is: " + filename);
