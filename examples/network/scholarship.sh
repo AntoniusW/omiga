@@ -22,11 +22,11 @@ echo $! > $PIDFILE
 
 
 echo "Starting nodes now ..."
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n1 $CTX1_FILE &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n1 $CTX1_FILE ok,wait_list,refuse,offer,has_wait,neg_offer,n2:apply,n3:apply,n2:refuse,n3:refuse,out,second_offer,scholarship,different &
 echo $! >> $PIDFILE
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n2 $CTX2_FILE &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n2 $CTX2_FILE n1:offer,apply,pick,refuse,n1:scholarship &
 echo $! >> $PIDFILE
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n3 $CTX3_FILE &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n3 $CTX3_FILE n1:offer,apply,pick,refuse,n1:scholarship &
 echo $! >> $PIDFILE
 
 
