@@ -67,6 +67,18 @@ def create_script(script_fn,
 
         f.closed
 
+def create_local_script(absolute_path, 
+                        local_program_file_name,
+                        local_script_file_name):
+    temp = ''
+    with open(absolute_path + '/templates/script-local.tpl', 'r') as f:
+        temp = f.readlines()
+    f.closed
+
+    with open(absolute_path + '/' + local_script_file_name, 'w') as f:
+        for line in temp:
+            f.write(line.format(local_program_file_name))
+    f.closed
 
 def create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, instance, absolute_path):
     # setting up the nodes' name and file names *************************
@@ -79,8 +91,11 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
     student_file_name = []
 
     str_instance = 'instance-' + str(n_org) + '-' + str(n_provider) + '-' + str(n_student) + '-' + str(density) + '-'
-    central_script_file_name = str_instance + instance + '-central' + '.sh'
-    distributed_script_file_name = str_instance + instance + '-dis' + '.sh'
+
+    central_script_file_name = str_instance + instance + '-central.sh'
+    distributed_script_file_name = str_instance + instance + '-dis.sh'
+    local_program_file_name = str_instance + instance + '.lp'
+    local_script_file_name = str_instance + instance + '-local.sh'
 
     name_count = 1
     for i in range(0,n_org):
@@ -159,7 +174,7 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
     # write to org files ****************************************************************************************************
     constraint = ''
 
-    with open(absolute_path + '/templates/constraint.tpl', 'r') as constraint_file:
+    with open(absolute_path + '/templates/org-constraint.tpl', 'r') as constraint_file:
         constraint = constraint_file.readline()
     constraint_file.closed
 
@@ -183,8 +198,15 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
             for s in provider_got_student_apps[i]:
                 for line in provider_template:
                     f.write(line.format(student_node_name[s]))
+
+            copy_content(absolute_path + '/templates/provider-constraint.tpl', f)
+
+            for s in provider_got_student_apps[i]:
+                for t in provider_got_student_apps[i]:
+                    if (s != t):
+                        f.write('different_student(' + student_node_name[s] + ',' + student_node_name[t] + ').\n')
+            f.write('scholarship(s' + str(i) + ').\n')
         f.closed
-            
 
     # write to student files ***********************************************************************************************
     student_template = ''
@@ -198,7 +220,38 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
             for p in student_applies_providers[i]:
                 for line in student_template:
                     f.write(line.format(provider_node_name[p], student_node_name[i]))
+
+            for s in student_applies_providers[i]:
+                for t in student_applies_providers[i]:
+                    if (s != t):
+                        f.write('different_scholarship(s' + str(s) + ',s' + str(t) + ').\n')
+
         f.closed
+
+    # write to local program files *****************************************************************************************
+    with open(absolute_path + '/' + local_program_file_name, 'w') as f:
+        copy_content(absolute_path + '/templates/local-program.tpl', f)
+
+        for i in range(0,n_student):
+            f.write('student(' + student_node_name[i] + ').\n')
+        f.write('\n')
+
+        for i in range(0,n_provider):
+            f.write('scholarship(s' + str(i) + ').\n')
+        f.write('\n')
+
+        for i in range(0, len(student_node_name)):
+            for j in range(0, len(student_node_name)):
+                if (i != j):
+                    f.write('different_student(' + student_node_name[i] + ',' + student_node_name[j] + ').\n')
+        f.write('\n')
+
+        for i in range(0,n_provider):
+            for j in range(0,n_provider):
+                if (i != j):
+                    f.write('different_scholarship(s' + str(i) + ',s' + str(j) + ').\n') 
+
+    f.closed
 
     # write to script files ************************************************************************************************
 
@@ -213,6 +266,10 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
                   org_file_name, provider_file_name, student_file_name, 
                   absolute_path,
                   'templates/script-start-dis-controller.tpl', 'Client')
+
+    create_local_script(absolute_path, 
+                        local_program_file_name, 
+                        local_script_file_name)
 
 def main(argv):
     # to run, for example: 
