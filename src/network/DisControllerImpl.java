@@ -113,7 +113,7 @@ public class DisControllerImpl implements DisControllerInterface {
     @Override
     public void makeChoice(int global_level, int last_guy) throws RemoteException {
         try {
-            if (local_node.hasMoreChoice())
+            if (local_node.hasMoreChoice(global_level))
             {
                 if (myid != last_guy)
                 {

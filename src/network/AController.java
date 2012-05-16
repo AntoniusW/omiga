@@ -47,7 +47,7 @@ public class AController {
     }
     
     
-    private int findNodeWithChoicePoint()
+    private int findNodeWithChoicePoint(int global_level)
     {
         try
         {
@@ -55,7 +55,7 @@ public class AController {
             {
                 System.out.println("Controller. findNodeWithChoicePoint(): checking, i = " + i);
 
-                if (nodes.get(i).getArg2().hasMoreChoice() == true)
+                if (nodes.get(i).getArg2().hasMoreChoice(global_level) == true)
                 {
                     System.out.println("Controller. findNodeWithChoicePoint(): return " + i);
                     return i;
@@ -161,7 +161,7 @@ public class AController {
             {                
                 if (action == Action.MAKE_CHOICE)
                 {
-                    current_node = findNodeWithChoicePoint();
+                    current_node = findNodeWithChoicePoint(global_level);
                     
                     
                     if (current_node != -1)

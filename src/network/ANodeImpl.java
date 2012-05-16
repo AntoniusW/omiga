@@ -96,7 +96,7 @@ public class ANodeImpl implements ANodeInterface {
             e.printStackTrace();
         }
         
-        global_to_local_dc.put(0, 0);
+        //global_to_local_dc.put(0, 0);
     }
 
     @Override
@@ -403,8 +403,10 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     @Override
-    public boolean hasMoreChoice() throws RemoteException {
+    public boolean hasMoreChoice(int global_level) throws RemoteException {
         System.out.println("Node[" + local_name + "]: before checking choice: local_dc = " + ctx.getDecisionLevel());
+        
+        int decision_level_before_asking_choice = ctx.getDecisionLevel();
         
         boolean moreChoice = ctx.choice();
 
@@ -413,6 +415,11 @@ public class ANodeImpl implements ANodeInterface {
         
         if (moreChoice)
         {
+            if (global_to_local_dc.get(global_level) == null)
+            {
+                System.out.println("Node[" + local_name + "]: hasMoreChoice. Store (global_level,local_dc) = (" + global_level + ", " + decision_level_before_asking_choice +")");
+                global_to_local_dc.put(global_level, decision_level_before_asking_choice);
+            }
             System.out.println("Node[" + local_name + "]: hasMoreChoice. Return TRUE.");
         }
         else

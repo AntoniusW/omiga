@@ -59,7 +59,7 @@ public interface ANodeInterface extends Remote {
     
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts, List<Predicate> closed_predicates) throws RemoteException;
     
-    public boolean hasMoreChoice() throws RemoteException;
+    public boolean hasMoreChoice(int global_level) throws RemoteException;
     
     public ReplyMessage propagate(int global_level) throws RemoteException;
 
