@@ -26,3 +26,15 @@ scholarship(s1).
 
 student(n2).
 student(n3).
+
+%ok_pick(n2) :- pick(n2,S).
+%ok_pick(n3) :- pick(n3,S).
+
+%:- not ok_pick(n2), offer(n2,S).
+%:- not ok_pick(n3), offer(n3,S).
+
+ok_pick(X) :- pick(X,S).
+:- not ok_pick(X), offer(X,S).
+
+:- pick(n2,S1), pick(n2,S2), different_scholarship(S1,S2).
+:- pick(n3,S1), pick(n3,S2), different_scholarship(S1,S2).
