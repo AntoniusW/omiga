@@ -427,6 +427,7 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage propagate(int global_level) throws RemoteException {
         
         int local_dc = ctx.getDecisionLevel();
+        decision_level_before_push = ctx.getDecisionLevel();
         
         System.out.println("Node[" + local_name + "]: before propagate. local_dc = " + local_dc);
         
@@ -509,7 +510,7 @@ public class ANodeImpl implements ANodeInterface {
             System.out.println("Node[" + local_name + "]: makeBranch. remove(" + gl1 + ").");
             
             System.out.println("After backtracking. Current local decision level = " + ctx.getDecisionLevel());
-            decision_level_before_push = ctx.getDecisionLevel();
+            //decision_level_before_push = ctx.getDecisionLevel();
         }
         else
         {
