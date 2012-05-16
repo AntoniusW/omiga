@@ -24,7 +24,7 @@ public class DisControllerImpl implements DisControllerInterface {
     
     Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
     
-    public DisControllerImpl(int id, int size, String filename)
+    public DisControllerImpl(int id, int size, String filename, String filter)
     {
         try {
             myid = id;
@@ -33,7 +33,7 @@ public class DisControllerImpl implements DisControllerInterface {
             
             //registry = LocateRegistry.getRegistry("127.0.0.1");
             //local_node = (ANodeInterface) registry.lookup(local_name);
-            local_node = new ANodeImpl(local_name, filename);
+            local_node = new ANodeImpl(local_name, filename, filter);
         }
         catch (Exception e) {
             System.err.println("Controller ctor ERROR.");
@@ -233,6 +233,7 @@ public class DisControllerImpl implements DisControllerInterface {
         int myid = Integer.parseInt(args[0]);
         int size = Integer.parseInt(args[1]);
         String filename = args[2];
+        String filter = args[3];
         String controller_name = "d" + myid;
         
         System.out.println("DisController. MyID = " + myid);
@@ -244,7 +245,7 @@ public class DisControllerImpl implements DisControllerInterface {
         }
         
         try {
-            DisControllerInterface local_controller = new DisControllerImpl(myid, size, filename);
+            DisControllerInterface local_controller = new DisControllerImpl(myid, size, filename, filter);
             DisControllerInterface stub =
                 (DisControllerInterface) UnicastRemoteObject.exportObject(local_controller,0);  // use anonymous/no port
             Registry registry = LocateRegistry.getRegistry();

@@ -96,11 +96,13 @@ public class AController {
     {
         try
         {
+            System.out.println("***************************************************************************************");
             for (int i = 0; i < system_size; i++)
             {
                 System.out.println("Controller. Request node[" + i + "] to print interpretation.");
                 nodes.get(i).getArg2().printAnswer();
             }
+            System.out.println("***************************************************************************************");            
         }
         catch (Exception e)
         {
@@ -146,6 +148,8 @@ public class AController {
                 System.out.println("Reply was: "+repl);
             }*/
             
+            System.out.println("Controller. Interpretation after first round of all propagation:");
+            printAnswer();
             
             Action action = Action.MAKE_CHOICE;
             int global_level = 0;
@@ -170,7 +174,7 @@ public class AController {
                         
                         System.out.println("Controller. makeChoice done");
                         
-                        System.out.println("Interpretation at nodes after this choice:");
+                        System.out.println("Controller. Interpretation at nodes after this choice:");
                         printAnswer();                        
                         
                         if (reply == ReplyMessage.INCONSISTENT)
@@ -218,21 +222,26 @@ public class AController {
                         global_level = p.getArg1();
                         current_node = p.getArg2();
                         
-                        System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because an answer set found!");
+                        System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of a potential answer before!");
                         
                         action = Action.MAKE_BRANCH;
                     }
                 }
                 else if (action == Action.MAKE_BRANCH)
-                {                    
-                    backTrack(global_level-1);
+                {   
+                    int glmo = global_level - 1;
+                    System.out.println("Controller. start making branch by backtracking to global level = " + glmo);
+                    backTrack(global_level-1);                    
+                    System.out.println("Controller: Interpretation after backtracking to global level = " + glmo);
+                    printAnswer();
+                    
                     ReplyMessage reply = nodes.get(current_node).getArg2().hasMoreBranch();
                     switch (reply)
                     {
                         case HAS_BRANCH:
                             reply = nodes.get(current_node).getArg2().propagate(global_level);
                             
-                            System.out.println("Interpretation at nodes after making branch:");
+                            System.out.println("Controller. Interpretation at nodes after making branch:");
                             printAnswer();                            
                             
                             if (reply == ReplyMessage.SUCCEEDED)
@@ -270,7 +279,10 @@ public class AController {
                     }
                 }
             }
-            System.out.println("Total number of answer = " + answer_count);
+            
+            potential_count--;
+            System.out.println("Total number of potential answers = " + potential_count);
+            System.out.println("Total number of answers = " + answer_count);
         } 
         catch (Exception e) {
             System.err.println("Controller. Controller mainLoop ERROR.");

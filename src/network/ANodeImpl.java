@@ -68,17 +68,18 @@ public class ANodeImpl implements ANodeInterface {
     private static ContextASPMCSRewriting ctx;
     private static int decision_level_before_push;
     public static String local_name;
-    private static String filter;
+    private String filter;
     private static int rewriting;
     private String filename;
     private static Integer answersets;
     private static boolean outprint;
 
-    public ANodeImpl(String local_name, String filename) {
+    public ANodeImpl(String local_name, String filename, String filter) {
         super();
         
-        this.local_name=local_name;
-        this.filename=filename;
+        this.local_name = local_name;
+        this.filename = filename;
+        this.filter = filter;
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager() );
@@ -108,7 +109,6 @@ public class ANodeImpl implements ANodeInterface {
         long start = System.currentTimeMillis();
         rewriting = 1;
         answersets = 50000;
-        filter = null;
         outprint =true;
         
         // create context
@@ -153,7 +153,7 @@ public class ANodeImpl implements ANodeInterface {
         ctx.getChoiceUnit().killSoloSCC();
         
         System.out.println("After killSoloSCC");
-        ctx.printAnswerSet(null);
+        ctx.printAnswerSet(filter);
         
         // collecting local predicates
         System.out.println("Node[" + local_name +"]: Collecting local predicates.");
@@ -436,9 +436,9 @@ public class ANodeImpl implements ANodeInterface {
         
         ctx.propagate();
         
-        System.out.println("Node[" + local_name + "]: after propagate. local_dc = " + local_dc);
-        System.out.println("Node[" + local_name + "]: after propagate. interpretation = ");
-        ctx.printAnswerSet(null);
+        //System.out.println("Node[" + local_name + "]: after propagate. local_dc = " + local_dc);
+        System.out.println("Node[" + local_name + "]: after propagate. interpretation is ");
+        ctx.printAnswerSet(filter);
         
         
         if (ctx.isSatisfiable())
@@ -521,7 +521,7 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage printAnswer() throws RemoteException {
-        ctx.printAnswerSet(null);
+        ctx.printAnswerSet(filter);
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -607,19 +607,6 @@ public class ANodeImpl implements ANodeInterface {
         return ReplyMessage.SUCCEEDED;
     }
     
-    
-        
-    public static void main(String[] args) {
-        String local_name = args[0];
-        String filename = args[1];
-        System.out.println("Node[" + local_name +"]: Starting NodeImpl.main(). args[0] = " + local_name);
-        
-        System.out.println("Node[" + local_name +"]: Input file is: " + filename);
-        
-        // create and export the local node
-        ANodeImpl local_node= new ANodeImpl(local_name, filename);
-    }
-
     @Override
     public ReplyMessage finalClosing() throws RemoteException {
         int dec = ctx.getDecisionLevel()+1;
@@ -642,5 +629,19 @@ public class ANodeImpl implements ANodeInterface {
         }
         
         return ReplyMessage.SUCCEEDED;
+    }    
+        
+    public static void main(String[] args) {
+        String local_name = args[0];
+        String filename = args[1];
+        String filter = args[2];
+        System.out.println("Node[" + local_name +"]: Starting NodeImpl.main(). args[0] = " + local_name);
+        
+        System.out.println("Node[" + local_name +"]: Input file is: " + filename);
+        
+        // create and export the local node
+        ANodeImpl local_node= new ANodeImpl(local_name, filename, filter);
     }
+
+
 }
