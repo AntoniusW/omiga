@@ -53,7 +53,8 @@ public class main_FINAL {
         //filename = "network/ctx1.asd";
         //filename = "funcTermTest.txt";
         //filename = "simpleChoice.txt";
-        filename ="scholarship.txt";
+        //filename ="scholarship.txt";
+        filename = args[0];
         rewriting = 1;
         answersets = 50000;
         filter = null;
