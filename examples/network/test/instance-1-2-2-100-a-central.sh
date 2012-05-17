@@ -21,15 +21,15 @@ rmiregistry -J-Djava.class.path=$CLASSPATH &
 echo $! > $PIDFILE
 
 echo "Starting nodes now ..."
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n1 $NODE1_FILE n2:offer,n3:offer &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n1 $NODE1_FILE &
 echo $! >> $PIDFILE
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n2 $NODE2_FILE  ok,wait_list,refuse,offer,has_wait,neg_offer,scholarship,different_student,n4:apply,n5:apply,n4:refuse,n5:refuse &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n2 $NODE2_FILE &
 echo $! >> $PIDFILE
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n3 $NODE3_FILE  ok,wait_list,refuse,offer,has_wait,neg_offer,scholarship,different_student,n4:apply,n5:apply,n4:refuse,n5:refuse &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n3 $NODE3_FILE &
 echo $! >> $PIDFILE
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n4 $NODE4_FILE n2:scholarship,n3:scholarship,n2:offer,n3:offer,apply,pick,refuse &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n4 $NODE4_FILE &
 echo $! >> $PIDFILE
-java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n5 $NODE5_FILE n2:scholarship,n3:scholarship,n2:offer,n3:offer,apply,pick,refuse &
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n5 $NODE5_FILE &
 echo $! >> $PIDFILE
 # give nodes time to start up and register
 echo "Giving nodes time to start up," $SLEEP "sec."
