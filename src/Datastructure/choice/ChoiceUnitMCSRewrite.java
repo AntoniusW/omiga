@@ -86,7 +86,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     @Override
     public boolean choice(){
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-        //System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
+        System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
         /*System.out.println("SCCMAXSize= " + SCC.size());
         System.out.println("Current SCC = "+actualSCC);*/
         
@@ -100,7 +100,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
                 //System.out.println("POSITIVE GUESS possible!");
                 this.addChoicePoint();
                 Instance inz = cN.getAllInstances().get(0);
-                //System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
+                System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                 for(Atom a: cN.getRule().getBodyMinus()){
                     Instance toAdd = Unifyer.unifyAtom(a,inz, cN.getVarPositions());
                     //System.out.println("Adding: " + toAdd + " to: " + a.getPredicate());
@@ -130,7 +130,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
                 if(!cN.getAllInstances().isEmpty()){
                     this.addChoicePoint();
                     Instance inz = cN.getAllInstances().get(0);
-                    //System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
+                    System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                     for(Atom a: cN.getRule().getBodyMinus()){
                         Instance toAdd = Unifyer.unifyAtom(a,inz, cN.getVarPositions());
                         c.getRete().addInstanceMinus(a.getPredicate(), toAdd);
@@ -164,7 +164,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
             this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
-            //System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!");
+            System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!");
             //we push false,nextNode,nextInstance to our stacks, to later, on backtracking, know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);

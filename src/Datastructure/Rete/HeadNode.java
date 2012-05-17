@@ -75,7 +75,7 @@ public class HeadNode extends Node{
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             rete.satisfiable = false;
-            //System.out.println("UNSATISFIABLE!: " + instance + " Rule: " + r);
+            System.out.println("UNSATISFIABLE!: " + instance + " Rule: " + r);
             //rete.printAnswerSet();
             //rete.printAnswerSet();
             return;
@@ -149,7 +149,7 @@ public class HeadNode extends Node{
                 //System.out.println(rete.getChoiceUnit().getMemory().getNodes());
                 //System.out.println("HeadNode Of: " + this.from);
                 //rete.printAnswerSet();
-                //System.out.println("UNSATISFIABLE because of HeadNode: " + " instance: " + instance + " Atom: " + a);
+                System.out.println("UNSATISFIABLE because of HeadNode: " + " instance: " + instance + " Atom: " + a);
                 this.rete.satisfiable = false;
             }
         }/*else{
