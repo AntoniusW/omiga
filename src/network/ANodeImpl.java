@@ -73,9 +73,12 @@ public class ANodeImpl implements ANodeInterface {
     private String filename;
     private static Integer answersets;
     private static boolean outprint;
+    private int local_dc_limit;
 
     public ANodeImpl(String local_name, String filename, String filter) {
         super();
+        
+        local_dc_limit = 50;
         
         this.local_name = local_name;
         this.filename = filename;
@@ -338,6 +341,10 @@ public class ANodeImpl implements ANodeInterface {
         System.out.println("Node[" + local_name +"]: Received facts from "+serializingFrom +":");
         System.out.println("Node[" + local_name +"]: HAF: ctx.decisionLevel (decision_level_before_push) = "+ctx.getDecisionLevel());
         decision_level_before_push = ctx.getDecisionLevel();
+        if (ctx.getDecisionLevel() > local_dc_limit)
+        {
+            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+        }
         
         HashMap<Predicate,ArrayList<Instance>> in_facts_map = (HashMap<Predicate,ArrayList<Instance>>) in_facts;
         ctx.addFactsFromOutside(in_facts_map);
@@ -364,6 +371,11 @@ public class ANodeImpl implements ANodeInterface {
         
         System.out.println("Node[" + local_name +"]: Received facts end.");
         System.out.println("Node[" + local_name +"]: HAF: ctx.decisionLevel = "+ctx.getDecisionLevel());
+        
+        if (ctx.getDecisionLevel() > local_dc_limit)
+        {
+            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+        }
         
         // TODO AW find global decision level
         return this.propagate(global_level);
@@ -406,7 +418,17 @@ public class ANodeImpl implements ANodeInterface {
     public boolean hasMoreChoice(int global_level) throws RemoteException {
         System.out.println("Node[" + local_name + "]: before checking choice: local_dc = " + ctx.getDecisionLevel());
         
+        if (ctx.getDecisionLevel() > local_dc_limit)
+        {
+            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+        }
+        
         int decision_level_before_asking_choice = ctx.getDecisionLevel();
+        
+        if (ctx.getDecisionLevel() > local_dc_limit)
+        {
+            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+        }
         
         boolean moreChoice = ctx.choice();
 
@@ -471,6 +493,11 @@ public class ANodeImpl implements ANodeInterface {
         
         System.out.println("Node[" + local_name + "]: before propagate. local_dc = " + local_dc);
         
+        if (ctx.getDecisionLevel() > local_dc_limit)
+        {
+            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+        }
+        
         global_to_local_dc.put(global_level, local_dc);
         
         System.out.println("Node[" + local_name + "]: propagate. put(" + global_level + ", " + local_dc + ").");
@@ -509,11 +536,21 @@ public class ANodeImpl implements ANodeInterface {
     @Override
     public ReplyMessage hasMoreBranch() throws RemoteException {
         System.out.println("Node[" + local_name + "]: before checking branch: local_dc = " + ctx.getDecisionLevel());
+        
+        if (ctx.getDecisionLevel() > local_dc_limit)
+        {
+            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+        }
 
         
         ReplyMessage moreBranch = ctx.nextBranch();
         
         System.out.println("Node[" + local_name + "]: after checking branch: local_dc = " + ctx.getDecisionLevel());
+        
+        if (ctx.getDecisionLevel() > local_dc_limit)
+        {
+            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+        }
         
         switch (moreBranch)
         {
@@ -550,6 +587,12 @@ public class ANodeImpl implements ANodeInterface {
             System.out.println("Node[" + local_name + "]: makeBranch. remove(" + gl1 + ").");
             
             System.out.println("After backtracking. Current local decision level = " + ctx.getDecisionLevel());
+            
+            if (ctx.getDecisionLevel() > local_dc_limit)
+            {   
+                System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
+            }
+            
             //decision_level_before_push = ctx.getDecisionLevel();
         }
         else
