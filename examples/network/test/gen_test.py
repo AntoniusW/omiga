@@ -68,7 +68,7 @@ def create_script(script_fn,
         f.closed
 
 def create_local_script(absolute_path, 
-                        local_program_file_name,
+                        all_mixed_file_name,
                         local_script_file_name):
     temp = ''
     with open(absolute_path + '/templates/script-local.tpl', 'r') as f:
@@ -77,7 +77,7 @@ def create_local_script(absolute_path,
 
     with open(absolute_path + '/' + local_script_file_name, 'w') as f:
         for line in temp:
-            f.write(line.format(local_program_file_name))
+            f.write(line.format(all_mixed_file_name))
     f.closed
 
 def create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, instance, absolute_path):
@@ -96,6 +96,7 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
     distributed_script_file_name = str_instance + instance + '-dis.sh'
     local_program_file_name = str_instance + instance + '.lp'
     local_script_file_name = str_instance + instance + '-local.sh'
+    all_mixed_file_name = str_instance + instance + '-mixed.lp'
 
     name_count = 1
     for i in range(0,n_org):
@@ -171,87 +172,123 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
                 student_applies_providers[j].append(i)
                 print 'connect provider[' + str(i) + '] and student[' + str(j) + ']'
 
+    with open(absolute_path + '/' + all_mixed_file_name, 'w') as mixed_file:
     # write to org files ****************************************************************************************************
-    constraint = ''
+        constraint = ''
+        mixed_constraint = ''
 
-    with open(absolute_path + '/templates/org-constraint.tpl', 'r') as constraint_file:
-        constraint = constraint_file.readline()
-    constraint_file.closed
+        with open(absolute_path + '/templates/org-constraint.tpl', 'r') as constraint_file:
+            constraint = constraint_file.readline()
+        constraint_file.closed
 
-    for i in range(0,n_org):
-        n_child_providers = len(org_funds_providers[i])
-        with open(absolute_path + '/' + org_file_name[i], 'w') as f:
-            for j in range(0, n_child_providers-1):
-                for k in range(j+1, n_child_providers):
-                    f.write(constraint.format(provider_node_name[j], provider_node_name[k]))
-        f.closed
+        with open(absolute_path + '/templates/mixed-org-constraint.tpl', 'r') as constraint_file:
+            mixed_constraint = constraint_file.readline()
+        constraint_file.closed
+
+        for i in range(0,n_org):
+            n_child_providers = len(org_funds_providers[i])
+            with open(absolute_path + '/' + org_file_name[i], 'w') as f:
+                for j in range(0, n_child_providers-1):
+                    for k in range(j+1, n_child_providers):
+                        f.write(constraint.format(provider_node_name[j], provider_node_name[k]))
+                        mixed_file.write(mixed_constraint.format(provider_node_name[j], provider_node_name[k]))
+            f.closed
 
     # write to provider files ***********************************************************************************************
-    provider_template = ''
+        provider_template = ''
+        mixed_provider_template = ''
+        mixed_provider_constraint_template = ''
 
-    with open(absolute_path + '/templates/provider.tpl', 'r') as provider_file:
-        provider_template = provider_file.readlines()
-    provider_file.closed
+        with open(absolute_path + '/templates/provider.tpl', 'r') as provider_file:
+            provider_template = provider_file.readlines()
+        provider_file.closed
 
-    for i in range(0,n_provider):
-        with open(absolute_path + '/' + provider_file_name[i], 'w') as f:
-            for s in provider_got_student_apps[i]:
-                for line in provider_template:
-                    f.write(line.format(student_node_name[s]))
+        with open(absolute_path + '/templates/mixed-provider.tpl', 'r') as provider_file:
+            mixed_provider_template = provider_file.readlines()
+        provider_file.closed
 
-            copy_content(absolute_path + '/templates/provider-constraint.tpl', f)
+        with open(absolute_path + '/templates/mixed-provider-constraint.tpl', 'r') as provider_file:
+            mixed_provider_constraint_template = provider_file.readlines()
+        provider_file.closed
 
-            for s in provider_got_student_apps[i]:
-                for t in provider_got_student_apps[i]:
-                    if (s != t):
-                        f.write('different_student(' + student_node_name[s] + ',' + student_node_name[t] + ').\n')
-            f.write('scholarship(s' + str(i) + ').\n')
-        f.closed
+        for i in range(0,n_provider):
+            with open(absolute_path + '/' + provider_file_name[i], 'w') as f:
+                for s in provider_got_student_apps[i]:
+                    for line in provider_template:
+                        f.write(line.format(student_node_name[s]))
+
+                    for line in mixed_provider_template:
+                        mixed_file.write(line.format(student_node_name[s], provider_node_name[i]))
+
+                for line in mixed_provider_constraint_template:
+                    mixed_file.write(line.format(provider_node_name[i]))
+
+                copy_content(absolute_path + '/templates/provider-constraint.tpl', f)
+
+                for s in provider_got_student_apps[i]:
+                    for t in provider_got_student_apps[i]:
+                        if (s != t):
+                            f.write('different_student(' + student_node_name[s] + ',' + student_node_name[t] + ').\n')
+                f.write('scholarship(s' + str(i) + ').\n')
+                mixed_file.write(provider_node_name[i] + 'scholarship(s' + str(i) + ').\n')
+            f.closed
 
     # write to student files ***********************************************************************************************
-    student_template = ''
+        student_template = ''
+        mixede_student_template = ''
 
-    with open(absolute_path + '/templates/student.tpl', 'r') as student_file:
-        student_template = student_file.readlines()
-    student_file.closed    
+        with open(absolute_path + '/templates/student.tpl', 'r') as student_file:
+            student_template = student_file.readlines()
+        student_file.closed
 
-    for i in range(0,n_student):
-        with open(absolute_path + '/' + student_file_name[i], 'w') as f:
-            for p in student_applies_providers[i]:
-                for line in student_template:
-                    f.write(line.format(provider_node_name[p], student_node_name[i]))
+        with open(absolute_path + '/templates/mixed-student.tpl', 'r') as student_file:
+            mixed_student_template = student_file.readlines()
+        student_file.closed  
 
-            for s in student_applies_providers[i]:
-                for t in student_applies_providers[i]:
-                    if (s != t):
-                        f.write('different_scholarship(s' + str(s) + ',s' + str(t) + ').\n')
+        for i in range(0,n_student):
+            with open(absolute_path + '/' + student_file_name[i], 'w') as f:
+                for p in student_applies_providers[i]:
+                    for line in student_template:
+                        f.write(line.format(provider_node_name[p], student_node_name[i]))
+
+                    for line in mixed_student_template:
+                        mixed_file.write(line.format(provider_node_name[p], student_node_name[i]))
+
+                for s in student_applies_providers[i]:
+                    for t in student_applies_providers[i]:
+                        if (s != t):
+                            f.write('different_scholarship(s' + str(s) + ',s' + str(t) + ').\n')
+
+            f.closed
+
+    # write to local program files *****************************************************************************************
+        with open(absolute_path + '/' + local_program_file_name, 'w') as f:
+            copy_content(absolute_path + '/templates/local-program.tpl', f)
+
+            for i in range(0,n_student):
+                f.write('student(' + student_node_name[i] + ').\n')
+            f.write('\n')
+
+            for i in range(0,n_provider):
+                f.write('scholarship(s' + str(i) + ').\n')
+            f.write('\n')
+
+            for i in range(0, len(student_node_name)):
+                for j in range(0, len(student_node_name)):
+                    if (i != j):
+                        f.write('different_student(' + student_node_name[i] + ',' + student_node_name[j] + ').\n')
+                        mixed_file.write('different_student(' + student_node_name[i] + ',' + student_node_name[j] + ').\n')
+            f.write('\n')
+
+            for i in range(0,n_provider):
+                for j in range(0,n_provider):
+                    if (i != j):
+                        f.write('different_scholarship(s' + str(i) + ',s' + str(j) + ').\n') 
+                        mixed_file.write('different_scholarship(s' + str(i) + ',s' + str(j) + ').\n') 
 
         f.closed
 
-    # write to local program files *****************************************************************************************
-    with open(absolute_path + '/' + local_program_file_name, 'w') as f:
-        copy_content(absolute_path + '/templates/local-program.tpl', f)
-
-        for i in range(0,n_student):
-            f.write('student(' + student_node_name[i] + ').\n')
-        f.write('\n')
-
-        for i in range(0,n_provider):
-            f.write('scholarship(s' + str(i) + ').\n')
-        f.write('\n')
-
-        for i in range(0, len(student_node_name)):
-            for j in range(0, len(student_node_name)):
-                if (i != j):
-                    f.write('different_student(' + student_node_name[i] + ',' + student_node_name[j] + ').\n')
-        f.write('\n')
-
-        for i in range(0,n_provider):
-            for j in range(0,n_provider):
-                if (i != j):
-                    f.write('different_scholarship(s' + str(i) + ',s' + str(j) + ').\n') 
-
-    f.closed
+    mixed_file.closed
 
     # write to script files ************************************************************************************************
 
@@ -268,7 +305,7 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
                   'templates/script-start-dis-controller.tpl', 'Client')
 
     create_local_script(absolute_path, 
-                        local_program_file_name, 
+                        all_mixed_file_name, 
                         local_script_file_name)
 
 def main(argv):
