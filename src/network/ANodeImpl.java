@@ -65,6 +65,8 @@ public class ANodeImpl implements ANodeInterface {
     private Map<Integer, Integer> global_to_local_dc =
             new HashMap<Integer, Integer>();
     
+    private HashSet<Predicate> closed_predicates;
+    
     private static ContextASPMCSRewriting ctx;
     private static int decision_level_before_push;
     public static String local_name;
@@ -83,6 +85,8 @@ public class ANodeImpl implements ANodeInterface {
         this.local_name = local_name;
         this.filename = filename;
         this.filter = filter;
+        
+        closed_predicates = new HashSet<Predicate>();
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager() );
@@ -581,6 +585,13 @@ public class ANodeImpl implements ANodeInterface {
         
             ctx.backtrackTo(local_dc.intValue());
             global_to_local_dc.remove(global_level+1);
+
+            // remove all re-opened predicates from the list of closed predicates
+            for (Iterator<Predicate> it = closed_predicates.iterator(); it.hasNext();) {
+                Predicate predicate = it.next();
+                if( !ctx.getRete().getBasicNodeMinus(predicate).isClosed() )
+                    it.remove();
+            }
             
             int gl1 = global_level+1;
             
@@ -659,8 +670,9 @@ public class ANodeImpl implements ANodeInterface {
                 //}
                 //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicLayerMinus: "+ ctx.getRete().getBasicLayerMinus().keySet());
                 //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicNodeMinus: "+ ctx.getRete().getBasicNodeMinus(pred));
-                if ( ctx.getRete().getBasicNodeMinus(pred).isClosed()) {
+                if ( ctx.getRete().getBasicNodeMinus(pred).isClosed() && !closed_predicates.contains(pred)) {
                     System.out.println("Node[" + local_name +"]: PushDerivedFacts: Predicate closed "+pred.toString());
+                    closed_predicates.add(pred);
                     will_push = true;
                     closed_preds.add(pred);
                 }
