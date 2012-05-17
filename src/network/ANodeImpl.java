@@ -431,6 +431,39 @@ public class ANodeImpl implements ANodeInterface {
     }
     
     @Override
+    public ReplyMessage firstPropagate() throws RemoteException {
+        decision_level_before_push = 0;
+        System.out.println("Node[" + local_name + "]: firstPropagate.");
+        ctx.propagate();
+        
+        System.out.println("Node[" + local_name + "]: after firstPropagate. interpretation is ");
+        ctx.printAnswerSet(filter);
+        
+        if (ctx.isSatisfiable())
+        {
+            System.out.println("Node[" + local_name + "]: firstPropagate. Pushing.");
+            
+            ReplyMessage reply = pushDerivedFacts(0);
+            
+            if (reply == ReplyMessage.SUCCEEDED)
+            {
+                System.out.println("Node[" + local_name + "]: All neighbors propagated successfully. Return SUCCEEDED");
+                return ReplyMessage.SUCCEEDED;
+            }
+            else
+            {
+                System.out.println("Node[" + local_name + "]: A neighbor got inconsistent. Return INCONSISTENT");
+                return ReplyMessage.INCONSISTENT;
+            }
+        }
+        else
+        {
+            System.out.println("Node[" + local_name + "]: firstPropagate. Return INCONSISTENT.");
+            return ReplyMessage.INCONSISTENT;
+        }           
+    }
+    
+    @Override
     public ReplyMessage propagate(int global_level) throws RemoteException {
         
         int local_dc = ctx.getDecisionLevel();
@@ -608,7 +641,8 @@ public class ANodeImpl implements ANodeInterface {
                     System.out.println("Node[" + local_name +"]: Nothing to push to " + node.getArg1());
                 }
             } catch (RemoteException ex) {
-                Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Node[" + local_name +"]: Exception in pushing derived facts to:"+node.getArg1());
+                    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

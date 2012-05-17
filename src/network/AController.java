@@ -137,7 +137,8 @@ public class AController {
             
             // let all nodes propagate
             for (Pair<String, ANodeInterface> pair : nodes) {
-                pair.getArg2().propagate(0);   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
+                System.out.println("Controller. Ask node " + pair.getArg1() + " to do first propagation!");
+                pair.getArg2().firstPropagate();   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
             }
             
             /*
