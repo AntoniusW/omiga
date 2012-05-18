@@ -31,9 +31,17 @@ public class SelectionNodeNegative extends SelectionNode{
     @Override
     public boolean containsInstance(Instance instance){
         if(closed){
+            
+            if(instance.getSize() == 0){
+                return !rete.containsInstance(atom, Instance.getInstance(atom.getTerms()), true);
+            }
+            
             //System.out.println(this + " returning: " + !rete.containsInstance(atom, instance, true) + "when asked for: " + instance + " BECAUSE OF CLOSURE!");
             return !rete.containsInstance(atom, instance, true);
         }else{
+            if(instance.getSize() == 0){
+                return this.memory.containsInstance(Instance.getInstance(atom.getTerms()));
+            }
             //System.out.println(this + " returning: " + this.memory.containsInstance(instance) + "when asked for: " + instance);
             return this.memory.containsInstance(instance);
         }

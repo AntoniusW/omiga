@@ -101,6 +101,7 @@ public class SelectionNode extends Node{
             // if this node encapsulates a fact atom
             Instance instance2Add = Instance.getInstance(this.atom.getTerms());
             this.memory.addInstance(instance2Add);
+            super.addInstance(instance2Add, from);
             
             for(int i = 0; i < this.children.size();i++){
                 children.get(i).addInstance(instance2Add, false);

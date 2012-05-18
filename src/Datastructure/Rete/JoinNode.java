@@ -359,7 +359,7 @@ public class JoinNode extends Node{
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
             //if(!rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i))){
             //System.out.println("Does rete not contain: " + temp.get(i) + ": " + !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))));
-            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))) ){
+            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || sN.containsInstance((Instance.getInstance(selCrit1))) ){
 
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
                 //System.out.println("Rete contains: " + sN.getAtom().getPredicate() + "(" + temp.get(i) + ")" + "SN = " + sN.getAtom());
