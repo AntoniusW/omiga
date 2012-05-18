@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-05-15 15:35:37
+// $ANTLR 3.4 /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-05-18 14:02:54
 
 package parser.antlr;
 
@@ -74,22 +74,24 @@ public class wocParser extends Parser {
 
 
     private ContextASPMCSRewriting context;
+    int rule_or_fact_counter;
 
     public void setContext(ContextASPMCSRewriting context) {
     	this.context=context;
+    	rule_or_fact_counter=0;
     }
 
 
 
 
     // $ANTLR start "woc_program"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:29:1: woc_program : ( rule_or_fact )* ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:31:1: woc_program : ( rule_or_fact )* ;
     public final void woc_program() throws RuleNotSafeException, RecognitionException, FactSizeException {
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:2: ( ( rule_or_fact )* )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:4: ( rule_or_fact )*
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:32:2: ( ( rule_or_fact )* )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:32:4: ( rule_or_fact )*
             {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:4: ( rule_or_fact )*
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:32:4: ( rule_or_fact )*
             loop1:
             do {
                 int alt1=2;
@@ -102,7 +104,7 @@ public class wocParser extends Parser {
 
                 switch (alt1) {
             	case 1 :
-            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:30:4: rule_or_fact
+            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:32:4: rule_or_fact
             	    {
             	    pushFollow(FOLLOW_rule_or_fact_in_woc_program36);
             	    rule_or_fact();
@@ -137,17 +139,17 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "rule_or_fact"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:33:1: rule_or_fact : ( atom )? ( ':-' body[r] '.' | '.' ) ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:1: rule_or_fact : ( fact )? ( ':-' body[r] '.' | '.' ) ;
     public final void rule_or_fact() throws RuleNotSafeException, RecognitionException, FactSizeException {
-        Atom atom1 =null;
+        wocParser.fact_return fact1 =null;
 
 
-         Atom head=null; 
+         boolean hasHead = false; 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:2: ( ( atom )? ( ':-' body[r] '.' | '.' ) )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:4: ( atom )? ( ':-' body[r] '.' | '.' )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:2: ( ( fact )? ( ':-' body[r] '.' | '.' ) )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:4: ( fact )? ( ':-' body[r] '.' | '.' )
             {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:4: ( atom )?
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:4: ( fact )?
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -156,10 +158,10 @@ public class wocParser extends Parser {
             }
             switch (alt2) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:35:4: atom
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:4: fact
                     {
-                    pushFollow(FOLLOW_atom_in_rule_or_fact60);
-                    atom1=atom();
+                    pushFollow(FOLLOW_fact_in_rule_or_fact59);
+                    fact1=fact();
 
                     state._fsp--;
 
@@ -170,9 +172,9 @@ public class wocParser extends Parser {
             }
 
 
-            head=atom1;
+            hasHead=true;
 
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:36:3: ( ':-' body[r] '.' | '.' )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:38:3: ( ':-' body[r] '.' | '.' )
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -191,37 +193,45 @@ public class wocParser extends Parser {
             }
             switch (alt3) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:36:4: ':-' body[r] '.'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:38:4: ':-' body[r] '.'
                     {
-                    match(input,26,FOLLOW_26_in_rule_or_fact68); 
+                    match(input,26,FOLLOW_26_in_rule_or_fact67); 
 
                     Rule r = new Rule();
 
-                    pushFollow(FOLLOW_body_in_rule_or_fact72);
+                    pushFollow(FOLLOW_body_in_rule_or_fact71);
                     body(r);
 
                     state._fsp--;
 
 
-                    match(input,23,FOLLOW_23_in_rule_or_fact75); 
+                    match(input,23,FOLLOW_23_in_rule_or_fact74); 
 
-                    if(head != null) r.setHead(head); context.addRule(r);
+                    if(hasHead ) {
+                    				Term[] termarr=(Term[])(fact1!=null?fact1.terms:null).toArray(new Term[(fact1!=null?fact1.terms:null).size()]);
+                    				Atom head=Atom.getAtom((fact1!=null?fact1.name:null),(fact1!=null?fact1.terms:null).size(),termarr);
+                    				r.setHead(head); }
+                    				context.addRule(r);
 
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:4: '.'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:43:4: '.'
                     {
-                    match(input,23,FOLLOW_23_in_rule_or_fact82); 
+                    match(input,23,FOLLOW_23_in_rule_or_fact81); 
 
                     	// TODO: throw better exception if there is no head, currently throws NullPointerException
-                    			context.addFact2IN(atom1.getPredicate(),Instance.getInstance(atom1.getTerms()));
+                    			context.addFact2IN(Predicate.getPredicate((fact1!=null?fact1.name:null),(fact1!=null?fact1.terms:null).size()),
+                    				Instance.getInstance((fact1!=null?fact1.terms:null).toArray(new Term[(fact1!=null?fact1.terms:null).size()])));
 
                     }
                     break;
 
             }
 
+
+             //System.out.println("Parsing rule_or_fact No.: "+rule_or_fact_counter++);
+            	
 
             }
 
@@ -239,38 +249,111 @@ public class wocParser extends Parser {
     // $ANTLR end "rule_or_fact"
 
 
+    public static class fact_return extends ParserRuleReturnScope {
+        public String name;
+        public ArrayList<Term> terms;
+    };
+
+
+    // $ANTLR start "fact"
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:50:1: fact returns [String name, ArrayList<Term> terms] : ID ( '(' termlist ')' )? ;
+    public final wocParser.fact_return fact() throws RecognitionException {
+        wocParser.fact_return retval = new wocParser.fact_return();
+        retval.start = input.LT(1);
+
+
+        Token ID2=null;
+        ArrayList<Term> termlist3 =null;
+
+
+        try {
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:51:2: ( ID ( '(' termlist ')' )? )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:52:3: ID ( '(' termlist ')' )?
+            {
+            ID2=(Token)match(input,ID,FOLLOW_ID_in_fact106); 
+
+            retval.name =(ID2!=null?ID2.getText():null); 
+
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:53:3: ( '(' termlist ')' )?
+            int alt4=2;
+            int LA4_0 = input.LA(1);
+
+            if ( (LA4_0==17) ) {
+                alt4=1;
+            }
+            switch (alt4) {
+                case 1 :
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:53:5: '(' termlist ')'
+                    {
+                    match(input,17,FOLLOW_17_in_fact114); 
+
+                    pushFollow(FOLLOW_termlist_in_fact116);
+                    termlist3=termlist();
+
+                    state._fsp--;
+
+
+                    match(input,18,FOLLOW_18_in_fact118); 
+
+                    retval.terms =termlist3;
+
+                    }
+                    break;
+
+            }
+
+
+            }
+
+            retval.stop = input.LT(-1);
+
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+
+        finally {
+        	// do for sure before leaving
+        }
+        return retval;
+    }
+    // $ANTLR end "fact"
+
+
 
     // $ANTLR start "body"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:41:1: body[Rule r] : literal[$r] ( ',' literal[$r] )* ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:56:1: body[Rule r] : literal[$r] ( ',' literal[$r] )* ;
     public final void body(Rule r) throws RecognitionException {
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:2: ( literal[$r] ( ',' literal[$r] )* )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:4: literal[$r] ( ',' literal[$r] )*
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:57:2: ( literal[$r] ( ',' literal[$r] )* )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:57:4: literal[$r] ( ',' literal[$r] )*
             {
-            pushFollow(FOLLOW_literal_in_body98);
+            pushFollow(FOLLOW_literal_in_body135);
             literal(r);
 
             state._fsp--;
 
 
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:16: ( ',' literal[$r] )*
-            loop4:
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:57:16: ( ',' literal[$r] )*
+            loop5:
             do {
-                int alt4=2;
-                int LA4_0 = input.LA(1);
+                int alt5=2;
+                int LA5_0 = input.LA(1);
 
-                if ( (LA4_0==21) ) {
-                    alt4=1;
+                if ( (LA5_0==21) ) {
+                    alt5=1;
                 }
 
 
-                switch (alt4) {
+                switch (alt5) {
             	case 1 :
-            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:42:17: ',' literal[$r]
+            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:57:17: ',' literal[$r]
             	    {
-            	    match(input,21,FOLLOW_21_in_body102); 
+            	    match(input,21,FOLLOW_21_in_body139); 
 
-            	    pushFollow(FOLLOW_literal_in_body104);
+            	    pushFollow(FOLLOW_literal_in_body141);
             	    literal(r);
 
             	    state._fsp--;
@@ -280,7 +363,7 @@ public class wocParser extends Parser {
             	    break;
 
             	default :
-            	    break loop4;
+            	    break loop5;
                 }
             } while (true);
 
@@ -303,47 +386,47 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "literal"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:45:1: literal[Rule r] : (a1= atom | 'not' a2= atom | operation );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:60:1: literal[Rule r] : (a1= atom | 'not' a2= atom | operation );
     public final void literal(Rule r) throws RecognitionException {
         Atom a1 =null;
 
         Atom a2 =null;
 
-        Operator operation2 =null;
+        Operator operation4 =null;
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:46:2: (a1= atom | 'not' a2= atom | operation )
-            int alt5=3;
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:61:2: (a1= atom | 'not' a2= atom | operation )
+            int alt6=3;
             switch ( input.LA(1) ) {
             case ID:
                 {
-                alt5=1;
+                alt6=1;
                 }
                 break;
             case 33:
                 {
-                alt5=2;
+                alt6=2;
                 }
                 break;
             case VAR:
                 {
-                alt5=3;
+                alt6=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 5, 0, input);
+                    new NoViableAltException("", 6, 0, input);
 
                 throw nvae;
 
             }
 
-            switch (alt5) {
+            switch (alt6) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:46:4: a1= atom
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:61:4: a1= atom
                     {
-                    pushFollow(FOLLOW_atom_in_literal122);
+                    pushFollow(FOLLOW_atom_in_literal159);
                     a1=atom();
 
                     state._fsp--;
@@ -354,11 +437,11 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:47:4: 'not' a2= atom
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:62:4: 'not' a2= atom
                     {
-                    match(input,33,FOLLOW_33_in_literal129); 
+                    match(input,33,FOLLOW_33_in_literal166); 
 
-                    pushFollow(FOLLOW_atom_in_literal133);
+                    pushFollow(FOLLOW_atom_in_literal170);
                     a2=atom();
 
                     state._fsp--;
@@ -369,15 +452,15 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:48:4: operation
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:63:4: operation
                     {
-                    pushFollow(FOLLOW_operation_in_literal140);
-                    operation2=operation();
+                    pushFollow(FOLLOW_operation_in_literal177);
+                    operation4=operation();
 
                     state._fsp--;
 
 
-                     r.addOperator(operation2); 
+                     r.addOperator(operation4); 
 
                     }
                     break;
@@ -399,7 +482,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "operation"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:51:1: operation returns [Operator op] : (v1= VAR comp_sym e1= expression |v2= VAR 'is' e2= expression );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:66:1: operation returns [Operator op] : (v1= VAR comp_sym e1= expression |v2= VAR 'is' e2= expression );
     public final Operator operation() throws RecognitionException {
         Operator op = null;
 
@@ -410,26 +493,26 @@ public class wocParser extends Parser {
 
         OperandI e2 =null;
 
-        OP comp_sym3 =null;
+        OP comp_sym5 =null;
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:52:2: (v1= VAR comp_sym e1= expression |v2= VAR 'is' e2= expression )
-            int alt6=2;
-            int LA6_0 = input.LA(1);
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:67:2: (v1= VAR comp_sym e1= expression |v2= VAR 'is' e2= expression )
+            int alt7=2;
+            int LA7_0 = input.LA(1);
 
-            if ( (LA6_0==VAR) ) {
-                int LA6_1 = input.LA(2);
+            if ( (LA7_0==VAR) ) {
+                int LA7_1 = input.LA(2);
 
-                if ( (LA6_1==32) ) {
-                    alt6=2;
+                if ( (LA7_1==32) ) {
+                    alt7=2;
                 }
-                else if ( (LA6_1==16||(LA6_1 >= 27 && LA6_1 <= 31)) ) {
-                    alt6=1;
+                else if ( (LA7_1==16||(LA7_1 >= 27 && LA7_1 <= 31)) ) {
+                    alt7=1;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 6, 1, input);
+                        new NoViableAltException("", 7, 1, input);
 
                     throw nvae;
 
@@ -437,41 +520,41 @@ public class wocParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 6, 0, input);
+                    new NoViableAltException("", 7, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt6) {
+            switch (alt7) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:52:4: v1= VAR comp_sym e1= expression
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:67:4: v1= VAR comp_sym e1= expression
                     {
-                    v1=(Token)match(input,VAR,FOLLOW_VAR_in_operation159); 
+                    v1=(Token)match(input,VAR,FOLLOW_VAR_in_operation196); 
 
-                    pushFollow(FOLLOW_comp_sym_in_operation161);
-                    comp_sym3=comp_sym();
+                    pushFollow(FOLLOW_comp_sym_in_operation198);
+                    comp_sym5=comp_sym();
 
                     state._fsp--;
 
 
-                    pushFollow(FOLLOW_expression_in_operation165);
+                    pushFollow(FOLLOW_expression_in_operation202);
                     e1=expression();
 
                     state._fsp--;
 
 
-                    op =new Operator(Variable.getVariable((v1!=null?v1.getText():null)),e1,comp_sym3);
+                    op =new Operator(Variable.getVariable((v1!=null?v1.getText():null)),e1,comp_sym5);
 
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:53:4: v2= VAR 'is' e2= expression
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:68:4: v2= VAR 'is' e2= expression
                     {
-                    v2=(Token)match(input,VAR,FOLLOW_VAR_in_operation174); 
+                    v2=(Token)match(input,VAR,FOLLOW_VAR_in_operation211); 
 
-                    match(input,32,FOLLOW_32_in_operation176); 
+                    match(input,32,FOLLOW_32_in_operation213); 
 
-                    pushFollow(FOLLOW_expression_in_operation180);
+                    pushFollow(FOLLOW_expression_in_operation217);
                     e2=expression();
 
                     state._fsp--;
@@ -499,7 +582,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "expression"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:56:1: expression returns [OperandI op] : l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:71:1: expression returns [OperandI op] : l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) ;
     public final OperandI expression() throws RecognitionException {
         OperandI op = null;
 
@@ -511,70 +594,70 @@ public class wocParser extends Parser {
 
          OP openu=null; 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:2: (l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:4: l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |)
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:2: (l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:4: l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |)
             {
-            pushFollow(FOLLOW_mult_expression_in_expression203);
+            pushFollow(FOLLOW_mult_expression_in_expression240);
             l=mult_expression();
 
             state._fsp--;
 
 
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:22: ( ( ( '+' | '-' ) r= mult_expression ) |)
-            int alt8=2;
-            int LA8_0 = input.LA(1);
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:22: ( ( ( '+' | '-' ) r= mult_expression ) |)
+            int alt9=2;
+            int LA9_0 = input.LA(1);
 
-            if ( (LA8_0==20||LA8_0==22) ) {
-                alt8=1;
+            if ( (LA9_0==20||LA9_0==22) ) {
+                alt9=1;
             }
-            else if ( (LA8_0==18||LA8_0==21||LA8_0==23) ) {
-                alt8=2;
+            else if ( (LA9_0==18||LA9_0==21||LA9_0==23) ) {
+                alt9=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 8, 0, input);
+                    new NoViableAltException("", 9, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt8) {
+            switch (alt9) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:23: ( ( '+' | '-' ) r= mult_expression )
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:23: ( ( '+' | '-' ) r= mult_expression )
                     {
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:23: ( ( '+' | '-' ) r= mult_expression )
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:24: ( '+' | '-' ) r= mult_expression
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:23: ( ( '+' | '-' ) r= mult_expression )
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:24: ( '+' | '-' ) r= mult_expression
                     {
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:24: ( '+' | '-' )
-                    int alt7=2;
-                    int LA7_0 = input.LA(1);
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:24: ( '+' | '-' )
+                    int alt8=2;
+                    int LA8_0 = input.LA(1);
 
-                    if ( (LA7_0==20) ) {
-                        alt7=1;
+                    if ( (LA8_0==20) ) {
+                        alt8=1;
                     }
-                    else if ( (LA7_0==22) ) {
-                        alt7=2;
+                    else if ( (LA8_0==22) ) {
+                        alt8=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 7, 0, input);
+                            new NoViableAltException("", 8, 0, input);
 
                         throw nvae;
 
                     }
-                    switch (alt7) {
+                    switch (alt8) {
                         case 1 :
-                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:25: '+'
+                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:25: '+'
                             {
-                            match(input,20,FOLLOW_20_in_expression208); 
+                            match(input,20,FOLLOW_20_in_expression245); 
 
                             openu=OP.PLUS;
 
                             }
                             break;
                         case 2 :
-                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:58:47: '-'
+                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:47: '-'
                             {
-                            match(input,22,FOLLOW_22_in_expression213); 
+                            match(input,22,FOLLOW_22_in_expression250); 
 
                             openu=OP.MINUS;
 
@@ -584,7 +667,7 @@ public class wocParser extends Parser {
                     }
 
 
-                    pushFollow(FOLLOW_mult_expression_in_expression221);
+                    pushFollow(FOLLOW_mult_expression_in_expression258);
                     r=mult_expression();
 
                     state._fsp--;
@@ -598,7 +681,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:60:4: 
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:75:4: 
                     {
                     op =l;
 
@@ -626,7 +709,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "mult_expression"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:63:1: mult_expression returns [OperandI op] : l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:1: mult_expression returns [OperandI op] : l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) ;
     public final OperandI mult_expression() throws RecognitionException {
         OperandI op = null;
 
@@ -638,70 +721,70 @@ public class wocParser extends Parser {
 
          OP openu=null; 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:2: (l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:4: l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |)
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:2: (l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:4: l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |)
             {
-            pushFollow(FOLLOW_primary_expression_in_mult_expression251);
+            pushFollow(FOLLOW_primary_expression_in_mult_expression288);
             l=primary_expression();
 
             state._fsp--;
 
 
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:25: ( ( ( '*' | '/' ) r= primary_expression ) |)
-            int alt10=2;
-            int LA10_0 = input.LA(1);
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:25: ( ( ( '*' | '/' ) r= primary_expression ) |)
+            int alt11=2;
+            int LA11_0 = input.LA(1);
 
-            if ( (LA10_0==19||LA10_0==24) ) {
-                alt10=1;
+            if ( (LA11_0==19||LA11_0==24) ) {
+                alt11=1;
             }
-            else if ( (LA10_0==18||(LA10_0 >= 20 && LA10_0 <= 23)) ) {
-                alt10=2;
+            else if ( (LA11_0==18||(LA11_0 >= 20 && LA11_0 <= 23)) ) {
+                alt11=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 10, 0, input);
+                    new NoViableAltException("", 11, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt10) {
+            switch (alt11) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:26: ( ( '*' | '/' ) r= primary_expression )
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:26: ( ( '*' | '/' ) r= primary_expression )
                     {
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:26: ( ( '*' | '/' ) r= primary_expression )
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:27: ( '*' | '/' ) r= primary_expression
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:26: ( ( '*' | '/' ) r= primary_expression )
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:27: ( '*' | '/' ) r= primary_expression
                     {
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:27: ( '*' | '/' )
-                    int alt9=2;
-                    int LA9_0 = input.LA(1);
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:27: ( '*' | '/' )
+                    int alt10=2;
+                    int LA10_0 = input.LA(1);
 
-                    if ( (LA9_0==19) ) {
-                        alt9=1;
+                    if ( (LA10_0==19) ) {
+                        alt10=1;
                     }
-                    else if ( (LA9_0==24) ) {
-                        alt9=2;
+                    else if ( (LA10_0==24) ) {
+                        alt10=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("", 9, 0, input);
+                            new NoViableAltException("", 10, 0, input);
 
                         throw nvae;
 
                     }
-                    switch (alt9) {
+                    switch (alt10) {
                         case 1 :
-                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:28: '*'
+                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:28: '*'
                             {
-                            match(input,19,FOLLOW_19_in_mult_expression256); 
+                            match(input,19,FOLLOW_19_in_mult_expression293); 
 
                             openu=OP.TIMES; 
 
                             }
                             break;
                         case 2 :
-                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:65:52: '/'
+                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:52: '/'
                             {
-                            match(input,24,FOLLOW_24_in_mult_expression261); 
+                            match(input,24,FOLLOW_24_in_mult_expression298); 
 
                             openu=OP.DIVIDE;
 
@@ -711,7 +794,7 @@ public class wocParser extends Parser {
                     }
 
 
-                    pushFollow(FOLLOW_primary_expression_in_mult_expression271);
+                    pushFollow(FOLLOW_primary_expression_in_mult_expression308);
                     r=primary_expression();
 
                     state._fsp--;
@@ -725,7 +808,7 @@ public class wocParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:67:4: 
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:82:4: 
                     {
                     op =l;
 
@@ -753,76 +836,76 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "primary_expression"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:70:1: primary_expression returns [OperandI op] : ( INT | VAR | '(' expression ')' );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:85:1: primary_expression returns [OperandI op] : ( INT | VAR | '(' expression ')' );
     public final OperandI primary_expression() throws RecognitionException {
         OperandI op = null;
 
 
-        Token INT4=null;
-        Token VAR5=null;
-        OperandI expression6 =null;
+        Token INT6=null;
+        Token VAR7=null;
+        OperandI expression8 =null;
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:71:2: ( INT | VAR | '(' expression ')' )
-            int alt11=3;
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:2: ( INT | VAR | '(' expression ')' )
+            int alt12=3;
             switch ( input.LA(1) ) {
             case INT:
                 {
-                alt11=1;
+                alt12=1;
                 }
                 break;
             case VAR:
                 {
-                alt11=2;
+                alt12=2;
                 }
                 break;
             case 17:
                 {
-                alt11=3;
+                alt12=3;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 11, 0, input);
+                    new NoViableAltException("", 12, 0, input);
 
                 throw nvae;
 
             }
 
-            switch (alt11) {
+            switch (alt12) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:71:4: INT
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:4: INT
                     {
-                    INT4=(Token)match(input,INT,FOLLOW_INT_in_primary_expression295); 
+                    INT6=(Token)match(input,INT,FOLLOW_INT_in_primary_expression332); 
 
-                    op =Constant.getConstant((INT4!=null?INT4.getText():null));
+                    op =Constant.getConstant((INT6!=null?INT6.getText():null));
 
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:72:4: VAR
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:87:4: VAR
                     {
-                    VAR5=(Token)match(input,VAR,FOLLOW_VAR_in_primary_expression302); 
+                    VAR7=(Token)match(input,VAR,FOLLOW_VAR_in_primary_expression339); 
 
-                    op =Variable.getVariable((VAR5!=null?VAR5.getText():null));
+                    op =Variable.getVariable((VAR7!=null?VAR7.getText():null));
 
                     }
                     break;
                 case 3 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:4: '(' expression ')'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:88:4: '(' expression ')'
                     {
-                    match(input,17,FOLLOW_17_in_primary_expression309); 
+                    match(input,17,FOLLOW_17_in_primary_expression346); 
 
-                    pushFollow(FOLLOW_expression_in_primary_expression311);
-                    expression6=expression();
+                    pushFollow(FOLLOW_expression_in_primary_expression348);
+                    expression8=expression();
 
                     state._fsp--;
 
 
-                    match(input,18,FOLLOW_18_in_primary_expression313); 
+                    match(input,18,FOLLOW_18_in_primary_expression350); 
 
-                    op =expression6;
+                    op =expression8;
 
                     }
                     break;
@@ -844,39 +927,39 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "atom"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:76:1: atom returns [Atom at] : (ctx= ID ':' )? name= ID ( '(' termlist ')' )? ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:91:1: atom returns [Atom at] : (ctx= ID ':' )? name= ID ( '(' termlist ')' )? ;
     public final Atom atom() throws RecognitionException {
         Atom at = null;
 
 
         Token ctx=null;
         Token name=null;
-        ArrayList<Term> termlist7 =null;
+        ArrayList<Term> termlist9 =null;
 
 
          String context_id=null; String atom_name; Term[] terms = new Term[0];
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:2: ( (ctx= ID ':' )? name= ID ( '(' termlist ')' )? )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:4: (ctx= ID ':' )? name= ID ( '(' termlist ')' )?
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:2: ( (ctx= ID ':' )? name= ID ( '(' termlist ')' )? )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:4: (ctx= ID ':' )? name= ID ( '(' termlist ')' )?
             {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:4: (ctx= ID ':' )?
-            int alt12=2;
-            int LA12_0 = input.LA(1);
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:4: (ctx= ID ':' )?
+            int alt13=2;
+            int LA13_0 = input.LA(1);
 
-            if ( (LA12_0==ID) ) {
-                int LA12_1 = input.LA(2);
+            if ( (LA13_0==ID) ) {
+                int LA13_1 = input.LA(2);
 
-                if ( (LA12_1==25) ) {
-                    alt12=1;
+                if ( (LA13_1==25) ) {
+                    alt13=1;
                 }
             }
-            switch (alt12) {
+            switch (alt13) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:78:5: ctx= ID ':'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:5: ctx= ID ':'
                     {
-                    ctx=(Token)match(input,ID,FOLLOW_ID_in_atom337); 
+                    ctx=(Token)match(input,ID,FOLLOW_ID_in_atom374); 
 
-                    match(input,25,FOLLOW_25_in_atom339); 
+                    match(input,25,FOLLOW_25_in_atom376); 
 
                     context_id=(ctx!=null?ctx.getText():null);
 
@@ -886,32 +969,32 @@ public class wocParser extends Parser {
             }
 
 
-            name=(Token)match(input,ID,FOLLOW_ID_in_atom350); 
+            name=(Token)match(input,ID,FOLLOW_ID_in_atom387); 
 
             if(context_id==null) { atom_name=(name!=null?name.getText():null); } else {atom_name=context_id+":"+(name!=null?name.getText():null);} 
 
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:3: ( '(' termlist ')' )?
-            int alt13=2;
-            int LA13_0 = input.LA(1);
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:95:3: ( '(' termlist ')' )?
+            int alt14=2;
+            int LA14_0 = input.LA(1);
 
-            if ( (LA13_0==17) ) {
-                alt13=1;
+            if ( (LA14_0==17) ) {
+                alt14=1;
             }
-            switch (alt13) {
+            switch (alt14) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:5: '(' termlist ')'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:95:5: '(' termlist ')'
                     {
-                    match(input,17,FOLLOW_17_in_atom358); 
+                    match(input,17,FOLLOW_17_in_atom395); 
 
-                    pushFollow(FOLLOW_termlist_in_atom360);
-                    termlist7=termlist();
+                    pushFollow(FOLLOW_termlist_in_atom397);
+                    termlist9=termlist();
 
                     state._fsp--;
 
 
-                    match(input,18,FOLLOW_18_in_atom362); 
+                    match(input,18,FOLLOW_18_in_atom399); 
 
-                    terms=(Term[])termlist7.toArray(new Term[termlist7.size()]);
+                    terms=(Term[])termlist9.toArray(new Term[termlist9.size()]);
 
                     }
                     break;
@@ -941,7 +1024,7 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "termlist"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:1: termlist returns [ArrayList<Term> termlist] : t1= term ( ',' tn= term )* ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:101:1: termlist returns [ArrayList<Term> termlist] : t1= term ( ',' tn= term )* ;
     public final ArrayList<Term> termlist() throws RecognitionException {
         ArrayList<Term> termlist = null;
 
@@ -953,10 +1036,10 @@ public class wocParser extends Parser {
 
          termlist = new ArrayList<Term>();
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:88:2: (t1= term ( ',' tn= term )* )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:88:4: t1= term ( ',' tn= term )*
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:2: (t1= term ( ',' tn= term )* )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:4: t1= term ( ',' tn= term )*
             {
-            pushFollow(FOLLOW_term_in_termlist391);
+            pushFollow(FOLLOW_term_in_termlist428);
             t1=term();
 
             state._fsp--;
@@ -964,24 +1047,24 @@ public class wocParser extends Parser {
 
             termlist.add(t1);
 
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:89:3: ( ',' tn= term )*
-            loop14:
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:3: ( ',' tn= term )*
+            loop15:
             do {
-                int alt14=2;
-                int LA14_0 = input.LA(1);
+                int alt15=2;
+                int LA15_0 = input.LA(1);
 
-                if ( (LA14_0==21) ) {
-                    alt14=1;
+                if ( (LA15_0==21) ) {
+                    alt15=1;
                 }
 
 
-                switch (alt14) {
+                switch (alt15) {
             	case 1 :
-            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:89:4: ',' tn= term
+            	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:4: ',' tn= term
             	    {
-            	    match(input,21,FOLLOW_21_in_termlist398); 
+            	    match(input,21,FOLLOW_21_in_termlist435); 
 
-            	    pushFollow(FOLLOW_term_in_termlist402);
+            	    pushFollow(FOLLOW_term_in_termlist439);
             	    tn=term();
 
             	    state._fsp--;
@@ -993,7 +1076,7 @@ public class wocParser extends Parser {
             	    break;
 
             	default :
-            	    break loop14;
+            	    break loop15;
                 }
             } while (true);
 
@@ -1016,34 +1099,34 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "term"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:92:1: term returns [Term term] : ( constant | VAR | function );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:107:1: term returns [Term term] : ( constant | VAR | function );
     public final Term term() throws RecognitionException {
         Term term = null;
 
 
-        Token VAR9=null;
-        Constant constant8 =null;
+        Token VAR11=null;
+        Constant constant10 =null;
 
-        wocParser.function_return function10 =null;
+        wocParser.function_return function12 =null;
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:2: ( constant | VAR | function )
-            int alt15=3;
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:2: ( constant | VAR | function )
+            int alt16=3;
             switch ( input.LA(1) ) {
             case ID:
                 {
-                int LA15_1 = input.LA(2);
+                int LA16_1 = input.LA(2);
 
-                if ( (LA15_1==17) ) {
-                    alt15=3;
+                if ( (LA16_1==17) ) {
+                    alt16=3;
                 }
-                else if ( (LA15_1==18||LA15_1==21) ) {
-                    alt15=1;
+                else if ( (LA16_1==18||LA16_1==21) ) {
+                    alt16=1;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("", 15, 1, input);
+                        new NoViableAltException("", 16, 1, input);
 
                     throw nvae;
 
@@ -1053,55 +1136,55 @@ public class wocParser extends Parser {
             case INT:
             case 22:
                 {
-                alt15=1;
+                alt16=1;
                 }
                 break;
             case VAR:
                 {
-                alt15=2;
+                alt16=2;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 15, 0, input);
+                    new NoViableAltException("", 16, 0, input);
 
                 throw nvae;
 
             }
 
-            switch (alt15) {
+            switch (alt16) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:4: constant
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:4: constant
                     {
-                    pushFollow(FOLLOW_constant_in_term421);
-                    constant8=constant();
+                    pushFollow(FOLLOW_constant_in_term458);
+                    constant10=constant();
 
                     state._fsp--;
 
 
-                    term =constant8;
+                    term =constant10;
 
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:94:4: VAR
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:4: VAR
                     {
-                    VAR9=(Token)match(input,VAR,FOLLOW_VAR_in_term428); 
+                    VAR11=(Token)match(input,VAR,FOLLOW_VAR_in_term465); 
 
-                    term =Variable.getVariable((VAR9!=null?VAR9.getText():null));
+                    term =Variable.getVariable((VAR11!=null?VAR11.getText():null));
 
                     }
                     break;
                 case 3 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:95:4: function
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:110:4: function
                     {
-                    pushFollow(FOLLOW_function_in_term435);
-                    function10=function();
+                    pushFollow(FOLLOW_function_in_term472);
+                    function12=function();
 
                     state._fsp--;
 
 
-                    term =FuncTerm.getFuncTerm((function10!=null?function10.name:null),(function10!=null?function10.terms:null));
+                    term =FuncTerm.getFuncTerm((function12!=null?function12.name:null),(function12!=null?function12.terms:null));
 
                     }
                     break;
@@ -1128,33 +1211,33 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "function"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:98:1: function returns [String name, ArrayList<Term> terms] : ID '(' termlist ')' ;
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:113:1: function returns [String name, ArrayList<Term> terms] : ID '(' termlist ')' ;
     public final wocParser.function_return function() throws RecognitionException {
         wocParser.function_return retval = new wocParser.function_return();
         retval.start = input.LT(1);
 
 
-        Token ID11=null;
-        ArrayList<Term> termlist12 =null;
+        Token ID13=null;
+        ArrayList<Term> termlist14 =null;
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:99:2: ( ID '(' termlist ')' )
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:99:4: ID '(' termlist ')'
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:114:2: ( ID '(' termlist ')' )
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:114:4: ID '(' termlist ')'
             {
-            ID11=(Token)match(input,ID,FOLLOW_ID_in_function452); 
+            ID13=(Token)match(input,ID,FOLLOW_ID_in_function489); 
 
-            match(input,17,FOLLOW_17_in_function454); 
+            match(input,17,FOLLOW_17_in_function491); 
 
-            pushFollow(FOLLOW_termlist_in_function456);
-            termlist12=termlist();
+            pushFollow(FOLLOW_termlist_in_function493);
+            termlist14=termlist();
 
             state._fsp--;
 
 
-            match(input,18,FOLLOW_18_in_function458); 
+            match(input,18,FOLLOW_18_in_function495); 
 
-            retval.name =(ID11!=null?ID11.getText():null); retval.terms =termlist12;
+            retval.name =(ID13!=null?ID13.getText():null); retval.terms =termlist14;
 
             }
 
@@ -1177,57 +1260,57 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "constant"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:102:1: constant returns [Constant constnt] : ( ID | ( '-' )? INT );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:117:1: constant returns [Constant constnt] : ( ID | ( '-' )? INT );
     public final Constant constant() throws RecognitionException {
         Constant constnt = null;
 
 
-        Token ID13=null;
-        Token INT14=null;
+        Token ID15=null;
+        Token INT16=null;
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:2: ( ID | ( '-' )? INT )
-            int alt17=2;
-            int LA17_0 = input.LA(1);
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:118:2: ( ID | ( '-' )? INT )
+            int alt18=2;
+            int LA18_0 = input.LA(1);
 
-            if ( (LA17_0==ID) ) {
-                alt17=1;
+            if ( (LA18_0==ID) ) {
+                alt18=1;
             }
-            else if ( (LA17_0==INT||LA17_0==22) ) {
-                alt17=2;
+            else if ( (LA18_0==INT||LA18_0==22) ) {
+                alt18=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 17, 0, input);
+                    new NoViableAltException("", 18, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt17) {
+            switch (alt18) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:4: ID
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:118:4: ID
                     {
-                    ID13=(Token)match(input,ID,FOLLOW_ID_in_constant475); 
+                    ID15=(Token)match(input,ID,FOLLOW_ID_in_constant512); 
 
-                    constnt =Constant.getConstant((ID13!=null?ID13.getText():null));
+                    constnt =Constant.getConstant((ID15!=null?ID15.getText():null));
 
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:4: ( '-' )? INT
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:119:4: ( '-' )? INT
                     {
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:4: ( '-' )?
-                    int alt16=2;
-                    int LA16_0 = input.LA(1);
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:119:4: ( '-' )?
+                    int alt17=2;
+                    int LA17_0 = input.LA(1);
 
-                    if ( (LA16_0==22) ) {
-                        alt16=1;
+                    if ( (LA17_0==22) ) {
+                        alt17=1;
                     }
-                    switch (alt16) {
+                    switch (alt17) {
                         case 1 :
-                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:5: '-'
+                            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:119:5: '-'
                             {
-                            match(input,22,FOLLOW_22_in_constant483); 
+                            match(input,22,FOLLOW_22_in_constant520); 
 
                             }
                             break;
@@ -1235,9 +1318,9 @@ public class wocParser extends Parser {
                     }
 
 
-                    INT14=(Token)match(input,INT,FOLLOW_INT_in_constant487); 
+                    INT16=(Token)match(input,INT,FOLLOW_INT_in_constant524); 
 
-                    constnt =Constant.getConstant((INT14!=null?INT14.getText():null));
+                    constnt =Constant.getConstant((INT16!=null?INT16.getText():null));
 
                     }
                     break;
@@ -1259,103 +1342,103 @@ public class wocParser extends Parser {
 
 
     // $ANTLR start "comp_sym"
-    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:107:1: comp_sym returns [OP openu] : ( '<' | '<=' | '>=' | '>' | '=' | '!=' );
+    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:122:1: comp_sym returns [OP openu] : ( '<' | '<=' | '>=' | '>' | '=' | '!=' );
     public final OP comp_sym() throws RecognitionException {
         OP openu = null;
 
 
         try {
-            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:2: ( '<' | '<=' | '>=' | '>' | '=' | '!=' )
-            int alt18=6;
+            // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:2: ( '<' | '<=' | '>=' | '>' | '=' | '!=' )
+            int alt19=6;
             switch ( input.LA(1) ) {
             case 27:
                 {
-                alt18=1;
+                alt19=1;
                 }
                 break;
             case 28:
                 {
-                alt18=2;
+                alt19=2;
                 }
                 break;
             case 31:
                 {
-                alt18=3;
+                alt19=3;
                 }
                 break;
             case 30:
                 {
-                alt18=4;
+                alt19=4;
                 }
                 break;
             case 29:
                 {
-                alt18=5;
+                alt19=5;
                 }
                 break;
             case 16:
                 {
-                alt18=6;
+                alt19=6;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 18, 0, input);
+                    new NoViableAltException("", 19, 0, input);
 
                 throw nvae;
 
             }
 
-            switch (alt18) {
+            switch (alt19) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:4: '<'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:4: '<'
                     {
-                    match(input,27,FOLLOW_27_in_comp_sym503); 
+                    match(input,27,FOLLOW_27_in_comp_sym540); 
 
                     openu =OP.LESS;
 
                     }
                     break;
                 case 2 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:4: '<='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:124:4: '<='
                     {
-                    match(input,28,FOLLOW_28_in_comp_sym510); 
+                    match(input,28,FOLLOW_28_in_comp_sym547); 
 
                     openu =OP.LESS_EQ;
 
                     }
                     break;
                 case 3 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:110:4: '>='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:125:4: '>='
                     {
-                    match(input,31,FOLLOW_31_in_comp_sym517); 
+                    match(input,31,FOLLOW_31_in_comp_sym554); 
 
                     openu =OP.GREATER_EQ;
 
                     }
                     break;
                 case 4 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:111:4: '>'
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:126:4: '>'
                     {
-                    match(input,30,FOLLOW_30_in_comp_sym524); 
+                    match(input,30,FOLLOW_30_in_comp_sym561); 
 
                     openu =OP.GREATER;
 
                     }
                     break;
                 case 5 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:112:4: '='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:127:4: '='
                     {
-                    match(input,29,FOLLOW_29_in_comp_sym531); 
+                    match(input,29,FOLLOW_29_in_comp_sym568); 
 
                     openu =OP.EQUAL;
 
                     }
                     break;
                 case 6 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:113:4: '!='
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:128:4: '!='
                     {
-                    match(input,16,FOLLOW_16_in_comp_sym538); 
+                    match(input,16,FOLLOW_16_in_comp_sym575); 
 
                     openu =OP.NOTEQUAL;
 
@@ -1382,61 +1465,65 @@ public class wocParser extends Parser {
  
 
     public static final BitSet FOLLOW_rule_or_fact_in_woc_program36 = new BitSet(new long[]{0x0000000004800202L});
-    public static final BitSet FOLLOW_atom_in_rule_or_fact60 = new BitSet(new long[]{0x0000000004800000L});
-    public static final BitSet FOLLOW_26_in_rule_or_fact68 = new BitSet(new long[]{0x0000000200004200L});
-    public static final BitSet FOLLOW_body_in_rule_or_fact72 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_23_in_rule_or_fact75 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_rule_or_fact82 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_literal_in_body98 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_21_in_body102 = new BitSet(new long[]{0x0000000200004200L});
-    public static final BitSet FOLLOW_literal_in_body104 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_atom_in_literal122 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_33_in_literal129 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_atom_in_literal133 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_operation_in_literal140 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_operation159 = new BitSet(new long[]{0x00000000F8010000L});
-    public static final BitSet FOLLOW_comp_sym_in_operation161 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_expression_in_operation165 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_operation174 = new BitSet(new long[]{0x0000000100000000L});
-    public static final BitSet FOLLOW_32_in_operation176 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_expression_in_operation180 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_mult_expression_in_expression203 = new BitSet(new long[]{0x0000000000500002L});
-    public static final BitSet FOLLOW_20_in_expression208 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_22_in_expression213 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_mult_expression_in_expression221 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_primary_expression_in_mult_expression251 = new BitSet(new long[]{0x0000000001080002L});
-    public static final BitSet FOLLOW_19_in_mult_expression256 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_24_in_mult_expression261 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_primary_expression_in_mult_expression271 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_in_primary_expression295 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_primary_expression302 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_primary_expression309 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_expression_in_primary_expression311 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_primary_expression313 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_atom337 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_25_in_atom339 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_ID_in_atom350 = new BitSet(new long[]{0x0000000000020002L});
-    public static final BitSet FOLLOW_17_in_atom358 = new BitSet(new long[]{0x0000000000404600L});
-    public static final BitSet FOLLOW_termlist_in_atom360 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_atom362 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_term_in_termlist391 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_21_in_termlist398 = new BitSet(new long[]{0x0000000000404600L});
-    public static final BitSet FOLLOW_term_in_termlist402 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_constant_in_term421 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_term428 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_function_in_term435 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_function452 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_17_in_function454 = new BitSet(new long[]{0x0000000000404600L});
-    public static final BitSet FOLLOW_termlist_in_function456 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_function458 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_constant475 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_22_in_constant483 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_INT_in_constant487 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_27_in_comp_sym503 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_comp_sym510 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_31_in_comp_sym517 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_30_in_comp_sym524 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_29_in_comp_sym531 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_16_in_comp_sym538 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_fact_in_rule_or_fact59 = new BitSet(new long[]{0x0000000004800000L});
+    public static final BitSet FOLLOW_26_in_rule_or_fact67 = new BitSet(new long[]{0x0000000200004200L});
+    public static final BitSet FOLLOW_body_in_rule_or_fact71 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_23_in_rule_or_fact74 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_rule_or_fact81 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_fact106 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_17_in_fact114 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_termlist_in_fact116 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_fact118 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_literal_in_body135 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_21_in_body139 = new BitSet(new long[]{0x0000000200004200L});
+    public static final BitSet FOLLOW_literal_in_body141 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_atom_in_literal159 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_33_in_literal166 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_atom_in_literal170 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_operation_in_literal177 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_operation196 = new BitSet(new long[]{0x00000000F8010000L});
+    public static final BitSet FOLLOW_comp_sym_in_operation198 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_operation202 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_operation211 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_32_in_operation213 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_operation217 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_mult_expression_in_expression240 = new BitSet(new long[]{0x0000000000500002L});
+    public static final BitSet FOLLOW_20_in_expression245 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_22_in_expression250 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_mult_expression_in_expression258 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_primary_expression_in_mult_expression288 = new BitSet(new long[]{0x0000000001080002L});
+    public static final BitSet FOLLOW_19_in_mult_expression293 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_24_in_mult_expression298 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_primary_expression_in_mult_expression308 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_in_primary_expression332 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_primary_expression339 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_17_in_primary_expression346 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_primary_expression348 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_primary_expression350 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_atom374 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_25_in_atom376 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_ID_in_atom387 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_17_in_atom395 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_termlist_in_atom397 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_atom399 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_term_in_termlist428 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_21_in_termlist435 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_term_in_termlist439 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_constant_in_term458 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_term465 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_function_in_term472 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_function489 = new BitSet(new long[]{0x0000000000020000L});
+    public static final BitSet FOLLOW_17_in_function491 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_termlist_in_function493 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_function495 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_constant512 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_22_in_constant520 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_INT_in_constant524 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_27_in_comp_sym540 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_comp_sym547 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_31_in_comp_sym554 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_30_in_comp_sym561 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_29_in_comp_sym568 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_16_in_comp_sym575 = new BitSet(new long[]{0x0000000000000002L});
 
 }

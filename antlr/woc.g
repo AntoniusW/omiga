@@ -19,9 +19,11 @@ import Enumeration.OP;
 
 @members{
 private ContextASPMCSRewriting context;
+int rule_or_fact_counter;
 
 public void setContext(ContextASPMCSRewriting context) {
 	this.context=context;
+	rule_or_fact_counter=0;
 }
 
 }
@@ -29,13 +31,26 @@ public void setContext(ContextASPMCSRewriting context) {
 woc_program throws RuleNotSafeException, FactSizeException
 	:	rule_or_fact*
 	;
-	
+
 rule_or_fact throws RuleNotSafeException, FactSizeException
-@init{ Atom head=null; }
-	:	atom? {head=$atom.at;}
-		(':-' {Rule r = new Rule();} body[r] '.' {if(head != null) r.setHead(head); context.addRule(r);}
+@init{ boolean hasHead = false; }
+	:	fact? {hasHead=true;}
+		(':-' {Rule r = new Rule();} body[r] '.' {if(hasHead ) {
+				Term[] termarr=(Term[])$fact.terms.toArray(new Term[$fact.terms.size()]);
+				Atom head=Atom.getAtom($fact.name,$fact.terms.size(),termarr);
+				r.setHead(head); }
+				context.addRule(r);}
 	|	'.' {	// TODO: throw better exception if there is no head, currently throws NullPointerException
-			context.addFact2IN($atom.at.getPredicate(),Instance.getInstance($atom.at.getTerms()));})
+			context.addFact2IN(Predicate.getPredicate($fact.name,$fact.terms.size()),
+				Instance.getInstance($fact.terms.toArray(new Term[$fact.terms.size()])));})
+	{ //System.out.println("Parsing rule_or_fact No.: "+rule_or_fact_counter++);
+	}
+	;
+	
+fact 	returns[String name, ArrayList<Term> terms]
+	:	//(ctx=ID ':' {context_id=$ctx.text;})?	// parsing atoms with context identifier
+		ID {$name=$ID.text; }
+		( '(' termlist ')' {$terms=$termlist.termlist;})?
 	;
 	
 body[Rule r]

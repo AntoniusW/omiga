@@ -60,7 +60,8 @@ public class main_FINAL_NormalASP {
         //filename ="single_import_pos.txt";
         //filename ="single_import_neg.txt";
         //filename = "Xir2.txt";
-        filename = "scholarship.txt";
+        //filename = "scholarship.txt";
+        filename = "WOC - EXAMPLES/WOC - EXAMPLES/reachability/reach3.txt";
         rewriting = 1;
         answersets = 600;
         filter = null;
@@ -72,6 +73,7 @@ public class main_FINAL_NormalASP {
         ContextASPMCSRewriting ctx = new ContextASPMCSRewriting();
         ContextASPRewriting rewctx = null;
         // parsing with ANTLR
+        long parsing_time = 0;
         try {
             // setting up lexer and parser
             wocLexer lex = new wocLexer(new ANTLRFileStream(filename));
@@ -84,15 +86,16 @@ public class main_FINAL_NormalASP {
             try {
                 try {
                     // parse input
+                    long start_parsing_time = System.currentTimeMillis();
                     parser.woc_program();
-                    
+                    parsing_time = System.currentTimeMillis() - start_parsing_time;
                     System.out.println("Parsed program, starting rewriting...");
                     
                     Rewriter_easy rewriter = new Rewriter_easy();
                     rewctx = rewriter.rewrite(ctx);
                     
-                    System.out.println("Read in program is: ");
-                    ctx.printContext();
+                    //System.out.println("Read in program is: ");
+                    //ctx.printContext();
                 } catch (RuleNotSafeException ex) {
                     Logger.getLogger(main_FINAL_NormalASP.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (FactSizeException ex) {
@@ -121,6 +124,7 @@ public class main_FINAL_NormalASP {
         m.calculate(answersets,outprint,filter);
 
         System.out.println("Termianted final Calculation");
+        System.out.println("Time needed for parsing: "+(parsing_time/1000.0f));
         System.out.println("Time needed overAll: " + (1.0F*(System.currentTimeMillis()-start)/1000));
         System.out.println("Time needed for calculation: " +(1.0F*(System.currentTimeMillis()-beforeCalc)/1000));
     }
