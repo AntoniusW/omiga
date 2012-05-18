@@ -61,7 +61,7 @@ public class main_FINAL_NormalASP {
         //filename ="single_import_neg.txt";
         //filename = "Xir2.txt";
         //filename = "scholarship.txt";
-        filename = "WOC - EXAMPLES/WOC - EXAMPLES/reachability/reach3.txt";
+        filename = "WOC - EXAMPLES/WOC - EXAMPLES/reachability/reach5.txt";
         rewriting = 1;
         answersets = 600;
         filter = null;

@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-05-18 14:02:54
+// $ANTLR 3.4 /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g 2012-05-18 14:25:10
 
 package parser.antlr;
 
@@ -158,21 +158,21 @@ public class wocParser extends Parser {
             }
             switch (alt2) {
                 case 1 :
-                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:4: fact
+                    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:37:5: fact
                     {
-                    pushFollow(FOLLOW_fact_in_rule_or_fact59);
+                    pushFollow(FOLLOW_fact_in_rule_or_fact60);
                     fact1=fact();
 
                     state._fsp--;
 
+
+                    hasHead=true;
 
                     }
                     break;
 
             }
 
-
-            hasHead=true;
 
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:38:3: ( ':-' body[r] '.' | '.' )
             int alt3=2;
@@ -195,17 +195,17 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:38:4: ':-' body[r] '.'
                     {
-                    match(input,26,FOLLOW_26_in_rule_or_fact67); 
+                    match(input,26,FOLLOW_26_in_rule_or_fact68); 
 
                     Rule r = new Rule();
 
-                    pushFollow(FOLLOW_body_in_rule_or_fact71);
+                    pushFollow(FOLLOW_body_in_rule_or_fact72);
                     body(r);
 
                     state._fsp--;
 
 
-                    match(input,23,FOLLOW_23_in_rule_or_fact74); 
+                    match(input,23,FOLLOW_23_in_rule_or_fact75); 
 
                     if(hasHead ) {
                     				Term[] termarr=(Term[])(fact1!=null?fact1.terms:null).toArray(new Term[(fact1!=null?fact1.terms:null).size()]);
@@ -218,7 +218,7 @@ public class wocParser extends Parser {
                 case 2 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:43:4: '.'
                     {
-                    match(input,23,FOLLOW_23_in_rule_or_fact81); 
+                    match(input,23,FOLLOW_23_in_rule_or_fact82); 
 
                     	// TODO: throw better exception if there is no head, currently throws NullPointerException
                     			context.addFact2IN(Predicate.getPredicate((fact1!=null?fact1.name:null),(fact1!=null?fact1.terms:null).size()),
@@ -270,7 +270,7 @@ public class wocParser extends Parser {
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:51:2: ( ID ( '(' termlist ')' )? )
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:52:3: ID ( '(' termlist ')' )?
             {
-            ID2=(Token)match(input,ID,FOLLOW_ID_in_fact106); 
+            ID2=(Token)match(input,ID,FOLLOW_ID_in_fact107); 
 
             retval.name =(ID2!=null?ID2.getText():null); 
 
@@ -285,15 +285,15 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:53:5: '(' termlist ')'
                     {
-                    match(input,17,FOLLOW_17_in_fact114); 
+                    match(input,17,FOLLOW_17_in_fact115); 
 
-                    pushFollow(FOLLOW_termlist_in_fact116);
+                    pushFollow(FOLLOW_termlist_in_fact117);
                     termlist3=termlist();
 
                     state._fsp--;
 
 
-                    match(input,18,FOLLOW_18_in_fact118); 
+                    match(input,18,FOLLOW_18_in_fact119); 
 
                     retval.terms =termlist3;
 
@@ -330,7 +330,7 @@ public class wocParser extends Parser {
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:57:2: ( literal[$r] ( ',' literal[$r] )* )
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:57:4: literal[$r] ( ',' literal[$r] )*
             {
-            pushFollow(FOLLOW_literal_in_body135);
+            pushFollow(FOLLOW_literal_in_body136);
             literal(r);
 
             state._fsp--;
@@ -351,9 +351,9 @@ public class wocParser extends Parser {
             	case 1 :
             	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:57:17: ',' literal[$r]
             	    {
-            	    match(input,21,FOLLOW_21_in_body139); 
+            	    match(input,21,FOLLOW_21_in_body140); 
 
-            	    pushFollow(FOLLOW_literal_in_body141);
+            	    pushFollow(FOLLOW_literal_in_body142);
             	    literal(r);
 
             	    state._fsp--;
@@ -426,7 +426,7 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:61:4: a1= atom
                     {
-                    pushFollow(FOLLOW_atom_in_literal159);
+                    pushFollow(FOLLOW_atom_in_literal160);
                     a1=atom();
 
                     state._fsp--;
@@ -439,9 +439,9 @@ public class wocParser extends Parser {
                 case 2 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:62:4: 'not' a2= atom
                     {
-                    match(input,33,FOLLOW_33_in_literal166); 
+                    match(input,33,FOLLOW_33_in_literal167); 
 
-                    pushFollow(FOLLOW_atom_in_literal170);
+                    pushFollow(FOLLOW_atom_in_literal171);
                     a2=atom();
 
                     state._fsp--;
@@ -454,7 +454,7 @@ public class wocParser extends Parser {
                 case 3 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:63:4: operation
                     {
-                    pushFollow(FOLLOW_operation_in_literal177);
+                    pushFollow(FOLLOW_operation_in_literal178);
                     operation4=operation();
 
                     state._fsp--;
@@ -529,15 +529,15 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:67:4: v1= VAR comp_sym e1= expression
                     {
-                    v1=(Token)match(input,VAR,FOLLOW_VAR_in_operation196); 
+                    v1=(Token)match(input,VAR,FOLLOW_VAR_in_operation197); 
 
-                    pushFollow(FOLLOW_comp_sym_in_operation198);
+                    pushFollow(FOLLOW_comp_sym_in_operation199);
                     comp_sym5=comp_sym();
 
                     state._fsp--;
 
 
-                    pushFollow(FOLLOW_expression_in_operation202);
+                    pushFollow(FOLLOW_expression_in_operation203);
                     e1=expression();
 
                     state._fsp--;
@@ -550,11 +550,11 @@ public class wocParser extends Parser {
                 case 2 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:68:4: v2= VAR 'is' e2= expression
                     {
-                    v2=(Token)match(input,VAR,FOLLOW_VAR_in_operation211); 
+                    v2=(Token)match(input,VAR,FOLLOW_VAR_in_operation212); 
 
-                    match(input,32,FOLLOW_32_in_operation213); 
+                    match(input,32,FOLLOW_32_in_operation214); 
 
-                    pushFollow(FOLLOW_expression_in_operation217);
+                    pushFollow(FOLLOW_expression_in_operation218);
                     e2=expression();
 
                     state._fsp--;
@@ -597,7 +597,7 @@ public class wocParser extends Parser {
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:2: (l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |) )
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:4: l= mult_expression ( ( ( '+' | '-' ) r= mult_expression ) |)
             {
-            pushFollow(FOLLOW_mult_expression_in_expression240);
+            pushFollow(FOLLOW_mult_expression_in_expression241);
             l=mult_expression();
 
             state._fsp--;
@@ -648,7 +648,7 @@ public class wocParser extends Parser {
                         case 1 :
                             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:25: '+'
                             {
-                            match(input,20,FOLLOW_20_in_expression245); 
+                            match(input,20,FOLLOW_20_in_expression246); 
 
                             openu=OP.PLUS;
 
@@ -657,7 +657,7 @@ public class wocParser extends Parser {
                         case 2 :
                             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:73:47: '-'
                             {
-                            match(input,22,FOLLOW_22_in_expression250); 
+                            match(input,22,FOLLOW_22_in_expression251); 
 
                             openu=OP.MINUS;
 
@@ -667,7 +667,7 @@ public class wocParser extends Parser {
                     }
 
 
-                    pushFollow(FOLLOW_mult_expression_in_expression258);
+                    pushFollow(FOLLOW_mult_expression_in_expression259);
                     r=mult_expression();
 
                     state._fsp--;
@@ -724,7 +724,7 @@ public class wocParser extends Parser {
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:2: (l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |) )
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:4: l= primary_expression ( ( ( '*' | '/' ) r= primary_expression ) |)
             {
-            pushFollow(FOLLOW_primary_expression_in_mult_expression288);
+            pushFollow(FOLLOW_primary_expression_in_mult_expression289);
             l=primary_expression();
 
             state._fsp--;
@@ -775,7 +775,7 @@ public class wocParser extends Parser {
                         case 1 :
                             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:28: '*'
                             {
-                            match(input,19,FOLLOW_19_in_mult_expression293); 
+                            match(input,19,FOLLOW_19_in_mult_expression294); 
 
                             openu=OP.TIMES; 
 
@@ -784,7 +784,7 @@ public class wocParser extends Parser {
                         case 2 :
                             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:80:52: '/'
                             {
-                            match(input,24,FOLLOW_24_in_mult_expression298); 
+                            match(input,24,FOLLOW_24_in_mult_expression299); 
 
                             openu=OP.DIVIDE;
 
@@ -794,7 +794,7 @@ public class wocParser extends Parser {
                     }
 
 
-                    pushFollow(FOLLOW_primary_expression_in_mult_expression308);
+                    pushFollow(FOLLOW_primary_expression_in_mult_expression309);
                     r=primary_expression();
 
                     state._fsp--;
@@ -877,7 +877,7 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:86:4: INT
                     {
-                    INT6=(Token)match(input,INT,FOLLOW_INT_in_primary_expression332); 
+                    INT6=(Token)match(input,INT,FOLLOW_INT_in_primary_expression333); 
 
                     op =Constant.getConstant((INT6!=null?INT6.getText():null));
 
@@ -886,7 +886,7 @@ public class wocParser extends Parser {
                 case 2 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:87:4: VAR
                     {
-                    VAR7=(Token)match(input,VAR,FOLLOW_VAR_in_primary_expression339); 
+                    VAR7=(Token)match(input,VAR,FOLLOW_VAR_in_primary_expression340); 
 
                     op =Variable.getVariable((VAR7!=null?VAR7.getText():null));
 
@@ -895,15 +895,15 @@ public class wocParser extends Parser {
                 case 3 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:88:4: '(' expression ')'
                     {
-                    match(input,17,FOLLOW_17_in_primary_expression346); 
+                    match(input,17,FOLLOW_17_in_primary_expression347); 
 
-                    pushFollow(FOLLOW_expression_in_primary_expression348);
+                    pushFollow(FOLLOW_expression_in_primary_expression349);
                     expression8=expression();
 
                     state._fsp--;
 
 
-                    match(input,18,FOLLOW_18_in_primary_expression350); 
+                    match(input,18,FOLLOW_18_in_primary_expression351); 
 
                     op =expression8;
 
@@ -957,9 +957,9 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:93:5: ctx= ID ':'
                     {
-                    ctx=(Token)match(input,ID,FOLLOW_ID_in_atom374); 
+                    ctx=(Token)match(input,ID,FOLLOW_ID_in_atom375); 
 
-                    match(input,25,FOLLOW_25_in_atom376); 
+                    match(input,25,FOLLOW_25_in_atom377); 
 
                     context_id=(ctx!=null?ctx.getText():null);
 
@@ -969,7 +969,7 @@ public class wocParser extends Parser {
             }
 
 
-            name=(Token)match(input,ID,FOLLOW_ID_in_atom387); 
+            name=(Token)match(input,ID,FOLLOW_ID_in_atom388); 
 
             if(context_id==null) { atom_name=(name!=null?name.getText():null); } else {atom_name=context_id+":"+(name!=null?name.getText():null);} 
 
@@ -984,15 +984,15 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:95:5: '(' termlist ')'
                     {
-                    match(input,17,FOLLOW_17_in_atom395); 
+                    match(input,17,FOLLOW_17_in_atom396); 
 
-                    pushFollow(FOLLOW_termlist_in_atom397);
+                    pushFollow(FOLLOW_termlist_in_atom398);
                     termlist9=termlist();
 
                     state._fsp--;
 
 
-                    match(input,18,FOLLOW_18_in_atom399); 
+                    match(input,18,FOLLOW_18_in_atom400); 
 
                     terms=(Term[])termlist9.toArray(new Term[termlist9.size()]);
 
@@ -1039,7 +1039,7 @@ public class wocParser extends Parser {
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:2: (t1= term ( ',' tn= term )* )
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:103:4: t1= term ( ',' tn= term )*
             {
-            pushFollow(FOLLOW_term_in_termlist428);
+            pushFollow(FOLLOW_term_in_termlist429);
             t1=term();
 
             state._fsp--;
@@ -1062,9 +1062,9 @@ public class wocParser extends Parser {
             	case 1 :
             	    // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:104:4: ',' tn= term
             	    {
-            	    match(input,21,FOLLOW_21_in_termlist435); 
+            	    match(input,21,FOLLOW_21_in_termlist436); 
 
-            	    pushFollow(FOLLOW_term_in_termlist439);
+            	    pushFollow(FOLLOW_term_in_termlist440);
             	    tn=term();
 
             	    state._fsp--;
@@ -1156,7 +1156,7 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:108:4: constant
                     {
-                    pushFollow(FOLLOW_constant_in_term458);
+                    pushFollow(FOLLOW_constant_in_term459);
                     constant10=constant();
 
                     state._fsp--;
@@ -1169,7 +1169,7 @@ public class wocParser extends Parser {
                 case 2 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:109:4: VAR
                     {
-                    VAR11=(Token)match(input,VAR,FOLLOW_VAR_in_term465); 
+                    VAR11=(Token)match(input,VAR,FOLLOW_VAR_in_term466); 
 
                     term =Variable.getVariable((VAR11!=null?VAR11.getText():null));
 
@@ -1178,7 +1178,7 @@ public class wocParser extends Parser {
                 case 3 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:110:4: function
                     {
-                    pushFollow(FOLLOW_function_in_term472);
+                    pushFollow(FOLLOW_function_in_term473);
                     function12=function();
 
                     state._fsp--;
@@ -1225,17 +1225,17 @@ public class wocParser extends Parser {
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:114:2: ( ID '(' termlist ')' )
             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:114:4: ID '(' termlist ')'
             {
-            ID13=(Token)match(input,ID,FOLLOW_ID_in_function489); 
+            ID13=(Token)match(input,ID,FOLLOW_ID_in_function490); 
 
-            match(input,17,FOLLOW_17_in_function491); 
+            match(input,17,FOLLOW_17_in_function492); 
 
-            pushFollow(FOLLOW_termlist_in_function493);
+            pushFollow(FOLLOW_termlist_in_function494);
             termlist14=termlist();
 
             state._fsp--;
 
 
-            match(input,18,FOLLOW_18_in_function495); 
+            match(input,18,FOLLOW_18_in_function496); 
 
             retval.name =(ID13!=null?ID13.getText():null); retval.terms =termlist14;
 
@@ -1290,7 +1290,7 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:118:4: ID
                     {
-                    ID15=(Token)match(input,ID,FOLLOW_ID_in_constant512); 
+                    ID15=(Token)match(input,ID,FOLLOW_ID_in_constant513); 
 
                     constnt =Constant.getConstant((ID15!=null?ID15.getText():null));
 
@@ -1310,7 +1310,7 @@ public class wocParser extends Parser {
                         case 1 :
                             // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:119:5: '-'
                             {
-                            match(input,22,FOLLOW_22_in_constant520); 
+                            match(input,22,FOLLOW_22_in_constant521); 
 
                             }
                             break;
@@ -1318,7 +1318,7 @@ public class wocParser extends Parser {
                     }
 
 
-                    INT16=(Token)match(input,INT,FOLLOW_INT_in_constant524); 
+                    INT16=(Token)match(input,INT,FOLLOW_INT_in_constant525); 
 
                     constnt =Constant.getConstant((INT16!=null?INT16.getText():null));
 
@@ -1393,7 +1393,7 @@ public class wocParser extends Parser {
                 case 1 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:123:4: '<'
                     {
-                    match(input,27,FOLLOW_27_in_comp_sym540); 
+                    match(input,27,FOLLOW_27_in_comp_sym541); 
 
                     openu =OP.LESS;
 
@@ -1402,7 +1402,7 @@ public class wocParser extends Parser {
                 case 2 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:124:4: '<='
                     {
-                    match(input,28,FOLLOW_28_in_comp_sym547); 
+                    match(input,28,FOLLOW_28_in_comp_sym548); 
 
                     openu =OP.LESS_EQ;
 
@@ -1411,7 +1411,7 @@ public class wocParser extends Parser {
                 case 3 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:125:4: '>='
                     {
-                    match(input,31,FOLLOW_31_in_comp_sym554); 
+                    match(input,31,FOLLOW_31_in_comp_sym555); 
 
                     openu =OP.GREATER_EQ;
 
@@ -1420,7 +1420,7 @@ public class wocParser extends Parser {
                 case 4 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:126:4: '>'
                     {
-                    match(input,30,FOLLOW_30_in_comp_sym561); 
+                    match(input,30,FOLLOW_30_in_comp_sym562); 
 
                     openu =OP.GREATER;
 
@@ -1429,7 +1429,7 @@ public class wocParser extends Parser {
                 case 5 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:127:4: '='
                     {
-                    match(input,29,FOLLOW_29_in_comp_sym568); 
+                    match(input,29,FOLLOW_29_in_comp_sym569); 
 
                     openu =OP.EQUAL;
 
@@ -1438,7 +1438,7 @@ public class wocParser extends Parser {
                 case 6 :
                     // /home/staff/aweinz/svnrepo/gerald_weidinger_thesis/WOC - Wings of Change/antlr/woc.g:128:4: '!='
                     {
-                    match(input,16,FOLLOW_16_in_comp_sym575); 
+                    match(input,16,FOLLOW_16_in_comp_sym576); 
 
                     openu =OP.NOTEQUAL;
 
@@ -1465,65 +1465,65 @@ public class wocParser extends Parser {
  
 
     public static final BitSet FOLLOW_rule_or_fact_in_woc_program36 = new BitSet(new long[]{0x0000000004800202L});
-    public static final BitSet FOLLOW_fact_in_rule_or_fact59 = new BitSet(new long[]{0x0000000004800000L});
-    public static final BitSet FOLLOW_26_in_rule_or_fact67 = new BitSet(new long[]{0x0000000200004200L});
-    public static final BitSet FOLLOW_body_in_rule_or_fact71 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_23_in_rule_or_fact74 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_23_in_rule_or_fact81 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_fact106 = new BitSet(new long[]{0x0000000000020002L});
-    public static final BitSet FOLLOW_17_in_fact114 = new BitSet(new long[]{0x0000000000404600L});
-    public static final BitSet FOLLOW_termlist_in_fact116 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_fact118 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_literal_in_body135 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_21_in_body139 = new BitSet(new long[]{0x0000000200004200L});
-    public static final BitSet FOLLOW_literal_in_body141 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_atom_in_literal159 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_33_in_literal166 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_atom_in_literal170 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_operation_in_literal177 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_operation196 = new BitSet(new long[]{0x00000000F8010000L});
-    public static final BitSet FOLLOW_comp_sym_in_operation198 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_expression_in_operation202 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_operation211 = new BitSet(new long[]{0x0000000100000000L});
-    public static final BitSet FOLLOW_32_in_operation213 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_expression_in_operation217 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_mult_expression_in_expression240 = new BitSet(new long[]{0x0000000000500002L});
-    public static final BitSet FOLLOW_20_in_expression245 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_22_in_expression250 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_mult_expression_in_expression258 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_primary_expression_in_mult_expression288 = new BitSet(new long[]{0x0000000001080002L});
-    public static final BitSet FOLLOW_19_in_mult_expression293 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_24_in_mult_expression298 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_primary_expression_in_mult_expression308 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_in_primary_expression332 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_primary_expression339 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_17_in_primary_expression346 = new BitSet(new long[]{0x0000000000024400L});
-    public static final BitSet FOLLOW_expression_in_primary_expression348 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_primary_expression350 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_atom374 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_25_in_atom376 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_ID_in_atom387 = new BitSet(new long[]{0x0000000000020002L});
-    public static final BitSet FOLLOW_17_in_atom395 = new BitSet(new long[]{0x0000000000404600L});
-    public static final BitSet FOLLOW_termlist_in_atom397 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_atom399 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_term_in_termlist428 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_21_in_termlist435 = new BitSet(new long[]{0x0000000000404600L});
-    public static final BitSet FOLLOW_term_in_termlist439 = new BitSet(new long[]{0x0000000000200002L});
-    public static final BitSet FOLLOW_constant_in_term458 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_term465 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_function_in_term472 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_function489 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_17_in_function491 = new BitSet(new long[]{0x0000000000404600L});
-    public static final BitSet FOLLOW_termlist_in_function493 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_18_in_function495 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_constant512 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_22_in_constant520 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_INT_in_constant524 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_27_in_comp_sym540 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_comp_sym547 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_31_in_comp_sym554 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_30_in_comp_sym561 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_29_in_comp_sym568 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_16_in_comp_sym575 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_fact_in_rule_or_fact60 = new BitSet(new long[]{0x0000000004800000L});
+    public static final BitSet FOLLOW_26_in_rule_or_fact68 = new BitSet(new long[]{0x0000000200004200L});
+    public static final BitSet FOLLOW_body_in_rule_or_fact72 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_23_in_rule_or_fact75 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_23_in_rule_or_fact82 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_fact107 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_17_in_fact115 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_termlist_in_fact117 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_fact119 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_literal_in_body136 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_21_in_body140 = new BitSet(new long[]{0x0000000200004200L});
+    public static final BitSet FOLLOW_literal_in_body142 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_atom_in_literal160 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_33_in_literal167 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_atom_in_literal171 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_operation_in_literal178 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_operation197 = new BitSet(new long[]{0x00000000F8010000L});
+    public static final BitSet FOLLOW_comp_sym_in_operation199 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_operation203 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_operation212 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_32_in_operation214 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_operation218 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_mult_expression_in_expression241 = new BitSet(new long[]{0x0000000000500002L});
+    public static final BitSet FOLLOW_20_in_expression246 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_22_in_expression251 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_mult_expression_in_expression259 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_primary_expression_in_mult_expression289 = new BitSet(new long[]{0x0000000001080002L});
+    public static final BitSet FOLLOW_19_in_mult_expression294 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_24_in_mult_expression299 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_primary_expression_in_mult_expression309 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_in_primary_expression333 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_primary_expression340 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_17_in_primary_expression347 = new BitSet(new long[]{0x0000000000024400L});
+    public static final BitSet FOLLOW_expression_in_primary_expression349 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_primary_expression351 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_atom375 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_25_in_atom377 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_ID_in_atom388 = new BitSet(new long[]{0x0000000000020002L});
+    public static final BitSet FOLLOW_17_in_atom396 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_termlist_in_atom398 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_atom400 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_term_in_termlist429 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_21_in_termlist436 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_term_in_termlist440 = new BitSet(new long[]{0x0000000000200002L});
+    public static final BitSet FOLLOW_constant_in_term459 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_term466 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_function_in_term473 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_function490 = new BitSet(new long[]{0x0000000000020000L});
+    public static final BitSet FOLLOW_17_in_function492 = new BitSet(new long[]{0x0000000000404600L});
+    public static final BitSet FOLLOW_termlist_in_function494 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_18_in_function496 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_constant513 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_22_in_constant521 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_INT_in_constant525 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_27_in_comp_sym541 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_comp_sym548 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_31_in_comp_sym555 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_30_in_comp_sym562 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_29_in_comp_sym569 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_16_in_comp_sym576 = new BitSet(new long[]{0x0000000000000002L});
 
 }

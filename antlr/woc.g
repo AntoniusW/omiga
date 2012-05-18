@@ -34,7 +34,7 @@ woc_program throws RuleNotSafeException, FactSizeException
 
 rule_or_fact throws RuleNotSafeException, FactSizeException
 @init{ boolean hasHead = false; }
-	:	fact? {hasHead=true;}
+	:	(fact{hasHead=true;})?
 		(':-' {Rule r = new Rule();} body[r] '.' {if(hasHead ) {
 				Term[] termarr=(Term[])$fact.terms.toArray(new Term[$fact.terms.size()]);
 				Atom head=Atom.getAtom($fact.name,$fact.terms.size(),termarr);
