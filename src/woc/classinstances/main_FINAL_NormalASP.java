@@ -70,6 +70,7 @@ public class main_FINAL_NormalASP {
         
         // create context
         ContextASPMCSRewriting ctx = new ContextASPMCSRewriting();
+        ContextASPRewriting rewctx = null;
         // parsing with ANTLR
         try {
             // setting up lexer and parser
@@ -87,8 +88,8 @@ public class main_FINAL_NormalASP {
                     
                     System.out.println("Parsed program, starting rewriting...");
                     
-                    Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
-                    ctx = rewriter.rewrite(ctx);
+                    Rewriter_easy rewriter = new Rewriter_easy();
+                    rewctx = rewriter.rewrite(ctx);
                     
                     System.out.println("Read in program is: ");
                     ctx.printContext();
@@ -115,7 +116,7 @@ public class main_FINAL_NormalASP {
         System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
         
         
-        Manager m = new Manager(ctx);
+        Manager m = new Manager(rewctx);
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets,outprint,filter);
 

@@ -55,7 +55,7 @@ public class testMCS {
         try {
             ContextASP c = pars.readContext(input);
             Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
-            c = rewriter.rewrite(c);
+             //c = rewriter.rewrite(c);
             ((ContextASPMCSRewriting) c).registerFactFromOutside(Predicate.getPredicate("s", 1));
             c.printContext();
             
