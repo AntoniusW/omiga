@@ -328,8 +328,9 @@ public class JoinNode extends Node{
     }
     
     //Actually this method is only called for JoinNodeNegative
-    ArrayList<Instance> temp;
+    
     public void informOfClosure(SelectionNode sN, boolean from){
+        ArrayList<Instance> temp;
         //System.out.println("Closure of: " + sN);
         //TODO: A closed notification always come from the right side! just kick this if statement. No need for bool nor sN
         Node actual; // The node that is not closed

@@ -70,5 +70,7 @@ public interface ANodeInterface extends Remote {
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
     
-    public ReplyMessage printAnswer() throws RemoteException;    
+    public ReplyMessage printAnswer() throws RemoteException;
+    
+    public String getName() throws RemoteException;
 }

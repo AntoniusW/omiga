@@ -4,6 +4,7 @@
  */
 package Entity;
 
+import Datastructure.Rete.Node;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
 import Datastructure.choice.ChoiceUnit;
@@ -12,10 +13,8 @@ import Datastructure.choice.ChoiceUnitMCSRewrite;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.ContextMCSInterface;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
+import network.Pair;
 import network.ReplyMessage;
 
 /**
@@ -195,8 +194,8 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
     }
 
     @Override
-    public HashMap<Predicate, HashSet<Instance>> deriveNewFacts(int since) {
-        return this.choiceUnit.deriveNewFactsSindsDecisionLevel(since);
+    public ArrayList<LinkedList<Pair<Node,Instance>>> deriveNewFacts() {
+        return this.choiceUnit.deriveNewFactsSindsDecisionLevel();
     }
     
     @Override

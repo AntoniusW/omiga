@@ -20,10 +20,8 @@ import Entity.Rule;
 import Entity.Variable;
 import Exceptions.FactSizeException;
 import Interfaces.Term;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Stack;
+import java.util.*;
+import network.Pair;
 import network.ReplyMessage;
 import org.jgrapht.graph.DirectedSubgraph;
 
@@ -538,8 +536,8 @@ public class ChoiceUnit {
         return false;
     }
     
-    public HashMap<Predicate, HashSet<Instance>> deriveNewFactsSindsDecisionLevel(int lvl){
-        return this.memory.deriveNewFactsSindsDecisionLevel(lvl);
+    public ArrayList<LinkedList<Pair<Node,Instance>>> deriveNewFactsSindsDecisionLevel(){
+        return this.memory.deriveNewFactsSindsDecisionLevel();
     }
 
     public ReplyMessage choicePlusInfo() {

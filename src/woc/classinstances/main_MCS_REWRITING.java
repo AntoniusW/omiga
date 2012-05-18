@@ -58,14 +58,14 @@ public class main_MCS_REWRITING {
             c.getChoiceUnit().DeriveSCC();
             
             System.out.println("Before any choice");
-            System.out.println(c.deriveNewFacts(0));
+            //System.out.println(c.deriveNewFacts(0));
             
             c.choice();
             c.propagate();
-            System.out.println("After choice1 with decisionlevel 0");
-            System.out.println(c.deriveNewFacts(0));
-            System.out.println("After choice1 with decisionlevel 1");
-            System.out.println(c.deriveNewFacts(1));
+            //System.out.println("After choice1 with decisionlevel 0");
+            //System.out.println(c.deriveNewFacts(0));
+            //System.out.println("After choice1 with decisionlevel 1");
+            //System.out.println(c.deriveNewFacts(1));
             
             /*Term[] terms = new Term[1];
             terms[0] = Constant.getConstant("0");

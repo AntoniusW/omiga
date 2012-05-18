@@ -4,12 +4,15 @@
  */
 package Interfaces;
 
+import Datastructure.Rete.Node;
 import Entity.Instance;
 import Entity.Predicate;
 import Entity.Rule;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import network.Pair;
 import network.ReplyMessage;
 
 /**
@@ -30,6 +33,6 @@ public interface ContextMCSInterface {
     public void closeFactFromOutside(Predicate p);
     public void closeRuleFromOutside(Predicate p);
     public int getDecisionLevel();
-    public HashMap<Predicate,HashSet<Instance>> deriveNewFacts(int since);
+    public ArrayList<LinkedList<Pair<Node,Instance>>> deriveNewFacts();
     
 }

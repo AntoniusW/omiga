@@ -61,7 +61,7 @@ public class Constant extends Term implements OperandI, Serializable {
         //System.out.println("CREATED CONSTANT: " + name);
         try{
             this.intValue = Integer.parseInt(name);
-        }catch(Exception e){
+        }catch(NumberFormatException e){
             this.intValue = null;
         }
     }

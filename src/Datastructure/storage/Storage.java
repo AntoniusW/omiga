@@ -56,18 +56,20 @@ public class Storage {
     public void addInstance(Instance instance){
         for(int i = 0; i < instance.getSize();i++){
             // The try stuff is definitly faster than the if block ~3seconds for 2kk instances
+            /*
             try{
                 memory[i].get(instance.get(i)).add(instance);
             }catch(Exception e){
                 memory[i].put(instance.get(i), new HashSet<Instance>());
                 memory[i].get(instance.get(i)).add(instance);
-            }
-            /*if(!memory[i].containsKey(instance.get(i))) 
+            }/*/
+             if(!memory[i].containsKey(instance.get(i))) 
                 memory[i].put(instance.get(i), new HashSet<Instance>());
             
             //if(!memory[i].get(instance.get(i)).contains(instance)) {
                 memory[i].get(instance.get(i)).add(instance);
-            //}*/
+            //}
+            //*/
         }
         //System.out.println(this + " Added: " + Instance.getInstanceAsString(instance));
     }

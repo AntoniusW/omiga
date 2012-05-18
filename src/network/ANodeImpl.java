@@ -4,6 +4,8 @@
  */
 package network;
 
+import Datastructure.Rete.BasicNode;
+import Datastructure.Rete.Node;
 import Datastructure.Rewriting.Rewriter_easyMCS;
 import Entity.*;
 import Exceptions.FactSizeException;
@@ -30,7 +32,7 @@ import parser.antlr.wocParser;
  */
 public class ANodeImpl implements ANodeInterface {
     
-    private ArrayList<Pair<String,ANodeInterface>> other_nodes;
+    private Map<String,ANodeInterface> other_nodes;
     
     // for serialization/deserialization
     public static String serializingFrom = null;
@@ -54,8 +56,10 @@ public class ANodeImpl implements ANodeInterface {
     // TODO AW something more specific than Object would be nice
 
     // list of predicates required at other nodes used for out-projection of predicates
-    private static Map<String, ArrayList<Predicate>> required_predicates =
-            new HashMap<String, ArrayList<Predicate>>();
+    private static Map<Predicate, ArrayList<ANodeInterface>> required_predicates =
+            new HashMap<Predicate, ArrayList<ANodeInterface>>();
+    //private static Map<String, ArrayList<Predicate>> required_predicates =
+     //       new HashMap<String, ArrayList<Predicate>>();
     
     // the local import interface, i.e., which predicates are imported from where
     private static Map<String, ArrayList<Pair<String,Integer>>> import_predicates =
@@ -87,6 +91,7 @@ public class ANodeImpl implements ANodeInterface {
         this.filter = filter;
         
         closed_predicates = new HashSet<Predicate>();
+        other_nodes = new HashMap<String, ANodeInterface>();
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager() );
@@ -108,7 +113,10 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage init(ArrayList<Pair<String, ANodeInterface>> other_nodes) throws RemoteException {
-        this.other_nodes = other_nodes;
+        for (Pair<String, ANodeInterface> pair : other_nodes) {
+            this.other_nodes.put(pair.getArg1(), pair.getArg2());
+        }
+        //this.other_nodes = other_nodes;
         
         System.out.println("Node[" + local_name +"]: received " + other_nodes.size() +" other nodes.");
         
@@ -251,10 +259,10 @@ public class ANodeImpl implements ANodeInterface {
             deser_mapping.put(ser_id, func);
         }
 
-        for (Pair<String, ANodeInterface> other : other_nodes) {
+        for (Entry<String, ANodeInterface> other : other_nodes.entrySet()) {
             // tell active domain to other nodes except self
-            if(!other.getArg1().equals(local_name)) {
-                other.getArg2().receive_active_domain(local_name, predicates,
+            if(!other.getKey().equals(local_name)) {
+                other.getValue().receive_active_domain(local_name, predicates,
                         functions, constants);
             }  
         }
@@ -266,13 +274,13 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage exchange_import_domain() throws RemoteException {
         System.out.println("Node[" + local_name +"]: Exchanging import domain.");
         // tell import interface to all nodes
-        for(Pair<String,ANodeInterface> other : other_nodes) {
-            System.out.println("Node[" + local_name +"]: Import predicates from Node["+other.getArg1()+"]: "
-                    +import_predicates.get(other.getArg1()));
+        for(Entry<String,ANodeInterface> other : other_nodes.entrySet()) {
+            System.out.println("Node[" + local_name +"]: Import predicates from Node["+other.getKey()+"]: "
+                    +import_predicates.get(other.getKey()));
             // only exchange import if it is non-empty
-            if(import_predicates.get(other.getArg1())!=null) {   
-                other.getArg2().receiveNextFactsFrom(local_name);     // needed to de-serialize predicates at other node
-                other.getArg2().receive_import_domain(local_name,import_predicates.get(other.getArg1()));
+            if(import_predicates.get(other.getKey())!=null) {   
+                other.getValue().receiveNextFactsFrom(local_name);     // needed to de-serialize predicates at other node
+                other.getValue().receive_import_domain(local_name,import_predicates.get(other.getKey()));
             }
         }
         return ReplyMessage.SUCCEEDED;
@@ -383,9 +391,11 @@ public class ANodeImpl implements ANodeInterface {
             }
         }*/
         
-        System.out.println("Node["+local_name+"]: Closed predicates are: "+closed_predicates);
-        for (Predicate predicate : closed_predicates) {
-            ctx.closeFactFromOutside(predicate);
+        if(closed_predicates != null ) {
+            System.out.println("Node["+local_name+"]: Closed predicates are: "+closed_predicates);
+            for (Predicate predicate : closed_predicates) {
+                ctx.closeFactFromOutside(predicate);
+            }   
         }
         
         System.out.println("Node[" + local_name +"]: Received facts end.");
@@ -429,7 +439,14 @@ public class ANodeImpl implements ANodeInterface {
             required_preds.add(Predicate.getPredicate(local_pred_name, pair.getArg2()));
             
         }
-        ANodeImpl.required_predicates.put(from, (ArrayList<Predicate>)required_preds);
+        // build list of other nodes that import local predicates
+        for (Predicate predicate : required_preds) {
+            if( !ANodeImpl.required_predicates.containsKey(predicate))
+                ANodeImpl.required_predicates.put(predicate, new ArrayList<ANodeInterface>());
+            ANodeInterface from_node = other_nodes.get(from);
+            ANodeImpl.required_predicates.get(predicate).add(from_node);
+        }
+        //ANodeImpl.required_predicates.put(from, (ArrayList<Predicate>)required_preds);
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -638,12 +655,82 @@ public class ANodeImpl implements ANodeInterface {
         //int current_level = ctx.getDecisionLevel();
         //current_level = (current_level == 0) ? 0 : current_level-1;
         System.out.println("Node[" + local_name +"]: Decision level before push = " + decision_level_before_push);
-        HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(decision_level_before_push);
+        ArrayList<LinkedList<Pair<Node,Instance>>> new_facts = ctx.deriveNewFacts();
         
-        System.out.println("Node[" + local_name +"]: PushDerivedFacts: required_predicates ="+required_predicates);
-        System.out.println("Node[" + local_name +"]: PushDerivedFacts: new_facts ="+new_facts);
+        //System.out.println("Node[" + local_name +"]: PushDerivedFacts: required_predicates ="+required_predicates);
+        //System.out.println("Node[" + local_name +"]: PushDerivedFacts: new_facts ="+new_facts);
         
-        // for all other nodes
+        // collect newly derived instances for required facts
+        HashMap<ANodeInterface,HashMap<Predicate,ArrayList<Instance>>> to_push =
+                new HashMap<ANodeInterface, HashMap<Predicate, ArrayList<Instance>>>();
+        for(int dl=decision_level_before_push; dl < new_facts.size(); dl++) {
+            LinkedList<Pair<Node,Instance>> added_in_dl = new_facts.get(dl);
+            
+            for (Pair<Node, Instance> pair : added_in_dl) {
+                if( pair.getArg1().getClass().equals(BasicNode.class)) {
+                    Predicate pred = ((BasicNode)pair.getArg1()).getPred();
+                    if( required_predicates.containsKey(pred)) {
+                        for (ANodeInterface other : required_predicates.get(pred)) {
+                            if(!to_push.containsKey(other))
+                                to_push.put(other, new HashMap<Predicate, ArrayList<Instance>>());
+                            if(!to_push.get(other).containsKey(pred))
+                                to_push.get(other).put(pred, new ArrayList<Instance>());
+                            to_push.get(other).get(pred).add(pair.getArg2());
+                        }
+                    }
+            }
+        }
+        }
+            
+        // collect all newly closed predicates
+        HashMap<ANodeInterface,ArrayList<Predicate>> closed_preds =new HashMap<ANodeInterface, ArrayList<Predicate>>();
+         for (Entry<Predicate, ArrayList<ANodeInterface>> entry : required_predicates.entrySet()) {
+             if( ctx.getRete().getBasicNodeMinus(entry.getKey()).isClosed() && !closed_predicates.contains(entry.getKey())) {
+                 closed_predicates.add(entry.getKey());
+                 for (ANodeInterface aNodeInterface : entry.getValue()) {
+                     if(!closed_preds.containsKey(aNodeInterface) )
+                         closed_preds.put(aNodeInterface, new ArrayList<Predicate>());
+                     closed_preds.get(aNodeInterface).add(entry.getKey());
+                 }
+             }
+         }
+         
+         for (ANodeInterface aNodeInterface : other_nodes.values()) {
+            Map<Predicate,ArrayList<Instance>> in_facts = to_push.get(aNodeInterface);
+            List<Predicate> closed_predicates = closed_preds.get(aNodeInterface);
+            
+            if( in_facts == null && closed_predicates==null ) {
+                try {
+                    System.out.println("Node["+local_name+"]: Nothing to push for Node["+aNodeInterface.getName()+"].");
+                } catch (RemoteException ex) {
+                    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                continue;
+            }
+            
+            try {
+                    System.out.println("Node[" + local_name +"]: PUSHING.");
+                    System.out.println("Node[" + local_name +"]: PushDerivedFacts: closed_predicates = "+closed_predicates);
+                    System.out.println("Node[" + local_name +"]: PushDerivedFacts: to_push = "+to_push);
+                    aNodeInterface.receiveNextFactsFrom(local_name);
+                    ReplyMessage reply = aNodeInterface.handleAddingFacts(global_level, in_facts,closed_predicates);
+                    if (reply == ReplyMessage.INCONSISTENT)
+                    {
+                        return ReplyMessage.INCONSISTENT;
+                    }
+                    assert (reply == ReplyMessage.SUCCEEDED);
+            } catch (RemoteException ex) {
+                try {
+                    System.out.println("Node[" + local_name +"]: Exception in pushing derived facts to:"+aNodeInterface.getName());
+                } catch (RemoteException ex1) {
+                    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+                    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+        }
+        
+        /*// for all other nodes
         for (Iterator<Pair<String, ANodeInterface>> it = other_nodes.iterator(); it.hasNext();) {
             Pair<String,ANodeInterface>  node = it.next();
             
@@ -712,7 +799,7 @@ public class ANodeImpl implements ANodeInterface {
                 System.out.println("Node[" + local_name +"]: Exception in pushing derived facts to:"+node.getArg1());
                     Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -723,17 +810,29 @@ public class ANodeImpl implements ANodeInterface {
         
         int dec = ctx.getDecisionLevel()+1;
         for (Predicate predicate : local_predicates) {
-            if( predicate.getNodeId()!= null)
+            if( predicate.getNodeId()!= null) {
+                closed_predicates.add(predicate);
                 ctx.closeFactFromOutside(predicate);
+            }
         }
         
-        HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(dec);
+        ArrayList<LinkedList<Pair<Node, Instance>>> new_facts = ctx.deriveNewFacts();
+        for (int dl = dec; dl < new_facts.size(); dl++) {
+            for (Pair<Node, Instance> pair : new_facts.get(dl)) {
+                if(pair.getArg1().getClass().equals(BasicNode.class)) {
+                    System.out.println("Node["+local_name+"]: finalClosing derived new fact: "+((BasicNode)pair.getArg1()).getPred()+" "+ pair.getArg2());
+                    return ReplyMessage.INCONSISTENT;  
+                }
+            }
+        }
+        
+        /*HashMap<Predicate, HashSet<Instance>> new_facts = ctx.deriveNewFacts(dec);
         System.out.println("Node["+local_name+"]: finalClosing, new_facts: "+new_facts);
 
         for (HashSet<Instance> hashSet : new_facts.values()) {
             if( !hashSet.isEmpty() )
                 return ReplyMessage.INCONSISTENT;  
-        }
+        }*/
         
         if (!ctx.isSatisfiable())
         {
@@ -742,6 +841,10 @@ public class ANodeImpl implements ANodeInterface {
         
         return ReplyMessage.SUCCEEDED;
     }    
+    
+    public String getName() {
+        return local_name;
+    }
         
     public static void main(String[] args) {
         String local_name = args[0];

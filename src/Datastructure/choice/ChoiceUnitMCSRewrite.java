@@ -91,14 +91,16 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         System.out.println("Current SCC = "+actualSCC);*/
         
         if(actualSCC >= SCC.size()) {
+            System.out.println("ChoiceUnitMCSRewrite.choice: actualSCC >= SCC.size().");
             return false;
         }
         
         //We need to do a positive guess
         for(ChoiceNode cN: SCC.get(actualSCC)){
             if(!cN.getAllInstances().isEmpty()){
-                //System.out.println("POSITIVE GUESS possible!");
+                System.out.println("POSITIVE GUESS possible!");
                 this.addChoicePoint();
+                System.out.println("ChoiceUnitMCSRewrite.choice: choice point added.");
                 Instance inz = cN.getAllInstances().get(0);
                 System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                 for(Atom a: cN.getRule().getBodyMinus()){

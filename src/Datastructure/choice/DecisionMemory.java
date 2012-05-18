@@ -13,6 +13,8 @@ import Entity.Predicate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import network.Pair;
 
 /**
  *
@@ -38,7 +40,8 @@ public class DecisionMemory {
      */
        
     private int decisionLevel;
-    private ArrayList<HashMap<Node,HashSet<Instance>>> decisionLayer;
+    //private ArrayList<HashMap<Node,HashSet<Instance>>> decisionLayer;
+    private ArrayList<LinkedList<Pair<Node,Instance>>> decisionLayer;
     private ArrayList<Node> nodes;
     
     /**
@@ -47,7 +50,8 @@ public class DecisionMemory {
     public DecisionMemory(){
         this.decisionLevel = -1; // start with -1 as addChocepoint increases this by one.
         this.nodes = new ArrayList<Node>();
-        this.decisionLayer = new ArrayList<HashMap<Node,HashSet<Instance>>>(); //TODO: Use an ArrayList rather than a hashSet
+        //this.decisionLayer = new ArrayList<HashMap<Node,HashSet<Instance>>>(); //TODO: Use an ArrayList rather than a hashSet
+        this.decisionLayer = new ArrayList<LinkedList<Pair<Node,Instance>>>();
         this.addChoicePoint();
     }
     
@@ -62,19 +66,39 @@ public class DecisionMemory {
      * @param n the node you want to register
      */
     public void addNode(Node n){
-        this.nodes.add(n);
-        this.decisionLayer.get(this.decisionLevel).put(n, new HashSet<Instance>());
+        //NOT NEEDED ANZMORE SINCE WE NOW USE A LIST of LISTS of PAIRS,no need to register nodes
+        //this.nodes.add(n);
+        //this.decisionLayer.get(this.decisionLevel).put(n, new LinkedList<Instance>());
+        //this.decisionLayer.get(this.decisionLevel).put(n, new HashSet<Instance>());
     }
     
     /**
      * Increases the decisionlevel and creates memory for the new level
      */
     public void addChoicePoint(){
+        System.out.println("DecisionMemory.addChoicePoint: method entry.");
         this.decisionLevel++;
-        this.decisionLayer.add(new HashMap<Node,HashSet<Instance>>());
+        this.decisionLayer.add(new LinkedList<Pair<Node,Instance>>());
+        
+        /*System.out.println("DecisionMemory.addChoicePoint: added new HashMap to decisionLayer.");
+        System.out.println("DecisionLevel is: "+decisionLevel);
         for(int i = 0; i < nodes.size();i++){
-            this.decisionLayer.get(this.decisionLevel).put(nodes.get(i), new HashSet<Instance>());
-        }
+            try {
+                if(decisionLevel > 277)
+                    System.out.println("Nodes.size is: "+nodes.size() + " i="+i);
+                HashSet<Instance> new_hs = new HashSet<Instance>();
+                if(decisionLevel >277)
+                    System.out.println("New HashSet created.");
+                this.decisionLayer.get(this.decisionLevel).put(nodes.get(i), new_hs);
+                if(decisionLevel >277)
+                    System.out.println("HashSet put.");
+            } catch (Exception e) {
+                System.out.println("Some exception occured."+e);
+                e.printStackTrace();
+            }
+            
+        }*/
+        System.out.println("DecisionMemory.addChoicePoint: method end.");
     }
     
     /**
@@ -85,7 +109,8 @@ public class DecisionMemory {
      */
     public void addInstance(Node n, Instance instance){
         //if(this.decisionLevel < 1) return;  // TODO AW out-commented this, as it leads to ignoring all facts, was there another reason for this?
-        this.decisionLayer.get(this.decisionLevel).get(n).add(instance);
+       this.decisionLayer.get(decisionLevel).add(new Pair<Node, Instance>(n,instance));
+        // this.decisionLayer.get(this.decisionLevel).get(n).add(instance);
     }
     
     /**
@@ -93,15 +118,15 @@ public class DecisionMemory {
      */
     public void backtrack(){
         //System.out.println("STARTING BACKTRACKING!");
-        for(Node n: this.decisionLayer.get(this.decisionLevel).keySet()){
+        for(Pair<Node,Instance> pa: this.decisionLayer.get(decisionLevel)){
+            pa.getArg1().simpleRemoveInstance(pa.getArg2());
+        }
+        /*for(Node n: this.decisionLayer.get(this.decisionLevel).keySet()){
             for(Instance inz: this.decisionLayer.get(this.decisionLevel).get(n)){
-                /*if(n.getClass().equals(ChoiceNode.class)){
-                    System.out.println("Removing from ChoiceNode: " + n + " - " + inz);
-                }*/
                 //System.out.println("Trying to remove: " + inz + " from: " + n);
                 n.simpleRemoveInstance(inz);
             }
-        }
+        }*/
         this.decisionLayer.remove(this.decisionLevel);
         this.decisionLevel--;
         //System.out.println("FINISHED BACKTRACKING!");
@@ -121,11 +146,8 @@ public class DecisionMemory {
     public void printDecisionMemory(){
         for(int i = 0; i < this.decisionLayer.size();i++){
             System.out.println("DECISION LVL: " + i);
-            for(Node n: this.decisionLayer.get(i).keySet()){
-                System.out.println("Node: " + n);
-                for(Instance inz: this.decisionLayer.get(i).get(n)){
-                    System.out.println(inz);
-                }
+            for(Pair<Node,Instance> pa: this.decisionLayer.get(decisionLevel)){
+                System.out.println(pa);
             }
         }
     }
@@ -143,25 +165,10 @@ public class DecisionMemory {
      * @param lvl the Decisionlevel from which on you want all added facts
      * @return A HashMap of Predicates with corrsponding instances
      */
-    public HashMap<Predicate, HashSet<Instance>> deriveNewFactsSindsDecisionLevel(int lvl){
-        HashMap<Predicate, HashSet<Instance>> ret = new HashMap<Predicate, HashSet<Instance>>();
+    public ArrayList<LinkedList<Pair<Node,Instance>>> deriveNewFactsSindsDecisionLevel(){
         
-        //System.out.println("DNFSDL: decisionLayer.size() = "+this.decisionLayer.size());
-        //System.out.println("DNFSDL: lvl = "+lvl);
-        for(int i = lvl; i < this.decisionLayer.size();i++){
-            for(Node n: this.decisionLayer.get(i).keySet()){
-                if(n.getClass().equals(BasicNode.class)){
-                    BasicNode bn = (BasicNode)n;
-                    if(!ret.containsKey(bn.getPred())){
-                        ret.put(bn.getPred(), new HashSet<Instance>());
-                    }
-                    ret.get(bn.getPred()).addAll(this.decisionLayer.get(i).get(bn));
-                    //System.out.println("DNFSDL: decisionLayer.get(i).get(bn) = "+this.decisionLayer.get(i).get(bn));
-                }
-            }
-        }
+        return this.decisionLayer;
         
-        return ret;
     }
     
 }
