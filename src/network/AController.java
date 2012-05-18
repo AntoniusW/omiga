@@ -191,14 +191,14 @@ public class AController {
                     }
                     else
                     {
-                        System.out.println("Controller. A potential answer set  No.["+potential_count+"] found. Now do final closing");
+                        System.out.println("Controller. A potential answer set  No.["+potential_count+"] found. Now do final closing. global_level = " + global_level);
                         potential_count++;
                         printAnswer();
                         boolean is_an_answer = true;
                         for (int i = 0; i < system_size; i++)
                         {
                             System.out.println("Controller. Final closing at node[" + i + "]");
-                            if (nodes.get(i).getArg2().finalClosing() == ReplyMessage.INCONSISTENT)
+                            if (nodes.get(i).getArg2().finalClosing(global_level) == ReplyMessage.INCONSISTENT)
                             {
                                 System.out.println("Controller. Killing answer set after finalClosing.");
                                 is_an_answer = false;

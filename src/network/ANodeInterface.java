@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Minh Dao-Tran
  */
 public interface ANodeInterface extends Remote {
-    public ReplyMessage finalClosing() throws RemoteException;
+    public ReplyMessage finalClosing(int global_level) throws RemoteException;
     
     /*
      * Initialize local node and read in local program.

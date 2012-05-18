@@ -62,7 +62,7 @@ public class Client {
             }
             
             for (Pair<String, ANodeInterface> pair : nodes) {
-                pair.getArg2().propagate(0);   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
+                pair.getArg2().firstPropagate();
             }
             
             System.out.println("Client. Interpretation after first round of all propagation");

@@ -334,6 +334,15 @@ public class ANodeImpl implements ANodeInterface {
         return ReplyMessage.SUCCEEDED;
     }
 
+    private void store_global_level_map(int global_level)
+    {
+        int local_dc = ctx.getDecisionLevel();
+        decision_level_before_push = local_dc;
+        
+        global_to_local_dc.put(global_level, local_dc);
+        
+        System.out.println("Node[" + local_name + "]: store_global_level_map. put(" + global_level + ", " + local_dc + ").");
+    }
     
     @Override
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts, List<Predicate> closed_predicates) throws RemoteException {
@@ -344,11 +353,17 @@ public class ANodeImpl implements ANodeInterface {
                
         System.out.println("Node[" + local_name +"]: Received facts from "+serializingFrom +":");
         System.out.println("Node[" + local_name +"]: HAF: ctx.decisionLevel (decision_level_before_push) = "+ctx.getDecisionLevel());
-        decision_level_before_push = ctx.getDecisionLevel();
+        //decision_level_before_push = ctx.getDecisionLevel();
         if (ctx.getDecisionLevel() > local_dc_limit)
         {
             System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
         }
+        
+        assert (global_level > 0);
+        
+        // store mapping of global_level - 1 to the local_dc before pushing 
+        // so that when backtracking, we can remove the pushed facts
+        store_global_level_map(global_level-1);
         
         HashMap<Predicate,ArrayList<Instance>> in_facts_map = (HashMap<Predicate,ArrayList<Instance>>) in_facts;
         ctx.addFactsFromOutside(in_facts_map);
@@ -390,6 +405,7 @@ public class ANodeImpl implements ANodeInterface {
         serializingFrom = from_node;
         
         System.out.println("Node[" + local_name +"]: The next facts will come from Node[" + from_node+"]");
+        ctx.printAnswerSet(filter);
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -491,20 +507,13 @@ public class ANodeImpl implements ANodeInterface {
     
     @Override
     public ReplyMessage propagate(int global_level) throws RemoteException {
+        //store_global_level_map(global_level);
+        return local_propagate(global_level);
+    }
+    
+    public ReplyMessage local_propagate(int global_level) throws RemoteException {
         
-        int local_dc = ctx.getDecisionLevel();
-        decision_level_before_push = ctx.getDecisionLevel();
-        
-        System.out.println("Node[" + local_name + "]: before propagate. local_dc = " + local_dc);
-        
-        if (ctx.getDecisionLevel() > local_dc_limit)
-        {
-            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
-        }
-        
-        global_to_local_dc.put(global_level, local_dc);
-        
-        System.out.println("Node[" + local_name + "]: propagate. put(" + global_level + ", " + local_dc + ").");
+        store_global_level_map(global_level);
         
         ctx.propagate();
         
@@ -532,7 +541,7 @@ public class ANodeImpl implements ANodeInterface {
         }
         else
         {
-            System.out.println("Node[" + local_name + "]: propagate. Return INCONSISTENT. local_dc = " + local_dc);
+            System.out.println("Node[" + local_name + "]: propagate. Return INCONSISTENT. local_dc = " + ctx.getDecisionLevel());
             return ReplyMessage.INCONSISTENT;
         }        
     }
@@ -584,7 +593,11 @@ public class ANodeImpl implements ANodeInterface {
             System.out.println("Node[" + local_name + "]: corresponding local level = " + local_dc);
         
             ctx.backtrackTo(local_dc.intValue());
-            global_to_local_dc.remove(global_level+1);
+            
+            if (global_to_local_dc.remove(global_level+1) == null)
+            {
+                global_to_local_dc.remove(global_level);
+            }
 
             // remove all re-opened predicates from the list of closed predicates
             for (Iterator<Predicate> it = closed_predicates.iterator(); it.hasNext();) {
@@ -705,7 +718,9 @@ public class ANodeImpl implements ANodeInterface {
     }
     
     @Override
-    public ReplyMessage finalClosing() throws RemoteException {
+    public ReplyMessage finalClosing(int global_level) throws RemoteException {
+        global_to_local_dc.put(global_level-1, ctx.getDecisionLevel());
+        
         int dec = ctx.getDecisionLevel()+1;
         for (Predicate predicate : local_predicates) {
             if( predicate.getNodeId()!= null)

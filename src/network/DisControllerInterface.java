@@ -18,13 +18,13 @@ public interface DisControllerInterface extends Remote {
     
     public int getCountPotentialAnswers()  throws RemoteException;
     
-    public ReplyMessage finalClosing() throws RemoteException;
+    public ReplyMessage finalClosing(int global_level) throws RemoteException;
     
     public ReplyMessage init(ArrayList<Pair<String, DisControllerInterface>> controller) throws RemoteException;
     
     public void makeChoice(int global_level, int last_guy) throws RemoteException;
     
-    public void makeBranch(int global_level) throws RemoteException;
+    public void makeBranch() throws RemoteException;
     
     public ReplyMessage localPrintAnswer() throws RemoteException;
     
