@@ -236,7 +236,7 @@ public class AController {
                     System.out.println("Controller: Interpretation after backtracking to global level = " + glmo);
                     printAnswer();
                     
-                    ReplyMessage reply = nodes.get(current_node).getArg2().hasMoreBranch();
+                    ReplyMessage reply = nodes.get(current_node).getArg2().hasMoreBranch(global_level);
                     switch (reply)
                     {
                         case HAS_BRANCH:

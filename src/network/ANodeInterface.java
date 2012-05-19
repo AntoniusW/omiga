@@ -66,11 +66,15 @@ public interface ANodeInterface extends Remote {
     
     public ReplyMessage propagate(int global_level) throws RemoteException;
 
-    public ReplyMessage hasMoreBranch() throws RemoteException;
+    public ReplyMessage hasMoreBranch(int global_level) throws RemoteException;
 
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
     
     public ReplyMessage printAnswer() throws RemoteException;
     
     public String getName() throws RemoteException;
+    
+    public ReplyMessage makeChoice(int global_level) throws RemoteException;
+    
+    public ReplyMessage makeBranch(int global_level) throws RemoteException;
 }
