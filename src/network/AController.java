@@ -111,6 +111,18 @@ public class AController {
         }
     }
     
+    private void print_stack(Stack<Pair<Integer, Integer> > stack)
+    {
+        System.out.print("stack = ");
+        Stack<Pair<Integer, Integer> > s2 = (Stack<Pair<Integer, Integer> >)stack.clone();
+        while (!s2.empty())
+        {
+            Pair<Integer, Integer> p = s2.pop();
+            System.out.print("(" + p.getArg1() + "," + p.getArg2() + ")");
+        }
+        System.out.println("");
+    }
+    
     public void mainLoop() {
         try {
             
@@ -163,12 +175,15 @@ public class AController {
             Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
             Pair<Integer, Integer> p;
             
+            stack.push(new Pair(0, -1));
+            
             ReplyMessage reply = ReplyMessage.INCONSISTENT;
                     
             while (action != Action.FINISH)
             {                
                 if (action == Action.MAKE_CHOICE)
                 {
+                    System.out.println("Controller. action = makeChoice");
                     current_node = -1;
                     for (int i = 0; i < system_size; i++)
                     {
@@ -184,9 +199,18 @@ public class AController {
                     {                        
                         global_level++;
                         stack.push(new Pair(global_level, current_node));
+                        
+                        System.out.println("Controller. A choice was made at node = " + current_node + ". stack.push(" + global_level + "," + current_node + ")");
+                        
                         if (reply == ReplyMessage.INCONSISTENT)
                         {
+                            System.out.println("Controller. choice returned INCONSISTENT. will next make branch");
                             action = Action.MAKE_BRANCH;
+                        }
+                        else
+                        {
+                            System.out.println("Controller. choice returned SUCCEEDED. will continue to make choice. Interpretation is");
+                            printAnswer();
                         }
                     }
                     else
@@ -194,7 +218,7 @@ public class AController {
                         System.out.println("Controller. A potential answer set  No.["+potential_count+"] found. Now do final closing. global_level = " + global_level);
                         potential_count++;
                         printAnswer();
-                        boolean is_an_answer = true;
+                        /*boolean is_an_answer = true;
                         global_level++;
                         
                         for (int i = 0; i < system_size; i++)
@@ -216,73 +240,10 @@ public class AController {
                             System.out.println("Controller. An answer set found!");
                             answer_count++;
                             printAnswer();
-                        }
-                    }
-                    /*current_node = findNodeWithChoicePoint(global_level);
-                    
-                    
-                    if (current_node != -1)
-                    {
-                        global_level++;
-                        System.out.println("Controller. makeChoice: stack.push (" + global_level + "," + current_node + ")");
-                        stack.push(new Pair(global_level, current_node));
-                        
-                        ReplyMessage reply = nodes.get(current_node).getArg2().propagate(global_level);
-                        
-                        System.out.println("Controller. makeChoice done");
-                        
-                        System.out.println("Controller. Interpretation at nodes after this choice:");
-                        printAnswer();                        
-                        
-                        if (reply == ReplyMessage.INCONSISTENT)
-                        {
-                            System.out.println("Controller. Node[" + current_node + "].makeChoice returned INCONSISTENT");
-                            p = stack.pop();
-                            global_level = p.getArg1();
-                            current_node = p.getArg2();
-                            
-                            System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of inconsistency!");
-                            action = Action.MAKE_BRANCH;
-                        }
-                    }
-                    else
-                    {
-                        System.out.println("Controller. A potential answer set  No.["+potential_count+"] found. Now do final closing. global_level = " + global_level);
-                        potential_count++;
-                        printAnswer();
-                        boolean is_an_answer = true;
-                        for (int i = 0; i < system_size; i++)
-                        {
-                            System.out.println("Controller. Final closing at node[" + i + "]");
-                            if (nodes.get(i).getArg2().finalClosing(global_level) == ReplyMessage.INCONSISTENT)
-                            {
-                                System.out.println("Controller. Killing answer set after finalClosing.");
-                                is_an_answer = false;
-                                break;
-                            }
-                        }
-                        
-                        if (is_an_answer)
-                        {
-                            System.out.println("Controller. An answer set found!");
-                            answer_count++;
-                            printAnswer();
-                        }
-                        
-                        // TODO AW stack may be empty at this time, is this a bug in the algorithm?
-                        if (stack.empty()) {
-                            action = Action.FINISH;
-                            continue;
-                        }
-                        
-                        p = stack.pop();
-                        global_level = p.getArg1();
-                        current_node = p.getArg2();
-                        
-                        System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of a potential answer before!");
-                        
+                        }*/
                         action = Action.MAKE_BRANCH;
-                    }*/
+                    }
+       
                 }
                 else if (action == Action.MAKE_BRANCH)
                 {   
@@ -301,16 +262,21 @@ public class AController {
                     int glmo = global_level-1;
                     System.out.println("Controller. makeBranch: Backtrack the whole system to global level = " + glmo);
                     backTrack(global_level-1);
+                    printAnswer();
                     
-                    reply = nodes.get(current_node).getArg2().makeBranch(global_level);
+                    reply = nodes.get(current_node).getArg2().makeBranch(global_level-1);
                     
                     switch (reply)
                     {
                         case SUCCEEDED:
                             stack.push(p);
+                            System.out.println("Controller. makeBranch succeeded. stack.push(" + global_level + "," + current_node + ")");
+                            System.out.println("will next make choice. Interpretation is:");
+                            printAnswer();
                             action = action.MAKE_CHOICE;
                             break;
                         case INCONSISTENT:
+                            System.out.println("Controller. makeBranch went inconsistent. stack.push(" + global_level + "," + current_node + ")");
                             stack.push(p);
                             break;
                         case NO_MORE_BRANCH:
@@ -319,7 +285,10 @@ public class AController {
                                 p = stack.peek();
                                 global_level = p.getArg1();
                                 int last_guy = p.getArg2();
-                                if (last_guy == 0)
+                                
+                                System.out.println("Controller. makeBranch. no more branch. peek(" + global_level + "," + current_node + ")");
+                                
+                                if (last_guy == -1)
                                 {
                                     action = Action.FINISH;
                                     System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
@@ -338,61 +307,6 @@ public class AController {
                             }
                             break;
                     }
-                    
-                    /*int glmo = global_level - 1;
-                    System.out.println("Controller. start making branch by backtracking to global level = " + glmo);
-                    backTrack(global_level-1);                    
-                    System.out.println("Controller: Interpretation after backtracking to global level = " + glmo);
-                    printAnswer();
-                    
-                    ReplyMessage reply = nodes.get(current_node).getArg2().hasMoreBranch(global_level);
-                    switch (reply)
-                    {
-                        case HAS_BRANCH:
-                            reply = nodes.get(current_node).getArg2().propagate(global_level);
-                            
-                            System.out.println("Controller. Interpretation at nodes after making branch:");
-                            printAnswer();                            
-                            
-                            if (reply == ReplyMessage.SUCCEEDED)
-                            {
-                                System.out.println("Controller. makeBranch: stack.push (" + global_level + "," + current_node + ")");
-                                stack.push(new Pair(global_level, current_node));
-                                action = Action.MAKE_CHOICE;
-                            }
-                            break;
-                        case NO_MORE_BRANCH:
-                            if (global_level == 1)
-                            {
-                                System.out.println("Controller. makeBranch: Terminate because of NO_MORE_BRANCH and global_level-1 == 0");
-                                action = Action.FINISH;
-                                break;
-                            }
-                            
-                            p = stack.pop();
-                            global_level = p.getArg1();
-                            current_node = p.getArg2();
-                            
-                            System.out.println("Controller. makeBranch: stack.pop (" + global_level + "," + current_node + ") because of no more branch!");
-                            break;
-                        case NO_MORE_ALTERNATIVE:
-                            if (stack.empty())
-                                action = Action.FINISH;
-                            else
-                            {
-                                p = stack.pop();
-                                global_level = p.getArg1();
-                                current_node = p.getArg2();
-                                System.out.println("Controller. makeBranch: stack.pop (" + global_level + "," + current_node + ") because of no more alternative! will FINISH");                                
-                            }
-                            break;
-                    }
-                }
-            }
-            * 
-            potential_count--;
-            System.out.println("Total number of potential answers = " + potential_count);
-            System.out.println("Total number of answers = " + answer_count);*/
                 }
             }
         }
