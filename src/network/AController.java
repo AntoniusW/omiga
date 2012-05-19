@@ -138,7 +138,12 @@ public class AController {
             // let all nodes propagate
             for (Pair<String, ANodeInterface> pair : nodes) {
                 System.out.println("Controller. Ask node " + pair.getArg1() + " to do first propagation!");
-                pair.getArg2().firstPropagate();   // TODO AW this relies on makeChoice not introducing a new choice point but rather just propagating
+                pair.getArg2().firstPropagate();   
+            }
+            
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                System.out.println("Controller. Ask node " + pair.getArg1() + " to do first propagation!");
+                pair.getArg2().initGlobalLevelZero(); 
             }
             
             /*
@@ -158,11 +163,37 @@ public class AController {
             Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
             Pair<Integer, Integer> p;
             
+            ReplyMessage reply;
+                    
             while (action != Action.FINISH)
             {                
                 if (action == Action.MAKE_CHOICE)
                 {
-                    current_node = findNodeWithChoicePoint(global_level);
+                    current_node = -1;
+                    for (int i = 0; i < system_size; i++)
+                    {
+                        reply = nodes.get(i).getArg2().makeChoice(global_level);
+                        if (reply != ReplyMessage.NO_MORE_CHOICE)
+                        {
+                            current_node = i;
+                            break;
+                        }
+                    }
+                        
+                    if (current_node != -1)
+                    {                        
+                        global_level++;
+                        stack.push(new Pair(global_level, current_node));
+                        if (reply == ReplyMessage.INCONSISTENT)
+                        {
+                            action = Action.MAKE_BRANCH;
+                        }
+                    }
+                    else
+                    {
+                        
+                    }
+                    /*current_node = findNodeWithChoicePoint(global_level);
                     
                     
                     if (current_node != -1)
@@ -226,11 +257,11 @@ public class AController {
                         System.out.println("Controller. makeChoice: stack.pop (" + global_level + "," + current_node + ") because of a potential answer before!");
                         
                         action = Action.MAKE_BRANCH;
-                    }
+                    }*/
                 }
                 else if (action == Action.MAKE_BRANCH)
                 {   
-                    int glmo = global_level - 1;
+                    /*int glmo = global_level - 1;
                     System.out.println("Controller. start making branch by backtracking to global level = " + glmo);
                     backTrack(global_level-1);                    
                     System.out.println("Controller: Interpretation after backtracking to global level = " + glmo);
@@ -283,7 +314,7 @@ public class AController {
             
             potential_count--;
             System.out.println("Total number of potential answers = " + potential_count);
-            System.out.println("Total number of answers = " + answer_count);
+            System.out.println("Total number of answers = " + answer_count);*/
         } 
         catch (Exception e) {
             System.err.println("Controller. Controller mainLoop ERROR.");
