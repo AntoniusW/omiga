@@ -355,7 +355,7 @@ public class DisControllerImpl implements DisControllerInterface {
                         System.out.println("DisController[" + myid +"]:. makBranch: NO MORE BRANCH. peek into stack, (global_level, last_guy) = ("+ p.getArg1() + "," + p.getArg2() + "). ");                        
                         print_stack();
                         
-                        if (last_guy == 0)
+                        if (last_guy == -1)
                         {
                             System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
                             System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());                        

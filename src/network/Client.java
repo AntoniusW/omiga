@@ -93,7 +93,7 @@ public class Client {
            
             
             System.out.println("Client. Issue the request to the first node");
-            all_controllers.get(0).getArg2().makeChoice(0, 0);
+            all_controllers.get(0).getArg2().makeChoice(0, -1);
         }
         catch (Exception e) {
             System.err.println("Client start() ERROR.");
