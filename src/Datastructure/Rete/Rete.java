@@ -220,46 +220,59 @@ public class Rete {
     
     /**
      * prints the actual Answersets (=All Instances) to standard Out
+     * @param String filter the predicates which are to be printed, if filter
+     *        is null, all predicates are printed
      */
     public void printAnswerSet(String filter){
         boolean densePrint = true;
+        boolean filtering = filter==null? false : true;
         System.out.println("Printing Answerset: ");
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         //System.out.println("Positive Facts: ");
         System.out.println("-----------------------------");
         System.out.println("IN:");
-        if(filter == null){
-            for(Predicate p: this.basicLayerPlus.keySet()){
-                Term[] selectionCriteria = new Term[p.getArity()];
-                for(int i = 0; i < p.getArity();i++){
-                    selectionCriteria[i] = Variable.getVariable("X");
-                }
-                //System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
-                //this.basicLayerPlus.get(p).printAllInstances();
-                boolean didPrint = basicLayerPlus.get(p).memory.prettyPrintAllInstances(p.getName(),densePrint);
-                if(didPrint)
-                    System.out.println();
+        String filter_use="";
+        if(filtering)
+            filter_use = "," + filter + ",";
+        for (Predicate p : this.basicLayerPlus.keySet()) {
+            // skip predicate if it does not occur in the filter and filtering is on
+            String filter_pred = "," + p.getName() + ",";
+            if(filtering && filter_use.indexOf(filter_pred) == -1 )
+                continue;
+            // print all instances
+            Term[] selectionCriteria = new Term[p.getArity()];
+            for (int i = 0; i < p.getArity(); i++) {
+                selectionCriteria[i] = Variable.getVariable("X");
             }
-            //System.out.println("Negative Facts: ");
-            System.out.println("OUT:");
-            for(Predicate p: this.basicLayerMinus.keySet()){
-                Term[] selectionCriteria = new Term[p.getArity()];
-                for(int i = 0; i < p.getArity();i++){
-                    selectionCriteria[i] = Variable.getVariable("X");
-                }
-                //System.out.println("Instances for: " + this.basicLayerMinus.get(p));// + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
-                //this.basicLayerMinus.get(p).printAllInstances();
-                boolean didPrint = basicLayerMinus.get(p).memory.prettyPrintAllInstances(p.getName(),densePrint);
-                if(didPrint)
-                    System.out.println();
+            boolean didPrint = basicLayerPlus.get(p).memory.prettyPrintAllInstances(p.getName(), densePrint);
+            if (didPrint) {
+                System.out.println();
             }
-            System.out.println("Closed: ");
-            for (Entry<Predicate, BasicNodeNegative> entry : basicLayerMinus.entrySet()) {
-                if(entry.getValue().isClosed())
-                    System.out.print(entry.getKey().getName()+"/"+entry.getKey().getArity()+" ");
+        }
+        //System.out.println("Negative Facts: ");
+        System.out.println("OUT:");
+        for (Predicate p : this.basicLayerMinus.keySet()) {
+            // skip predicate if it does not occur in the filter and filtering is on
+            String filter_pred = "," + p.getName() + ",";
+            if(filtering && filter_use.indexOf(filter_pred) == -1 )
+                continue;
+            Term[] selectionCriteria = new Term[p.getArity()];
+            for (int i = 0; i < p.getArity(); i++) {
+                selectionCriteria[i] = Variable.getVariable("X");
             }
-            System.out.println();
-        }else{
+            boolean didPrint = basicLayerMinus.get(p).memory.prettyPrintAllInstances(p.getName(), densePrint);
+            if (didPrint) {
+                System.out.println();
+            }
+        }
+        System.out.println("Closed: ");
+        for (Entry<Predicate, BasicNodeNegative> entry : basicLayerMinus.entrySet()) {
+            if (entry.getValue().isClosed()) {
+                System.out.print(entry.getKey().getName() + "/" + entry.getKey().getArity() + " ");
+            }
+        }
+        System.out.println();
+        /*}else{
             String temp = "," + filter + ",";
             for(Predicate p: this.basicLayerPlus.keySet()){
                 //if(p.getName().equals(filter)){
@@ -287,7 +300,7 @@ public class Rete {
                     this.basicLayerMinus.get(p).printAllInstances();
                 }
             }            
-        }
+        }*/
         
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         System.out.println("-----------------------------");
