@@ -77,4 +77,6 @@ public interface ANodeInterface extends Remote {
     public ReplyMessage makeChoice(int global_level) throws RemoteException;
     
     public ReplyMessage makeBranch(int global_level) throws RemoteException;
+    
+    public ReplyMessage initGlobalLevelZero() throws RemoteException;
 }

@@ -551,6 +551,7 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage printAnswer() throws RemoteException {
+        System.out.println("Node[" + local_name + "]: print interpretation:");
         ctx.printAnswerSet(filter);
         
         return ReplyMessage.SUCCEEDED;
@@ -561,6 +562,7 @@ public class ANodeImpl implements ANodeInterface {
     @Override
     public ReplyMessage finalClosing(int global_level) throws RemoteException {
         // increase the outside global_level by one before calling this method
+        System.out.println("Node[" + local_name + "]: finalClosing. Store (global_level,local_dc) = (" + global_level + ", " + ctx.getDecisionLevel() +")");
         global_to_local_dc.put(global_level, ctx.getDecisionLevel());
         
         int dec = ctx.getDecisionLevel()+1;
@@ -641,6 +643,8 @@ public class ANodeImpl implements ANodeInterface {
                 
         if (global_to_local_dc.get(global_level) == null)
         {
+            System.out.println("Node[" + local_name + "]: handleAddingFacts. Store (global_level,local_dc) = (" + global_level + ", " + decision_level_before_push +")");
+        
             global_to_local_dc.put(global_level, decision_level_before_push);
         }
         
@@ -840,31 +844,31 @@ public class ANodeImpl implements ANodeInterface {
     }
     
     @Override
-    public ReplyMessage makeChoice(int global_level) throws RemoteException {                
-        System.out.println("Node[" + local_name +"]: makeChoice. store(gl,dc_before_make_choice) = (" + global_level + "," + ctx.getDecisionLevel() +")");
-        global_to_local_dc.put(global_level, ctx.getDecisionLevel());
-        
+    public ReplyMessage makeChoice(int global_level) throws RemoteException {
+        int dc_before_choice = ctx.getDecisionLevel();
         boolean has_choice = ctx.choice();
         if (has_choice)
         {
+            System.out.println("Node[" + local_name +"]: makeChoice. store(gl,dc_before_make_choice) = (" + global_level + "," + dc_before_choice +")");
+            global_to_local_dc.put(global_level, dc_before_choice);
             System.out.println("Node[" + local_name +"]: makeChoice. now call makePropagation(" + global_level + ")");            
             return makePropagation(global_level);
         }
         else
         { 
-            System.out.println("Node[" + local_name +"]: makeBranch. return NO_MORE_CHOICE");
+            System.out.println("Node[" + local_name +"]: makeChoice. return NO_MORE_CHOICE");
             return ReplyMessage.NO_MORE_CHOICE;
         }
     }
     
     @Override
     public ReplyMessage makeBranch(int global_level) throws RemoteException {
-        System.out.println("Node[" + local_name +"]: makeBranch. store(gl,dc_before_make_branch) = (" + global_level + "," + ctx.getDecisionLevel() +")");
-        global_to_local_dc.put(global_level, ctx.getDecisionLevel());
-        
+        int dc_before_branch = ctx.getDecisionLevel();
         ReplyMessage has_branch = ctx.nextBranch();        
         if (has_branch == ReplyMessage.HAS_BRANCH)
         {
+            System.out.println("Node[" + local_name +"]: makeBranch. store(gl,dc_before_make_branch) = (" + global_level + "," + dc_before_branch +")");
+            global_to_local_dc.put(global_level, dc_before_branch);
             System.out.println("Node[" + local_name +"]: makeBranch. now call makePropagation(" + global_level + ")");
             return makePropagation(global_level);
         }
@@ -896,11 +900,19 @@ public class ANodeImpl implements ANodeInterface {
         // create and export the local node
         ANodeImpl local_node= new ANodeImpl(local_name, filename, filter);
     }
+    
+    @Override
+    public ReplyMessage initGlobalLevelZero() throws RemoteException {
+        global_to_local_dc.put(0, ctx.getDecisionLevel());
+        return ReplyMessage.SUCCEEDED;
+    }
 
     @Override
     public ReplyMessage propagate(int global_level) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
 
 
 }

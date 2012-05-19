@@ -226,7 +226,7 @@ public class Rete {
     public void printAnswerSet(String filter){
         boolean densePrint = true;
         boolean filtering = filter==null? false : true;
-        System.out.println("Printing Answerset: ");
+        //System.out.println("Printing Answerset: ");
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         //System.out.println("Positive Facts: ");
         System.out.println("-----------------------------");
@@ -266,12 +266,16 @@ public class Rete {
             }
         }
         System.out.println("Closed: ");
+        
+        boolean didPrint = false;
         for (Entry<Predicate, BasicNodeNegative> entry : basicLayerMinus.entrySet()) {
             if (entry.getValue().isClosed()) {
                 System.out.print(entry.getKey().getName() + "/" + entry.getKey().getArity() + " ");
+                didPrint = true;
             }
         }
-        System.out.println();
+        
+        if (didPrint) System.out.println();
         /*}else{
             String temp = "," + filter + ",";
             for(Predicate p: this.basicLayerPlus.keySet()){

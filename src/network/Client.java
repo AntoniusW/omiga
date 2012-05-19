@@ -61,8 +61,14 @@ public class Client {
                 pair.getArg2().exchange_import_domain();
             }
             
+            System.out.println("Client. Start first propagate");
             for (Pair<String, ANodeInterface> pair : nodes) {
                 pair.getArg2().firstPropagate();
+            }
+            
+            System.out.println("Client. Reset global_level zero");
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                pair.getArg2().initGlobalLevelZero();
             }
             
             System.out.println("Client. Interpretation after first round of all propagation");

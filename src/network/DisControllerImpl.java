@@ -189,8 +189,8 @@ public class DisControllerImpl implements DisControllerInterface {
                     print_stack();
                     printAnswer();
                     
-                    System.out.println("DisController[" + myid + "]. makeChoice: Ask first controller to do the next choice. global_level = " + global_level + ". myid = " + myid);
-                    all_controllers.get(0).getArg2().makeChoice(global_level, myid);
+                    System.out.println("DisController[" + myid + "]. makeChoice: Ask first controller to do the next choice. global_level = " + glpo + ". myid = " + myid);
+                    all_controllers.get(0).getArg2().makeChoice(global_level+1, myid);
                     break;
                 case INCONSISTENT:
                     if (last_guy != myid) 
@@ -211,13 +211,25 @@ public class DisControllerImpl implements DisControllerInterface {
                     {
                         count_potential_answer++;
                         System.out.println("DisController[" + myid + "]. A POTENTIAL ANSWER FOUND No.[" + count_potential_answer + "] Now do final closing.");                    
-                        printAnswer();
-                        /*if (doClosing(global_level) == ReplyMessage.SUCCEEDED)
+                        
+                        global_level++;
+                        if (doClosing(global_level) == ReplyMessage.SUCCEEDED)
                         {
                             System.out.println("DisController[" + myid + "]. AN ANSWER FOUND");
                             count_answer++;
                             printAnswer();
-                        }*/
+                        }
+                        else
+                        {
+                            System.out.println("DisController[" + myid + "]. NOT AN ANSWER!!!");
+                            printAnswer();
+                        }
+                        
+                        backTrack(global_level);
+                        System.out.println("DisController[" + myid + "]. Backtrack after final closing. Interpretation is");
+                        printAnswer();
+                        global_level--;
+                        
                         System.out.println("DisController[" + myid + "]. Request last guy = " + last_guy + " to make a branch");
                         all_controllers.get(last_guy).getArg2().makeBranch();                        
                     }
@@ -317,7 +329,7 @@ public class DisControllerImpl implements DisControllerInterface {
                     System.out.println("DisController[" + myid + "]. makeBranch: succeeded. stack.push("+ global_level + "," + myid + "). Interpretation is");
                     stack.push(new Pair(global_level, myid));
                     print_stack();
-                    printAnswer();
+                    printAnswer();                    
                     
                     System.out.println("DisController[" + myid + "]. makeBranch: Ask first controller to do the next choice. global_level = " + global_level + ". myid = " + myid);
                     all_controllers.get(0).getArg2().makeChoice(global_level, myid);
@@ -330,7 +342,7 @@ public class DisControllerImpl implements DisControllerInterface {
                     makeBranch();
                     break;
                 case NO_MORE_BRANCH:
-                    if (global_level > 1)
+                    if (global_level > 0)
                     {
                         p = stack.peek();                        
                         int last_guy = p.getArg2();
@@ -343,8 +355,16 @@ public class DisControllerImpl implements DisControllerInterface {
                         System.out.println("DisController[" + myid +"]:. makBranch: NO MORE BRANCH. peek into stack, (global_level, last_guy) = ("+ p.getArg1() + "," + p.getArg2() + "). ");                        
                         print_stack();
                         
-                        System.out.println("DisController[" + myid +"]:. makBranch: Ask last_guy = " + last_guy + " to make branch");
-                        all_controllers.get(last_guy).getArg2().makeBranch();
+                        if (last_guy == 0)
+                        {
+                            System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
+                            System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());                        
+                        }
+                        else
+                        {
+                            System.out.println("DisController[" + myid +"]:. makBranch: Ask last_guy = " + last_guy + " to make branch");
+                            all_controllers.get(last_guy).getArg2().makeBranch();
+                        }
                     }
                     else
                     {
