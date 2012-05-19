@@ -842,6 +842,7 @@ public class ANodeImpl implements ANodeInterface {
         return ReplyMessage.SUCCEEDED;
     }    
     
+    @Override
     public String getName() {
         return local_name;
     }
@@ -857,7 +858,7 @@ public class ANodeImpl implements ANodeInterface {
         }
         else
         {
-            filter = "";
+            filter = null;//"";
         }
         
         System.out.println("Node[" + local_name +"]: Starting NodeImpl.main(). args[0] = " + local_name);

@@ -15,6 +15,7 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Stack;
 
 /**
@@ -221,27 +222,43 @@ public class Rete {
      * prints the actual Answersets (=All Instances) to standard Out
      */
     public void printAnswerSet(String filter){
-        //System.out.println("Printing Answerset: ");
-        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-        System.out.println("Positive Facts: ");
+        boolean densePrint = true;
+        System.out.println("Printing Answerset: ");
+        //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        //System.out.println("Positive Facts: ");
+        System.out.println("-----------------------------");
+        System.out.println("IN:");
         if(filter == null){
             for(Predicate p: this.basicLayerPlus.keySet()){
                 Term[] selectionCriteria = new Term[p.getArity()];
                 for(int i = 0; i < p.getArity();i++){
                     selectionCriteria[i] = Variable.getVariable("X");
                 }
-                System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
-                this.basicLayerPlus.get(p).printAllInstances();
+                //System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
+                //this.basicLayerPlus.get(p).printAllInstances();
+                boolean didPrint = basicLayerPlus.get(p).memory.prettyPrintAllInstances(p.getName(),densePrint);
+                if(didPrint)
+                    System.out.println();
             }
-            System.out.println("Negative Facts: ");
+            //System.out.println("Negative Facts: ");
+            System.out.println("OUT:");
             for(Predicate p: this.basicLayerMinus.keySet()){
                 Term[] selectionCriteria = new Term[p.getArity()];
                 for(int i = 0; i < p.getArity();i++){
                     selectionCriteria[i] = Variable.getVariable("X");
                 }
-                System.out.println("Instances for: " + this.basicLayerMinus.get(p));// + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
-                this.basicLayerMinus.get(p).printAllInstances();
+                //System.out.println("Instances for: " + this.basicLayerMinus.get(p));// + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
+                //this.basicLayerMinus.get(p).printAllInstances();
+                boolean didPrint = basicLayerMinus.get(p).memory.prettyPrintAllInstances(p.getName(),densePrint);
+                if(didPrint)
+                    System.out.println();
             }
+            System.out.println("Closed: ");
+            for (Entry<Predicate, BasicNodeNegative> entry : basicLayerMinus.entrySet()) {
+                if(entry.getValue().isClosed())
+                    System.out.print(entry.getKey().getName()+"/"+entry.getKey().getArity()+" ");
+            }
+            System.out.println();
         }else{
             String temp = "," + filter + ",";
             for(Predicate p: this.basicLayerPlus.keySet()){
@@ -272,7 +289,8 @@ public class Rete {
             }            
         }
         
-        System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        System.out.println("-----------------------------");
     }
     
     public void printRete(){

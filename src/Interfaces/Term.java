@@ -113,6 +113,24 @@ public abstract class Term {
          }
          return result;
     }
+     
+     public static String prettyPrint(Term[] termlist, boolean densePrint) {
+         String ret;
+         if(densePrint)
+             ret="[";
+         else 
+            ret="(";  
+         for (int i = 0; i < termlist.length; i++) {
+             ret+=termlist[i].toString();
+             if(i+1 < termlist.length)
+                 ret+=",";
+         }
+         if(densePrint)
+             ret+="]";
+         else
+            ret+=") ";
+         return ret;
+     }
     
     
     /**

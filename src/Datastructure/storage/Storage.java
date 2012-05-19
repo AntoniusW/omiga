@@ -212,6 +212,34 @@ public class Storage {
         return ret;
     }
     
+    public boolean prettyPrintAllInstances(String pred_name, boolean densePrint){
+        boolean didPrint = false;
+        if( densePrint ) {
+            for (HashSet<Instance> hashSet : memory[0].values()) {
+                for (Instance instance : hashSet) {
+                    if(!didPrint) {
+                        int instance_spacing = 16;
+                        String pred = pred_name;
+                        for (int i = 0; i < instance_spacing-pred_name.length(); i++) {
+                            pred+=" ";
+                        }
+                        System.out.print(pred);
+                        didPrint = true;
+                    }
+                    System.out.print(" "+Term.prettyPrint(instance.getTerms(),true));
+                }
+            }
+        } else {
+            for (HashSet<Instance> hashSet : memory[0].values()) {
+                for (Instance instance : hashSet) {
+                    System.out.print(pred_name+Term.prettyPrint(instance.getTerms(),false));
+                    didPrint = true;
+                }
+            }
+        }
+        return didPrint;
+    }
+    
     /**
      * prints all instances that are contained within this memory to standard out.
      */

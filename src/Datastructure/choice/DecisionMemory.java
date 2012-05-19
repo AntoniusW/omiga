@@ -76,7 +76,7 @@ public class DecisionMemory {
      * Increases the decisionlevel and creates memory for the new level
      */
     public void addChoicePoint(){
-        System.out.println("DecisionMemory.addChoicePoint: method entry.");
+        //System.out.println("DecisionMemory.addChoicePoint: method entry.");
         this.decisionLevel++;
         this.decisionLayer.add(new LinkedList<Pair<Node,Instance>>());
         
@@ -98,7 +98,7 @@ public class DecisionMemory {
             }
             
         }*/
-        System.out.println("DecisionMemory.addChoicePoint: method end.");
+        //System.out.println("DecisionMemory.addChoicePoint: method end.");
     }
     
     /**

@@ -28,6 +28,10 @@ public class Instance implements Serializable {
     private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();
         
     Term[] terms;
+
+    public Term[] getTerms() {
+        return terms;
+    }
     int hashcode;
     
     /**
