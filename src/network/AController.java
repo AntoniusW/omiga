@@ -163,7 +163,7 @@ public class AController {
             Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
             Pair<Integer, Integer> p;
             
-            ReplyMessage reply;
+            ReplyMessage reply = ReplyMessage.INCONSISTENT;
                     
             while (action != Action.FINISH)
             {                
@@ -191,7 +191,32 @@ public class AController {
                     }
                     else
                     {
+                        System.out.println("Controller. A potential answer set  No.["+potential_count+"] found. Now do final closing. global_level = " + global_level);
+                        potential_count++;
+                        printAnswer();
+                        boolean is_an_answer = true;
+                        global_level++;
                         
+                        for (int i = 0; i < system_size; i++)
+                        {
+                            System.out.println("Controller. Final closing at node[" + i + "]");
+                            if (nodes.get(i).getArg2().finalClosing(global_level) == ReplyMessage.INCONSISTENT)
+                            {
+                                System.out.println("Controller. Killing answer set after finalClosing.");
+                                is_an_answer = false;
+                                break;
+                            }
+                        }
+                        System.out.println("Controller. Undo closing");
+                        backTrack(global_level);
+                        global_level--;
+                        
+                        if (is_an_answer)
+                        {
+                            System.out.println("Controller. An answer set found!");
+                            answer_count++;
+                            printAnswer();
+                        }
                     }
                     /*current_node = findNodeWithChoicePoint(global_level);
                     
@@ -261,6 +286,59 @@ public class AController {
                 }
                 else if (action == Action.MAKE_BRANCH)
                 {   
+                    p = stack.pop();
+                    System.out.println("Controller. makeBranch: pop out (" + p.getArg1() + "," + p.getArg2() + ")");
+            
+                    global_level = p.getArg1();
+                    current_node = p.getArg2();
+                    
+                    if (global_level == 0)
+                    {
+                        System.out.println("Controller. Ask for branch at global_level = 0. Get out now");
+                        return;
+                    }                    
+                    
+                    int glmo = global_level-1;
+                    System.out.println("Controller. makeBranch: Backtrack the whole system to global level = " + glmo);
+                    backTrack(global_level-1);
+                    
+                    reply = nodes.get(current_node).getArg2().makeBranch(global_level);
+                    
+                    switch (reply)
+                    {
+                        case SUCCEEDED:
+                            stack.push(p);
+                            action = action.MAKE_CHOICE;
+                            break;
+                        case INCONSISTENT:
+                            stack.push(p);
+                            break;
+                        case NO_MORE_BRANCH:
+                            if (global_level > 0)
+                            {
+                                p = stack.peek();
+                                global_level = p.getArg1();
+                                int last_guy = p.getArg2();
+                                if (last_guy == 0)
+                                {
+                                    action = Action.FINISH;
+                                    System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
+                                    System.out.println("Controller. FINISHED: number of answers = " + answer_count);
+                                }
+                                else
+                                {
+                                    action = Action.MAKE_BRANCH;
+                                }
+                            }
+                            else
+                            {
+                                action = Action.FINISH;
+                                System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
+                                System.out.println("Controller. FINISHED: number of answers = " + answer_count);
+                            }
+                            break;
+                    }
+                    
                     /*int glmo = global_level - 1;
                     System.out.println("Controller. start making branch by backtracking to global level = " + glmo);
                     backTrack(global_level-1);                    
@@ -311,11 +389,13 @@ public class AController {
                     }
                 }
             }
-            
+            * 
             potential_count--;
             System.out.println("Total number of potential answers = " + potential_count);
             System.out.println("Total number of answers = " + answer_count);*/
-        } 
+                }
+            }
+        }
         catch (Exception e) {
             System.err.println("Controller. Controller mainLoop ERROR.");
             e.printStackTrace();
