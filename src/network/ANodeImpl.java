@@ -75,16 +75,14 @@ public class ANodeImpl implements ANodeInterface {
     //private static int decision_level_before_push;
     public static String local_name;
     private String filter;
-    private static int rewriting;
     private String filename;
-    private static Integer answersets;
-    private static boolean outprint;
-    private int local_dc_limit;
+    private long solving_time;
+    
 
     public ANodeImpl(String local_name, String filename, String filter) {
         super();
         
-        local_dc_limit = 50;
+        solving_time = 0;
         
         this.local_name = local_name;
         this.filename = filename;
@@ -114,6 +112,12 @@ public class ANodeImpl implements ANodeInterface {
     public String getName() {
         return local_name;
     }    
+    
+    @Override
+    public long getSolvingTime() throws RemoteException
+    {
+        return solving_time;
+    }
 
     @Override
     public ReplyMessage init(ArrayList<Pair<String, ANodeInterface>> other_nodes) throws RemoteException {
@@ -123,13 +127,7 @@ public class ANodeImpl implements ANodeInterface {
         //this.other_nodes = other_nodes;
         
         //System.out.println("Node[" + local_name +"]: received " + other_nodes.size() +" other nodes.");
-        
-        // startup of local server here (read program, etc.)
-        long start = System.currentTimeMillis();
-        rewriting = 1;
-        answersets = 50000;
-        outprint =true;
-        
+       
         // create context
         ctx = new ContextASPMCSRewriting();
         
@@ -431,7 +429,9 @@ public class ANodeImpl implements ANodeInterface {
         {
             //System.out.println("Node[" + local_name + "]: corresponding local level = " + local_dc);
         
+            long start_backtrack = System.currentTimeMillis();
             ctx.backtrackTo(local_dc.intValue());
+            solving_time = solving_time + System.currentTimeMillis() - start_backtrack;
             
             if (global_to_local_dc.remove(global_level+1) == null)
             {
@@ -473,6 +473,7 @@ public class ANodeImpl implements ANodeInterface {
         //System.out.println("Node[" + local_name + "]: finalClosing. Store (global_level,local_dc) = (" + global_level + ", " + ctx.getDecisionLevel() +")");
         global_to_local_dc.put(global_level, ctx.getDecisionLevel());
         
+        long start_final_closing = System.currentTimeMillis();
         int dec = ctx.getDecisionLevel()+1;
         for (Predicate predicate : local_predicates) {
             if( predicate.getNodeId()!= null) {
@@ -480,6 +481,7 @@ public class ANodeImpl implements ANodeInterface {
                 ctx.closeFactFromOutside(predicate);
             }
         }
+        solving_time = solving_time + System.currentTimeMillis() - start_final_closing;
         
         ArrayList<LinkedList<Pair<Node, Instance>>> new_facts = ctx.deriveNewFacts();
         for (int dl = dec; dl < new_facts.size(); dl++) {
@@ -512,7 +514,10 @@ public class ANodeImpl implements ANodeInterface {
     //***************************************************************************************************************************************************************
     
     public ReplyMessage propagateAfterBeingPushed(int global_level, int decision_level_before_push) throws RemoteException {
+        long start_propagation = System.currentTimeMillis();
         ctx.propagate();
+        solving_time = solving_time + System.currentTimeMillis() - start_propagation;
+        
         //System.out.println("Node[" + local_name + "]: after propagate. interpretation is ");
         //ctx.printAnswerSet(filter);
         
@@ -742,7 +747,10 @@ public class ANodeImpl implements ANodeInterface {
     // only called by makeChoice or makeBranch
     private ReplyMessage makePropagation(int global_level)
     {
+        long start_propagate = System.currentTimeMillis();
         ctx.propagate();
+        solving_time = solving_time + System.currentTimeMillis() - start_propagate;
+        
         if (ctx.isSatisfiable())
         {
             return pushDerivedFacts(global_level, ctx.getDecisionLevel());
@@ -755,7 +763,10 @@ public class ANodeImpl implements ANodeInterface {
     
     @Override
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
+        long start_choice = System.currentTimeMillis();
         int dc_before_choice = ctx.getDecisionLevel();
+        solving_time = solving_time + System.currentTimeMillis() - start_choice;
+        
         boolean has_choice = ctx.choice();
         if (has_choice)
         {
@@ -772,9 +783,13 @@ public class ANodeImpl implements ANodeInterface {
     }
     
     @Override
-    public ReplyMessage makeBranch(int global_level) throws RemoteException {
+    public ReplyMessage makeBranch(int global_level) throws RemoteException {        
         int dc_before_branch = ctx.getDecisionLevel();
+        
+        long start_branch = System.currentTimeMillis();
         ReplyMessage has_branch = ctx.nextBranch();        
+        solving_time = solving_time + System.currentTimeMillis() - start_branch;
+        
         if (has_branch == ReplyMessage.HAS_BRANCH)
         {
             //System.out.println("Node[" + local_name +"]: makeBranch. store(gl,dc_before_make_branch) = (" + global_level + "," + dc_before_branch +")");

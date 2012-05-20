@@ -157,6 +157,8 @@ public class AController {
             long start_computation = System.currentTimeMillis();
             startup_time = startup_time + start_computation - start_init_nodes;
             
+            System.out.println("INFO: startup time = " + startup_time);
+            
             Action action = Action.MAKE_CHOICE;
             int global_level = 0;
             int current_node = 0;
@@ -300,6 +302,11 @@ public class AController {
             }
             System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
             System.out.println("Controller. FINISHED: number of answers = " + answer_count);
+            
+            // now print all solving time
+            for (Pair<String, ANodeInterface> pair : nodes) {
+                System.out.println("INFO: Node[" + pair.getArg1() + "]: Solving time = " + pair.getArg2().getSolvingTime()); 
+            }
         }
         catch (Exception e) {
             System.err.println("Controller. Controller mainLoop ERROR.");

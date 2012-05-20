@@ -228,6 +228,7 @@ public class DisControllerImpl implements DisControllerInterface {
                             
                             if (answer_to_find != 0 && count_answer == answer_to_find)
                             {
+                                printSolvingTime();
                                 break;
                             }
                         }
@@ -320,6 +321,7 @@ public class DisControllerImpl implements DisControllerInterface {
                         {
                             System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
                             System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());                        
+                            printSolvingTime();
                         }
                         else
                         {
@@ -330,7 +332,8 @@ public class DisControllerImpl implements DisControllerInterface {
                     else
                     {
                         System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
-                        System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());                        
+                        System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());
+                        printSolvingTime();
                     }
                     break;
             }
@@ -342,9 +345,32 @@ public class DisControllerImpl implements DisControllerInterface {
             e.printStackTrace();
         }        
     }
+    
+    @Override
+    public long getSolvingTime() throws RemoteException {
+        return local_node.getSolvingTime();
+    }
 
+    private void printSolvingTime()
+    {
+        try
+        {
+            for (int i = 0; i < system_size-1; i++) {
+                System.out.println("INFO: DisController[" + i + "]: Solving time = " + all_controllers.get(i).getArg2().getSolvingTime());
+            }
+            
+            int ssmo = system_size - 1;
+            System.out.println("INFO: DisController[" + ssmo + "]: Solving time = " + local_node.getSolvingTime());            
+        }
+        catch (Exception e)
+        {
+            System.err.println("DisController. printSolvingTime ERROR.");
+            e.printStackTrace();
+        }           
+    }
+    
     public static void main(String[] args) {
-        System.out.println("DisController. Starting DisController.main()");
+        //System.out.println("DisController. Starting DisController.main()");
         
         int myid = Integer.parseInt(args[0]);
         int size = Integer.parseInt(args[1]);

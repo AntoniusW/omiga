@@ -72,4 +72,6 @@ public interface ANodeInterface extends Remote {
     public ReplyMessage makeBranch(int global_level) throws RemoteException;
     
     public ReplyMessage initGlobalLevelZero() throws RemoteException;
+    
+    public long getSolvingTime() throws RemoteException;
 }

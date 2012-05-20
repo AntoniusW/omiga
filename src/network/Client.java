@@ -28,6 +28,8 @@ public class Client {
             system_size = size;
             this.answer_to_find = answer_to_find;
             
+            long startup_point = System.currentTimeMillis();
+            
             registry = LocateRegistry.getRegistry("127.0.0.1");
         
             System.out.println("Client. Get remote interface to all DISTRIBUTED CONTROLLERS");
@@ -77,6 +79,9 @@ public class Client {
             for (Pair<String, DisControllerInterface> pair : all_controllers) {
                 pair.getArg2().setAnswerToFind(answer_to_find);
             }
+            
+            long startup_time = System.currentTimeMillis() - startup_point;
+            System.out.println("INFO: Client: Startup time = " + startup_time);
             
             //System.out.println("Client. Interpretation after first round of all propagation");
             //for (Pair<String, ANodeInterface> pair : nodes) {

@@ -31,4 +31,6 @@ public interface DisControllerInterface extends Remote {
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
     
     public ReplyMessage setAnswerToFind(int atf) throws RemoteException;
+    
+    public long getSolvingTime() throws RemoteException;
 }
