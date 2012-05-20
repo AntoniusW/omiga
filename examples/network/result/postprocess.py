@@ -85,35 +85,77 @@ def getDistributedTime(filename):
 
     return dis_time
 
+def copy_content(source, target):
+    content = ''
+    with open (source, 'r') as s:
+        content = s.readlines()
+    s.closed
+    
+    for line in content:
+        target.write(line)
+
 
 def main(argv):
-    with open('instances.txt', 'r') as f:
-        instances = f.readlines()
-    f.closed
 
-    answers = ['1', '2']
+
+    answers = ['1']
     absolute_path = os.path.abspath( __file__ )
     print absolute_path
     last_slash = absolute_path.rfind('/')
     absolute_path = absolute_path[:last_slash]
     print absolute_path    
 
-    for instance in instances:
-        # kill the last \n
-        instance = instance[:len(instance)-1]
-        for answer in answers:
-            local_filename = absolute_path + '/instance-' + instance + '-local-' + answer + '.log'
-            central_filename = absolute_path + '/instance-' + instance + '-central-' + answer + '.log'
-            dis_filename = absolute_path + '/instance-' + instance + '-dis-' + answer + '.log'
+    with open(absolute_path + '/instances.txt', 'r') as f:
+        instances = f.readlines()
+    f.closed
 
-            local_time = getLocalTime(local_filename)
-            print local_time
+    row_tpl = ''
+    with open(absolute_path + '/templates/table_row.tpl', 'r') as f:
+        row_tpl = f.readline()
+    f.closed
 
-            central_time = getDistributedTime(central_filename)
-            print central_time
+    with open(absolute_path + '/table.txt', 'w') as f:
+        copy_content(absolute_path + '/templates/table_header.tpl', f)
 
-            dis_time = getDistributedTime(dis_filename)
-            print dis_time
+        is_first = True
+        for instance in instances:
+            # kill the last \n
+            instance = instance[:len(instance)-1]
+            for answer in answers:
+                local_filename = absolute_path + '/instance-' + instance + '-local-' + answer + '.log'
+                central_filename = absolute_path + '/instance-' + instance + '-central-' + answer + '.log'
+                dis_filename = absolute_path + '/instance-' + instance + '-dis-' + answer + '.log'
+
+                local_time = getLocalTime(local_filename)
+                print local_time
+
+                central_time = getDistributedTime(central_filename)
+                print central_time
+
+                dis_time = getDistributedTime(dis_filename)
+                print dis_time
+                
+                if (is_first):
+                    is_first = False
+                else:
+                    f.write('\midrule\n')
+
+                print local_time[0]
+                print local_time[1]
+                print local_time[2]
+
+                print local_time[0]
+                print local_time[1]
+                print local_time[2]
+
+                print local_time[0]
+                print local_time[1]
+                print local_time[2]
+
+                f.write(row_tpl.format(instance, local_time[1], local_time[2], central_time[0], central_time[1], central_time[2], dis_time[0], dis_time[1], dis_time[2]))
+
+        copy_content(absolute_path + '/templates/table_footer.tpl', f)
+    f.closed
 
 if __name__ == "__main__":
     import sys
