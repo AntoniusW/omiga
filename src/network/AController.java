@@ -21,16 +21,18 @@ public class AController {
     private Registry registry;
     private int system_size;
     private int answer_count;
+    private int answer_to_find;
     private ArrayList<Pair<String,ANodeInterface>> nodes =
             new ArrayList<Pair<String,ANodeInterface>>();
     
     private long startup_time;
     
-    public AController(int size) {
+    public AController(int size, int answer_to_find) {
         try {
             potential_count = 0;
             system_size = size;
-            answer_count = 0;            
+            answer_count = 0;
+            this.answer_to_find = answer_to_find;
             
             long start_registry = System.currentTimeMillis();
             registry = LocateRegistry.getRegistry("127.0.0.1");
@@ -226,6 +228,11 @@ public class AController {
                             //System.out.println("Controller. An answer set found!");
                             answer_count++;
                             printAnswer();
+                            
+                            if (answer_to_find > 0 && answer_count == answer_to_find)
+                            {
+                                break;
+                            }
                         }
                         action = Action.MAKE_BRANCH;
                     }
@@ -308,9 +315,15 @@ public class AController {
         }
         
         int size = Integer.parseInt(args[0]);
-        System.out.println("Controller. System size = " + size);
+        int answer_to_find = 1;
         
-        AController controller = new AController(size);
+        if (args.length > 1)
+        {
+            answer_to_find = Integer.parseInt(args[1]);
+        }
+        //System.out.println("Controller. System size = " + size);
+        
+        AController controller = new AController(size, answer_to_find);
         controller.mainLoop();
     }
 }

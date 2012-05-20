@@ -29,4 +29,6 @@ public interface DisControllerInterface extends Remote {
     public ReplyMessage localPrintAnswer() throws RemoteException;
     
     public ReplyMessage localBacktrack(int global_level) throws RemoteException;
+    
+    public ReplyMessage setAnswerToFind(int atf) throws RemoteException;
 }

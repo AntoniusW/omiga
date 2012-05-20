@@ -23,6 +23,7 @@ public class DisControllerImpl implements DisControllerInterface {
     private ArrayList<Pair<String, DisControllerInterface>> all_controllers;
     private int count_answer;
     private int count_potential_answer;
+    private int answer_to_find;
     
     Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
     
@@ -36,6 +37,8 @@ public class DisControllerImpl implements DisControllerInterface {
             count_answer = 0;
             count_potential_answer = 0;
             
+            answer_to_find = 1;
+            
             //registry = LocateRegistry.getRegistry("127.0.0.1");
             //local_node = (ANodeInterface) registry.lookup(local_name);
             local_node = new ANodeImpl(local_name, filename, filter);
@@ -44,6 +47,12 @@ public class DisControllerImpl implements DisControllerInterface {
             System.err.println("Controller ctor ERROR.");
             e.printStackTrace();
         }
+    }
+    
+    public ReplyMessage setAnswerToFind(int atf) throws RemoteException
+    {
+        answer_to_find = atf;
+        return ReplyMessage.SUCCEEDED;
     }
     
     public int getCountAnswers() throws RemoteException 
@@ -216,6 +225,11 @@ public class DisControllerImpl implements DisControllerInterface {
                             //System.out.println("DisController[" + myid + "]. AN ANSWER FOUND");
                             count_answer++;
                             printAnswer();
+                            
+                            if (answer_to_find != 0 && count_answer == answer_to_find)
+                            {
+                                break;
+                            }
                         }
                         //else
                         //{
