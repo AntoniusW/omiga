@@ -218,7 +218,7 @@ public class AController {
                         System.out.println("Controller. A potential answer set  No.["+potential_count+"] found. Now do final closing. global_level = " + global_level);
                         potential_count++;
                         printAnswer();
-                        /*boolean is_an_answer = true;
+                        boolean is_an_answer = true;
                         global_level++;
                         
                         for (int i = 0; i < system_size; i++)
@@ -240,7 +240,7 @@ public class AController {
                             System.out.println("Controller. An answer set found!");
                             answer_count++;
                             printAnswer();
-                        }*/
+                        }
                         action = Action.MAKE_BRANCH;
                     }
        
@@ -291,6 +291,7 @@ public class AController {
                                 if (last_guy == -1)
                                 {
                                     action = Action.FINISH;
+                                    potential_count--;
                                     System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
                                     System.out.println("Controller. FINISHED: number of answers = " + answer_count);
                                 }
@@ -302,6 +303,7 @@ public class AController {
                             else
                             {
                                 action = Action.FINISH;
+                                potential_count--;
                                 System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
                                 System.out.println("Controller. FINISHED: number of answers = " + answer_count);
                             }
