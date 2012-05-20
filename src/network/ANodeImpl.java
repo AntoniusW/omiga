@@ -903,6 +903,8 @@ public class ANodeImpl implements ANodeInterface {
     
     @Override
     public ReplyMessage initGlobalLevelZero() throws RemoteException {
+        System.out.println("Node[" + local_name +"]: init zero global level to: " + ctx.getDecisionLevel());
+        
         global_to_local_dc.put(0, ctx.getDecisionLevel());
         return ReplyMessage.SUCCEEDED;
     }
