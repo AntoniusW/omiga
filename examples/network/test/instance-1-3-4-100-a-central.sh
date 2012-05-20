@@ -6,11 +6,14 @@ ulimit -n 32000
 export BASEDIR=.
 export CLASSPATH=$BASEDIR/dist/woc.jar:$BASEDIR/lib/antlr-3.4-complete.jar:$BASEDIR/lib/jgrapht-0.8.3/jgrapht-jdk1.6.jar
 export POLICYFILE=$BASEDIR/examples/network/server.policy
-export NODE1_FILE=$BASEDIR/examples/network/test/instance-1-2-2-100-a-org-n1.lp
-export NODE2_FILE=$BASEDIR/examples/network/test/instance-1-2-2-100-a-provider-n2.lp
-export NODE3_FILE=$BASEDIR/examples/network/test/instance-1-2-2-100-a-provider-n3.lp
-export NODE4_FILE=$BASEDIR/examples/network/test/instance-1-2-2-100-a-student-n4.lp
-export NODE5_FILE=$BASEDIR/examples/network/test/instance-1-2-2-100-a-student-n5.lp
+export NODE1_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-org-n1.lp
+export NODE2_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-provider-n2.lp
+export NODE3_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-provider-n3.lp
+export NODE4_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-provider-n4.lp
+export NODE5_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-student-n5.lp
+export NODE6_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-student-n6.lp
+export NODE7_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-student-n7.lp
+export NODE8_FILE=$BASEDIR/examples/network/test/instance-1-3-4-100-a-student-n8.lp
 export SLEEP=5
 export PIDFILE=nodes.pid
 
@@ -33,13 +36,19 @@ java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n4 $NOD
 echo $! >> $PIDFILE
 java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n5 $NODE5_FILE &
 echo $! >> $PIDFILE
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n6 $NODE6_FILE &
+echo $! >> $PIDFILE
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n7 $NODE7_FILE &
+echo $! >> $PIDFILE
+java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.ANodeImpl n8 $NODE8_FILE &
+echo $! >> $PIDFILE
 # give nodes time to start up and register
 echo "Giving nodes time to start up," $SLEEP "sec."
 sleep $SLEEP
 
 # start main entry (controller or client)
 echo "Starting main entry (controller or client)."
-time java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.AController 5 $1
+time java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.AController 8 $1
 echo "Sleeping for " $SLEEP " sec."
 sleep $SLEEP
 

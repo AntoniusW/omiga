@@ -3,8 +3,8 @@
 export INSTANCESLOG='examples/network/result/instances.txt'
 export INSTANCEPATH='examples/network/test'
 export RESULTPATH='examples/network/result'
-export INSTANCES="1-2-2-100-a 1-2-3-100-a"
-export ANSWERS="1 2"
+export INSTANCES="1-2-2-100-a 1-2-3-100-a 1-2-4-100-a 1-3-3-100-a"
+export ANSWERS="1"
 
 #empty file
 > $INSTANCESLOG

@@ -1,8 +1,10 @@
 #!/bin/bash
 
+ulimit -n 32000
+
 # start this file from WOC base directory
 export BASEDIR=.
-export CLASSPATH=$BASEDIR/build/classes/:$BASEDIR/lib/antlr-3.4-complete.jar:$BASEDIR/lib/jgrapht-0.8.3/jgrapht-jdk1.6.jar
+export CLASSPATH=$BASEDIR/dist/woc.jar:$BASEDIR/lib/antlr-3.4-complete.jar:$BASEDIR/lib/jgrapht-0.8.3/jgrapht-jdk1.6.jar
 export POLICYFILE=$BASEDIR/examples/network/server.policy
 export NODE1_FILE=$BASEDIR/examples/network/test/instance-1-2-2-100-a-org-n1.lp
 export NODE2_FILE=$BASEDIR/examples/network/test/instance-1-2-2-100-a-provider-n2.lp
@@ -37,7 +39,7 @@ sleep $SLEEP
 
 # start main entry (controller or client)
 echo "Starting main entry (controller or client)."
-time java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.Client 5
+time java -cp $CLASSPATH -Djava.security.policy=$POLICYFILE network.Client 5 $1
 echo "Sleeping for " $SLEEP " sec."
 sleep $SLEEP
 
