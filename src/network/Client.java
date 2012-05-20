@@ -81,7 +81,7 @@ public class Client {
             }
             
             long startup_time = System.currentTimeMillis() - startup_point;
-            System.out.println("INFO: Client: Startup time = " + startup_time);
+            System.out.println("INFO: startup time = " + startup_time);
             
             //System.out.println("Client. Interpretation after first round of all propagation");
             //for (Pair<String, ANodeInterface> pair : nodes) {
