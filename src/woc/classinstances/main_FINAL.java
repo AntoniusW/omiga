@@ -56,9 +56,14 @@ public class main_FINAL {
         //filename ="scholarship.txt";
         filename = args[0];
         rewriting = 1;
-        answersets = 50000;
+        answersets = 1;
         filter = null;
         outprint =true;
+        
+        if (args.length == 2)
+        {
+            answersets = Integer.parseInt(args[1]);
+        }
         
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         
