@@ -146,10 +146,10 @@ public class ReteBuilder {
                 //System.out.println("RULE: " + r);
                 if(actualNode.getClass().equals(SelectionNode.class)){
                     actualNode = this.createJoin(actual, partner, true,varPositions);
-                    System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                    //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
                 }else{
                     actualNode = this.createJoin(actualNode, partner, true,varPositions);
-                    System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                    //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
                 }
             }else{
                 if(!atomsMinus.isEmpty()){
@@ -159,10 +159,10 @@ public class ReteBuilder {
                     //System.out.println("RULE: " + r);
                     if(actualNode.getClass().equals(SelectionNode.class)){
                         actualNode = this.createJoinNegative(actual, partner, false,varPositions); // TODO createJoinNegative
-                        System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                        //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
                     }else{
                         actualNode = this.createJoinNegative(actualNode, partner, false,varPositions); // TODO createJoinNegative
-                        System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                        //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
                     }
                 }else{
                     // Negative Rules do not contain operators. At least for our easy rewriting.

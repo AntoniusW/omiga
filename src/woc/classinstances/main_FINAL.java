@@ -82,8 +82,8 @@ public class main_FINAL {
                     Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
                     ctx = rewriter.rewrite(ctx);
                     
-                    System.out.println("Read in program is: ");
-                    ctx.printContext();
+                    //System.out.println("Read in program is: ");
+                    //ctx.printContext();
                 } catch (RuleNotSafeException ex) {
                     Logger.getLogger(main_FINAL.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (FactSizeException ex) {
@@ -104,7 +104,7 @@ public class main_FINAL {
 
 
         
-        System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
+        //System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
         
         
         ManagerMCS m = new ManagerMCS(ctx);

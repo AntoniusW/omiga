@@ -56,13 +56,13 @@ public class ManagerMCS {
                 if(output){
                     c.printAnswerSet(filter);
                 }
-                System.out.println("GuessFree Context found 1 AnswerSet");
+                //System.out.println("GuessFree Context found 1 AnswerSet");
             }else{
-                System.out.println("GuessFree Context UNSATISFIABLE!");
+                //System.out.println("GuessFree Context UNSATISFIABLE!");
             }
             return;
         }
-        System.out.println("Preparing to Guess: " + System.currentTimeMillis());
+        //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
         int i = 0;
         while(!finished){
@@ -85,7 +85,7 @@ public class ManagerMCS {
                     
                 }
             }else{
-                System.out.println("ManagerMCS: Choice false.");
+                //System.out.println("ManagerMCS: Choice false.");
                 if(c.getChoiceUnit().getDecisionLevel() > 0){
                     //System.out.println("REACHED AN END");
                     c.propagate();
@@ -97,7 +97,7 @@ public class ManagerMCS {
                                 c.printAnswerSet(filter);
                             }
                             answerSetCount++;
-                            System.out.println(answerSetCount);
+                            //System.out.println(answerSetCount);
                             if(answersets != null && answerSetCount == answersets) break;
                         //}
                     }else{

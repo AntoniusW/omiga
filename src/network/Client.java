@@ -61,21 +61,21 @@ public class Client {
                 pair.getArg2().exchange_import_domain();
             }
             
-            System.out.println("Client. Start first propagate");
+            //System.out.println("Client. Start first propagate");
             for (Pair<String, ANodeInterface> pair : nodes) {
                 pair.getArg2().firstPropagate();
             }
             
-            System.out.println("Client. Reset global_level zero");
+            //System.out.println("Client. Reset global_level zero");
             for (Pair<String, ANodeInterface> pair : nodes) {
                 pair.getArg2().initGlobalLevelZero();
             }
             
-            System.out.println("Client. Interpretation after first round of all propagation");
-            for (Pair<String, ANodeInterface> pair : nodes) {
-                pair.getArg2().printAnswer();
-            }
-            System.out.println("*************************************************************");
+            //System.out.println("Client. Interpretation after first round of all propagation");
+            //for (Pair<String, ANodeInterface> pair : nodes) {
+            //    pair.getArg2().printAnswer();
+            //}
+            //System.out.println("*************************************************************");
         }
         catch (Exception e) {
             System.err.println("Client ctor ERROR.");
@@ -102,14 +102,14 @@ public class Client {
     }
     
     public static void main(String[] args) {
-        System.out.println("Client. Starting Client.main()");
+        //System.out.println("Client. Starting Client.main()");
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
         
         int size = Integer.parseInt(args[0]);
-        System.out.println("Client. System size = " + size);
+        //System.out.println("Client. System size = " + size);
         
         Client client = new Client(size);
         client.start();

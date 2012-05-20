@@ -86,23 +86,23 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     @Override
     public boolean choice(){
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-        System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
+        //System.out.println("CHOICE IS CALLED! : ChoiceUNIT MCS REWRITE");
         /*System.out.println("SCCMAXSize= " + SCC.size());
         System.out.println("Current SCC = "+actualSCC);*/
         
         if(actualSCC >= SCC.size()) {
-            System.out.println("ChoiceUnitMCSRewrite.choice: actualSCC >= SCC.size().");
+            //System.out.println("ChoiceUnitMCSRewrite.choice: actualSCC >= SCC.size().");
             return false;
         }
         
         //We need to do a positive guess
         for(ChoiceNode cN: SCC.get(actualSCC)){
             if(!cN.getAllInstances().isEmpty()){
-                System.out.println("POSITIVE GUESS possible!");
+                //System.out.println("POSITIVE GUESS possible!");
                 this.addChoicePoint();
-                System.out.println("ChoiceUnitMCSRewrite.choice: choice point added.");
+                //System.out.println("ChoiceUnitMCSRewrite.choice: choice point added.");
                 Instance inz = cN.getAllInstances().get(0);
-                System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
+                //System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                 for(Atom a: cN.getRule().getBodyMinus()){
                     Instance toAdd = Unifyer.unifyAtom(a,inz, cN.getVarPositions());
                     //System.out.println("Adding: " + toAdd + " to: " + a.getPredicate());
@@ -132,7 +132,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
                 if(!cN.getAllInstances().isEmpty()){
                     this.addChoicePoint();
                     Instance inz = cN.getAllInstances().get(0);
-                    System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
+                    //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                     for(Atom a: cN.getRule().getBodyMinus()){
                         Instance toAdd = Unifyer.unifyAtom(a,inz, cN.getVarPositions());
                         c.getRete().addInstanceMinus(a.getPredicate(), toAdd);
@@ -166,7 +166,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
             this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
-            System.out.println("LvL: " + this.memory.getDecisonLevel() + "Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!");
+            //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!");
             //we push false,nextNode,nextInstance to our stacks, to later, on backtracking, know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);
@@ -292,10 +292,10 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     }
     
     private boolean closeActualSCCFromOutside(){
-        System.out.println("Closing SCC! lv: " + this.actualSCC + " : " + this.SCCPreds.get(this.actualSCC));
+        //System.out.println("Closing SCC! lv: " + this.actualSCC + " : " + this.SCCPreds.get(this.actualSCC));
         for(ChoiceNode cN: SCC.get(actualSCC)){
             if(!cN.getAllInstances().isEmpty()){
-                System.out.println("Returning false because we still have choicepoints!; " + cN);
+                //System.out.println("Returning false because we still have choicepoints!; " + cN);
                 return false;
             }
         }
@@ -303,14 +303,14 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
                 //System.out.println("Returning false because: " + !c.getClosureStatusForOutside(p) + " - " + p);
-                System.out.println("Returning false because its not closed from outside; " + p);
+                //System.out.println("Returning false because its not closed from outside; " + p);
                 return false;
             }
         }
         for(Predicate p: SCCPreds.get(actualSCC)){
            //if(c.getRete().containsPredicate(p, false)) {
                //System.out.println("Closing Predicate: " + p);
-                System.out.println("Closing: " + p);
+                //System.out.println("Closing: " + p);
                    c.getRete().getBasicNodeMinus(p).close();
            //}
         }
@@ -321,15 +321,16 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     }
     
     private boolean closeActualSCCWithReturnValue(){
-        System.out.println("Closing SCC! lv: " + this.actualSCC + " : " + this.SCCPreds.get(this.actualSCC));
+        //System.out.println("Closing SCC! lv: " + this.actualSCC + " : " + this.SCCPreds.get(this.actualSCC));
         c.getRete().propagate(); //think this is not really needed anymore
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
-                System.out.println("Returning false because: " + !c.getClosureStatusForOutside(p) + " - " + p);
+                //System.out.println("Returning false because: " + !c.getClosureStatusForOutside(p) + " - " + p);
                 return false;
-            }else{
-                System.out.println(p +" :  "+ c.getClosureStatusForOutside(p));
             }
+            //else{
+            //    System.out.println(p +" :  "+ c.getClosureStatusForOutside(p));
+            //}
         }
         for(Predicate p: SCCPreds.get(actualSCC)){
            //if(c.getRete().containsPredicate(p, false)) {
@@ -358,7 +359,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     
     @Override
         public void DeriveSCC(){
-        System.out.println("DeriveSCC called.");
+        //System.out.println("DeriveSCC called.");
         SCC = new ArrayList<ArrayList<ChoiceNode>>();
         SCCPreds = new ArrayList<ArrayList<Predicate>>();
         SCCSize = new ArrayList<Integer>();
@@ -383,6 +384,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
              SCCSize.add(SCC.get(i).size());
         }
         
+        /*
         System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
         for(int i = 0; i < this.SCC.size();i++){
             System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i));
@@ -395,7 +397,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             i++;
             System.out.println("SCC: " + i);
             System.out.println(gsg.vertexSet());
-        }
+        }*/
         
     }
     
@@ -412,7 +414,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
        
             this.closedfromoutside.push(new Pair<Integer,Predicate>(this.getDecisionLevel(),p));
         
-            System.out.println("SCCSIZE: " + this.SCCPreds.size() + " vs. " + this.actualSCC);
+            //System.out.println("SCCSIZE: " + this.SCCPreds.size() + " vs. " + this.actualSCC);
         if (this.actualSCC < this.SCCPreds.size()){
             
             this.closeActualSCCFromOutside();

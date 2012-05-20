@@ -75,8 +75,7 @@ public class DisControllerImpl implements DisControllerInterface {
         {
             for (int i = 0; i < myid; i++)
             {
-                System.out.println("DisController. backTrack(). "
-                        + "Requesting localBackTrack(" + global_level + ") to node[" + i + "]");                  
+                //System.out.println("DisController. backTrack(). " + "Requesting localBackTrack(" + global_level + ") to node[" + i + "]");                  
                 ReplyMessage reply = all_controllers.get(i).getArg2().localBacktrack(global_level);
                 assert (reply == ReplyMessage.SUCCEEDED);
             }
@@ -85,8 +84,7 @@ public class DisControllerImpl implements DisControllerInterface {
             
             for (int i = myid+1; i < system_size; i++)
             {
-                System.out.println("DisController. backTrack(). "
-                        + "Requesting localBackTrack(" + global_level + ") to node[" + i + "]");                  
+                //System.out.println("DisController. backTrack(). " + "Requesting localBackTrack(" + global_level + ") to node[" + i + "]");                  
                 ReplyMessage reply = all_controllers.get(i).getArg2().localBacktrack(global_level);
                 assert (reply == ReplyMessage.SUCCEEDED);
             }            
@@ -140,10 +138,10 @@ public class DisControllerImpl implements DisControllerInterface {
             
             for (int i = 0; i < system_size - 1; i++)
             {
-                System.out.println("Controller. Final closing at node[" + i + "]");
+                //System.out.println("Controller. Final closing at node[" + i + "]");
                 if (all_controllers.get(i).getArg2().finalClosing(global_level) == ReplyMessage.INCONSISTENT)
                 {
-                    System.out.println("Controller. Killing answer set after finalClosing.");
+                    //System.out.println("Controller. Killing answer set after finalClosing.");
                     return ReplyMessage.INCONSISTENT;
                 }
             }
@@ -180,118 +178,67 @@ public class DisControllerImpl implements DisControllerInterface {
                 case SUCCEEDED:
                     if (last_guy != myid) 
                     {
-                        System.out.println("DisController[" + myid + "]. makeChoice: stack.push("+ global_level + "," + last_guy + "). Because last_guy = " + last_guy + " is not me = " + myid);
+                        //System.out.println("DisController[" + myid + "]. makeChoice: stack.push("+ global_level + "," + last_guy + "). Because last_guy = " + last_guy + " is not me = " + myid);
                         stack.push(new Pair(global_level, last_guy));
                     }
-                    int glpo = global_level+1;
-                    System.out.println("DisController[" + myid + "]. makeChoice: succeeded. stack.push("+ glpo + "," + myid + "). Interpretation is");
+                    //int glpo = global_level+1;
+                    //System.out.println("DisController[" + myid + "]. makeChoice: succeeded. stack.push("+ glpo + "," + myid + "). Interpretation is");
                     stack.push(new Pair(global_level+1, myid));
-                    print_stack();
-                    printAnswer();
+                    //print_stack();
+                    //printAnswer();
                     
-                    System.out.println("DisController[" + myid + "]. makeChoice: Ask first controller to do the next choice. global_level = " + glpo + ". myid = " + myid);
+                    //System.out.println("DisController[" + myid + "]. makeChoice: Ask first controller to do the next choice. global_level = " + glpo + ". myid = " + myid);
                     all_controllers.get(0).getArg2().makeChoice(global_level+1, myid);
                     break;
                 case INCONSISTENT:
                     if (last_guy != myid) 
                     {
-                        System.out.println("DisController[" + myid + "]. makeChoice. stack.push("+ global_level + "," + last_guy + "). Because last_guy = " + last_guy + " is not me = " + myid);
+                        //System.out.println("DisController[" + myid + "]. makeChoice. stack.push("+ global_level + "," + last_guy + "). Because last_guy = " + last_guy + " is not me = " + myid);
                         stack.push(new Pair(global_level, last_guy));
                     }
-                    glpo = global_level+1;
-                    System.out.println("DisController[" + myid + "]. makeChoice: stack.push("+ glpo + "," + myid + ").");
+                    //glpo = global_level+1;
+                    //System.out.println("DisController[" + myid + "]. makeChoice: stack.push("+ glpo + "," + myid + ").");
                     stack.push(new Pair(global_level+1, myid));
-                    print_stack();
+                    //print_stack();
                     
-                    System.out.println("DisController[" + myid + "]. makeChoice got INCONSISTENT from propagation. Now call makeBranch.");
+                    //System.out.println("DisController[" + myid + "]. makeChoice got INCONSISTENT from propagation. Now call makeBranch.");
                     makeBranch();
                     break;
                 case NO_MORE_CHOICE:
                     if (myid == system_size - 1)
                     {
                         count_potential_answer++;
-                        System.out.println("DisController[" + myid + "]. A POTENTIAL ANSWER FOUND No.[" + count_potential_answer + "] Now do final closing.");                    
+                        //System.out.println("DisController[" + myid + "]. A POTENTIAL ANSWER FOUND No.[" + count_potential_answer + "] Now do final closing.");                    
                         
                         global_level++;
                         if (doClosing(global_level) == ReplyMessage.SUCCEEDED)
                         {
-                            System.out.println("DisController[" + myid + "]. AN ANSWER FOUND");
+                            //System.out.println("DisController[" + myid + "]. AN ANSWER FOUND");
                             count_answer++;
                             printAnswer();
                         }
-                        else
-                        {
-                            System.out.println("DisController[" + myid + "]. NOT AN ANSWER!!!");
-                            printAnswer();
-                        }
+                        //else
+                        //{
+                            //System.out.println("DisController[" + myid + "]. NOT AN ANSWER!!!");
+                         //   printAnswer();
+                        //}
                         
                         backTrack(global_level);
-                        System.out.println("DisController[" + myid + "]. Backtrack after final closing. Interpretation is");
-                        printAnswer();
+                        //System.out.println("DisController[" + myid + "]. Backtrack after final closing. Interpretation is");
+                        //printAnswer();
                         global_level--;
                         
-                        System.out.println("DisController[" + myid + "]. Request last guy = " + last_guy + " to make a branch");
+                        //System.out.println("DisController[" + myid + "]. Request last guy = " + last_guy + " to make a branch");
                         all_controllers.get(last_guy).getArg2().makeBranch();                        
                     }
                     else
                     {
-                        System.out.println("DisController[" + myid + "]. Request next node to make choice. passing on (global_level,last_guy = (" + global_level +"," + last_guy + ")");
+                        //System.out.println("DisController[" + myid + "]. Request next node to make choice. passing on (global_level,last_guy = (" + global_level +"," + last_guy + ")");
                         all_controllers.get(myid+1).getArg2().makeChoice(global_level, last_guy);
                     }
                     break;
             }
         }
-        /*try {
-            if (local_node.hasMoreChoice(global_level))
-            {
-                if (myid != last_guy)
-                {
-                    stack.push(new Pair(global_level, last_guy));
-                    System.out.println("DisController[" + myid + "]. makeChoice. stack.push("+ global_level + "," + last_guy + "). Because last_guy = " + last_guy + " is not me = " + myid);                    
-                }
-                
-                global_level++;
-                stack.push(new Pair(global_level, myid));
-                System.out.println("DisController[" + myid + "]. makeChoice: stack.push("+ global_level + "," + myid + ").");
-                print_stack();
-                
-                ReplyMessage reply = local_node.propagate(global_level);                
-                
-                if (reply == ReplyMessage.INCONSISTENT)
-                {
-                    System.out.println("DisController[" + myid + "]. makeChoice got INCONSISTENT from propagation. Now call makeBranch.");
-                    makeBranch();
-                }
-                else
-                {
-                    System.out.println("DisController[" + myid + "]. makeChoice succeeded. Interpretation is:");
-                    printAnswer();
-                    System.out.println("Ask first controller to do the next choice. global_level = " + global_level + ". myid = " + myid);
-                    all_controllers.get(0).getArg2().makeChoice(global_level, myid);
-                }
-            }
-            else
-            {
-                if (myid == system_size - 1)
-                {
-                    count_potential_answer++;
-                    System.out.println("DisController[" + myid + "]. A POTENTIAL ANSWER FOUND No.[" + count_potential_answer + "] Now do final closing.");                    
-                    if (doClosing(global_level) == ReplyMessage.SUCCEEDED)
-                    {
-                        System.out.println("DisController[" + myid + "]. AN ANSWER FOUND");
-                        count_answer++;
-                        printAnswer();
-                    }
-                    System.out.println("DisController[" + myid + "]. Request last guy = " + last_guy + " to make a branch");
-                    all_controllers.get(last_guy).getArg2().makeBranch();
-                }
-                else
-                {
-                    System.out.println("DisController[" + myid + "]. Request next node to make choice. passing on (global_level,last_guy = (" + global_level +"," + last_guy + ")");
-                    all_controllers.get(myid+1).getArg2().makeChoice(global_level, last_guy);
-                }
-            }
-        }*/
         catch (Exception e)
         {
             System.err.println("DisController. makeChoice ERROR.");
@@ -305,10 +252,10 @@ public class DisControllerImpl implements DisControllerInterface {
             Pair<Integer, Integer> p = stack.pop();
             int global_level = p.getArg1();
             
-            System.out.println("DisController[" + myid + "]. makeBranch: pop out (" + p.getArg1() + "," + p.getArg2() + ")");
-            print_stack();
-            int glmo = global_level-1;
-            System.out.println("DisController[" + myid + "]. makeBranch: Backtrack the whole system to global level = " + glmo);
+            //System.out.println("DisController[" + myid + "]. makeBranch: pop out (" + p.getArg1() + "," + p.getArg2() + ")");
+            //print_stack();
+            //int glmo = global_level-1;
+            //System.out.println("DisController[" + myid + "]. makeBranch: Backtrack the whole system to global level = " + glmo);
             
             if (global_level == 0)
             {
@@ -318,27 +265,27 @@ public class DisControllerImpl implements DisControllerInterface {
             
             backTrack(global_level-1);
             
-            System.out.println("DisController[" + myid + "]. After backtracking to global_level = " + glmo + ". Interpretation is");
-            printAnswer();
+            //System.out.println("DisController[" + myid + "]. After backtracking to global_level = " + glmo + ". Interpretation is");
+            //printAnswer();
             
             ReplyMessage reply = local_node.makeBranch(global_level-1);
             
             switch (reply)
             {
                 case SUCCEEDED:
-                    System.out.println("DisController[" + myid + "]. makeBranch: succeeded. stack.push("+ global_level + "," + myid + "). Interpretation is");
+                    //System.out.println("DisController[" + myid + "]. makeBranch: succeeded. stack.push("+ global_level + "," + myid + "). Interpretation is");
                     stack.push(new Pair(global_level, myid));
-                    print_stack();
-                    printAnswer();                    
+                    //print_stack();
+                    //printAnswer();                    
                     
-                    System.out.println("DisController[" + myid + "]. makeBranch: Ask first controller to do the next choice. global_level = " + global_level + ". myid = " + myid);
+                    //System.out.println("DisController[" + myid + "]. makeBranch: Ask first controller to do the next choice. global_level = " + global_level + ". myid = " + myid);
                     all_controllers.get(0).getArg2().makeChoice(global_level, myid);
                     break;
                 case INCONSISTENT:
-                    System.out.println("DisController[" + myid + "]. makeChoice: stack.push("+ global_level + "," + myid + ").");
+                    //System.out.println("DisController[" + myid + "]. makeChoice: stack.push("+ global_level + "," + myid + ").");
                     stack.push(new Pair(global_level, myid));
-                    print_stack();
-                    System.out.println("DisController[" + myid + "]. makeChoice got INCONSISTENT from propagation. Now call makeBranch.");
+                    //print_stack();
+                    //System.out.println("DisController[" + myid + "]. makeChoice got INCONSISTENT from propagation. Now call makeBranch.");
                     makeBranch();
                     break;
                 case NO_MORE_BRANCH:
@@ -352,8 +299,8 @@ public class DisControllerImpl implements DisControllerInterface {
                             stack.pop();
                         }
                         
-                        System.out.println("DisController[" + myid +"]:. makBranch: NO MORE BRANCH. peek into stack, (global_level, last_guy) = ("+ p.getArg1() + "," + p.getArg2() + "). ");                        
-                        print_stack();
+                        //System.out.println("DisController[" + myid +"]:. makBranch: NO MORE BRANCH. peek into stack, (global_level, last_guy) = ("+ p.getArg1() + "," + p.getArg2() + "). ");                        
+                        //print_stack();
                         
                         if (last_guy == -1)
                         {
@@ -362,7 +309,7 @@ public class DisControllerImpl implements DisControllerInterface {
                         }
                         else
                         {
-                            System.out.println("DisController[" + myid +"]:. makBranch: Ask last_guy = " + last_guy + " to make branch");
+                            //System.out.println("DisController[" + myid +"]:. makBranch: Ask last_guy = " + last_guy + " to make branch");
                             all_controllers.get(last_guy).getArg2().makeBranch();
                         }
                     }
@@ -374,98 +321,7 @@ public class DisControllerImpl implements DisControllerInterface {
                     break;
             }
         }
-        /*try {
-            
-            Pair<Integer, Integer> p = stack.pop();
-            int global_level = p.getArg1();
-           
-            System.out.println("DisController[" + myid + "]. makeBranch: pop out (" + p.getArg1() + "," + p.getArg2() + ")");
-            int glmo = global_level-1;
-            System.out.println("DisController[" + myid + "]. makeBranch: Backtrack the whole system to global level = " + glmo);
-            
-            if (global_level == 0)
-            {
-                System.out.println("DisController[" + myid + "]. Ask for branch at global_level = 0. Get out now");
-                return;
-            }
-            
-            backTrack(global_level-1);
-            System.out.println("DisController[" + myid + "]. After backtracking to global_level = " + glmo + ". Interpretation is");
-            printAnswer();
-            
-            ReplyMessage reply = local_node.hasMoreBranch(global_level);
-            switch (reply)
-            {
-                case HAS_BRANCH:
-                    reply = local_node.propagate(global_level);
-                    if (reply == ReplyMessage.SUCCEEDED)
-                    {
-                        stack.push(new Pair(global_level, myid));
-                        System.out.println("DisController[" + myid + "]. has_branch, propagate successfully. stack.push(" + global_level + "," + myid +")");
-                        print_stack();
-                        System.out.println("DisController[" + myid + "]. interpretation is:");
-                        printAnswer();
-                        
-                        System.out.println("DisController[" + myid + "]. Request first node to make choice. (global_level,last_guy = (" + global_level +"," + myid + ")");
-                        all_controllers.get(0).getArg2().makeChoice(global_level, myid);
-                    }
-                    else
-                    {
-                        stack.push(new Pair(global_level, myid));
-                        System.out.println("DisController[" + myid + "]. inconsistent answer. stack.push(" + global_level + "," + myid +"). Will check for another branch");
-                        print_stack();
-                        makeBranch();
-                    }
-                    break;
-                case NO_MORE_BRANCH:
-                    if (global_level > 1)
-                    {
-                        p = stack.peek();
-                        assert (p.getArg1() == global_level-1);
-                        
-                        int last_guy = p.getArg2();
-                        
-                        if (last_guy != myid)
-                        {
-                            stack.pop();
-                        }
-                        
-                        System.out.println("DisController[" + myid +"]:. makBranch: NO MORE BRANCH. peek into stack, (global_level, last_guy) = ("+ p.getArg1() + "," + p.getArg2() + "). ");
-                        
-                        print_stack();
-                        
-                        System.out.println("DisController[" + myid +"]:. makBranch: Ask last_guy = " + last_guy + " to make branch");
-                        all_controllers.get(last_guy).getArg2().makeBranch();
-                    }
-                    else
-                    {
-                        System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
-                        System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());                        
-                    }
-                    // otherwise global_level == 1 ~~> FINISH
-                    break;
-                case NO_MORE_ALTERNATIVE:
-                    if (!stack.empty())
-                    {
-                        p = stack.pop();
-                        //assert (p.getArg1() == global_level-1);
-                        
-                        System.out.println("DisController[" + myid +"]:. No more alternative. pair from stack (global_level, last_guy) = ("+ p.getArg1() + "," + p.getArg2() + "). ");
-                        
-                        print_stack();
-                        int last_guy = p.getArg2();
-                        System.out.println("DisController[" + myid +"]:. makBranch: Ask last_guy = " + last_guy + " to make branch");
-                        all_controllers.get(last_guy).getArg2().makeBranch();
-                    }
-                    else
-                    {
-                        System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + count_potential_answer);
-                        System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + count_answer);
-                    }
-                    // FINISH
-                    break;
-            }
-        }*/
+
         catch (Exception e)
         {
             System.err.println("DisController. makeBranch ERROR.");
@@ -492,9 +348,9 @@ public class DisControllerImpl implements DisControllerInterface {
         
         String controller_name = "d" + myid;
         
-        System.out.println("DisController. MyID = " + myid);
-        System.out.println("DisController. name = " + controller_name);
-        System.out.println("DisController. System size = " + size);
+        //System.out.println("DisController. MyID = " + myid);
+        //System.out.println("DisController. name = " + controller_name);
+        //System.out.println("DisController. System size = " + size);
         
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager() );

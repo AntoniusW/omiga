@@ -122,7 +122,7 @@ public class ANodeImpl implements ANodeInterface {
         }
         //this.other_nodes = other_nodes;
         
-        System.out.println("Node[" + local_name +"]: received " + other_nodes.size() +" other nodes.");
+        //System.out.println("Node[" + local_name +"]: received " + other_nodes.size() +" other nodes.");
         
         // startup of local server here (read program, etc.)
         long start = System.currentTimeMillis();
@@ -145,8 +145,8 @@ public class ANodeImpl implements ANodeInterface {
             // parse input
             parser.woc_program();
             
-            System.out.println("Node[" + local_name +"]: Read in program is: ");
-            ctx.printContext();
+            //System.out.println("Node[" + local_name +"]: Read in program is: ");
+            //ctx.printContext();
             
             // rewrite context
             Rewriter_easyMCS rewriter = new Rewriter_easyMCS();
@@ -165,17 +165,17 @@ public class ANodeImpl implements ANodeInterface {
         }
         
         ctx.propagate();
-        System.out.println("First Propagation finished: " + System.currentTimeMillis());
+        //System.out.println("First Propagation finished: " + System.currentTimeMillis());
         ctx.getChoiceUnit().DeriveSCC();
         
-        System.out.println("Call killSoloSCC");
+        //System.out.println("Call killSoloSCC");
         ctx.getChoiceUnit().killSoloSCC();
         
-        System.out.println("After killSoloSCC");
-        ctx.printAnswerSet(filter);
+        //System.out.println("After killSoloSCC");
+        //ctx.printAnswerSet(filter);
         
         // collecting local predicates
-        System.out.println("Node[" + local_name +"]: Collecting local predicates.");
+        //System.out.println("Node[" + local_name +"]: Collecting local predicates.");
         for (Iterator<Predicate> it = Predicate.getPredicatesIterator(); it.hasNext();) {
             Predicate pred = it.next();
             local_predicates.add(pred);
@@ -195,7 +195,7 @@ public class ANodeImpl implements ANodeInterface {
                     import_predicates.put(from_node, preds_from_node);
                 }
                 
-                System.out.println("Node[" + local_name +"]: Predicate is from outside: "+pred.toString());
+                //System.out.println("Node[" + local_name +"]: Predicate is from outside: "+pred.toString());
                 
                 // add import predicate
                 preds_from_node.add(new Pair<String, Integer>(pred.getName(),pred.getArity()));
@@ -206,9 +206,9 @@ public class ANodeImpl implements ANodeInterface {
                 //ANodeImpl.ctx.registerFactFromOutside(pred);
             }
         }
-        System.out.println("Node[" + local_name +"]: import predicates: "+import_predicates);
+        //System.out.println("Node[" + local_name +"]: import predicates: "+import_predicates);
       
-        System.out.println("Node[" + local_name +"]: Initialized node.");
+        //System.out.println("Node[" + local_name +"]: Initialized node.");
 
         return ReplyMessage.SUCCEEDED;
         
@@ -276,11 +276,10 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage exchange_import_domain() throws RemoteException {
-        System.out.println("Node[" + local_name +"]: Exchanging import domain.");
+        //System.out.println("Node[" + local_name +"]: Exchanging import domain.");
         // tell import interface to all nodes
         for(Entry<String,ANodeInterface> other : other_nodes.entrySet()) {
-            System.out.println("Node[" + local_name +"]: Import predicates from Node["+other.getKey()+"]: "
-                    +import_predicates.get(other.getKey()));
+            //System.out.println("Node[" + local_name +"]: Import predicates from Node["+other.getKey()+"]: " + import_predicates.get(other.getKey()));
             // only exchange import if it is non-empty
             if(import_predicates.get(other.getKey())!=null) {   
                 other.getValue().receiveNextFactsFrom(local_name);     // needed to de-serialize predicates at other node
@@ -297,9 +296,8 @@ public class ANodeImpl implements ANodeInterface {
                     Map<String, Integer> functions,
                     Map<String, Integer> constants) throws RemoteException {
        
-        System.out.println("Node[" + local_name +"]: Receiving active domain from " + other_node);
-        
-        System.out.println("Node[" + local_name +"]: Adding predicates: "+predicates);
+        //System.out.println("Node[" + local_name +"]: Receiving active domain from " + other_node);        
+        //System.out.println("Node[" + local_name +"]: Adding predicates: "+predicates);
         
         
         // fill mapping: predicates
@@ -318,11 +316,11 @@ public class ANodeImpl implements ANodeInterface {
             Predicate pred = Predicate.getPredicate(local_pred_name, pred_desc.getKey().getArg2());
             //ctx.getRete().addPredicatePlus(pred);
             pred_map.put( pred_desc.getValue(), pred);
-            System.out.println("Node[" + local_name +"]: Added to mapping: "+pred+" with value "+pred_desc.getValue()+" from "+other_node);
+            //System.out.println("Node[" + local_name +"]: Added to mapping: "+pred+" with value "+pred_desc.getValue()+" from "+other_node);
         }
         predicate_mapping.put(other_node, pred_map);
         
-        System.out.println("Adding function symbols: "+functions);
+        //System.out.println("Adding function symbols: "+functions);
         
         // fill mapping: function symbols
         for(Entry<String, Integer> func_desc : functions.entrySet()) {
@@ -331,7 +329,7 @@ public class ANodeImpl implements ANodeInterface {
             out_mapping.put(fun, func_desc.getValue());
         }
         
-        System.out.println("Adding constants: "+constants);
+        //System.out.println("Adding constants: "+constants);
         
         // fill mapping: constants
         for(Entry<String, Integer> con_desc : constants.entrySet()) {
@@ -341,7 +339,7 @@ public class ANodeImpl implements ANodeInterface {
             
         }
         
-        System.out.println("Node[" + local_name +"]: Active domain mapping wrt. node "+other_node+" created.");
+        //System.out.println("Node[" + local_name +"]: Active domain mapping wrt. node "+other_node+" created.");
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -352,7 +350,7 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage receiveNextFactsFrom(String from_node) throws RemoteException {
         serializingFrom = from_node;
         
-        System.out.println("Node[" + local_name +"]: The next facts will come from Node[" + from_node+"]");
+        //System.out.println("Node[" + local_name +"]: The next facts will come from Node[" + from_node+"]");
         //ctx.printAnswerSet(filter);
         
         return ReplyMessage.SUCCEEDED;
@@ -360,8 +358,8 @@ public class ANodeImpl implements ANodeInterface {
 
     @Override
     public ReplyMessage receive_import_domain(String from, List<Pair<String,Integer>> required_predicates) throws RemoteException {
-        System.out.println("Node[" + local_name + "]: got import domain from Node[" + from+"]");
-        System.out.println("Node[" + local_name + "]: required predicates are: "+required_predicates);
+        //System.out.println("Node[" + local_name + "]: got import domain from Node[" + from+"]");
+        //System.out.println("Node[" + local_name + "]: required predicates are: "+required_predicates);
 
         ArrayList<Predicate> required_preds = new ArrayList<Predicate>();
         for (Iterator<Pair<String, Integer>> it = required_predicates.iterator(); it.hasNext();) {
@@ -369,7 +367,7 @@ public class ANodeImpl implements ANodeInterface {
             if(!pair.getArg1().startsWith(local_name+":"))
                     throw new RemoteException("Node[" + local_name +"]: Node identifier of received import predicate ["+pair.getArg1()+"] differs from local name ["+local_name+"]");
             String local_pred_name = pair.getArg1().replaceFirst(".*:", "");
-            System.out.println("Node[" + local_name +"]: Localized predicate "+ pair.getArg1() + " to "+local_pred_name);
+            //System.out.println("Node[" + local_name +"]: Localized predicate "+ pair.getArg1() + " to "+local_pred_name);
             // check that the imported predicate exists locally
             if(!local_predicates.contains(Predicate.getPredicate(local_pred_name, pair.getArg2()))) {
                 throw new RemoteException("Node["+local_name+"]: requested non-existent predicate "+pair.getArg1()+"/"+pair.getArg2()+" from Node "+from);
@@ -390,129 +388,48 @@ public class ANodeImpl implements ANodeInterface {
     }
 
     @Override
-    public boolean hasMoreChoice(int global_level) throws RemoteException {
-        System.out.println("Node[" + local_name + "]: before checking choice: local_dc = " + ctx.getDecisionLevel());
-        
-        if (ctx.getDecisionLevel() > local_dc_limit)
-        {
-            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
-        }
-        
-        int decision_level_before_asking_choice = ctx.getDecisionLevel();
-
-        boolean moreChoice = ctx.choice();
-
-        System.out.println("Node[" + local_name + "]: after checking choice: local_dc = " + ctx.getDecisionLevel());
-
-        
-        if (moreChoice)
-        {
-            if (global_to_local_dc.get(global_level) != null)
-            {
-                int ldc = global_to_local_dc.get(global_level);
-                throw new RemoteException("Node[" + local_name + "]: hasMoreChoice. already has local_dc = " + ldc + " for global_level = " + global_level);
-            }
-            
-            System.out.println("Node[" + local_name + "]: hasMoreChoice. Store (global_level,local_dc) = (" + global_level + ", " + decision_level_before_asking_choice +")");
-            global_to_local_dc.put(global_level, decision_level_before_asking_choice);
-            System.out.println("Node[" + local_name + "]: hasMoreChoice. Return TRUE.");
-        }
-        else
-        {
-            System.out.println("Node[" + local_name + "]: hasMoreChoice. Return FALSE.");
-        }
-        
-        return moreChoice;
-    }
-    
-    @Override
-    public ReplyMessage firstPropagate() throws RemoteException {
-        //decision_level_before_push = 0;
-        System.out.println("Node[" + local_name + "]: firstPropagate.");
+    public ReplyMessage firstPropagate() throws RemoteException {        
+        //System.out.println("Node[" + local_name + "]: firstPropagate.");
         ctx.propagate();
         
-        System.out.println("Node[" + local_name + "]: after firstPropagate. interpretation is ");
-        ctx.printAnswerSet(filter);
+        //System.out.println("Node[" + local_name + "]: after firstPropagate. interpretation is ");
+        //ctx.printAnswerSet(filter);
         
         if (ctx.isSatisfiable())
         {
-            System.out.println("Node[" + local_name + "]: firstPropagate. Pushing.");
+            //System.out.println("Node[" + local_name + "]: firstPropagate. Pushing.");
             
             ReplyMessage reply = pushDerivedFacts(0, 0);
             
             if (reply == ReplyMessage.SUCCEEDED)
             {
-                System.out.println("Node[" + local_name + "]: All neighbors propagated successfully. Return SUCCEEDED");
+                //System.out.println("Node[" + local_name + "]: All neighbors propagated successfully. Return SUCCEEDED");
                 return ReplyMessage.SUCCEEDED;
             }
             else
             {
-                System.out.println("Node[" + local_name + "]: A neighbor got inconsistent. Return INCONSISTENT");
+                //System.out.println("Node[" + local_name + "]: A neighbor got inconsistent. Return INCONSISTENT");
                 return ReplyMessage.INCONSISTENT;
             }
         }
         else
         {
-            System.out.println("Node[" + local_name + "]: firstPropagate. Return INCONSISTENT.");
+            //System.out.println("Node[" + local_name + "]: firstPropagate. Return INCONSISTENT.");
             return ReplyMessage.INCONSISTENT;
         }           
     }
-    
-
-    @Override
-    public ReplyMessage hasMoreBranch(int global_level) throws RemoteException {
-        System.out.println("Node[" + local_name + "]: before checking branch: local_dc = " + ctx.getDecisionLevel());
-        
-        if (ctx.getDecisionLevel() > local_dc_limit)
-        {
-            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
-        }
-
-        int decision_level_before_asking_branch = ctx.getDecisionLevel();
-        
-        ReplyMessage moreBranch = ctx.nextBranch();
-        
-        System.out.println("Node[" + local_name + "]: after checking branch: local_dc = " + ctx.getDecisionLevel());
-        
-        if (ctx.getDecisionLevel() > local_dc_limit)
-        {
-            System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
-        }
-        
-        switch (moreBranch)
-        {
-            case HAS_BRANCH:
-                if (global_to_local_dc.get(global_level) != null)
-                {
-                    int ldc = global_to_local_dc.get(global_level);
-                    throw new RemoteException("Node[" + local_name + "]: hasMoreChoice. already has local_dc = " + ldc + " for global_level = " + global_level);
-                }
-            
-                System.out.println("Node[" + local_name + "]: hasMoreChoice. Store (global_level,local_dc) = (" + global_level + ", " + decision_level_before_asking_branch +")");
-                global_to_local_dc.put(global_level, decision_level_before_asking_branch);                
-                System.out.println("Node[" + local_name + "]: hasMoreBranch. Return HAS_BRANCH.");
-                break;
-            case NO_MORE_BRANCH:
-                System.out.println("Node[" + local_name + "]: hasMoreBranch. Return NO_MORE_BRANCH.");
-                break;
-            case NO_MORE_ALTERNATIVE:
-                System.out.println("Node[" + local_name + "]: hasMoreBranch. Return NO_MORE_ALTERNATIVE.");
-                break;
-        }
-        return moreBranch;
-    }    
-
+  
     @Override
     public ReplyMessage localBacktrack(int global_level) throws RemoteException {
-        System.out.println("Node[" + local_name + "]: start in backtrack. local_dc = " + ctx.getDecisionLevel());
+        //System.out.println("Node[" + local_name + "]: start in backtrack. local_dc = " + ctx.getDecisionLevel());
         
         Integer local_dc = global_to_local_dc.get(global_level);
         
-        System.out.println("Node[" + local_name + "]: backtrack to global_level = " + global_level);
+        //System.out.println("Node[" + local_name + "]: backtrack to global_level = " + global_level);
         
         if (local_dc != null)
         {
-            System.out.println("Node[" + local_name + "]: corresponding local level = " + local_dc);
+            //System.out.println("Node[" + local_name + "]: corresponding local level = " + local_dc);
         
             ctx.backtrackTo(local_dc.intValue());
             
@@ -528,23 +445,14 @@ public class ANodeImpl implements ANodeInterface {
                     it.remove();
             }
             
-            int gl1 = global_level+1;
-            
-            System.out.println("Node[" + local_name + "]: makeBranch. remove(" + gl1 + ").");
-            
-            System.out.println("After backtracking. Current local decision level = " + ctx.getDecisionLevel());
-            
-            if (ctx.getDecisionLevel() > local_dc_limit)
-            {   
-                System.out.println("Node[" + local_name +"]: SOS, local_dc = " + ctx.getDecisionLevel());
-            }
-            
-            //decision_level_before_push = ctx.getDecisionLevel();
+            //int gl1 = global_level+1;            
+            //System.out.println("Node[" + local_name + "]: makeBranch. remove(" + gl1 + ").");
+            //System.out.println("After backtracking. Current local decision level = " + ctx.getDecisionLevel());
         }
-        else
-        {
-            System.out.println("Node[" + local_name + "]: no corresponding local level found.");
-        }
+        //else
+        //{
+        //    System.out.println("Node[" + local_name + "]: no corresponding local level found.");
+        //}
         
         return ReplyMessage.SUCCEEDED;
     }
@@ -562,7 +470,7 @@ public class ANodeImpl implements ANodeInterface {
     @Override
     public ReplyMessage finalClosing(int global_level) throws RemoteException {
         // increase the outside global_level by one before calling this method
-        System.out.println("Node[" + local_name + "]: finalClosing. Store (global_level,local_dc) = (" + global_level + ", " + ctx.getDecisionLevel() +")");
+        //System.out.println("Node[" + local_name + "]: finalClosing. Store (global_level,local_dc) = (" + global_level + ", " + ctx.getDecisionLevel() +")");
         global_to_local_dc.put(global_level, ctx.getDecisionLevel());
         
         int dec = ctx.getDecisionLevel()+1;
@@ -577,7 +485,7 @@ public class ANodeImpl implements ANodeInterface {
         for (int dl = dec; dl < new_facts.size(); dl++) {
             for (Pair<Node, Instance> pair : new_facts.get(dl)) {
                 if(pair.getArg1().getClass().equals(BasicNode.class)) {
-                    System.out.println("Node["+local_name+"]: finalClosing derived new fact: "+((BasicNode)pair.getArg1()).getPred()+" "+ pair.getArg2());
+                    //System.out.println("Node["+local_name+"]: finalClosing derived new fact: "+((BasicNode)pair.getArg1()).getPred()+" "+ pair.getArg2());
                     return ReplyMessage.INCONSISTENT;  
                 }
             }
@@ -605,30 +513,30 @@ public class ANodeImpl implements ANodeInterface {
     
     public ReplyMessage propagateAfterBeingPushed(int global_level, int decision_level_before_push) throws RemoteException {
         ctx.propagate();
-        System.out.println("Node[" + local_name + "]: after propagate. interpretation is ");
-        ctx.printAnswerSet(filter);
+        //System.out.println("Node[" + local_name + "]: after propagate. interpretation is ");
+        //ctx.printAnswerSet(filter);
         
         
         if (ctx.isSatisfiable())
         {
-            System.out.println("Node[" + local_name + "]: propagate. Pushing.");
+            //System.out.println("Node[" + local_name + "]: propagate. Pushing.");
             
             ReplyMessage reply = pushDerivedFacts(global_level, decision_level_before_push);
             
             if (reply == ReplyMessage.SUCCEEDED)
             {
-                System.out.println("Node[" + local_name + "]: All neighbors propagated successfully. Return SUCCEEDED");
+                //System.out.println("Node[" + local_name + "]: All neighbors propagated successfully. Return SUCCEEDED");
                 return ReplyMessage.SUCCEEDED;
             }
             else
             {
-                System.out.println("Node[" + local_name + "]: A neighbor got inconsistent. Return INCONSISTENT");
+                //System.out.println("Node[" + local_name + "]: A neighbor got inconsistent. Return INCONSISTENT");
                 return ReplyMessage.INCONSISTENT;
             }
         }
         else
         {
-            System.out.println("Node[" + local_name + "]: propagate. Return INCONSISTENT. local_dc = " + ctx.getDecisionLevel());
+            //System.out.println("Node[" + local_name + "]: propagate. Return INCONSISTENT. local_dc = " + ctx.getDecisionLevel());
             return ReplyMessage.INCONSISTENT;
         }        
     }
@@ -636,14 +544,14 @@ public class ANodeImpl implements ANodeInterface {
     
     @Override
     public ReplyMessage handleAddingFacts(int global_level, Map<Predicate, ArrayList<Instance>> in_facts, List<Predicate> closed_predicates) throws RemoteException {
-        System.out.println("Node[" + local_name +"]: Received facts from " + serializingFrom + ":");
-        System.out.println("Node[" + local_name +"]: decision_level_before_push = " + ctx.getDecisionLevel());
+        //System.out.println("Node[" + local_name +"]: Received facts from " + serializingFrom + ":");
+        //System.out.println("Node[" + local_name +"]: decision_level_before_push = " + ctx.getDecisionLevel());
        
         int decision_level_before_push = ctx.getDecisionLevel();
                 
         if (global_to_local_dc.get(global_level) == null)
         {
-            System.out.println("Node[" + local_name + "]: handleAddingFacts. Store (global_level,local_dc) = (" + global_level + ", " + decision_level_before_push +")");
+            //System.out.println("Node[" + local_name + "]: handleAddingFacts. Store (global_level,local_dc) = (" + global_level + ", " + decision_level_before_push +")");
         
             global_to_local_dc.put(global_level, decision_level_before_push);
         }
@@ -668,20 +576,20 @@ public class ANodeImpl implements ANodeInterface {
         }*/
         
         if(closed_predicates != null ) {
-            System.out.println("Node[" + local_name + "]: Closed predicates are: " + closed_predicates);
+            //System.out.println("Node[" + local_name + "]: Closed predicates are: " + closed_predicates);
             for (Predicate predicate : closed_predicates) {
                 ctx.closeFactFromOutside(predicate);
             }   
         }
         
-        System.out.println("Node[" + local_name + "]: Received facts end.");
-        System.out.println("Node[" + local_name + "]: HAF: decision level after push = " + ctx.getDecisionLevel());
+        //System.out.println("Node[" + local_name + "]: Received facts end.");
+        //System.out.println("Node[" + local_name + "]: HAF: decision level after push = " + ctx.getDecisionLevel());
         
         return propagateAfterBeingPushed(global_level, decision_level_before_push);
     }
     
     private ReplyMessage pushDerivedFacts(int global_level, int from_decision_level) {
-        System.out.println("Node[" + local_name +"]: pushDerivedFacts. from decision level = " + from_decision_level);
+        //System.out.println("Node[" + local_name +"]: pushDerivedFacts. from decision level = " + from_decision_level);
         ArrayList<LinkedList<Pair<Node,Instance>>> new_facts = ctx.deriveNewFacts();
         
         //System.out.println("Node[" + local_name +"]: PushDerivedFacts: required_predicates ="+required_predicates);
@@ -729,18 +637,18 @@ public class ANodeImpl implements ANodeInterface {
             List<Predicate> closed_predicates = closed_preds.get(aNodeInterface);
             
             if( in_facts == null && closed_predicates == null ) {
-                try {
-                    System.out.println("Node["+local_name+"]: Nothing to push for Node[" + aNodeInterface.getName() + "].");
-                } catch (RemoteException ex) {
-                    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                //try {
+                //    System.out.println("Node["+local_name+"]: Nothing to push for Node[" + aNodeInterface.getName() + "].");
+                //} catch (RemoteException ex) {
+                //    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
+                //}
                 continue;
             }
             
             try {
-                System.out.println("Node[" + local_name +"]: PushDerivedFacts: to Node[" + aNodeInterface.getName() + "]");
-                System.out.println("Node[" + local_name +"]: PushDerivedFacts: closed_predicates = " + closed_predicates);
-                System.out.println("Node[" + local_name +"]: PushDerivedFacts: to_push = " + to_push);
+                //System.out.println("Node[" + local_name +"]: PushDerivedFacts: to Node[" + aNodeInterface.getName() + "]");
+                //System.out.println("Node[" + local_name +"]: PushDerivedFacts: closed_predicates = " + closed_predicates);
+                //System.out.println("Node[" + local_name +"]: PushDerivedFacts: to_push = " + to_push);
                 aNodeInterface.receiveNextFactsFrom(local_name);
                 ReplyMessage reply = aNodeInterface.handleAddingFacts(global_level, in_facts, closed_predicates);
                 if (reply == ReplyMessage.INCONSISTENT)
@@ -748,15 +656,17 @@ public class ANodeImpl implements ANodeInterface {
                     return ReplyMessage.INCONSISTENT;
                 }                
             } catch (RemoteException ex) {
-                try {
-                    System.out.println("Node[" + local_name +"]: Exception in pushing derived facts to:"+aNodeInterface.getName());
-                } catch (RemoteException ex1) {
-                    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex1);
-                }
+                //try {
+                //    System.out.println("Node[" + local_name +"]: Exception in pushing derived facts to:"+aNodeInterface.getName());
+                //} catch (RemoteException ex1) {
                     Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
+         
+         return ReplyMessage.SUCCEEDED;
                 
-        }
+        //}
         
         /*// for all other nodes
         for (Iterator<Pair<String, ANodeInterface>> it = other_nodes.iterator(); it.hasNext();) {
@@ -826,7 +736,7 @@ public class ANodeImpl implements ANodeInterface {
             }
         }*/
         
-        return ReplyMessage.SUCCEEDED;
+        
     }
     
     // only called by makeChoice or makeBranch
@@ -849,14 +759,14 @@ public class ANodeImpl implements ANodeInterface {
         boolean has_choice = ctx.choice();
         if (has_choice)
         {
-            System.out.println("Node[" + local_name +"]: makeChoice. store(gl,dc_before_make_choice) = (" + global_level + "," + dc_before_choice +")");
+            //System.out.println("Node[" + local_name +"]: makeChoice. store(gl,dc_before_make_choice) = (" + global_level + "," + dc_before_choice +")");
             global_to_local_dc.put(global_level, dc_before_choice);
-            System.out.println("Node[" + local_name +"]: makeChoice. now call makePropagation(" + global_level + ")");            
+            //System.out.println("Node[" + local_name +"]: makeChoice. now call makePropagation(" + global_level + ")");            
             return makePropagation(global_level);
         }
         else
         { 
-            System.out.println("Node[" + local_name +"]: makeChoice. return NO_MORE_CHOICE");
+            //System.out.println("Node[" + local_name +"]: makeChoice. return NO_MORE_CHOICE");
             return ReplyMessage.NO_MORE_CHOICE;
         }
     }
@@ -867,14 +777,14 @@ public class ANodeImpl implements ANodeInterface {
         ReplyMessage has_branch = ctx.nextBranch();        
         if (has_branch == ReplyMessage.HAS_BRANCH)
         {
-            System.out.println("Node[" + local_name +"]: makeBranch. store(gl,dc_before_make_branch) = (" + global_level + "," + dc_before_branch +")");
+            //System.out.println("Node[" + local_name +"]: makeBranch. store(gl,dc_before_make_branch) = (" + global_level + "," + dc_before_branch +")");
             global_to_local_dc.put(global_level, dc_before_branch);
-            System.out.println("Node[" + local_name +"]: makeBranch. now call makePropagation(" + global_level + ")");
+            //System.out.println("Node[" + local_name +"]: makeBranch. now call makePropagation(" + global_level + ")");
             return makePropagation(global_level);
         }
         else
         {
-            System.out.println("Node[" + local_name +"]: makeBranch. return NO_MORE_BRANCH");
+            //System.out.println("Node[" + local_name +"]: makeBranch. return NO_MORE_BRANCH");
             return ReplyMessage.NO_MORE_BRANCH;
         }
     }
@@ -893,9 +803,9 @@ public class ANodeImpl implements ANodeInterface {
             filter = null;//"";
         }
         
-        System.out.println("Node[" + local_name +"]: Starting NodeImpl.main(). args[0] = " + local_name);
+        //System.out.println("Node[" + local_name +"]: Starting NodeImpl.main(). args[0] = " + local_name);
         
-        System.out.println("Node[" + local_name +"]: Input file is: " + filename);
+        //System.out.println("Node[" + local_name +"]: Input file is: " + filename);
         
         // create and export the local node
         ANodeImpl local_node= new ANodeImpl(local_name, filename, filter);
@@ -903,18 +813,9 @@ public class ANodeImpl implements ANodeInterface {
     
     @Override
     public ReplyMessage initGlobalLevelZero() throws RemoteException {
-        System.out.println("Node[" + local_name +"]: init zero global level to: " + ctx.getDecisionLevel());
+        //System.out.println("Node[" + local_name +"]: init zero global level to: " + ctx.getDecisionLevel());
         
         global_to_local_dc.put(0, ctx.getDecisionLevel());
         return ReplyMessage.SUCCEEDED;
     }
-
-    @Override
-    public ReplyMessage propagate(int global_level) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-
-
 }
