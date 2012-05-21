@@ -228,6 +228,8 @@ public class DisControllerImpl implements DisControllerInterface {
                             
                             if (answer_to_find != 0 && count_answer == answer_to_find)
                             {
+                                System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
+                                System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());  
                                 printSolvingTime();
                                 break;
                             }
