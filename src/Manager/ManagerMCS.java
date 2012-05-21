@@ -86,7 +86,7 @@ public class ManagerMCS {
                 }
             }else{
                 //System.out.println("ManagerMCS: Choice false.");
-                if(c.getChoiceUnit().getDecisionLevel() > 0){
+                if(c.getChoiceUnit().getDecisionLevel() >= 0){
                     //System.out.println("REACHED AN END");
                     c.propagate();
                     if(c.isSatisfiable()){

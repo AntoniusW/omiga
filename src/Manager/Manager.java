@@ -169,7 +169,7 @@ public class Manager {
                 }
             }else{
                 System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
-                if(c.getChoiceUnit().getDecisionLevel() > 0){
+                if(c.getChoiceUnit().getDecisionLevel() >= 0){
                     if(c.isSatisfiable()){
                         //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
@@ -185,9 +185,11 @@ public class Manager {
                     {
                         System.out.println("No more choice but UNSAT");
                     }
-                    c.backtrack();
-                }else{
-                    finished = true;
+                   if (c.getChoiceUnit().getDecisionLevel() > 0) {
+                       c.backtrack();
+                   }else{
+                        finished = true;
+                   }
                 }
             }
         }
