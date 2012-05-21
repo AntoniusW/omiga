@@ -22,6 +22,7 @@ public class AController {
     private int system_size;
     private int answer_count;
     private int answer_to_find;
+    private MessagesCounter counter;
     private ArrayList<Pair<String,ANodeInterface>> nodes =
             new ArrayList<Pair<String,ANodeInterface>>();
     
@@ -33,6 +34,7 @@ public class AController {
             system_size = size;
             answer_count = 0;
             this.answer_to_find = answer_to_find;
+            counter = new MessagesCounter();
             
             long start_registry = System.currentTimeMillis();
             registry = LocateRegistry.getRegistry("127.0.0.1");
@@ -62,7 +64,8 @@ public class AController {
         {
             for (int i = 0; i < system_size; i++)
             {
-                //System.out.println("Controller. backTrack(). Requesting backTrack(" + global_level + ") to node[" + i + "]");                  
+                //System.out.println("Controller. backTrack(). Requesting backTrack(" + global_level + ") to node[" + i + "]");
+                counter.backtrack++;
                 ReplyMessage reply = nodes.get(i).getArg2().localBacktrack(global_level);
                 assert (reply == ReplyMessage.SUCCEEDED);
             }
@@ -83,6 +86,7 @@ public class AController {
             for (int i = 0; i < system_size; i++)
             {
                 System.out.println("Controller. Request node[" + i + "] to print interpretation.");
+                counter.print_answer++;
                 nodes.get(i).getArg2().printAnswer();
             }
             System.out.println("***************************************************************************************");            
@@ -177,6 +181,7 @@ public class AController {
                     current_node = -1;
                     for (int i = 0; i < system_size; i++)
                     {
+                        counter.make_choice++;
                         reply = nodes.get(i).getArg2().makeChoice(global_level);
                         if (reply != ReplyMessage.NO_MORE_CHOICE)
                         {
@@ -214,6 +219,7 @@ public class AController {
                         for (int i = 0; i < system_size; i++)
                         {
                             //System.out.println("Controller. Final closing at node[" + i + "]");
+                            counter.final_closing++;
                             if (nodes.get(i).getArg2().finalClosing(global_level) == ReplyMessage.INCONSISTENT)
                             {
                                 //System.out.println("Controller. Killing answer set after finalClosing.");
@@ -259,6 +265,7 @@ public class AController {
                     backTrack(global_level-1);
                     //printAnswer();
                     
+                    counter.make_branch++;
                     reply = nodes.get(current_node).getArg2().makeBranch(global_level-1);
                     
                     switch (reply)
@@ -300,13 +307,16 @@ public class AController {
                     }
                 }
             }
-            System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
-            System.out.println("Controller. FINISHED: number of answers = " + answer_count);
+
+            System.out.println(counter.toString());
             
             // now print all solving time
             for (Pair<String, ANodeInterface> pair : nodes) {
                 System.out.println("INFO: Node[" + pair.getArg1() + "]: Solving time = " + pair.getArg2().getSolvingTime()); 
             }
+            
+            System.out.println("Controller. FINISHED: number of potential answers = " + potential_count);
+            System.out.println("Controller. FINISHED: number of answers = " + answer_count);
         }
         catch (Exception e) {
             System.err.println("Controller. Controller mainLoop ERROR.");

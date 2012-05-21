@@ -24,6 +24,7 @@ public class DisControllerImpl implements DisControllerInterface {
     private int count_answer;
     private int count_potential_answer;
     private int answer_to_find;
+    private MessagesCounter counter;
     
     Stack<Pair<Integer, Integer> > stack = new Stack<Pair<Integer,Integer> >();
     
@@ -36,6 +37,7 @@ public class DisControllerImpl implements DisControllerInterface {
             
             count_answer = 0;
             count_potential_answer = 0;
+            counter = new MessagesCounter();
             
             answer_to_find = 1;
             
@@ -65,6 +67,11 @@ public class DisControllerImpl implements DisControllerInterface {
         return count_potential_answer;
     }
     
+    public MessagesCounter getMsgCounter() throws RemoteException
+    {
+        return counter;
+    }
+    
     // called by Client
     public ReplyMessage init(ArrayList<Pair<String, DisControllerInterface>> controllers) throws RemoteException
     {
@@ -75,6 +82,7 @@ public class DisControllerImpl implements DisControllerInterface {
     
     @Override
     public ReplyMessage localBacktrack(int global_level) throws RemoteException {
+        counter.call_local_node++;
         return local_node.localBacktrack(global_level);
     }
     
@@ -85,8 +93,8 @@ public class DisControllerImpl implements DisControllerInterface {
             for (int i = 0; i < myid; i++)
             {
                 //System.out.println("DisController. backTrack(). " + "Requesting localBackTrack(" + global_level + ") to node[" + i + "]");                  
-                ReplyMessage reply = all_controllers.get(i).getArg2().localBacktrack(global_level);
-                assert (reply == ReplyMessage.SUCCEEDED);
+                counter.backtrack++;
+                all_controllers.get(i).getArg2().localBacktrack(global_level);                
             }
             
             localBacktrack(global_level);
@@ -94,8 +102,8 @@ public class DisControllerImpl implements DisControllerInterface {
             for (int i = myid+1; i < system_size; i++)
             {
                 //System.out.println("DisController. backTrack(). " + "Requesting localBackTrack(" + global_level + ") to node[" + i + "]");                  
-                ReplyMessage reply = all_controllers.get(i).getArg2().localBacktrack(global_level);
-                assert (reply == ReplyMessage.SUCCEEDED);
+                counter.backtrack++;
+                all_controllers.get(i).getArg2().localBacktrack(global_level);                
             }            
         }
         catch (Exception e)
@@ -107,6 +115,7 @@ public class DisControllerImpl implements DisControllerInterface {
     
     @Override
     public ReplyMessage localPrintAnswer() throws RemoteException {
+        counter.call_local_node++;
         local_node.printAnswer();
         
         return ReplyMessage.SUCCEEDED;
@@ -116,13 +125,15 @@ public class DisControllerImpl implements DisControllerInterface {
     {
         try {
             for (int i = 0; i < myid; i++) {
-                all_controllers.get(i).getArg2().localPrintAnswer();
+                counter.print_answer++;
+                all_controllers.get(i).getArg2().localPrintAnswer();                
             }
             
             localPrintAnswer();
             
             for (int i = myid+1; i < system_size; i++) {
-                all_controllers.get(i).getArg2().localPrintAnswer();
+                counter.print_answer++;
+                all_controllers.get(i).getArg2().localPrintAnswer();                
             }
             System.out.println("******************************************************************************************");
         }
@@ -136,6 +147,7 @@ public class DisControllerImpl implements DisControllerInterface {
     @Override
     public ReplyMessage finalClosing(int global_level) throws RemoteException
     {
+        counter.call_local_node++;
         return local_node.finalClosing(global_level);
     }
     
@@ -148,6 +160,7 @@ public class DisControllerImpl implements DisControllerInterface {
             for (int i = 0; i < system_size - 1; i++)
             {
                 //System.out.println("Controller. Final closing at node[" + i + "]");
+                counter.final_closing++;
                 if (all_controllers.get(i).getArg2().finalClosing(global_level) == ReplyMessage.INCONSISTENT)
                 {
                     //System.out.println("Controller. Killing answer set after finalClosing.");
@@ -155,6 +168,7 @@ public class DisControllerImpl implements DisControllerInterface {
                 }
             }
             
+            counter.call_local_node++;
             return local_node.finalClosing(global_level);
         }
         catch (Exception e)
@@ -181,6 +195,7 @@ public class DisControllerImpl implements DisControllerInterface {
     @Override
     public void makeChoice(int global_level, int last_guy) throws RemoteException {
         try {
+            counter.call_local_node++;
             ReplyMessage reply = local_node.makeChoice(global_level);
             switch (reply)
             {
@@ -197,7 +212,8 @@ public class DisControllerImpl implements DisControllerInterface {
                     //printAnswer();
                     
                     //System.out.println("DisController[" + myid + "]. makeChoice: Ask first controller to do the next choice. global_level = " + glpo + ". myid = " + myid);
-                    all_controllers.get(0).getArg2().makeChoice(global_level+1, myid);
+                    counter.make_choice++;
+                    all_controllers.get(0).getArg2().makeChoice(global_level+1, myid);                    
                     break;
                 case INCONSISTENT:
                     if (last_guy != myid) 
@@ -230,6 +246,7 @@ public class DisControllerImpl implements DisControllerInterface {
                             {
                                 System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
                                 System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());  
+                                printMessagesCounter();
                                 printSolvingTime();
                                 break;
                             }
@@ -246,11 +263,13 @@ public class DisControllerImpl implements DisControllerInterface {
                         global_level--;
                         
                         //System.out.println("DisController[" + myid + "]. Request last guy = " + last_guy + " to make a branch");
+                        counter.make_branch++;
                         all_controllers.get(last_guy).getArg2().makeBranch();                        
                     }
                     else
                     {
                         //System.out.println("DisController[" + myid + "]. Request next node to make choice. passing on (global_level,last_guy = (" + global_level +"," + last_guy + ")");
+                        counter.make_choice++;
                         all_controllers.get(myid+1).getArg2().makeChoice(global_level, last_guy);
                     }
                     break;
@@ -285,6 +304,7 @@ public class DisControllerImpl implements DisControllerInterface {
             //System.out.println("DisController[" + myid + "]. After backtracking to global_level = " + glmo + ". Interpretation is");
             //printAnswer();
             
+            counter.call_local_node++;
             ReplyMessage reply = local_node.makeBranch(global_level-1);
             
             switch (reply)
@@ -296,6 +316,7 @@ public class DisControllerImpl implements DisControllerInterface {
                     //printAnswer();                    
                     
                     //System.out.println("DisController[" + myid + "]. makeBranch: Ask first controller to do the next choice. global_level = " + global_level + ". myid = " + myid);
+                    counter.make_choice++;
                     all_controllers.get(0).getArg2().makeChoice(global_level, myid);
                     break;
                 case INCONSISTENT:
@@ -323,11 +344,13 @@ public class DisControllerImpl implements DisControllerInterface {
                         {
                             System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
                             System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());                        
+                            printMessagesCounter();
                             printSolvingTime();
                         }
                         else
                         {
                             //System.out.println("DisController[" + myid +"]:. makBranch: Ask last_guy = " + last_guy + " to make branch");
+                            counter.make_branch++;
                             all_controllers.get(last_guy).getArg2().makeBranch();
                         }
                     }
@@ -335,6 +358,7 @@ public class DisControllerImpl implements DisControllerInterface {
                     {
                         System.out.println("DisController[" + myid +"]: FINISHED. number of potential answers = " + all_controllers.get(system_size-1).getArg2().getCountPotentialAnswers());
                         System.out.println("DisController[" + myid +"]: FINISHED. number of answers = " + all_controllers.get(system_size-1).getArg2().getCountAnswers());
+                        printMessagesCounter();
                         printSolvingTime();
                     }
                     break;
@@ -351,6 +375,23 @@ public class DisControllerImpl implements DisControllerInterface {
     @Override
     public long getSolvingTime() throws RemoteException {
         return local_node.getSolvingTime();
+    }
+    
+    
+    private void printMessagesCounter()
+    {
+        try 
+        {
+            for (int i = 0; i < system_size-1; i++) {
+                System.out.println(all_controllers.get(i).getArg2().getMsgCounter().toString());
+            }
+            System.out.println(counter.toString());
+        }
+        catch (Exception e)
+        {
+            System.err.println("DisController. printMessagesCounter ERROR.");
+            e.printStackTrace();            
+        }
     }
 
     private void printSolvingTime()
