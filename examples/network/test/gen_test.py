@@ -80,7 +80,8 @@ def create_local_script(absolute_path,
             f.write(line.format(all_mixed_file_name))
     f.closed
 
-def create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, instance, absolute_path):
+def create_one_test_case(n_org, n_provider, n_student, good,
+                         density, org_provider_density, instance, absolute_path):
     # setting up the nodes' name and file names *************************
     org_node_name = []
     provider_node_name = []
@@ -226,8 +227,8 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
                         mixed_file.write(line.format(student_node_name[s], provider_node_name[i]))
 
                 # put a scholarship and generate its requirements
-                require_gpa = random.randint(0,9)
-                require_english = random.randint(0,9)
+                require_gpa = random.randint(0,7)
+                require_english = random.randint(0,7)
 
                 f.write('scholarship(s' + str(i) + ').\n')
                 mixed_file.write(provider_node_name[i] + 'scholarship(s' + str(i) + ').\n')
@@ -276,6 +277,12 @@ def create_one_test_case(n_org, n_provider, n_student, density, org_provider_den
                 # generate a random profile for this student
                 gpa = random.randint(0,10)
                 english = random.randint(0,10)
+
+                is_good = random.randint(0,100)
+                if (is_good < good):
+                    gpa = random.randint(7,10)
+                    english = random.randint(7,10)
+
                 f.write('profile(' + str(gpa) + ',' + str(english) + ').\n');
                 mixed_file.write(student_node_name[i] + 'profile(' + str(gpa) + ',' + str(english) + ').\n');
 
@@ -309,6 +316,7 @@ def main(argv):
     parser.add_option('-p', '--provider', dest="provider") # number of scholarship providers
     parser.add_option('-s', '--student',  dest="student")  # number of students
     parser.add_option('-d', '--density',  dest="density")  # desity of the graph. The total connection is density*(provider*(student+1))/100
+    parser.add_option('-g', '--good',     dest="good")     # probability to have a good student (GPA >= 7) and (English >= 7)
     parser.add_option('-n', '--num',      dest="num")      # number of test cases a..z
 
     (options, args) = parser.parse_args()
@@ -318,6 +326,7 @@ def main(argv):
     n_student = string.atoi(options.student)
     density = string.atoi(options.density)
     org_provider_density = 3*density / 4
+    good = string.atoi(options.good)
     n_instance = string.atoi(options.num)
 
     absolute_path = os.path.abspath( __file__ )
@@ -327,7 +336,8 @@ def main(argv):
     print absolute_path
 
     for i in range(0,n_instance):
-        create_one_test_case(n_org, n_provider, n_student, density, org_provider_density, chr(97+i), absolute_path)
+        create_one_test_case(n_org, n_provider, n_student, good,
+                             density, org_provider_density, chr(97+i), absolute_path)
 
 if __name__ == "__main__":
     import sys
