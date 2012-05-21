@@ -350,7 +350,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         if(SCCSize.isEmpty()) {
             return false;
         }
-        while(SCCSize.get(actualSCC)<=1 && this.closeActualSCCWithReturnValue()){
+        while(SCCSize.get(actualSCC)<=0 && this.closeActualSCCWithReturnValue()){
             //System.out.println("Calling close SCC!");
             if(actualSCC >= SCC.size()) return false;
         }
@@ -404,7 +404,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     private boolean closeProcedure(){
         boolean flag = false;
         //System.out.println("CloseProcedure: " + this.SCCSize.get(actualSCC) + " - " + this.closeActualSCCWithReturnValue());
-        while(actualSCC < this.SCCSize.size() && this.SCCSize.get(actualSCC) <= 1 && this.closeActualSCCWithReturnValue()){
+        while(actualSCC < this.SCCSize.size() && this.SCCSize.get(actualSCC) <= 0 && this.closeActualSCCWithReturnValue()){
             flag = true;
         }
         return flag;
@@ -419,7 +419,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             
             this.closeActualSCCFromOutside();
             //System.out.println("CloseProcedure: " + this.SCCSize.get(actualSCC) + " - " + this.closeActualSCCWithReturnValue());
-            while(actualSCC < this.SCCSize.size() && this.closeActualSCCWithReturnValue()){
+            while(actualSCC < this.SCCSize.size() && this.closeActualSCCFromOutside()){
             }
         }
     }
