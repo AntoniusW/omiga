@@ -20,6 +20,7 @@ def getLocalTime(filename):
         if (pos != -1):
             ltime = ['---','---','---']
             return ltime
+        
 
         pos = line.find('Time needed overAll:')
         if (pos != -1):
@@ -60,6 +61,7 @@ def getDistributedTime(filename):
     startup_time = 0
     solving_time = 0
     total_time = 0
+    message_count = 0
 
     with open(filename, 'r') as f:
         lines = f.readlines()
@@ -68,8 +70,13 @@ def getDistributedTime(filename):
     for line in lines:
         pos = line.find('Exception')
         if (pos != -1):
-            dis_time = ['---','---','---']
+            dis_time = ['---','---','---','---']
             return dis_time
+
+        pos = line.find('INFO: Total messages counter           = ')
+        if (pos != -1):
+            pos = pos + len('INFO: Total messages counter           = ')
+            message_count = message_count + string.atoi(line[pos:])
 
         pos = line.find('INFO: startup time =')
         if (pos != -1):
@@ -92,6 +99,7 @@ def getDistributedTime(filename):
     dis_time.append(startup_time)
     dis_time.append(1.0 * solving_time / 1000)
     dis_time.append(total_time)
+    dis_time.append(message_count)
 
     return dis_time
 
@@ -106,8 +114,6 @@ def copy_content(source, target):
 
 
 def main(argv):
-
-
     answers = ['1']
     absolute_path = os.path.abspath( __file__ )
     print absolute_path
@@ -150,7 +156,9 @@ def main(argv):
                 else:
                     f.write('\midrule\n')
 
-                f.write(row_tpl.format(instance, local_time[1], local_time[2], central_time[0], central_time[1], central_time[2], dis_time[0], dis_time[1], dis_time[2]))
+                f.write(row_tpl.format(instance, local_time[1], local_time[2], 
+                                       central_time[0], central_time[1], central_time[2], central_time[3], 
+                                       dis_time[0], dis_time[1], dis_time[2], dis_time[3]))
 
         copy_content(absolute_path + '/templates/table_footer.tpl', f)
     f.closed

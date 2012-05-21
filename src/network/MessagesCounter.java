@@ -33,17 +33,17 @@ public class MessagesCounter implements Serializable {
     public String toString()
     {
         String tmp = "";
-        tmp = tmp + "INFO: Backtrack counter       = " + backtrack + "\n";
-        tmp = tmp + "INFO: Pushing counter         = " + pushing + "\n";
-        tmp = tmp + "INFO: MakeChoice counter      = " + make_choice + "\n";
-        tmp = tmp + "INFO: MakeBranch counter      = " + make_branch + "\n";
-        tmp = tmp + "INFO: PrintAnswer counter     = " + print_answer + "\n";
-        tmp = tmp + "INFO: FinalClosing counter    = " + final_closing + "\n";
-        tmp = tmp + "INFO: Call local node counter = " + call_local_node + "\n";
+        tmp = tmp + "INFO: Backtrack messages counter       = " + backtrack + "\n";
+        tmp = tmp + "INFO: Pushing messages counter         = " + pushing + "\n";
+        tmp = tmp + "INFO: MakeChoice messages counter      = " + make_choice + "\n";
+        tmp = tmp + "INFO: MakeBranch messages counter      = " + make_branch + "\n";
+        tmp = tmp + "INFO: PrintAnswer messages counter     = " + print_answer + "\n";
+        tmp = tmp + "INFO: FinalClosing messages counter    = " + final_closing + "\n";
+        tmp = tmp + "INFO: Call local node messages counter = " + call_local_node + "\n";
 
         
         int total = backtrack + pushing + make_choice + make_branch + print_answer + final_closing + call_local_node;
-        tmp = tmp + "INFO: Total counters       = " + total + "\n";
+        tmp = tmp + "INFO: Total messages counter           = " + total + "\n";
         
         return tmp;
     }
