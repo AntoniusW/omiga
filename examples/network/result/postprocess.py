@@ -16,6 +16,11 @@ def getLocalTime(filename):
     f.closed
 
     for line in lines:
+        pos = line.find('Exception')
+        if (pos != -1):
+            ltime = ['---','---','---']
+            return ltime
+
         pos = line.find('Time needed overAll:')
         if (pos != -1):
             pos = pos + len('Time needed overAll:')
@@ -61,6 +66,11 @@ def getDistributedTime(filename):
     f.closed
 
     for line in lines:
+        pos = line.find('Exception')
+        if (pos != -1):
+            dis_time = ['---','---','---']
+            return dis_time
+
         pos = line.find('INFO: startup time =')
         if (pos != -1):
             pos = pos + len('INFO: startup time =')
@@ -139,18 +149,6 @@ def main(argv):
                     is_first = False
                 else:
                     f.write('\midrule\n')
-
-                print local_time[0]
-                print local_time[1]
-                print local_time[2]
-
-                print local_time[0]
-                print local_time[1]
-                print local_time[2]
-
-                print local_time[0]
-                print local_time[1]
-                print local_time[2]
 
                 f.write(row_tpl.format(instance, local_time[1], local_time[2], central_time[0], central_time[1], central_time[2], dis_time[0], dis_time[1], dis_time[2]))
 
