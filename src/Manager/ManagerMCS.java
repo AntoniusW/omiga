@@ -144,7 +144,7 @@ public class ManagerMCS {
             }
         }
         
-        System.out.println("INFO: Pure solving time = " + pure_solving_time);
+        System.out.println("INFO: Pure solving time = " + 1.0*pure_solving_time/1000);
         
         /*
         while(!finished){
