@@ -567,7 +567,10 @@ public class ANodeImpl implements ANodeInterface {
         
         
         HashMap<Predicate,ArrayList<Instance>> in_facts_map = (HashMap<Predicate,ArrayList<Instance>>) in_facts;
+        long start_adding_facts = System.currentTimeMillis();
         ctx.addFactsFromOutside(in_facts_map);
+        solving_time = solving_time + System.currentTimeMillis() - start_adding_facts;
+        
         /*for(Entry<Predicate, ArrayList<Instance>> pred : in_facts.entrySet()) {
             
             // print out what was received
@@ -586,9 +589,11 @@ public class ANodeImpl implements ANodeInterface {
         
         if(closed_predicates != null ) {
             //System.out.println("Node[" + local_name + "]: Closed predicates are: " + closed_predicates);
+            long start_adding_closed_preds = System.currentTimeMillis();
             for (Predicate predicate : closed_predicates) {
                 ctx.closeFactFromOutside(predicate);
-            }   
+            }
+            solving_time = solving_time + System.currentTimeMillis() - start_adding_closed_preds;
         }
         
         //System.out.println("Node[" + local_name + "]: Received facts end.");
@@ -716,8 +721,8 @@ public class ANodeImpl implements ANodeInterface {
     
     @Override
     public ReplyMessage makeBranch(int global_level) throws RemoteException {        
-        int dc_before_branch = ctx.getDecisionLevel();        
         long start_branch = System.currentTimeMillis();
+        int dc_before_branch = ctx.getDecisionLevel();
         ReplyMessage has_branch = ctx.nextBranch();        
         solving_time = solving_time + System.currentTimeMillis() - start_branch;
         
