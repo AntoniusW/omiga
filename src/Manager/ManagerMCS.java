@@ -13,6 +13,7 @@ import Entity.ContextASPMCSRewriting;
 import Entity.Predicate;
 import Entity.Rule;
 import java.io.FileNotFoundException;
+import network.Action;
 import network.ReplyMessage;
 import org.jgrapht.graph.DirectedSubgraph;
 
@@ -64,7 +65,59 @@ public class ManagerMCS {
         }
         //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
-        int i = 0;
+        
+        Action action = Action.MAKE_CHOICE;
+        while (action != Action.FINISH)
+        {
+            if (action == Action.MAKE_CHOICE)
+            {
+                if (c.choice())
+                {
+                    c.propagate();
+                    if (!c.isSatisfiable())
+                        action = Action.MAKE_BRANCH;
+                }
+                else
+                {
+                    if(c.getChoiceUnit().getDecisionLevel() >= 0)
+                    {
+                        c.propagate();
+                        if (c.isSatisfiable())
+                        {
+                            answerSetCount++;
+                            if (output)
+                            {
+                                System.out.println("Found Answerset: " + answerSetCount);
+                                c.printAnswerSet(filter);
+                            }
+                            if(answersets != 0 && answerSetCount == answersets) break;
+                        }
+                        c.backtrack();
+                    }
+                }
+            }
+            else if (action == Action.MAKE_BRANCH)
+            {
+                c.backtrack();
+                ReplyMessage rm = c.nextBranch();
+                switch (rm)
+                {
+                    case HAS_BRANCH:
+                        c.propagate();
+                        if (c.isSatisfiable())
+                            action = Action.MAKE_CHOICE;
+                        break;
+                    case NO_MORE_BRANCH:                        
+                        break;
+                    case NO_MORE_ALTERNATIVE:
+                        action = Action.FINISH;
+                        break;
+                }
+            }
+        }
+        
+        
+        /*
         while(!finished){
             boolean flag = false;
             
@@ -74,8 +127,8 @@ public class ManagerMCS {
                 if(!c.isSatisfiable()){
                     c.backtrack();
                     ReplyMessage rm = c.nextBranch();
-                    while(!rm.equals(ReplyMessage.HAS_BRANCH) && !finished){
-                        if(rm.equals(ReplyMessage.NO_MORE_ALTERNATIVE)) finished = true;
+                    while(rm != ReplyMessage.HAS_BRANCH && !finished){
+                        if(rm == ReplyMessage.NO_MORE_ALTERNATIVE) finished = true;
                         c.backtrack();
                         rm = c.nextBranch();
                         c.propagate();
@@ -105,8 +158,8 @@ public class ManagerMCS {
                     }
                     c.backtrack();
                     ReplyMessage rm = c.nextBranch();
-                    while(!rm.equals(ReplyMessage.HAS_BRANCH) && !finished){
-                        if(rm.equals(ReplyMessage.NO_MORE_ALTERNATIVE)) finished = true;
+                    while(rm != ReplyMessage.HAS_BRANCH && !finished){
+                        if(rm == ReplyMessage.NO_MORE_ALTERNATIVE) finished = true;
                         c.backtrack();
                         rm = c.nextBranch();
                         c.propagate();
@@ -118,6 +171,8 @@ public class ManagerMCS {
                 }
             }
         }
+        */
+        
         System.out.println("Found: " + this.answerSetCount + " answersets!");
         
     }
