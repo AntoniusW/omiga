@@ -47,10 +47,19 @@ public class ManagerMCS {
     }
     
     public void calculate(Integer answersets, boolean output, String filter){
-        boolean finished = false;
+        long pure_solving_time = 0;
+        long start_action;
+        
+        //boolean finished = false;
+        start_action = System.currentTimeMillis();
         c.propagate();
         c.getChoiceUnit().DeriveSCC();
-        if(!c.getChoiceUnit().killSoloSCC()){
+        
+        boolean kill_solo = c.getChoiceUnit().killSoloSCC();
+        
+        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
+        
+        if(!kill_solo){
             //System.err.println("Killed all SCC: " + System.currentTimeMillis());
             //We killed all SCC --> This context is guessfree
             if(c.isSatisfiable()){
@@ -65,15 +74,23 @@ public class ManagerMCS {
         }
         //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
+
         
         Action action = Action.MAKE_CHOICE;
         while (action != Action.FINISH)
         {
             if (action == Action.MAKE_CHOICE)
             {
-                if (c.choice())
+                start_action = System.currentTimeMillis();
+                boolean has_choice = c.choice();
+                pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
+                
+                if (has_choice)
                 {
+                    start_action = System.currentTimeMillis();
                     c.propagate();
+                    pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
+                    
                     if (!c.isSatisfiable())
                         action = Action.MAKE_BRANCH;
                 }
@@ -81,7 +98,10 @@ public class ManagerMCS {
                 {
                     if(c.getChoiceUnit().getDecisionLevel() >= 0)
                     {
+                        start_action = System.currentTimeMillis();
                         c.propagate();
+                        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
+                        
                         if (c.isSatisfiable())
                         {
                             answerSetCount++;
@@ -92,18 +112,26 @@ public class ManagerMCS {
                             }
                             if(answersets != 0 && answerSetCount == answersets) break;
                         }
+                        
+                        start_action = System.currentTimeMillis();
                         c.backtrack();
+                        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
                     }
                 }
             }
             else if (action == Action.MAKE_BRANCH)
             {
+                start_action = System.currentTimeMillis();
                 c.backtrack();
                 ReplyMessage rm = c.nextBranch();
+                pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
+                
                 switch (rm)
                 {
                     case HAS_BRANCH:
+                        start_action = System.currentTimeMillis();
                         c.propagate();
+                        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
                         if (c.isSatisfiable())
                             action = Action.MAKE_CHOICE;
                         break;
@@ -116,6 +144,7 @@ public class ManagerMCS {
             }
         }
         
+        System.out.println("INFO: Pure solving time = " + pure_solving_time);
         
         /*
         while(!finished){

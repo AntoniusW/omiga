@@ -611,7 +611,7 @@ public class ANodeImpl implements ANodeInterface {
         //System.out.println("Node[" + local_name +"]: pushDerivedFacts. from decision level = " + from_decision_level);
         long start_derive_new_facts = System.currentTimeMillis();
         ArrayList<LinkedList<Pair<Node,Instance>>> new_facts = ctx.deriveNewFacts();
-        solving_time = solving_time + System.currentTimeMillis() - start_derive_new_facts;
+        
         
         //System.out.println("Node[" + local_name +"]: PushDerivedFacts: required_predicates ="+required_predicates);
         //System.out.println("Node[" + local_name +"]: PushDerivedFacts: new_facts ="+new_facts);
@@ -642,16 +642,18 @@ public class ANodeImpl implements ANodeInterface {
             
         // collect all newly closed predicates
         HashMap<ANodeInterface,ArrayList<Predicate>> closed_preds =new HashMap<ANodeInterface, ArrayList<Predicate>>();
-         for (Entry<Predicate, ArrayList<ANodeInterface>> entry : required_predicates.entrySet()) {
-             if( ctx.getRete().getBasicNodeMinus(entry.getKey()).isClosed() && !closed_predicates.contains(entry.getKey())) {
-                 closed_predicates.add(entry.getKey());
-                 for (ANodeInterface aNodeInterface : entry.getValue()) {
-                     if(!closed_preds.containsKey(aNodeInterface) )
-                         closed_preds.put(aNodeInterface, new ArrayList<Predicate>());
-                     closed_preds.get(aNodeInterface).add(entry.getKey());
-                 }
-             }
-         }
+        for (Entry<Predicate, ArrayList<ANodeInterface>> entry : required_predicates.entrySet()) {
+            if( ctx.getRete().getBasicNodeMinus(entry.getKey()).isClosed() && !closed_predicates.contains(entry.getKey())) {
+                closed_predicates.add(entry.getKey());
+                for (ANodeInterface aNodeInterface : entry.getValue()) {
+                    if(!closed_preds.containsKey(aNodeInterface) )
+                        closed_preds.put(aNodeInterface, new ArrayList<Predicate>());
+                    closed_preds.get(aNodeInterface).add(entry.getKey());
+                }
+            }
+        }
+         
+        solving_time = solving_time + System.currentTimeMillis() - start_derive_new_facts;
          
          for (ANodeInterface aNodeInterface : other_nodes.values()) {
             Map<Predicate,ArrayList<Instance>> in_facts = to_push.get(aNodeInterface);

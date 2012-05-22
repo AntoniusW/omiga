@@ -8,6 +8,7 @@ def getLocalTime(filename):
     ltime = []
 
     overall_time = 0
+    pure_solving_time = 0;
     calculation_time = 0
     total_time = 0
 
@@ -18,9 +19,13 @@ def getLocalTime(filename):
     for line in lines:
         pos = line.find('Exception')
         if (pos != -1):
-            ltime = ['---','---','---']
+            ltime = ['---','---','---','---']
             return ltime
         
+        pos = line.find('INFO: Pure solving time =')
+        if (pos != -1):
+            pos = pos + len('INFO: Pure solving time =')
+            pure_solving_time = string.atof(line[pos:])
 
         pos = line.find('Time needed overAll:')
         if (pos != -1):
@@ -39,6 +44,7 @@ def getLocalTime(filename):
             total_time = to_second(str_time)
 
     ltime.append(overall_time)
+    ltime.append(pure_solving_time)
     ltime.append(calculation_time)
     ltime.append(total_time)
 
