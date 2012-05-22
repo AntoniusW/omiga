@@ -1,0 +1,30 @@
+col(Country, red) :- node(Country), not col(Country, green), not col(Country, blue).
+col(Country, blue) :- node(Country), not col(Country, green), not col(Country, red).
+col(Country, green) :- node(Country), not col(Country, red), not col(Country, blue).
+
+:- arc(Country1, Country2), col(Country1, CommonColor), col(Country2, CommonColor).
+
+
+node(minnesota).
+node(wisconsin).
+node(illinois).
+node(iowa).
+node(indiana).
+node(michigan).
+node(ohio).
+
+arc(minnesota, wisconsin).
+arc(illinois, iowa).
+arc(illinois, michigan).
+arc(illinois, wisconsin).
+arc(illinois, indiana).
+arc(indiana, ohio).
+arc(michigan, indiana).
+arc(michigan, ohio).
+arc(michigan, wisconsin).
+arc(minnesota, iowa).
+arc(wisconsin, iowa).
+arc(minnesota, michigan).
+
+
+

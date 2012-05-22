@@ -1,0 +1,25 @@
+
+a(X) :- p(X), not b(X). 
+aa(X,Y) :- a(X), p(Y), not a(Y).
+b(X) :- p(X), not a(X). 
+bb(X,Y) :- b(X), p(Y), not b(Y).
+
+b(X) :- f(X).
+f(X) :- b(X).
+
+a(X) :- u(X).
+u(X) :- a(X).
+
+p(0).
+p(1).
+p(2).
+p(3).
+p(4).
+p(5).
+p(6).
+p(7).
+p(8).
+p(9).
+
+
+c(X) :- p(X), not f(X).
