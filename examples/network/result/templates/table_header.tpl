@@ -3,9 +3,9 @@
 \caption{Experimental results for the scholarships hunting example}
 \footnotesize
 \label{tab:experiment}
-\begin{tabular}{lcccccccccc}
+\begin{tabular}{lcccccccc}
 \toprule
-\multirow{2}{*}{\textbf{Instances}} & \multicolumn{2}{c}{\textbf{Local Solver}} & \multicolumn{4}{c}{\textbf{Semi-Distributed}} & \multicolumn{4}{c}{\textbf{Fully-Distributed}} \\
+\multirow{2}{*}{\textbf{Instances}} & \multicolumn{2}{c}{\textbf{Local Solver}} & \multicolumn{3}{c}{\textbf{Semi-Distributed}} & \multicolumn{3}{c}{\textbf{Fully-Distributed}} \\
 \cline{2-11}
-& Solve & Total & Startup & Solve & Total & Msg & Startup & Solve & Total & Msg \\
+& Solve & Total & Solve & Total & Msg & Solve & Total & Msg \\
 \toprule

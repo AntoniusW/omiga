@@ -157,8 +157,8 @@ def main(argv):
                     f.write('\midrule\n')
 
                 f.write(row_tpl.format(instance, local_time[1], local_time[2], 
-                                       central_time[0], central_time[1], central_time[2], central_time[3], 
-                                       dis_time[0], dis_time[1], dis_time[2], dis_time[3]))
+                                       central_time[1], central_time[2], central_time[3], 
+                                       dis_time[1], dis_time[2], dis_time[3]))
 
         copy_content(absolute_path + '/templates/table_footer.tpl', f)
     f.closed

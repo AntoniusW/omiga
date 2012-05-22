@@ -162,12 +162,14 @@ public class ANodeImpl implements ANodeInterface {
             Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        long start_computing = System.currentTimeMillis();
         ctx.propagate();
         //System.out.println("First Propagation finished: " + System.currentTimeMillis());
         ctx.getChoiceUnit().DeriveSCC();
         
         //System.out.println("Call killSoloSCC");
         ctx.getChoiceUnit().killSoloSCC();
+        solving_time = solving_time + System.currentTimeMillis() - start_computing;
         
         //System.out.println("After killSoloSCC");
         //ctx.printAnswerSet(filter);
@@ -388,7 +390,9 @@ public class ANodeImpl implements ANodeInterface {
     @Override
     public ReplyMessage firstPropagate() throws RemoteException {        
         //System.out.println("Node[" + local_name + "]: firstPropagate.");
+        long start_propagate = System.currentTimeMillis();
         ctx.propagate();
+        solving_time = solving_time + System.currentTimeMillis() - start_propagate;
         
         //System.out.println("Node[" + local_name + "]: after firstPropagate. interpretation is ");
         //ctx.printAnswerSet(filter);
@@ -670,78 +674,6 @@ public class ANodeImpl implements ANodeInterface {
             }
          
          return ReplyMessage.SUCCEEDED;
-                
-        //}
-        
-        /*// for all other nodes
-        for (Iterator<Pair<String, ANodeInterface>> it = other_nodes.iterator(); it.hasNext();) {
-            Pair<String,ANodeInterface>  node = it.next();
-            
-            // skip other node if it does not require facts from this one
-            if(!required_predicates.containsKey(node.getArg1()) || required_predicates.get(node.getArg1())==null) {
-                System.out.println("Node[" + local_name +"]: Skipping " + node.getArg1());
-                continue;
-            }
-            
-            boolean will_push = false;
-            HashMap<Predicate,ArrayList<Instance>> to_push = new HashMap<Predicate, ArrayList<Instance>>();
-            // for all predicates having new facts 
-            for (Entry<Predicate, HashSet<Instance>> pred : new_facts.entrySet()) {                
-                //System.out.println("pushDerivedFacts:  pred: "+pred.toString());
-                
-                // add facts if this predicate is imported
-                if( required_predicates.get(node.getArg1()).contains(pred.getKey())) {
-                    if (pred.getValue().size() > 0)
-                    {
-                        will_push = true;
-                        System.out.println("Node[" + local_name +"]: PushDerivedFacts: to " + node.getArg1() + ". HashSet of Instances size " + pred.getValue().size());
-                        to_push.put(pred.getKey(), new ArrayList<Instance>(pred.getValue()));
-                    }
-                }
-            }
-            ArrayList<Predicate> closed_preds = new ArrayList<Predicate>();
-            for (Predicate pred : required_predicates.get(node.getArg1())) {
-                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx: "+ ctx);
-                //System.out.println("Node["+local_name+"]: PushDerivedFacts: Predicate" +pred+" arity: "+pred.getArity()+" hashCode: "+ pred.hashCode());
-                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete: "+ ctx.getRete());
-                //System.out.println("Outputing hash codes:");
-                //for (Predicate predicate : ctx.getRete().getBasicLayerMinus().keySet()) {
-                //    System.out.println("Predicate "+predicate+" arity: "+predicate.getArity()+" hashCode: "+ predicate.hashCode());
-                //}
-                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicLayerMinus: "+ ctx.getRete().getBasicLayerMinus().keySet());
-                //System.out.println("Node["+local_name+"]: PushDerivedFacts: ctx.getRete.getBasicNodeMinus: "+ ctx.getRete().getBasicNodeMinus(pred));
-                if ( ctx.getRete().getBasicNodeMinus(pred).isClosed() && !closed_predicates.contains(pred)) {
-                    System.out.println("Node[" + local_name +"]: PushDerivedFacts: Predicate closed "+pred.toString());
-                    closed_predicates.add(pred);
-                    will_push = true;
-                    closed_preds.add(pred);
-                }
-            }
-            
-            // send new facts to other node
-            try {
-                if (will_push)
-                {
-                    System.out.println("Node[" + local_name +"]: PushDerivedFacts: to_push = "+to_push);
-                    node.getArg2().receiveNextFactsFrom(local_name);
-                    ReplyMessage reply = node.getArg2().handleAddingFacts(global_level, to_push,closed_preds);
-                    if (reply == ReplyMessage.INCONSISTENT)
-                    {
-                        return ReplyMessage.INCONSISTENT;
-                    }
-                    assert (reply == ReplyMessage.SUCCEEDED);
-                }
-                else
-                {
-                    System.out.println("Node[" + local_name +"]: Nothing to push to " + node.getArg1());
-                }
-            } catch (RemoteException ex) {
-                System.out.println("Node[" + local_name +"]: Exception in pushing derived facts to:"+node.getArg1());
-                    Logger.getLogger(ANodeImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }*/
-        
-        
     }
     
     // only called by makeChoice or makeBranch
