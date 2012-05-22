@@ -697,9 +697,9 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage makeChoice(int global_level) throws RemoteException {
         long start_choice = System.currentTimeMillis();
         int dc_before_choice = ctx.getDecisionLevel();
+        boolean has_choice = ctx.choice();
         solving_time = solving_time + System.currentTimeMillis() - start_choice;
         
-        boolean has_choice = ctx.choice();
         if (has_choice)
         {
             //System.out.println("Node[" + local_name +"]: makeChoice. store(gl,dc_before_make_choice) = (" + global_level + "," + dc_before_choice +")");
@@ -716,8 +716,7 @@ public class ANodeImpl implements ANodeInterface {
     
     @Override
     public ReplyMessage makeBranch(int global_level) throws RemoteException {        
-        int dc_before_branch = ctx.getDecisionLevel();
-        
+        int dc_before_branch = ctx.getDecisionLevel();        
         long start_branch = System.currentTimeMillis();
         ReplyMessage has_branch = ctx.nextBranch();        
         solving_time = solving_time + System.currentTimeMillis() - start_branch;
