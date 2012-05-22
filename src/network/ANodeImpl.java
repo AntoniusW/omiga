@@ -435,7 +435,7 @@ public class ANodeImpl implements ANodeInterface {
         
             long start_backtrack = System.currentTimeMillis();
             ctx.backtrackTo(local_dc.intValue());
-            solving_time = solving_time + System.currentTimeMillis() - start_backtrack;
+            
             
             if (global_to_local_dc.remove(global_level+1) == null)
             {
@@ -448,6 +448,7 @@ public class ANodeImpl implements ANodeInterface {
                 if( !ctx.getRete().getBasicNodeMinus(predicate).isClosed() )
                     it.remove();
             }
+            solving_time = solving_time + System.currentTimeMillis() - start_backtrack;
             
             //int gl1 = global_level+1;            
             //System.out.println("Node[" + local_name + "]: makeBranch. remove(" + gl1 + ").");
@@ -475,23 +476,25 @@ public class ANodeImpl implements ANodeInterface {
     public ReplyMessage finalClosing(int global_level) throws RemoteException {
         // increase the outside global_level by one before calling this method
         //System.out.println("Node[" + local_name + "]: finalClosing. Store (global_level,local_dc) = (" + global_level + ", " + ctx.getDecisionLevel() +")");
-        global_to_local_dc.put(global_level, ctx.getDecisionLevel());
         
         long start_final_closing = System.currentTimeMillis();
+        global_to_local_dc.put(global_level, ctx.getDecisionLevel());
+        
+        
         int dec = ctx.getDecisionLevel()+1;
         for (Predicate predicate : local_predicates) {
             if( predicate.getNodeId()!= null) {
                 closed_predicates.add(predicate);
                 ctx.closeFactFromOutside(predicate);
             }
-        }
-        solving_time = solving_time + System.currentTimeMillis() - start_final_closing;
+        }        
         
         ArrayList<LinkedList<Pair<Node, Instance>>> new_facts = ctx.deriveNewFacts();
         for (int dl = dec; dl < new_facts.size(); dl++) {
             for (Pair<Node, Instance> pair : new_facts.get(dl)) {
                 if(pair.getArg1().getClass().equals(BasicNode.class)) {
                     //System.out.println("Node["+local_name+"]: finalClosing derived new fact: "+((BasicNode)pair.getArg1()).getPred()+" "+ pair.getArg2());
+                    solving_time = solving_time + System.currentTimeMillis() - start_final_closing;
                     return ReplyMessage.INCONSISTENT;  
                 }
             }
@@ -507,9 +510,11 @@ public class ANodeImpl implements ANodeInterface {
         
         if (!ctx.isSatisfiable())
         {
+            solving_time = solving_time + System.currentTimeMillis() - start_final_closing;
             return ReplyMessage.INCONSISTENT;
         }
         
+        solving_time = solving_time + System.currentTimeMillis() - start_final_closing;
         return ReplyMessage.SUCCEEDED;
     }    
     
@@ -604,7 +609,9 @@ public class ANodeImpl implements ANodeInterface {
     
     private ReplyMessage pushDerivedFacts(int global_level, int from_decision_level) {
         //System.out.println("Node[" + local_name +"]: pushDerivedFacts. from decision level = " + from_decision_level);
+        long start_derive_new_facts = System.currentTimeMillis();
         ArrayList<LinkedList<Pair<Node,Instance>>> new_facts = ctx.deriveNewFacts();
+        solving_time = solving_time + System.currentTimeMillis() - start_derive_new_facts;
         
         //System.out.println("Node[" + local_name +"]: PushDerivedFacts: required_predicates ="+required_predicates);
         //System.out.println("Node[" + local_name +"]: PushDerivedFacts: new_facts ="+new_facts);
