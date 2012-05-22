@@ -1,0 +1,7 @@
+a(X) :- p(X), not b(X). 
+aa(X,Y) :- a(X), p(Y), not b(Y).
+b(X) :- p(X), not a(X). 
+bb(X,Y) :- b(X), p(Y), not a(Y).
+
+p(0).
+p(1).
