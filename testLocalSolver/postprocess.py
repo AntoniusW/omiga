@@ -47,7 +47,7 @@ def get_running_time(time_file):
 
 
 def get_status(out_file):
-    status = 'No status'
+    status = '---' # No status
 
     with open(out_file, 'r') as l:
         for line in l:
@@ -82,86 +82,138 @@ def get_outcome(outname):
 
 def main(argv):
     
-    # Run me: python tables.py --file=testcases.txt
-
-    # Get file that contains all test cases
-    parser = optparse.OptionParser()
-    parser.add_option('-f', '--file', dest="filename")
-
-    (options, args) = parser.parse_args()
+    # Run me: python postprocess
 
     # copy header
-    tex_output = open('./table.tex', 'w')
+    #tex_output = open('./table.tex', 'w')
     #copy_text(tex_output, 'template/tex_header.tpl')
 
     # read row separation template
-    with open('template/tex_row_separation.tpl', 'r') as rs:
-        row_sep = rs.readlines()
-    rs.closed
+    #with open('template/tex_row_separation.tpl', 'r') as rs:
+    #    row_sep = rs.readlines()
+    #rs.closed
 
-    engines = ['dlv', 'asperix', 'woc']
-    testnames = []
+    engines = ['clingo', 'dlv', 'asperix', 'omiga']
+    #testnames = ['reach', 'birds', 'party', '3col', 'stratProg']
+    testnames = ['reach', 'birds']
+    count_testruns = [0, 0]
+    count_instances = []
     final_table = [] # this will be constructed as a 2-dimensional table, 
                      # each row corresponding to a testname and 
                      # each column to an engine
+    final_shade = []
+
     dir_name = ''
 
-    with open(options.filename, 'r') as f:
+    testruns = []
+    with open('instances.txt', 'r') as f:
         for line in f:
             # Get rid of the last '\n' character
             line = line[:len(line)-1]
+            testruns.append(line)
+    f.closed
 
-            # Format of testcases
-            # __directory
-            # test1 size_11 ... size_1n
-            # test2 size_21 ... size_2m
-            #
-            # For example:
-            #
-            # __birds
-            # birds10000 0 100 1000
-            # birds200000 0 1000
+    instances = []
+        
+    for testname in testnames:
+        for testrun in testruns:
+            if (testrun.find(testname) != -1):
+                print 'Found ' + testname + ' in ' + testrun
 
-            # Now extract the directory name, testname, and all sizes
-            find_dir = line.find('__')
-            if find_dir != -1:
-                dir_name = line[find_dir+2:]
-            else:
-                find_blank = line.find(' ')
-                testname = line[:find_blank]
+                test_id = testnames.index(testname)
+                count_testruns[test_id] = count_testruns[test_id] + 1
 
-                sizes = []
+                last_slash = testrun.rfind('/')
+                last_dash = testrun.rfind('-')
+                instance = testrun[last_slash+1 : last_dash]
+                if (instances.count(instance) == 0):
+                    count_instances.append(1)
+                    instances.append(instance)
+                    print 'Add instance: ' + instance
+                else:
+                    ins_id = instances.index(instance)
+                    count_instances[ins_id] = count_instances[ins_id] + 1;
 
-                next_blank = line.find(' ', find_blank+1)
-                while (next_blank != -1):
-                    s = line[find_blank+1 : next_blank]
-                    sizes.append(s)
-                    find_blank = next_blank
-                    next_blank = line.find(' ', find_blank+1)
+    for instance in instances:
+        for testrun in testruns:
+            if (testrun.find(instance) != -1):
+                timing = []
+                shade = []
 
-                # The last size. (There should be at least one size)
-                s = line[find_blank+1:]
-                sizes.append(s)
+                for en in engines:
+                    # shade if it's not for 1 answer
+                    last_dash = testrun.rfind('-')
+                    num_answer = string.atoi(testrun[last_dash+1:])
+                    if (num_answer == 1):
+                        shade.append(0)
+                    else:
+                        shade.append(1)
 
-                # Iterate over tests cases. For example: birds1000-100-engine.log/.time/.out
-                for si in sizes:
-                    testnames.append(testname + '-' + si)
-                    timing = []
+                    # get running time
+                    outname = testrun + '-' + en
+                    outcome = get_outcome(outname)
+                    timing.append(outcome)
+                    print "reading from " + outname + ". got outcome = " + outcome
 
-                    for en in engines:
-                        outname = 'output/' + dir_name + '/' + testname + '-' + si + '-' + en
-                        outcome = get_outcome(outname)
-                        timing.append(outcome)
-                        #print "reading from " + outname + ". got outcome = " + outcome
+                final_table.append(timing)
+                final_shade.append(shade)
 
-                    final_table.append(timing)
+    print instances
+    print count_instances
+    print count_testruns
+
+    
 
     # Every outcome is now in the final_table
     i = 0
-    for test in testnames:
-        sys.stdout.write(test + ' ')
+
+    for testrun in testruns:
+        print '   ' + testrun + ':'
+        sys.stdout.write('   ')
         print final_table[i]
         i = i+1
+
+    total_run = 0
+    for run in count_testruns:
+        total_run = total_run + run;
+
+    with open('table.tex', 'w') as f:
+        f.write('\\begin{table}[t]\n')
+        f.write('\\centering\n')
+        f.write('\\caption{Evaluation of the solver.}\n')
+        f.write('\\label{tab:experiment}\n')
+        f.write('\\footnotesize\n')
+
+        f.write('\\begin{tabular}{l')
+        for i in range(total_run):
+            f.write('c')
+        f.write('}\n')
+
+        f.write('\\toprule\n')
+        f.write('Solver')
+
+        for testname in testnames:
+            test_id = testnames.index(testname)
+            f.write(' & \\multicolumn{' + str(count_testruns[test_id]) + '}{c}{' + testname + '}')
+        f.write('\\\\\n')
+
+        for en in engines:
+            f.write('\\midrule\n')
+            en_id = engines.index(en)
+            f.write(en)
+            for testrun in testruns:
+                test_id = testruns.index(testrun)
+                if (final_shade[test_id][en_id] == 0):
+                    f.write(' & ' + str(final_table[test_id][en_id]))
+                else:
+                    f.write(' & xxx' + str(final_table[test_id][en_id]))
+            f.write('\\\\\n')
+
+        f.write('\\bottomrule\n')
+        f.write('\\end{tabular}\n')
+        f.write('\\end{table}\n')
+
+    f.closed
 
 if __name__ == "__main__":
     import sys
