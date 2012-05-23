@@ -1,0 +1,7 @@
+blue(N) :- node(N), not red(N), not green(N).
+red(N) :- node(N), not blue(N), not green(N).
+green(N) :- node(N), not red(N), not blue(N).
+
+:- edge(N1,N2), blue(N1), blue(N2).
+:- edge(N1,N2), red(N1), red(N2).
+:- edge(N1,N2), green(N1), green(N2).
