@@ -228,11 +228,21 @@ public class ReteBuilder {
         @SuppressWarnings("unchecked") // AW: workaround for array conversion
         ArrayList<Operator> operators = (ArrayList<Operator>) r.getOperators().clone();
         
+        Atom actual;
+        Node actualNode;
         //we choose an atom with which we want to start
-        Atom actual = getBestNextAtom(atomsPlus);
+        if(!atomsPlus.isEmpty()){
+            actual = getBestNextAtom(atomsPlus);
+            actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+        }else{
+            actual = getBestNextAtom(atomsMinus);
+            actualNode = this.rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+        }
+        
+        //Atom actual = getBestNextAtom(atomsPlus);
         
         // From the actual Atom we easily derive the corresponding node
-        Node actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+        //Node actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
         this.VarPosNodes.put(actualNode, varPositions.get(actual));
         //We cast to selectionNode, since this is always a selection Node
         ((SelectionNode)actualNode).resetVarPosition(actual);

@@ -350,7 +350,9 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
         if(SCCSize.isEmpty()) {
             return false;
         }
-        while(SCCSize.get(actualSCC)<=0 && this.closeActualSCCWithReturnValue()){
+        while(SCCSize.get(actualSCC)<=1){
+            if(SCCSize.get(actualSCC)==1 && SCCPreds.get(actualSCC).size() > 1) break;
+            if(this.closeActualSCCWithReturnValue()) break;
             //System.out.println("Calling close SCC!");
             if(actualSCC >= SCC.size()) return false;
         }

@@ -295,7 +295,7 @@ public class ChoiceUnit {
     public void backtrack(){
         
         //System.err.println(this.stackybool.size() + " vs: " + this.memory.getDecisonLevel());
-        //System.out.println("BACKTRACKING!");
+        System.out.println("BACKTRACKING!");
         //this.printAllChoiceNodes();
         // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
         this.backtrackchoiceNodesDecisionLayer();
@@ -496,7 +496,7 @@ public class ChoiceUnit {
              SCCSize.add(SCC.get(i).size());
         }
         
-        /*System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
+        System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
         for(int i = 0; i < this.SCC.size();i++){
             System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i));
         }
@@ -508,15 +508,15 @@ public class ChoiceUnit {
             i++;
             System.out.println("SCC: " + i);
             System.out.println(gsg.vertexSet());
-        }*/
+        }
     }
     
     public boolean killSoloSCC(){
         if(SCCSize.isEmpty()) {
             return false;
         }
-        while(SCCSize.get(actualSCC)<=0){
-            System.out.println("Calling close SCC!");
+        while(SCCSize.get(actualSCC)<=1){
+            if(SCCSize.get(actualSCC)==1 && SCCPreds.get(actualSCC).size() > 1) break;
             this.closeActualSCC();
             if(actualSCC >= SCC.size()) return false;
         }
