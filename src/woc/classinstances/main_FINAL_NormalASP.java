@@ -43,14 +43,10 @@ public class main_FINAL_NormalASP {
     
     public static void main(String args[]) /*throws FactSizeException, RuleNotSafeException*/{
         long start = System.currentTimeMillis();
-        /*filename = args[0];
-        for(String s: args){
-            System.out.println(s);
-        }*/
-        
+       
         //filename = "birds_ASPERIX_nbb=100.txt";
         //filename = "StableMarriage/01-stable_marriage-0-0.txt";
-        //filename = "funcTermTest.txt";
+        //filename = "scholarship.txt";
        // filename = "Hanoi\\00-hanoi.txt";
         //filename = "maze generation\\00-maze_genearation.txt";
         //filename = "maze generation\\01-maze_generation-0-0.txt";
@@ -61,11 +57,17 @@ public class main_FINAL_NormalASP {
         //filename ="single_import_neg.txt";
         //filename = "Xir2.txt";
         //filename = "scholarship.txt";
-        filename = "WOC - EXAMPLES/WOC - EXAMPLES/reachability/reach5.txt";
+        
+        filename = args[0];
         rewriting = 1;
-        answersets = 600;
+        answersets = 1;
         filter = null;
-        outprint =false;
+        outprint =true;
+        
+        if (args.length == 2)
+        {
+            answersets = Integer.parseInt(args[1]);
+        }
         
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         
