@@ -47,17 +47,17 @@ public class ManagerMCS {
     }
     
     public void calculate(Integer answersets, boolean output, String filter){
-        long pure_solving_time = 0;
-        long start_action;
+        //long pure_solving_time = 0;
+        //long start_action;
         
-        //boolean finished = false;
-        start_action = System.currentTimeMillis();
+        boolean finished = false;
+        //start_action = System.currentTimeMillis();
         c.propagate();
         c.getChoiceUnit().DeriveSCC();
         
         boolean kill_solo = c.getChoiceUnit().killSoloSCC();
         
-        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
+        //pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
         
         if(!kill_solo){
             //System.err.println("Killed all SCC: " + System.currentTimeMillis());
@@ -76,6 +76,7 @@ public class ManagerMCS {
         //c.printAnswerSet();
 
         
+        /*
         Action action = Action.MAKE_CHOICE;
         while (action != Action.FINISH)
         {
@@ -144,11 +145,11 @@ public class ManagerMCS {
             }
         }
         
-        System.out.println("INFO: Pure solving time = " + 1.0*pure_solving_time/1000);
+        System.out.println("INFO: Pure solving time = " + 1.0*pure_solving_time/1000);*/
         
-        /*
+        
         while(!finished){
-            boolean flag = false;
+            //boolean flag = false;
             
             //c.propagate();
             if(c.choice()){
@@ -200,7 +201,7 @@ public class ManagerMCS {
                 }
             }
         }
-        */
+        
         
         System.out.println("Found: " + this.answerSetCount + " answersets!");
         
