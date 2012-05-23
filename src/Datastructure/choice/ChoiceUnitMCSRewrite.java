@@ -404,8 +404,9 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     private boolean closeProcedure(){
         boolean flag = false;
         //System.out.println("CloseProcedure: " + this.SCCSize.get(actualSCC) + " - " + this.closeActualSCCWithReturnValue());
-        while(actualSCC < this.SCCSize.size() && this.SCCSize.get(actualSCC) <= 0 && this.closeActualSCCWithReturnValue()){
-            flag = true;
+        while(actualSCC < this.SCCSize.size() && this.SCCSize.get(actualSCC) <= 1 ){
+            if(this.SCCPreds.size() > 1) break;
+            if(this.closeActualSCCWithReturnValue()) flag = true;
         }
         return flag;
     }

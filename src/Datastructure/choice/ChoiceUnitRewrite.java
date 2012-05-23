@@ -78,7 +78,6 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         c.getRete().propagate();
         for(Predicate p: SCCPreds.get(actualSCC)){
            if(c.getRete().containsPredicate(p, false)) {
-               //System.out.println("Closing Predicate: " + p);
                c.getRete().getBasicNodeMinus(p).close();
            }
         }
@@ -177,7 +176,12 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         } // We have no more ChoiceNode to guess on!
         //System.out.println("OMG?");
         //We can close all reached SCCs that are of size one (as they have no more input and do not depend on anything else!
-        while(this.SCCSize.get(actualSCC) <= 0){
+        while(this.SCCSize.get(actualSCC) <= 1){
+            
+            if(SCCSize.get(actualSCC) == 1){
+               if(SCCPreds.get(actualSCC).size() > 1) break;
+            }
+            
             this.closeActualSCC(); // closing the SCC increases actual SCC to the next SCC
             //c.propagate(); //TODO Remove this propaagte its already in the close SCC MEthod!
             if(SCC.size() <= actualSCC) {
