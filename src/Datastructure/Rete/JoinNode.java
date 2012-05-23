@@ -362,18 +362,21 @@ public class JoinNode extends Node{
             //System.out.println("Does rete not contain: " + temp.get(i) + ": " + !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))));
             if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || sN.containsInstance((Instance.getInstance(selCrit1))) ){
 
+                if(!this.memory.containsInstance(temp.get(i))){
+                     this.memory.addInstance(temp.get(i));
+                    super.addInstance(temp.get(i), true); // register the adding of this variableassignment within the choiceUnit
+                    //System.out.println("Dervied newly through Closure: " + temp.get(i) + " to " + this);
+                    for(int j = 0; j < this.children.size();j++){
+                        this.children.get(j).addInstance(temp.get(i), false);
+                    }
+                    for(int j = 0; j < this.childrenR.size();j++){
+                        this.childrenR.get(j).addInstance(temp.get(i), true);
+                    }
+                }
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
                 //System.out.println("Rete contains: " + sN.getAtom().getPredicate() + "(" + temp.get(i) + ")" + "SN = " + sN.getAtom());
                 //System.err.println("ADDING: " + temp.get(i) + " to this join node");
-                this.memory.addInstance(temp.get(i));
-                super.addInstance(temp.get(i), true); // register the adding of this variableassignment within the choiceUnit
-                //System.out.println("Dervied through Closure: " + temp.get(i));
-                for(int j = 0; j < this.children.size();j++){
-                    this.children.get(j).addInstance(temp.get(i), false);
-                }
-                for(int j = 0; j < this.childrenR.size();j++){
-                    this.childrenR.get(j).addInstance(temp.get(i), true);
-                }
+               
             }
         }
         //System.err.println("Finished closing: " + System.currentTimeMillis());
