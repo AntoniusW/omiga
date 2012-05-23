@@ -66,9 +66,9 @@ public class ManagerMCS {
                 if(output){
                     c.printAnswerSet(filter);
                 }
-                //System.out.println("GuessFree Context found 1 AnswerSet");
+                System.out.println("GuessFree Context found 1 AnswerSet");
             }else{
-                //System.out.println("GuessFree Context UNSATISFIABLE!");
+                System.out.println("GuessFree Context UNSATISFIABLE!");
             }
             return;
         }
@@ -181,7 +181,7 @@ public class ManagerMCS {
                             }
                             answerSetCount++;
                             //System.out.println(answerSetCount);
-                            if(answersets != null && answerSetCount == answersets) break;
+                            //if(answersets != null && answerSetCount == answersets) break;
                         //}
                     }else{
                         //System.out.println("That is NOT satisfiable!");
