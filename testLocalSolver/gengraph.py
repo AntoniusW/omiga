@@ -3,6 +3,8 @@
 import getopt, sys
 import optparse
 import string
+import os.path
+import random
 
 def copy_content(source, target):
     content = ''
@@ -35,7 +37,7 @@ def main(argv):
 
     rules_filename = ''
     testname = ''
-    if (test == 1):
+    if (testcase == 1):
         testname = 'cutedge'
     else:
         testname = '3col'
@@ -51,25 +53,20 @@ def main(argv):
         edge = []
         for i in range(nodes):
             links = []
-            for j in range(nodes):
+            for j in range(nodes):                
                 links.append(0)
             edge.append(links)
 
         for i in range(nodes):
             for j in range(nodes):
-                prob = random.randint(100)
-                if (prob < density):
-                    edge[i][j] = 1
+                if (i != j):
+                    prob = random.randint(0,100)
+                    if (prob < density):
+                        edge[i][j] = 1
 
-        if (test == 1):
-            start = random.randint(nodes)
-            end = random.randint(nodes)
-            
-            while (start == end || edge[start][end] == 1):
-                start = random.randint(nodes)
-                end = random.randint(nodes)
-                
-            f.write('reachable(X,' + str(start) + ') :- reachable(X,Z),reachable(Z,' + str(end) + ').\n')
+        if (testcase == 1):
+            check = random.randint(0,nodes-1)
+            f.write('reachable(X,' + str(check) + ') :- reachable(X,Z),reachable(Z,' + str(check) + ').\n')
         else:
             for i in range(nodes):
                 f.write('node(' + str(i) + ').\n')
@@ -83,7 +80,7 @@ def main(argv):
     # file with #hide. for ASPeRix
     with open(filename_hide, 'w') as f:
         f.write('#hide.\n')
-        copy_content(filename, f).
+        copy_content(filename, f)
     f.closed
 
 if __name__ == "__main__":
