@@ -1,0 +1,28 @@
+Parsed program, starting rewriting...
+STARTING: input/cutedge/cutedge-100-50.txtAnswersets2Derive: 1rewriting=1-filter= null StartingTime: 1337850415998
+DeriveSCC called in ChoiceUnit.
+DGraph initialized. SCCSize: 4
+SCC0 is of size: 0
+SCC1 is of size: 1
+SCC2 is of size: 0
+SCC3 is of size: 0
+SCC0 is of size: 0 :::: []
+SCC1 is of size: 1 :::: [ChoiceNode: rule3_delete(X,Y) :- edge(X,Y),not keep(X,Y).]
+SCC2 is of size: 0 :::: []
+SCC3 is of size: 0 :::: []
+SCC: 1
+[edge]
+SCC: 2
+[keep, rule3_delete, delete, rule4_keep, rule5_keep]
+SCC: 3
+[rule1_reachable]
+SCC: 4
+[reachable, rule2_reachable]
+Preparing to Guess: 1337850416047
+No more choice at level = 4863
+1
+Found: 1 answersets!
+Termianted final Calculation
+Time needed for parsing: 0.157
+Time needed overAll: 0.787
+Time needed for calculation: 0.571

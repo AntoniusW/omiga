@@ -1,0 +1,2836 @@
+Parsed program, starting rewriting...
+STARTING: input/stratProg/stratProg-400.txtAnswersets2Derive: 1rewriting=1-filter= null StartingTime: 1337804680002
+DeriveSCC called in ChoiceUnit.
+DGraph initialized. SCCSize: 6
+SCC0 is of size: 0
+SCC1 is of size: 2
+SCC2 is of size: 1
+SCC3 is of size: 0
+SCC4 is of size: 1
+SCC5 is of size: 0
+SCC0 is of size: 0 :::: []
+SCC1 is of size: 2 :::: [ChoiceNode: rule1_b(X) :- p(X),not a(X)., ChoiceNode: rule2_a(X) :- p(X),not b(X).]
+SCC2 is of size: 1 :::: [ChoiceNode: rule3_aa(X,Y) :- a(X),p(Y),not a(Y).]
+SCC3 is of size: 0 :::: []
+SCC4 is of size: 1 :::: [ChoiceNode: rule4_bb(X,Y) :- b(X),p(Y),not b(Y).]
+SCC5 is of size: 0 :::: []
+SCC: 1
+[p]
+SCC: 2
+[rule1_b, a, b, rule2_a]
+SCC: 3
+[rule3_aa]
+SCC: 4
+[aa]
+SCC: 5
+[rule4_bb]
+SCC: 6
+[bb]
+Preparing to Guess: 1337804680027
+LvL: 1. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [14] to be true!
+1
+LvL: 2. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [15] to be true!
+2
+LvL: 3. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [16] to be true!
+3
+LvL: 4. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [17] to be true!
+4
+LvL: 5. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [18] to be true!
+5
+LvL: 6. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [19] to be true!
+6
+LvL: 7. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [399] to be true!
+7
+LvL: 8. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [397] to be true!
+8
+LvL: 9. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [398] to be true!
+9
+LvL: 10. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [395] to be true!
+10
+LvL: 11. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [396] to be true!
+11
+LvL: 12. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [10] to be true!
+12
+LvL: 13. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [393] to be true!
+13
+LvL: 14. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [11] to be true!
+14
+LvL: 15. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [394] to be true!
+15
+LvL: 16. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [12] to be true!
+16
+LvL: 17. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [391] to be true!
+17
+LvL: 18. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [13] to be true!
+18
+LvL: 19. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [392] to be true!
+19
+LvL: 20. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [199] to be true!
+20
+LvL: 21. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [198] to be true!
+21
+LvL: 22. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [197] to be true!
+22
+LvL: 23. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [196] to be true!
+23
+LvL: 24. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [195] to be true!
+24
+LvL: 25. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [194] to be true!
+25
+LvL: 26. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [193] to be true!
+26
+LvL: 27. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [27] to be true!
+27
+LvL: 28. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [28] to be true!
+28
+LvL: 29. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [25] to be true!
+29
+LvL: 30. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [26] to be true!
+30
+LvL: 31. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [29] to be true!
+31
+LvL: 32. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [20] to be true!
+32
+LvL: 33. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [23] to be true!
+33
+LvL: 34. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [24] to be true!
+34
+LvL: 35. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [21] to be true!
+35
+LvL: 36. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [22] to be true!
+36
+LvL: 37. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [36] to be true!
+37
+LvL: 38. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [37] to be true!
+38
+LvL: 39. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [38] to be true!
+39
+LvL: 40. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [39] to be true!
+40
+LvL: 41. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [32] to be true!
+41
+LvL: 42. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [33] to be true!
+42
+LvL: 43. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [34] to be true!
+43
+LvL: 44. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [35] to be true!
+44
+LvL: 45. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [30] to be true!
+45
+LvL: 46. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [31] to be true!
+46
+LvL: 47. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [49] to be true!
+47
+LvL: 48. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [47] to be true!
+48
+LvL: 49. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [48] to be true!
+49
+LvL: 50. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [45] to be true!
+50
+LvL: 51. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [46] to be true!
+51
+LvL: 52. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [43] to be true!
+52
+LvL: 53. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [44] to be true!
+53
+LvL: 54. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [41] to be true!
+54
+LvL: 55. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [42] to be true!
+55
+LvL: 56. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [40] to be true!
+56
+LvL: 57. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [294] to be true!
+57
+LvL: 58. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [295] to be true!
+58
+LvL: 59. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [292] to be true!
+59
+LvL: 60. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [293] to be true!
+60
+LvL: 61. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [298] to be true!
+61
+LvL: 62. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [159] to be true!
+62
+LvL: 63. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [299] to be true!
+63
+LvL: 64. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [296] to be true!
+64
+LvL: 65. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [157] to be true!
+65
+LvL: 66. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [297] to be true!
+66
+LvL: 67. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [158] to be true!
+67
+LvL: 68. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [155] to be true!
+68
+LvL: 69. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [156] to be true!
+69
+LvL: 70. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [153] to be true!
+70
+LvL: 71. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [154] to be true!
+71
+LvL: 72. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [151] to be true!
+72
+LvL: 73. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [152] to be true!
+73
+LvL: 74. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [150] to be true!
+74
+LvL: 75. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [170] to be true!
+75
+LvL: 76. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [168] to be true!
+76
+LvL: 77. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [169] to be true!
+77
+LvL: 78. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [164] to be true!
+78
+LvL: 79. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [165] to be true!
+79
+LvL: 80. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [166] to be true!
+80
+LvL: 81. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [167] to be true!
+81
+LvL: 82. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [160] to be true!
+82
+LvL: 83. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [161] to be true!
+83
+LvL: 84. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [162] to be true!
+84
+LvL: 85. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [163] to be true!
+85
+LvL: 86. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [181] to be true!
+86
+LvL: 87. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [180] to be true!
+87
+LvL: 88. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [280] to be true!
+88
+LvL: 89. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [276] to be true!
+89
+LvL: 90. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [277] to be true!
+90
+LvL: 91. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [274] to be true!
+91
+LvL: 92. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [179] to be true!
+92
+LvL: 93. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [275] to be true!
+93
+LvL: 94. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [272] to be true!
+94
+LvL: 95. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [273] to be true!
+95
+LvL: 96. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [270] to be true!
+96
+LvL: 97. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [271] to be true!
+97
+LvL: 98. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [173] to be true!
+98
+LvL: 99. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [174] to be true!
+99
+LvL: 100. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [171] to be true!
+100
+LvL: 101. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [172] to be true!
+101
+LvL: 102. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [177] to be true!
+102
+LvL: 103. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [178] to be true!
+103
+LvL: 104. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [278] to be true!
+104
+LvL: 105. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [175] to be true!
+105
+LvL: 106. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [279] to be true!
+106
+LvL: 107. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [176] to be true!
+107
+LvL: 108. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [190] to be true!
+108
+LvL: 109. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [192] to be true!
+109
+LvL: 110. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [191] to be true!
+110
+LvL: 111. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [291] to be true!
+111
+LvL: 112. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [290] to be true!
+112
+LvL: 113. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [285] to be true!
+113
+LvL: 114. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [286] to be true!
+114
+LvL: 115. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [287] to be true!
+115
+LvL: 116. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [288] to be true!
+116
+LvL: 117. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [281] to be true!
+117
+LvL: 118. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [282] to be true!
+118
+LvL: 119. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [283] to be true!
+119
+LvL: 120. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [284] to be true!
+120
+LvL: 121. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [182] to be true!
+121
+LvL: 122. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [183] to be true!
+122
+LvL: 123. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [184] to be true!
+123
+LvL: 124. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [185] to be true!
+124
+LvL: 125. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [289] to be true!
+125
+LvL: 126. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [186] to be true!
+126
+LvL: 127. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [187] to be true!
+127
+LvL: 128. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [188] to be true!
+128
+LvL: 129. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [189] to be true!
+129
+LvL: 130. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [257] to be true!
+130
+LvL: 131. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [110] to be true!
+131
+LvL: 132. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [256] to be true!
+132
+LvL: 133. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [259] to be true!
+133
+LvL: 134. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [112] to be true!
+134
+LvL: 135. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [258] to be true!
+135
+LvL: 136. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [111] to be true!
+136
+LvL: 137. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [93] to be true!
+137
+LvL: 138. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [92] to be true!
+138
+LvL: 139. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [91] to be true!
+139
+LvL: 140. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [90] to be true!
+140
+LvL: 141. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [118] to be true!
+141
+LvL: 142. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [117] to be true!
+142
+LvL: 143. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [251] to be true!
+143
+LvL: 144. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [250] to be true!
+144
+LvL: 145. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [119] to be true!
+145
+LvL: 146. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [253] to be true!
+146
+LvL: 147. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [114] to be true!
+147
+LvL: 148. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [252] to be true!
+148
+LvL: 149. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [319] to be true!
+149
+LvL: 150. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [113] to be true!
+150
+LvL: 151. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [255] to be true!
+151
+LvL: 152. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [116] to be true!
+152
+LvL: 153. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [254] to be true!
+153
+LvL: 154. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [115] to be true!
+154
+LvL: 155. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [315] to be true!
+155
+LvL: 156. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [316] to be true!
+156
+LvL: 157. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [317] to be true!
+157
+LvL: 158. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [318] to be true!
+158
+LvL: 159. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [311] to be true!
+159
+LvL: 160. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [312] to be true!
+160
+LvL: 161. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [313] to be true!
+161
+LvL: 162. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [314] to be true!
+162
+LvL: 163. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [96] to be true!
+163
+LvL: 164. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [97] to be true!
+164
+LvL: 165. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [94] to be true!
+165
+LvL: 166. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [310] to be true!
+166
+LvL: 167. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [95] to be true!
+167
+LvL: 168. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [98] to be true!
+168
+LvL: 169. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [99] to be true!
+169
+LvL: 170. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [123] to be true!
+170
+LvL: 171. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [269] to be true!
+171
+LvL: 172. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [122] to be true!
+172
+LvL: 173. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [268] to be true!
+173
+LvL: 174. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [121] to be true!
+174
+LvL: 175. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [267] to be true!
+175
+LvL: 176. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [120] to be true!
+176
+LvL: 177. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [262] to be true!
+177
+LvL: 178. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [261] to be true!
+178
+LvL: 179. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [260] to be true!
+179
+LvL: 180. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [129] to be true!
+180
+LvL: 181. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [128] to be true!
+181
+LvL: 182. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [266] to be true!
+182
+LvL: 183. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [127] to be true!
+183
+LvL: 184. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [265] to be true!
+184
+LvL: 185. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [126] to be true!
+185
+LvL: 186. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [264] to be true!
+186
+LvL: 187. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [125] to be true!
+187
+LvL: 188. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [263] to be true!
+188
+LvL: 189. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [124] to be true!
+189
+LvL: 190. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [328] to be true!
+190
+LvL: 191. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [329] to be true!
+191
+LvL: 192. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [326] to be true!
+192
+LvL: 193. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [327] to be true!
+193
+LvL: 194. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [324] to be true!
+194
+LvL: 195. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [325] to be true!
+195
+LvL: 196. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [322] to be true!
+196
+LvL: 197. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [323] to be true!
+197
+LvL: 198. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [320] to be true!
+198
+LvL: 199. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [321] to be true!
+199
+LvL: 200. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [239] to be true!
+200
+LvL: 201. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [238] to be true!
+201
+LvL: 202. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [130] to be true!
+202
+LvL: 203. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [235] to be true!
+203
+LvL: 204. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [132] to be true!
+204
+LvL: 205. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [234] to be true!
+205
+LvL: 206. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [131] to be true!
+206
+LvL: 207. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [237] to be true!
+207
+LvL: 208. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [134] to be true!
+208
+LvL: 209. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [236] to be true!
+209
+LvL: 210. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [133] to be true!
+210
+LvL: 211. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [231] to be true!
+211
+LvL: 212. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [136] to be true!
+212
+LvL: 213. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [230] to be true!
+213
+LvL: 214. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [135] to be true!
+214
+LvL: 215. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [233] to be true!
+215
+LvL: 216. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [138] to be true!
+216
+LvL: 217. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [232] to be true!
+217
+LvL: 218. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [137] to be true!
+218
+LvL: 219. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [139] to be true!
+219
+LvL: 220. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [333] to be true!
+220
+LvL: 221. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [334] to be true!
+221
+LvL: 222. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [335] to be true!
+222
+LvL: 223. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [336] to be true!
+223
+LvL: 224. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [337] to be true!
+224
+LvL: 225. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [338] to be true!
+225
+LvL: 226. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [339] to be true!
+226
+LvL: 227. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [330] to be true!
+227
+LvL: 228. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [331] to be true!
+228
+LvL: 229. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [332] to be true!
+229
+LvL: 230. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [141] to be true!
+230
+LvL: 231. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [140] to be true!
+231
+LvL: 232. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [249] to be true!
+232
+LvL: 233. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [248] to be true!
+233
+LvL: 234. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [145] to be true!
+234
+LvL: 235. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [247] to be true!
+235
+LvL: 236. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [144] to be true!
+236
+LvL: 237. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [246] to be true!
+237
+LvL: 238. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [143] to be true!
+238
+LvL: 239. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [245] to be true!
+239
+LvL: 240. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [142] to be true!
+240
+LvL: 241. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [244] to be true!
+241
+LvL: 242. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [149] to be true!
+242
+LvL: 243. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [243] to be true!
+243
+LvL: 244. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [148] to be true!
+244
+LvL: 245. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [242] to be true!
+245
+LvL: 246. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [147] to be true!
+246
+LvL: 247. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [241] to be true!
+247
+LvL: 248. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [146] to be true!
+248
+LvL: 249. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [240] to be true!
+249
+LvL: 250. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [346] to be true!
+250
+LvL: 251. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [347] to be true!
+251
+LvL: 252. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [344] to be true!
+252
+LvL: 253. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [345] to be true!
+253
+LvL: 254. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [348] to be true!
+254
+LvL: 255. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [349] to be true!
+255
+LvL: 256. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [342] to be true!
+256
+LvL: 257. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [343] to be true!
+257
+LvL: 258. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [340] to be true!
+258
+LvL: 259. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [341] to be true!
+259
+LvL: 260. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [210] to be true!
+260
+LvL: 261. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [211] to be true!
+261
+LvL: 262. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [212] to be true!
+262
+LvL: 263. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [213] to be true!
+263
+LvL: 264. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [214] to be true!
+264
+LvL: 265. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [215] to be true!
+265
+LvL: 266. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [216] to be true!
+266
+LvL: 267. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [217] to be true!
+267
+LvL: 268. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [218] to be true!
+268
+LvL: 269. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [219] to be true!
+269
+LvL: 270. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [352] to be true!
+270
+LvL: 271. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [53] to be true!
+271
+LvL: 272. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [351] to be true!
+272
+LvL: 273. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [52] to be true!
+273
+LvL: 274. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [354] to be true!
+274
+LvL: 275. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [51] to be true!
+275
+LvL: 276. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [353] to be true!
+276
+LvL: 277. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [50] to be true!
+277
+LvL: 278. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [57] to be true!
+278
+LvL: 279. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [56] to be true!
+279
+LvL: 280. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [350] to be true!
+280
+LvL: 281. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [55] to be true!
+281
+LvL: 282. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [54] to be true!
+282
+LvL: 283. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [359] to be true!
+283
+LvL: 284. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [59] to be true!
+284
+LvL: 285. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [58] to be true!
+285
+LvL: 286. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [356] to be true!
+286
+LvL: 287. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [355] to be true!
+287
+LvL: 288. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [358] to be true!
+288
+LvL: 289. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [357] to be true!
+289
+LvL: 290. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [221] to be true!
+290
+LvL: 291. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [222] to be true!
+291
+LvL: 292. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [220] to be true!
+292
+LvL: 293. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [225] to be true!
+293
+LvL: 294. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [226] to be true!
+294
+LvL: 295. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [223] to be true!
+295
+LvL: 296. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [224] to be true!
+296
+LvL: 297. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [229] to be true!
+297
+LvL: 298. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [227] to be true!
+298
+LvL: 299. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [228] to be true!
+299
+LvL: 300. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [60] to be true!
+300
+LvL: 301. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [365] to be true!
+301
+LvL: 302. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [62] to be true!
+302
+LvL: 303. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [364] to be true!
+303
+LvL: 304. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [61] to be true!
+304
+LvL: 305. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [363] to be true!
+305
+LvL: 306. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [64] to be true!
+306
+LvL: 307. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [362] to be true!
+307
+LvL: 308. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [63] to be true!
+308
+LvL: 309. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [361] to be true!
+309
+LvL: 310. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [66] to be true!
+310
+LvL: 311. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [360] to be true!
+311
+LvL: 312. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [65] to be true!
+312
+LvL: 313. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [68] to be true!
+313
+LvL: 314. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [67] to be true!
+314
+LvL: 315. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [69] to be true!
+315
+LvL: 316. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [369] to be true!
+316
+LvL: 317. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [368] to be true!
+317
+LvL: 318. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [367] to be true!
+318
+LvL: 319. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [366] to be true!
+319
+LvL: 320. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [70] to be true!
+320
+LvL: 321. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [71] to be true!
+321
+LvL: 322. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [370] to be true!
+322
+LvL: 323. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [79] to be true!
+323
+LvL: 324. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [78] to be true!
+324
+LvL: 325. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [372] to be true!
+325
+LvL: 326. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [77] to be true!
+326
+LvL: 327. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [371] to be true!
+327
+LvL: 328. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [76] to be true!
+328
+LvL: 329. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [374] to be true!
+329
+LvL: 330. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [75] to be true!
+330
+LvL: 331. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [373] to be true!
+331
+LvL: 332. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [74] to be true!
+332
+LvL: 333. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [376] to be true!
+333
+LvL: 334. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [73] to be true!
+334
+LvL: 335. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [375] to be true!
+335
+LvL: 336. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [72] to be true!
+336
+LvL: 337. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [378] to be true!
+337
+LvL: 338. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [377] to be true!
+338
+LvL: 339. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [379] to be true!
+339
+LvL: 340. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [104] to be true!
+340
+LvL: 341. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [200] to be true!
+341
+LvL: 342. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [105] to be true!
+342
+LvL: 343. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [102] to be true!
+343
+LvL: 344. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [103] to be true!
+344
+LvL: 345. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [108] to be true!
+345
+LvL: 346. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [109] to be true!
+346
+LvL: 347. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [106] to be true!
+347
+LvL: 348. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [107] to be true!
+348
+LvL: 349. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [207] to be true!
+349
+LvL: 350. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [208] to be true!
+350
+LvL: 351. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [80] to be true!
+351
+LvL: 352. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [205] to be true!
+352
+LvL: 353. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [81] to be true!
+353
+LvL: 354. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [206] to be true!
+354
+LvL: 355. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [82] to be true!
+355
+LvL: 356. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [203] to be true!
+356
+LvL: 357. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [100] to be true!
+357
+LvL: 358. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [390] to be true!
+358
+LvL: 359. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [204] to be true!
+359
+LvL: 360. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [101] to be true!
+360
+LvL: 361. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [201] to be true!
+361
+LvL: 362. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [202] to be true!
+362
+LvL: 363. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [383] to be true!
+363
+LvL: 364. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [88] to be true!
+364
+LvL: 365. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [382] to be true!
+365
+LvL: 366. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [87] to be true!
+366
+LvL: 367. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [381] to be true!
+367
+LvL: 368. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [380] to be true!
+368
+LvL: 369. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [89] to be true!
+369
+LvL: 370. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [387] to be true!
+370
+LvL: 371. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [84] to be true!
+371
+LvL: 372. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [386] to be true!
+372
+LvL: 373. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [83] to be true!
+373
+LvL: 374. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [385] to be true!
+374
+LvL: 375. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [86] to be true!
+375
+LvL: 376. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [209] to be true!
+376
+LvL: 377. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [384] to be true!
+377
+LvL: 378. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [85] to be true!
+378
+LvL: 379. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [389] to be true!
+379
+LvL: 380. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [388] to be true!
+380
+LvL: 381. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [308] to be true!
+381
+LvL: 382. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [309] to be true!
+382
+LvL: 383. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [305] to be true!
+383
+LvL: 384. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [304] to be true!
+384
+LvL: 385. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [307] to be true!
+385
+LvL: 386. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [306] to be true!
+386
+LvL: 387. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [301] to be true!
+387
+LvL: 388. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [300] to be true!
+388
+LvL: 389. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [303] to be true!
+389
+LvL: 390. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [302] to be true!
+390
+LvL: 391. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [9] to be true!
+391
+LvL: 392. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [8] to be true!
+392
+LvL: 393. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [7] to be true!
+393
+LvL: 394. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [6] to be true!
+394
+LvL: 395. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [5] to be true!
+395
+LvL: 396. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [4] to be true!
+396
+LvL: 397. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [3] to be true!
+397
+LvL: 398. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [2] to be true!
+398
+LvL: 399. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [1] to be true!
+399
+LvL: 400. Guesing on: rule1_b(X) :- p(X),not a(X). - with VarAsign: [0] to be true!
+400
+LvL: 401. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [14] to be true!
+401
+BACKTRACKING!
+LvL: 401. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [14] to be false!
+402
+LvL: 402. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [15] to be true!
+403
+BACKTRACKING!
+LvL: 402. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [15] to be false!
+404
+LvL: 403. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [16] to be true!
+405
+BACKTRACKING!
+LvL: 403. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [16] to be false!
+406
+LvL: 404. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [17] to be true!
+407
+BACKTRACKING!
+LvL: 404. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [17] to be false!
+408
+LvL: 405. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [18] to be true!
+409
+BACKTRACKING!
+LvL: 405. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [18] to be false!
+410
+LvL: 406. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [19] to be true!
+411
+BACKTRACKING!
+LvL: 406. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [19] to be false!
+412
+LvL: 407. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [399] to be true!
+413
+BACKTRACKING!
+LvL: 407. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [399] to be false!
+414
+LvL: 408. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [397] to be true!
+415
+BACKTRACKING!
+LvL: 408. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [397] to be false!
+416
+LvL: 409. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [398] to be true!
+417
+BACKTRACKING!
+LvL: 409. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [398] to be false!
+418
+LvL: 410. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [395] to be true!
+419
+BACKTRACKING!
+LvL: 410. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [395] to be false!
+420
+LvL: 411. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [396] to be true!
+421
+BACKTRACKING!
+LvL: 411. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [396] to be false!
+422
+LvL: 412. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [10] to be true!
+423
+BACKTRACKING!
+LvL: 412. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [10] to be false!
+424
+LvL: 413. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [393] to be true!
+425
+BACKTRACKING!
+LvL: 413. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [393] to be false!
+426
+LvL: 414. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [11] to be true!
+427
+BACKTRACKING!
+LvL: 414. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [11] to be false!
+428
+LvL: 415. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [394] to be true!
+429
+BACKTRACKING!
+LvL: 415. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [394] to be false!
+430
+LvL: 416. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [12] to be true!
+431
+BACKTRACKING!
+LvL: 416. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [12] to be false!
+432
+LvL: 417. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [391] to be true!
+433
+BACKTRACKING!
+LvL: 417. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [391] to be false!
+434
+LvL: 418. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [13] to be true!
+435
+BACKTRACKING!
+LvL: 418. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [13] to be false!
+436
+LvL: 419. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [392] to be true!
+437
+BACKTRACKING!
+LvL: 419. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [392] to be false!
+438
+LvL: 420. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [199] to be true!
+439
+BACKTRACKING!
+LvL: 420. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [199] to be false!
+440
+LvL: 421. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [198] to be true!
+441
+BACKTRACKING!
+LvL: 421. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [198] to be false!
+442
+LvL: 422. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [197] to be true!
+443
+BACKTRACKING!
+LvL: 422. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [197] to be false!
+444
+LvL: 423. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [196] to be true!
+445
+BACKTRACKING!
+LvL: 423. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [196] to be false!
+446
+LvL: 424. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [195] to be true!
+447
+BACKTRACKING!
+LvL: 424. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [195] to be false!
+448
+LvL: 425. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [194] to be true!
+449
+BACKTRACKING!
+LvL: 425. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [194] to be false!
+450
+LvL: 426. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [193] to be true!
+451
+BACKTRACKING!
+LvL: 426. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [193] to be false!
+452
+LvL: 427. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [27] to be true!
+453
+BACKTRACKING!
+LvL: 427. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [27] to be false!
+454
+LvL: 428. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [28] to be true!
+455
+BACKTRACKING!
+LvL: 428. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [28] to be false!
+456
+LvL: 429. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [25] to be true!
+457
+BACKTRACKING!
+LvL: 429. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [25] to be false!
+458
+LvL: 430. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [26] to be true!
+459
+BACKTRACKING!
+LvL: 430. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [26] to be false!
+460
+LvL: 431. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [29] to be true!
+461
+BACKTRACKING!
+LvL: 431. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [29] to be false!
+462
+LvL: 432. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [20] to be true!
+463
+BACKTRACKING!
+LvL: 432. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [20] to be false!
+464
+LvL: 433. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [23] to be true!
+465
+BACKTRACKING!
+LvL: 433. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [23] to be false!
+466
+LvL: 434. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [24] to be true!
+467
+BACKTRACKING!
+LvL: 434. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [24] to be false!
+468
+LvL: 435. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [21] to be true!
+469
+BACKTRACKING!
+LvL: 435. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [21] to be false!
+470
+LvL: 436. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [22] to be true!
+471
+BACKTRACKING!
+LvL: 436. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [22] to be false!
+472
+LvL: 437. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [36] to be true!
+473
+BACKTRACKING!
+LvL: 437. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [36] to be false!
+474
+LvL: 438. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [37] to be true!
+475
+BACKTRACKING!
+LvL: 438. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [37] to be false!
+476
+LvL: 439. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [38] to be true!
+477
+BACKTRACKING!
+LvL: 439. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [38] to be false!
+478
+LvL: 440. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [39] to be true!
+479
+BACKTRACKING!
+LvL: 440. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [39] to be false!
+480
+LvL: 441. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [32] to be true!
+481
+BACKTRACKING!
+LvL: 441. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [32] to be false!
+482
+LvL: 442. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [33] to be true!
+483
+BACKTRACKING!
+LvL: 442. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [33] to be false!
+484
+LvL: 443. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [34] to be true!
+485
+BACKTRACKING!
+LvL: 443. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [34] to be false!
+486
+LvL: 444. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [35] to be true!
+487
+BACKTRACKING!
+LvL: 444. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [35] to be false!
+488
+LvL: 445. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [30] to be true!
+489
+BACKTRACKING!
+LvL: 445. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [30] to be false!
+490
+LvL: 446. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [31] to be true!
+491
+BACKTRACKING!
+LvL: 446. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [31] to be false!
+492
+LvL: 447. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [49] to be true!
+493
+BACKTRACKING!
+LvL: 447. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [49] to be false!
+494
+LvL: 448. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [47] to be true!
+495
+BACKTRACKING!
+LvL: 448. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [47] to be false!
+496
+LvL: 449. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [48] to be true!
+497
+BACKTRACKING!
+LvL: 449. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [48] to be false!
+498
+LvL: 450. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [45] to be true!
+499
+BACKTRACKING!
+LvL: 450. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [45] to be false!
+500
+LvL: 451. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [46] to be true!
+501
+BACKTRACKING!
+LvL: 451. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [46] to be false!
+502
+LvL: 452. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [43] to be true!
+503
+BACKTRACKING!
+LvL: 452. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [43] to be false!
+504
+LvL: 453. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [44] to be true!
+505
+BACKTRACKING!
+LvL: 453. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [44] to be false!
+506
+LvL: 454. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [41] to be true!
+507
+BACKTRACKING!
+LvL: 454. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [41] to be false!
+508
+LvL: 455. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [42] to be true!
+509
+BACKTRACKING!
+LvL: 455. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [42] to be false!
+510
+LvL: 456. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [40] to be true!
+511
+BACKTRACKING!
+LvL: 456. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [40] to be false!
+512
+LvL: 457. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [294] to be true!
+513
+BACKTRACKING!
+LvL: 457. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [294] to be false!
+514
+LvL: 458. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [295] to be true!
+515
+BACKTRACKING!
+LvL: 458. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [295] to be false!
+516
+LvL: 459. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [292] to be true!
+517
+BACKTRACKING!
+LvL: 459. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [292] to be false!
+518
+LvL: 460. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [293] to be true!
+519
+BACKTRACKING!
+LvL: 460. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [293] to be false!
+520
+LvL: 461. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [298] to be true!
+521
+BACKTRACKING!
+LvL: 461. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [298] to be false!
+522
+LvL: 462. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [159] to be true!
+523
+BACKTRACKING!
+LvL: 462. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [159] to be false!
+524
+LvL: 463. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [299] to be true!
+525
+BACKTRACKING!
+LvL: 463. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [299] to be false!
+526
+LvL: 464. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [296] to be true!
+527
+BACKTRACKING!
+LvL: 464. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [296] to be false!
+528
+LvL: 465. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [157] to be true!
+529
+BACKTRACKING!
+LvL: 465. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [157] to be false!
+530
+LvL: 466. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [297] to be true!
+531
+BACKTRACKING!
+LvL: 466. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [297] to be false!
+532
+LvL: 467. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [158] to be true!
+533
+BACKTRACKING!
+LvL: 467. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [158] to be false!
+534
+LvL: 468. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [155] to be true!
+535
+BACKTRACKING!
+LvL: 468. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [155] to be false!
+536
+LvL: 469. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [156] to be true!
+537
+BACKTRACKING!
+LvL: 469. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [156] to be false!
+538
+LvL: 470. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [153] to be true!
+539
+BACKTRACKING!
+LvL: 470. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [153] to be false!
+540
+LvL: 471. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [154] to be true!
+541
+BACKTRACKING!
+LvL: 471. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [154] to be false!
+542
+LvL: 472. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [151] to be true!
+543
+BACKTRACKING!
+LvL: 472. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [151] to be false!
+544
+LvL: 473. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [152] to be true!
+545
+BACKTRACKING!
+LvL: 473. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [152] to be false!
+546
+LvL: 474. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [150] to be true!
+547
+BACKTRACKING!
+LvL: 474. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [150] to be false!
+548
+LvL: 475. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [170] to be true!
+549
+BACKTRACKING!
+LvL: 475. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [170] to be false!
+550
+LvL: 476. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [168] to be true!
+551
+BACKTRACKING!
+LvL: 476. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [168] to be false!
+552
+LvL: 477. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [169] to be true!
+553
+BACKTRACKING!
+LvL: 477. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [169] to be false!
+554
+LvL: 478. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [164] to be true!
+555
+BACKTRACKING!
+LvL: 478. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [164] to be false!
+556
+LvL: 479. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [165] to be true!
+557
+BACKTRACKING!
+LvL: 479. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [165] to be false!
+558
+LvL: 480. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [166] to be true!
+559
+BACKTRACKING!
+LvL: 480. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [166] to be false!
+560
+LvL: 481. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [167] to be true!
+561
+BACKTRACKING!
+LvL: 481. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [167] to be false!
+562
+LvL: 482. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [160] to be true!
+563
+BACKTRACKING!
+LvL: 482. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [160] to be false!
+564
+LvL: 483. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [161] to be true!
+565
+BACKTRACKING!
+LvL: 483. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [161] to be false!
+566
+LvL: 484. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [162] to be true!
+567
+BACKTRACKING!
+LvL: 484. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [162] to be false!
+568
+LvL: 485. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [163] to be true!
+569
+BACKTRACKING!
+LvL: 485. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [163] to be false!
+570
+LvL: 486. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [181] to be true!
+571
+BACKTRACKING!
+LvL: 486. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [181] to be false!
+572
+LvL: 487. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [180] to be true!
+573
+BACKTRACKING!
+LvL: 487. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [180] to be false!
+574
+LvL: 488. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [280] to be true!
+575
+BACKTRACKING!
+LvL: 488. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [280] to be false!
+576
+LvL: 489. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [276] to be true!
+577
+BACKTRACKING!
+LvL: 489. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [276] to be false!
+578
+LvL: 490. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [277] to be true!
+579
+BACKTRACKING!
+LvL: 490. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [277] to be false!
+580
+LvL: 491. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [274] to be true!
+581
+BACKTRACKING!
+LvL: 491. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [274] to be false!
+582
+LvL: 492. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [179] to be true!
+583
+BACKTRACKING!
+LvL: 492. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [179] to be false!
+584
+LvL: 493. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [275] to be true!
+585
+BACKTRACKING!
+LvL: 493. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [275] to be false!
+586
+LvL: 494. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [272] to be true!
+587
+BACKTRACKING!
+LvL: 494. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [272] to be false!
+588
+LvL: 495. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [273] to be true!
+589
+BACKTRACKING!
+LvL: 495. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [273] to be false!
+590
+LvL: 496. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [270] to be true!
+591
+BACKTRACKING!
+LvL: 496. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [270] to be false!
+592
+LvL: 497. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [271] to be true!
+593
+BACKTRACKING!
+LvL: 497. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [271] to be false!
+594
+LvL: 498. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [173] to be true!
+595
+BACKTRACKING!
+LvL: 498. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [173] to be false!
+596
+LvL: 499. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [174] to be true!
+597
+BACKTRACKING!
+LvL: 499. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [174] to be false!
+598
+LvL: 500. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [171] to be true!
+599
+BACKTRACKING!
+LvL: 500. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [171] to be false!
+600
+LvL: 501. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [172] to be true!
+601
+BACKTRACKING!
+LvL: 501. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [172] to be false!
+602
+LvL: 502. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [177] to be true!
+603
+BACKTRACKING!
+LvL: 502. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [177] to be false!
+604
+LvL: 503. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [178] to be true!
+605
+BACKTRACKING!
+LvL: 503. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [178] to be false!
+606
+LvL: 504. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [278] to be true!
+607
+BACKTRACKING!
+LvL: 504. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [278] to be false!
+608
+LvL: 505. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [175] to be true!
+609
+BACKTRACKING!
+LvL: 505. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [175] to be false!
+610
+LvL: 506. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [279] to be true!
+611
+BACKTRACKING!
+LvL: 506. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [279] to be false!
+612
+LvL: 507. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [176] to be true!
+613
+BACKTRACKING!
+LvL: 507. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [176] to be false!
+614
+LvL: 508. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [190] to be true!
+615
+BACKTRACKING!
+LvL: 508. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [190] to be false!
+616
+LvL: 509. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [192] to be true!
+617
+BACKTRACKING!
+LvL: 509. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [192] to be false!
+618
+LvL: 510. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [191] to be true!
+619
+BACKTRACKING!
+LvL: 510. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [191] to be false!
+620
+LvL: 511. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [291] to be true!
+621
+BACKTRACKING!
+LvL: 511. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [291] to be false!
+622
+LvL: 512. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [290] to be true!
+623
+BACKTRACKING!
+LvL: 512. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [290] to be false!
+624
+LvL: 513. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [285] to be true!
+625
+BACKTRACKING!
+LvL: 513. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [285] to be false!
+626
+LvL: 514. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [286] to be true!
+627
+BACKTRACKING!
+LvL: 514. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [286] to be false!
+628
+LvL: 515. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [287] to be true!
+629
+BACKTRACKING!
+LvL: 515. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [287] to be false!
+630
+LvL: 516. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [288] to be true!
+631
+BACKTRACKING!
+LvL: 516. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [288] to be false!
+632
+LvL: 517. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [281] to be true!
+633
+BACKTRACKING!
+LvL: 517. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [281] to be false!
+634
+LvL: 518. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [282] to be true!
+635
+BACKTRACKING!
+LvL: 518. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [282] to be false!
+636
+LvL: 519. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [283] to be true!
+637
+BACKTRACKING!
+LvL: 519. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [283] to be false!
+638
+LvL: 520. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [284] to be true!
+639
+BACKTRACKING!
+LvL: 520. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [284] to be false!
+640
+LvL: 521. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [182] to be true!
+641
+BACKTRACKING!
+LvL: 521. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [182] to be false!
+642
+LvL: 522. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [183] to be true!
+643
+BACKTRACKING!
+LvL: 522. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [183] to be false!
+644
+LvL: 523. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [184] to be true!
+645
+BACKTRACKING!
+LvL: 523. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [184] to be false!
+646
+LvL: 524. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [185] to be true!
+647
+BACKTRACKING!
+LvL: 524. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [185] to be false!
+648
+LvL: 525. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [289] to be true!
+649
+BACKTRACKING!
+LvL: 525. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [289] to be false!
+650
+LvL: 526. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [186] to be true!
+651
+BACKTRACKING!
+LvL: 526. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [186] to be false!
+652
+LvL: 527. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [187] to be true!
+653
+BACKTRACKING!
+LvL: 527. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [187] to be false!
+654
+LvL: 528. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [188] to be true!
+655
+BACKTRACKING!
+LvL: 528. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [188] to be false!
+656
+LvL: 529. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [189] to be true!
+657
+BACKTRACKING!
+LvL: 529. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [189] to be false!
+658
+LvL: 530. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [257] to be true!
+659
+BACKTRACKING!
+LvL: 530. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [257] to be false!
+660
+LvL: 531. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [110] to be true!
+661
+BACKTRACKING!
+LvL: 531. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [110] to be false!
+662
+LvL: 532. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [256] to be true!
+663
+BACKTRACKING!
+LvL: 532. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [256] to be false!
+664
+LvL: 533. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [259] to be true!
+665
+BACKTRACKING!
+LvL: 533. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [259] to be false!
+666
+LvL: 534. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [112] to be true!
+667
+BACKTRACKING!
+LvL: 534. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [112] to be false!
+668
+LvL: 535. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [258] to be true!
+669
+BACKTRACKING!
+LvL: 535. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [258] to be false!
+670
+LvL: 536. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [111] to be true!
+671
+BACKTRACKING!
+LvL: 536. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [111] to be false!
+672
+LvL: 537. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [93] to be true!
+673
+BACKTRACKING!
+LvL: 537. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [93] to be false!
+674
+LvL: 538. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [92] to be true!
+675
+BACKTRACKING!
+LvL: 538. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [92] to be false!
+676
+LvL: 539. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [91] to be true!
+677
+BACKTRACKING!
+LvL: 539. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [91] to be false!
+678
+LvL: 540. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [90] to be true!
+679
+BACKTRACKING!
+LvL: 540. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [90] to be false!
+680
+LvL: 541. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [118] to be true!
+681
+BACKTRACKING!
+LvL: 541. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [118] to be false!
+682
+LvL: 542. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [117] to be true!
+683
+BACKTRACKING!
+LvL: 542. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [117] to be false!
+684
+LvL: 543. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [251] to be true!
+685
+BACKTRACKING!
+LvL: 543. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [251] to be false!
+686
+LvL: 544. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [250] to be true!
+687
+BACKTRACKING!
+LvL: 544. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [250] to be false!
+688
+LvL: 545. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [119] to be true!
+689
+BACKTRACKING!
+LvL: 545. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [119] to be false!
+690
+LvL: 546. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [253] to be true!
+691
+BACKTRACKING!
+LvL: 546. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [253] to be false!
+692
+LvL: 547. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [114] to be true!
+693
+BACKTRACKING!
+LvL: 547. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [114] to be false!
+694
+LvL: 548. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [252] to be true!
+695
+BACKTRACKING!
+LvL: 548. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [252] to be false!
+696
+LvL: 549. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [319] to be true!
+697
+BACKTRACKING!
+LvL: 549. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [319] to be false!
+698
+LvL: 550. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [113] to be true!
+699
+BACKTRACKING!
+LvL: 550. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [113] to be false!
+700
+LvL: 551. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [255] to be true!
+701
+BACKTRACKING!
+LvL: 551. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [255] to be false!
+702
+LvL: 552. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [116] to be true!
+703
+BACKTRACKING!
+LvL: 552. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [116] to be false!
+704
+LvL: 553. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [254] to be true!
+705
+BACKTRACKING!
+LvL: 553. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [254] to be false!
+706
+LvL: 554. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [115] to be true!
+707
+BACKTRACKING!
+LvL: 554. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [115] to be false!
+708
+LvL: 555. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [315] to be true!
+709
+BACKTRACKING!
+LvL: 555. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [315] to be false!
+710
+LvL: 556. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [316] to be true!
+711
+BACKTRACKING!
+LvL: 556. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [316] to be false!
+712
+LvL: 557. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [317] to be true!
+713
+BACKTRACKING!
+LvL: 557. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [317] to be false!
+714
+LvL: 558. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [318] to be true!
+715
+BACKTRACKING!
+LvL: 558. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [318] to be false!
+716
+LvL: 559. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [311] to be true!
+717
+BACKTRACKING!
+LvL: 559. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [311] to be false!
+718
+LvL: 560. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [312] to be true!
+719
+BACKTRACKING!
+LvL: 560. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [312] to be false!
+720
+LvL: 561. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [313] to be true!
+721
+BACKTRACKING!
+LvL: 561. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [313] to be false!
+722
+LvL: 562. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [314] to be true!
+723
+BACKTRACKING!
+LvL: 562. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [314] to be false!
+724
+LvL: 563. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [96] to be true!
+725
+BACKTRACKING!
+LvL: 563. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [96] to be false!
+726
+LvL: 564. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [97] to be true!
+727
+BACKTRACKING!
+LvL: 564. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [97] to be false!
+728
+LvL: 565. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [94] to be true!
+729
+BACKTRACKING!
+LvL: 565. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [94] to be false!
+730
+LvL: 566. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [310] to be true!
+731
+BACKTRACKING!
+LvL: 566. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [310] to be false!
+732
+LvL: 567. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [95] to be true!
+733
+BACKTRACKING!
+LvL: 567. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [95] to be false!
+734
+LvL: 568. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [98] to be true!
+735
+BACKTRACKING!
+LvL: 568. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [98] to be false!
+736
+LvL: 569. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [99] to be true!
+737
+BACKTRACKING!
+LvL: 569. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [99] to be false!
+738
+LvL: 570. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [123] to be true!
+739
+BACKTRACKING!
+LvL: 570. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [123] to be false!
+740
+LvL: 571. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [269] to be true!
+741
+BACKTRACKING!
+LvL: 571. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [269] to be false!
+742
+LvL: 572. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [122] to be true!
+743
+BACKTRACKING!
+LvL: 572. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [122] to be false!
+744
+LvL: 573. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [268] to be true!
+745
+BACKTRACKING!
+LvL: 573. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [268] to be false!
+746
+LvL: 574. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [121] to be true!
+747
+BACKTRACKING!
+LvL: 574. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [121] to be false!
+748
+LvL: 575. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [267] to be true!
+749
+BACKTRACKING!
+LvL: 575. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [267] to be false!
+750
+LvL: 576. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [120] to be true!
+751
+BACKTRACKING!
+LvL: 576. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [120] to be false!
+752
+LvL: 577. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [262] to be true!
+753
+BACKTRACKING!
+LvL: 577. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [262] to be false!
+754
+LvL: 578. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [261] to be true!
+755
+BACKTRACKING!
+LvL: 578. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [261] to be false!
+756
+LvL: 579. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [260] to be true!
+757
+BACKTRACKING!
+LvL: 579. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [260] to be false!
+758
+LvL: 580. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [129] to be true!
+759
+BACKTRACKING!
+LvL: 580. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [129] to be false!
+760
+LvL: 581. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [128] to be true!
+761
+BACKTRACKING!
+LvL: 581. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [128] to be false!
+762
+LvL: 582. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [266] to be true!
+763
+BACKTRACKING!
+LvL: 582. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [266] to be false!
+764
+LvL: 583. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [127] to be true!
+765
+BACKTRACKING!
+LvL: 583. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [127] to be false!
+766
+LvL: 584. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [265] to be true!
+767
+BACKTRACKING!
+LvL: 584. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [265] to be false!
+768
+LvL: 585. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [126] to be true!
+769
+BACKTRACKING!
+LvL: 585. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [126] to be false!
+770
+LvL: 586. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [264] to be true!
+771
+BACKTRACKING!
+LvL: 586. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [264] to be false!
+772
+LvL: 587. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [125] to be true!
+773
+BACKTRACKING!
+LvL: 587. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [125] to be false!
+774
+LvL: 588. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [263] to be true!
+775
+BACKTRACKING!
+LvL: 588. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [263] to be false!
+776
+LvL: 589. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [124] to be true!
+777
+BACKTRACKING!
+LvL: 589. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [124] to be false!
+778
+LvL: 590. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [328] to be true!
+779
+BACKTRACKING!
+LvL: 590. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [328] to be false!
+780
+LvL: 591. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [329] to be true!
+781
+BACKTRACKING!
+LvL: 591. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [329] to be false!
+782
+LvL: 592. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [326] to be true!
+783
+BACKTRACKING!
+LvL: 592. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [326] to be false!
+784
+LvL: 593. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [327] to be true!
+785
+BACKTRACKING!
+LvL: 593. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [327] to be false!
+786
+LvL: 594. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [324] to be true!
+787
+BACKTRACKING!
+LvL: 594. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [324] to be false!
+788
+LvL: 595. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [325] to be true!
+789
+BACKTRACKING!
+LvL: 595. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [325] to be false!
+790
+LvL: 596. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [322] to be true!
+791
+BACKTRACKING!
+LvL: 596. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [322] to be false!
+792
+LvL: 597. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [323] to be true!
+793
+BACKTRACKING!
+LvL: 597. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [323] to be false!
+794
+LvL: 598. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [320] to be true!
+795
+BACKTRACKING!
+LvL: 598. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [320] to be false!
+796
+LvL: 599. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [321] to be true!
+797
+BACKTRACKING!
+LvL: 599. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [321] to be false!
+798
+LvL: 600. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [239] to be true!
+799
+BACKTRACKING!
+LvL: 600. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [239] to be false!
+800
+LvL: 601. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [238] to be true!
+801
+BACKTRACKING!
+LvL: 601. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [238] to be false!
+802
+LvL: 602. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [130] to be true!
+803
+BACKTRACKING!
+LvL: 602. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [130] to be false!
+804
+LvL: 603. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [235] to be true!
+805
+BACKTRACKING!
+LvL: 603. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [235] to be false!
+806
+LvL: 604. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [132] to be true!
+807
+BACKTRACKING!
+LvL: 604. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [132] to be false!
+808
+LvL: 605. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [234] to be true!
+809
+BACKTRACKING!
+LvL: 605. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [234] to be false!
+810
+LvL: 606. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [131] to be true!
+811
+BACKTRACKING!
+LvL: 606. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [131] to be false!
+812
+LvL: 607. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [237] to be true!
+813
+BACKTRACKING!
+LvL: 607. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [237] to be false!
+814
+LvL: 608. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [134] to be true!
+815
+BACKTRACKING!
+LvL: 608. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [134] to be false!
+816
+LvL: 609. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [236] to be true!
+817
+BACKTRACKING!
+LvL: 609. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [236] to be false!
+818
+LvL: 610. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [133] to be true!
+819
+BACKTRACKING!
+LvL: 610. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [133] to be false!
+820
+LvL: 611. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [231] to be true!
+821
+BACKTRACKING!
+LvL: 611. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [231] to be false!
+822
+LvL: 612. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [136] to be true!
+823
+BACKTRACKING!
+LvL: 612. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [136] to be false!
+824
+LvL: 613. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [230] to be true!
+825
+BACKTRACKING!
+LvL: 613. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [230] to be false!
+826
+LvL: 614. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [135] to be true!
+827
+BACKTRACKING!
+LvL: 614. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [135] to be false!
+828
+LvL: 615. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [233] to be true!
+829
+BACKTRACKING!
+LvL: 615. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [233] to be false!
+830
+LvL: 616. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [138] to be true!
+831
+BACKTRACKING!
+LvL: 616. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [138] to be false!
+832
+LvL: 617. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [232] to be true!
+833
+BACKTRACKING!
+LvL: 617. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [232] to be false!
+834
+LvL: 618. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [137] to be true!
+835
+BACKTRACKING!
+LvL: 618. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [137] to be false!
+836
+LvL: 619. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [139] to be true!
+837
+BACKTRACKING!
+LvL: 619. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [139] to be false!
+838
+LvL: 620. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [333] to be true!
+839
+BACKTRACKING!
+LvL: 620. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [333] to be false!
+840
+LvL: 621. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [334] to be true!
+841
+BACKTRACKING!
+LvL: 621. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [334] to be false!
+842
+LvL: 622. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [335] to be true!
+843
+BACKTRACKING!
+LvL: 622. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [335] to be false!
+844
+LvL: 623. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [336] to be true!
+845
+BACKTRACKING!
+LvL: 623. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [336] to be false!
+846
+LvL: 624. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [337] to be true!
+847
+BACKTRACKING!
+LvL: 624. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [337] to be false!
+848
+LvL: 625. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [338] to be true!
+849
+BACKTRACKING!
+LvL: 625. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [338] to be false!
+850
+LvL: 626. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [339] to be true!
+851
+BACKTRACKING!
+LvL: 626. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [339] to be false!
+852
+LvL: 627. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [330] to be true!
+853
+BACKTRACKING!
+LvL: 627. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [330] to be false!
+854
+LvL: 628. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [331] to be true!
+855
+BACKTRACKING!
+LvL: 628. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [331] to be false!
+856
+LvL: 629. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [332] to be true!
+857
+BACKTRACKING!
+LvL: 629. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [332] to be false!
+858
+LvL: 630. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [141] to be true!
+859
+BACKTRACKING!
+LvL: 630. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [141] to be false!
+860
+LvL: 631. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [140] to be true!
+861
+BACKTRACKING!
+LvL: 631. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [140] to be false!
+862
+LvL: 632. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [249] to be true!
+863
+BACKTRACKING!
+LvL: 632. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [249] to be false!
+864
+LvL: 633. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [248] to be true!
+865
+BACKTRACKING!
+LvL: 633. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [248] to be false!
+866
+LvL: 634. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [145] to be true!
+867
+BACKTRACKING!
+LvL: 634. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [145] to be false!
+868
+LvL: 635. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [247] to be true!
+869
+BACKTRACKING!
+LvL: 635. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [247] to be false!
+870
+LvL: 636. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [144] to be true!
+871
+BACKTRACKING!
+LvL: 636. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [144] to be false!
+872
+LvL: 637. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [246] to be true!
+873
+BACKTRACKING!
+LvL: 637. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [246] to be false!
+874
+LvL: 638. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [143] to be true!
+875
+BACKTRACKING!
+LvL: 638. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [143] to be false!
+876
+LvL: 639. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [245] to be true!
+877
+BACKTRACKING!
+LvL: 639. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [245] to be false!
+878
+LvL: 640. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [142] to be true!
+879
+BACKTRACKING!
+LvL: 640. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [142] to be false!
+880
+LvL: 641. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [244] to be true!
+881
+BACKTRACKING!
+LvL: 641. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [244] to be false!
+882
+LvL: 642. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [149] to be true!
+883
+BACKTRACKING!
+LvL: 642. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [149] to be false!
+884
+LvL: 643. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [243] to be true!
+885
+BACKTRACKING!
+LvL: 643. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [243] to be false!
+886
+LvL: 644. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [148] to be true!
+887
+BACKTRACKING!
+LvL: 644. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [148] to be false!
+888
+LvL: 645. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [242] to be true!
+889
+BACKTRACKING!
+LvL: 645. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [242] to be false!
+890
+LvL: 646. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [147] to be true!
+891
+BACKTRACKING!
+LvL: 646. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [147] to be false!
+892
+LvL: 647. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [241] to be true!
+893
+BACKTRACKING!
+LvL: 647. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [241] to be false!
+894
+LvL: 648. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [146] to be true!
+895
+BACKTRACKING!
+LvL: 648. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [146] to be false!
+896
+LvL: 649. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [240] to be true!
+897
+BACKTRACKING!
+LvL: 649. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [240] to be false!
+898
+LvL: 650. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [346] to be true!
+899
+BACKTRACKING!
+LvL: 650. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [346] to be false!
+900
+LvL: 651. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [347] to be true!
+901
+BACKTRACKING!
+LvL: 651. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [347] to be false!
+902
+LvL: 652. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [344] to be true!
+903
+BACKTRACKING!
+LvL: 652. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [344] to be false!
+904
+LvL: 653. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [345] to be true!
+905
+BACKTRACKING!
+LvL: 653. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [345] to be false!
+906
+LvL: 654. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [348] to be true!
+907
+BACKTRACKING!
+LvL: 654. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [348] to be false!
+908
+LvL: 655. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [349] to be true!
+909
+BACKTRACKING!
+LvL: 655. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [349] to be false!
+910
+LvL: 656. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [342] to be true!
+911
+BACKTRACKING!
+LvL: 656. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [342] to be false!
+912
+LvL: 657. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [343] to be true!
+913
+BACKTRACKING!
+LvL: 657. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [343] to be false!
+914
+LvL: 658. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [340] to be true!
+915
+BACKTRACKING!
+LvL: 658. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [340] to be false!
+916
+LvL: 659. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [341] to be true!
+917
+BACKTRACKING!
+LvL: 659. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [341] to be false!
+918
+LvL: 660. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [210] to be true!
+919
+BACKTRACKING!
+LvL: 660. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [210] to be false!
+920
+LvL: 661. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [211] to be true!
+921
+BACKTRACKING!
+LvL: 661. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [211] to be false!
+922
+LvL: 662. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [212] to be true!
+923
+BACKTRACKING!
+LvL: 662. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [212] to be false!
+924
+LvL: 663. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [213] to be true!
+925
+BACKTRACKING!
+LvL: 663. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [213] to be false!
+926
+LvL: 664. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [214] to be true!
+927
+BACKTRACKING!
+LvL: 664. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [214] to be false!
+928
+LvL: 665. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [215] to be true!
+929
+BACKTRACKING!
+LvL: 665. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [215] to be false!
+930
+LvL: 666. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [216] to be true!
+931
+BACKTRACKING!
+LvL: 666. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [216] to be false!
+932
+LvL: 667. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [217] to be true!
+933
+BACKTRACKING!
+LvL: 667. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [217] to be false!
+934
+LvL: 668. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [218] to be true!
+935
+BACKTRACKING!
+LvL: 668. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [218] to be false!
+936
+LvL: 669. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [219] to be true!
+937
+BACKTRACKING!
+LvL: 669. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [219] to be false!
+938
+LvL: 670. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [352] to be true!
+939
+BACKTRACKING!
+LvL: 670. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [352] to be false!
+940
+LvL: 671. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [53] to be true!
+941
+BACKTRACKING!
+LvL: 671. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [53] to be false!
+942
+LvL: 672. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [351] to be true!
+943
+BACKTRACKING!
+LvL: 672. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [351] to be false!
+944
+LvL: 673. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [52] to be true!
+945
+BACKTRACKING!
+LvL: 673. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [52] to be false!
+946
+LvL: 674. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [354] to be true!
+947
+BACKTRACKING!
+LvL: 674. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [354] to be false!
+948
+LvL: 675. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [51] to be true!
+949
+BACKTRACKING!
+LvL: 675. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [51] to be false!
+950
+LvL: 676. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [353] to be true!
+951
+BACKTRACKING!
+LvL: 676. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [353] to be false!
+952
+LvL: 677. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [50] to be true!
+953
+BACKTRACKING!
+LvL: 677. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [50] to be false!
+954
+LvL: 678. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [57] to be true!
+955
+BACKTRACKING!
+LvL: 678. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [57] to be false!
+956
+LvL: 679. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [56] to be true!
+957
+BACKTRACKING!
+LvL: 679. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [56] to be false!
+958
+LvL: 680. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [350] to be true!
+959
+BACKTRACKING!
+LvL: 680. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [350] to be false!
+960
+LvL: 681. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [55] to be true!
+961
+BACKTRACKING!
+LvL: 681. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [55] to be false!
+962
+LvL: 682. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [54] to be true!
+963
+BACKTRACKING!
+LvL: 682. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [54] to be false!
+964
+LvL: 683. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [359] to be true!
+965
+BACKTRACKING!
+LvL: 683. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [359] to be false!
+966
+LvL: 684. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [59] to be true!
+967
+BACKTRACKING!
+LvL: 684. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [59] to be false!
+968
+LvL: 685. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [58] to be true!
+969
+BACKTRACKING!
+LvL: 685. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [58] to be false!
+970
+LvL: 686. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [356] to be true!
+971
+BACKTRACKING!
+LvL: 686. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [356] to be false!
+972
+LvL: 687. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [355] to be true!
+973
+BACKTRACKING!
+LvL: 687. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [355] to be false!
+974
+LvL: 688. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [358] to be true!
+975
+BACKTRACKING!
+LvL: 688. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [358] to be false!
+976
+LvL: 689. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [357] to be true!
+977
+BACKTRACKING!
+LvL: 689. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [357] to be false!
+978
+LvL: 690. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [221] to be true!
+979
+BACKTRACKING!
+LvL: 690. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [221] to be false!
+980
+LvL: 691. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [222] to be true!
+981
+BACKTRACKING!
+LvL: 691. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [222] to be false!
+982
+LvL: 692. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [220] to be true!
+983
+BACKTRACKING!
+LvL: 692. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [220] to be false!
+984
+LvL: 693. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [225] to be true!
+985
+BACKTRACKING!
+LvL: 693. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [225] to be false!
+986
+LvL: 694. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [226] to be true!
+987
+BACKTRACKING!
+LvL: 694. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [226] to be false!
+988
+LvL: 695. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [223] to be true!
+989
+BACKTRACKING!
+LvL: 695. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [223] to be false!
+990
+LvL: 696. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [224] to be true!
+991
+BACKTRACKING!
+LvL: 696. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [224] to be false!
+992
+LvL: 697. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [229] to be true!
+993
+BACKTRACKING!
+LvL: 697. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [229] to be false!
+994
+LvL: 698. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [227] to be true!
+995
+BACKTRACKING!
+LvL: 698. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [227] to be false!
+996
+LvL: 699. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [228] to be true!
+997
+BACKTRACKING!
+LvL: 699. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [228] to be false!
+998
+LvL: 700. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [60] to be true!
+999
+BACKTRACKING!
+LvL: 700. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [60] to be false!
+1000
+LvL: 701. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [365] to be true!
+1001
+BACKTRACKING!
+LvL: 701. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [365] to be false!
+1002
+LvL: 702. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [62] to be true!
+1003
+BACKTRACKING!
+LvL: 702. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [62] to be false!
+1004
+LvL: 703. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [364] to be true!
+1005
+BACKTRACKING!
+LvL: 703. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [364] to be false!
+1006
+LvL: 704. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [61] to be true!
+1007
+BACKTRACKING!
+LvL: 704. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [61] to be false!
+1008
+LvL: 705. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [363] to be true!
+1009
+BACKTRACKING!
+LvL: 705. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [363] to be false!
+1010
+LvL: 706. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [64] to be true!
+1011
+BACKTRACKING!
+LvL: 706. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [64] to be false!
+1012
+LvL: 707. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [362] to be true!
+1013
+BACKTRACKING!
+LvL: 707. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [362] to be false!
+1014
+LvL: 708. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [63] to be true!
+1015
+BACKTRACKING!
+LvL: 708. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [63] to be false!
+1016
+LvL: 709. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [361] to be true!
+1017
+BACKTRACKING!
+LvL: 709. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [361] to be false!
+1018
+LvL: 710. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [66] to be true!
+1019
+BACKTRACKING!
+LvL: 710. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [66] to be false!
+1020
+LvL: 711. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [360] to be true!
+1021
+BACKTRACKING!
+LvL: 711. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [360] to be false!
+1022
+LvL: 712. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [65] to be true!
+1023
+BACKTRACKING!
+LvL: 712. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [65] to be false!
+1024
+LvL: 713. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [68] to be true!
+1025
+BACKTRACKING!
+LvL: 713. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [68] to be false!
+1026
+LvL: 714. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [67] to be true!
+1027
+BACKTRACKING!
+LvL: 714. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [67] to be false!
+1028
+LvL: 715. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [69] to be true!
+1029
+BACKTRACKING!
+LvL: 715. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [69] to be false!
+1030
+LvL: 716. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [369] to be true!
+1031
+BACKTRACKING!
+LvL: 716. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [369] to be false!
+1032
+LvL: 717. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [368] to be true!
+1033
+BACKTRACKING!
+LvL: 717. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [368] to be false!
+1034
+LvL: 718. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [367] to be true!
+1035
+BACKTRACKING!
+LvL: 718. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [367] to be false!
+1036
+LvL: 719. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [366] to be true!
+1037
+BACKTRACKING!
+LvL: 719. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [366] to be false!
+1038
+LvL: 720. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [70] to be true!
+1039
+BACKTRACKING!
+LvL: 720. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [70] to be false!
+1040
+LvL: 721. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [71] to be true!
+1041
+BACKTRACKING!
+LvL: 721. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [71] to be false!
+1042
+LvL: 722. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [370] to be true!
+1043
+BACKTRACKING!
+LvL: 722. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [370] to be false!
+1044
+LvL: 723. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [79] to be true!
+1045
+BACKTRACKING!
+LvL: 723. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [79] to be false!
+1046
+LvL: 724. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [78] to be true!
+1047
+BACKTRACKING!
+LvL: 724. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [78] to be false!
+1048
+LvL: 725. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [372] to be true!
+1049
+BACKTRACKING!
+LvL: 725. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [372] to be false!
+1050
+LvL: 726. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [77] to be true!
+1051
+BACKTRACKING!
+LvL: 726. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [77] to be false!
+1052
+LvL: 727. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [371] to be true!
+1053
+BACKTRACKING!
+LvL: 727. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [371] to be false!
+1054
+LvL: 728. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [76] to be true!
+1055
+BACKTRACKING!
+LvL: 728. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [76] to be false!
+1056
+LvL: 729. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [374] to be true!
+1057
+BACKTRACKING!
+LvL: 729. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [374] to be false!
+1058
+LvL: 730. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [75] to be true!
+1059
+BACKTRACKING!
+LvL: 730. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [75] to be false!
+1060
+LvL: 731. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [373] to be true!
+1061
+BACKTRACKING!
+LvL: 731. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [373] to be false!
+1062
+LvL: 732. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [74] to be true!
+1063
+BACKTRACKING!
+LvL: 732. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [74] to be false!
+1064
+LvL: 733. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [376] to be true!
+1065
+BACKTRACKING!
+LvL: 733. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [376] to be false!
+1066
+LvL: 734. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [73] to be true!
+1067
+BACKTRACKING!
+LvL: 734. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [73] to be false!
+1068
+LvL: 735. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [375] to be true!
+1069
+BACKTRACKING!
+LvL: 735. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [375] to be false!
+1070
+LvL: 736. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [72] to be true!
+1071
+BACKTRACKING!
+LvL: 736. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [72] to be false!
+1072
+LvL: 737. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [378] to be true!
+1073
+BACKTRACKING!
+LvL: 737. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [378] to be false!
+1074
+LvL: 738. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [377] to be true!
+1075
+BACKTRACKING!
+LvL: 738. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [377] to be false!
+1076
+LvL: 739. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [379] to be true!
+1077
+BACKTRACKING!
+LvL: 739. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [379] to be false!
+1078
+LvL: 740. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [104] to be true!
+1079
+BACKTRACKING!
+LvL: 740. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [104] to be false!
+1080
+LvL: 741. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [200] to be true!
+1081
+BACKTRACKING!
+LvL: 741. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [200] to be false!
+1082
+LvL: 742. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [105] to be true!
+1083
+BACKTRACKING!
+LvL: 742. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [105] to be false!
+1084
+LvL: 743. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [102] to be true!
+1085
+BACKTRACKING!
+LvL: 743. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [102] to be false!
+1086
+LvL: 744. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [103] to be true!
+1087
+BACKTRACKING!
+LvL: 744. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [103] to be false!
+1088
+LvL: 745. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [108] to be true!
+1089
+BACKTRACKING!
+LvL: 745. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [108] to be false!
+1090
+LvL: 746. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [109] to be true!
+1091
+BACKTRACKING!
+LvL: 746. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [109] to be false!
+1092
+LvL: 747. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [106] to be true!
+1093
+BACKTRACKING!
+LvL: 747. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [106] to be false!
+1094
+LvL: 748. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [107] to be true!
+1095
+BACKTRACKING!
+LvL: 748. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [107] to be false!
+1096
+LvL: 749. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [207] to be true!
+1097
+BACKTRACKING!
+LvL: 749. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [207] to be false!
+1098
+LvL: 750. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [208] to be true!
+1099
+BACKTRACKING!
+LvL: 750. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [208] to be false!
+1100
+LvL: 751. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [80] to be true!
+1101
+BACKTRACKING!
+LvL: 751. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [80] to be false!
+1102
+LvL: 752. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [205] to be true!
+1103
+BACKTRACKING!
+LvL: 752. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [205] to be false!
+1104
+LvL: 753. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [81] to be true!
+1105
+BACKTRACKING!
+LvL: 753. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [81] to be false!
+1106
+LvL: 754. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [206] to be true!
+1107
+BACKTRACKING!
+LvL: 754. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [206] to be false!
+1108
+LvL: 755. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [82] to be true!
+1109
+BACKTRACKING!
+LvL: 755. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [82] to be false!
+1110
+LvL: 756. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [203] to be true!
+1111
+BACKTRACKING!
+LvL: 756. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [203] to be false!
+1112
+LvL: 757. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [100] to be true!
+1113
+BACKTRACKING!
+LvL: 757. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [100] to be false!
+1114
+LvL: 758. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [390] to be true!
+1115
+BACKTRACKING!
+LvL: 758. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [390] to be false!
+1116
+LvL: 759. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [204] to be true!
+1117
+BACKTRACKING!
+LvL: 759. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [204] to be false!
+1118
+LvL: 760. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [101] to be true!
+1119
+BACKTRACKING!
+LvL: 760. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [101] to be false!
+1120
+LvL: 761. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [201] to be true!
+1121
+BACKTRACKING!
+LvL: 761. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [201] to be false!
+1122
+LvL: 762. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [202] to be true!
+1123
+BACKTRACKING!
+LvL: 762. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [202] to be false!
+1124
+LvL: 763. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [383] to be true!
+1125
+BACKTRACKING!
+LvL: 763. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [383] to be false!
+1126
+LvL: 764. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [88] to be true!
+1127
+BACKTRACKING!
+LvL: 764. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [88] to be false!
+1128
+LvL: 765. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [382] to be true!
+1129
+BACKTRACKING!
+LvL: 765. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [382] to be false!
+1130
+LvL: 766. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [87] to be true!
+1131
+BACKTRACKING!
+LvL: 766. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [87] to be false!
+1132
+LvL: 767. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [381] to be true!
+1133
+BACKTRACKING!
+LvL: 767. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [381] to be false!
+1134
+LvL: 768. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [380] to be true!
+1135
+BACKTRACKING!
+LvL: 768. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [380] to be false!
+1136
+LvL: 769. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [89] to be true!
+1137
+BACKTRACKING!
+LvL: 769. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [89] to be false!
+1138
+LvL: 770. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [387] to be true!
+1139
+BACKTRACKING!
+LvL: 770. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [387] to be false!
+1140
+LvL: 771. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [84] to be true!
+1141
+BACKTRACKING!
+LvL: 771. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [84] to be false!
+1142
+LvL: 772. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [386] to be true!
+1143
+BACKTRACKING!
+LvL: 772. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [386] to be false!
+1144
+LvL: 773. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [83] to be true!
+1145
+BACKTRACKING!
+LvL: 773. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [83] to be false!
+1146
+LvL: 774. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [385] to be true!
+1147
+BACKTRACKING!
+LvL: 774. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [385] to be false!
+1148
+LvL: 775. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [86] to be true!
+1149
+BACKTRACKING!
+LvL: 775. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [86] to be false!
+1150
+LvL: 776. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [209] to be true!
+1151
+BACKTRACKING!
+LvL: 776. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [209] to be false!
+1152
+LvL: 777. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [384] to be true!
+1153
+BACKTRACKING!
+LvL: 777. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [384] to be false!
+1154
+LvL: 778. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [85] to be true!
+1155
+BACKTRACKING!
+LvL: 778. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [85] to be false!
+1156
+LvL: 779. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [389] to be true!
+1157
+BACKTRACKING!
+LvL: 779. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [389] to be false!
+1158
+LvL: 780. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [388] to be true!
+1159
+BACKTRACKING!
+LvL: 780. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [388] to be false!
+1160
+LvL: 781. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [308] to be true!
+1161
+BACKTRACKING!
+LvL: 781. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [308] to be false!
+1162
+LvL: 782. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [309] to be true!
+1163
+BACKTRACKING!
+LvL: 782. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [309] to be false!
+1164
+LvL: 783. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [305] to be true!
+1165
+BACKTRACKING!
+LvL: 783. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [305] to be false!
+1166
+LvL: 784. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [304] to be true!
+1167
+BACKTRACKING!
+LvL: 784. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [304] to be false!
+1168
+LvL: 785. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [307] to be true!
+1169
+BACKTRACKING!
+LvL: 785. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [307] to be false!
+1170
+LvL: 786. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [306] to be true!
+1171
+BACKTRACKING!
+LvL: 786. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [306] to be false!
+1172
+LvL: 787. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [301] to be true!
+1173
+BACKTRACKING!
+LvL: 787. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [301] to be false!
+1174
+LvL: 788. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [300] to be true!
+1175
+BACKTRACKING!
+LvL: 788. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [300] to be false!
+1176
+LvL: 789. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [303] to be true!
+1177
+BACKTRACKING!
+LvL: 789. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [303] to be false!
+1178
+LvL: 790. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [302] to be true!
+1179
+BACKTRACKING!
+LvL: 790. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [302] to be false!
+1180
+LvL: 791. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [9] to be true!
+1181
+BACKTRACKING!
+LvL: 791. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [9] to be false!
+1182
+LvL: 792. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [8] to be true!
+1183
+BACKTRACKING!
+LvL: 792. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [8] to be false!
+1184
+LvL: 793. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [7] to be true!
+1185
+BACKTRACKING!
+LvL: 793. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [7] to be false!
+1186
+LvL: 794. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [6] to be true!
+1187
+BACKTRACKING!
+LvL: 794. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [6] to be false!
+1188
+LvL: 795. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [5] to be true!
+1189
+BACKTRACKING!
+LvL: 795. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [5] to be false!
+1190
+LvL: 796. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [4] to be true!
+1191
+BACKTRACKING!
+LvL: 796. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [4] to be false!
+1192
+LvL: 797. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [3] to be true!
+1193
+BACKTRACKING!
+LvL: 797. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [3] to be false!
+1194
+LvL: 798. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [2] to be true!
+1195
+BACKTRACKING!
+LvL: 798. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [2] to be false!
+1196
+LvL: 799. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [1] to be true!
+1197
+BACKTRACKING!
+LvL: 799. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [1] to be false!
+1198
+LvL: 800. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [0] to be true!
+1199
+BACKTRACKING!
+LvL: 800. Guesing on: rule2_a(X) :- p(X),not b(X). - with VarAsign: [0] to be false!
+1200
+No more choice at level = 800
+1
+Found: 1 answersets!
+Termianted final Calculation
+Time needed for parsing: 0.03
+Time needed overAll: 0.547
+Time needed for calculation: 0.482

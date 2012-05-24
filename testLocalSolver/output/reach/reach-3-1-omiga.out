@@ -1,0 +1,13 @@
+Parsed program, starting rewriting...
+STARTING: input/reach/reach-3.txtAnswersets2Derive: 1rewriting=1-filter= null StartingTime: 1337775745381
+DeriveSCC called in ChoiceUnit.
+Calling close SCC!
+Calling close SCC!
+Calling close SCC!
+Calling close SCC!
+Calling close SCC!
+GuessFree Context found 1 AnswerSet
+Termianted final Calculation
+Time needed for parsing: 1.139
+Time needed overAll: 3.735
+Time needed for calculation: 2.421

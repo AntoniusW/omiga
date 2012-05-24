@@ -1,0 +1,332 @@
+Parsed program, starting rewriting...
+STARTING: input/3col/3col-10-18.txtAnswersets2Derive: 1rewriting=1-filter= null StartingTime: 1337847123002
+DeriveSCC called in ChoiceUnit.
+DGraph initialized. SCCSize: 2
+SCC0 is of size: 0
+SCC1 is of size: 3
+SCC0 is of size: 0 :::: []
+SCC1 is of size: 3 :::: [ChoiceNode: rule1_green(N) :- node(N),not red(N),not blue(N)., ChoiceNode: rule2_red(N) :- node(N),not blue(N),not green(N)., ChoiceNode: rule3_blue(N) :- node(N),not red(N),not green(N).]
+SCC: 1
+[node]
+SCC: 2
+[rule1_green, red, blue, green, rule2_red, rule3_blue]
+Preparing to Guess: 1337847123017
+LvL: 1. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [9] to be true!
+1
+LvL: 2. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [8] to be true!
+2
+LvL: 3. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [7] to be true!
+3
+BACKTRACKING!
+LvL: 3. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [7] to be false!
+4
+LvL: 4. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [6] to be true!
+5
+LvL: 5. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [5] to be true!
+6
+BACKTRACKING!
+LvL: 5. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [5] to be false!
+7
+LvL: 6. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [4] to be true!
+8
+LvL: 7. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [3] to be true!
+9
+BACKTRACKING!
+LvL: 7. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [3] to be false!
+10
+LvL: 8. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [2] to be true!
+11
+BACKTRACKING!
+LvL: 8. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [2] to be false!
+12
+LvL: 9. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [1] to be true!
+13
+BACKTRACKING!
+LvL: 9. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [1] to be false!
+14
+LvL: 10. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [0] to be true!
+15
+BACKTRACKING!
+LvL: 10. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [0] to be false!
+16
+LvL: 11. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [9] to be true!
+17
+BACKTRACKING!
+LvL: 11. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [9] to be false!
+18
+LvL: 12. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [8] to be true!
+19
+BACKTRACKING!
+LvL: 12. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [8] to be false!
+20
+LvL: 13. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [7] to be true!
+21
+LvL: 14. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [6] to be true!
+22
+BACKTRACKING!
+LvL: 14. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [6] to be false!
+23
+LvL: 15. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [5] to be true!
+24
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be true!
+25
+BACKTRACKING!
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be false!
+26
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be true!
+27
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+28
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+29
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be true!
+30
+BACKTRACKING!
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be false!
+31
+LvL: 20. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [0] to be true!
+32
+BACKTRACKING!
+LvL: 20. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [0] to be false!
+33
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be false!
+34
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+35
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+36
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+LvL: 15. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [5] to be false!
+37
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be true!
+38
+BACKTRACKING!
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be false!
+39
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be true!
+40
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+41
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+42
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be true!
+43
+BACKTRACKING!
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be false!
+44
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be false!
+45
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+46
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+47
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+LvL: 13. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [7] to be false!
+48
+LvL: 14. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [6] to be true!
+49
+BACKTRACKING!
+LvL: 14. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [6] to be false!
+50
+LvL: 15. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [5] to be true!
+51
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be true!
+52
+BACKTRACKING!
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be false!
+53
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be true!
+54
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+55
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+56
+BACKTRACKING!
+BACKTRACKING!
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be false!
+57
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+58
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be true!
+59
+BACKTRACKING!
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be false!
+60
+BACKTRACKING!
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+61
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+LvL: 15. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [5] to be false!
+62
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be true!
+63
+BACKTRACKING!
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be false!
+64
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be true!
+65
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+66
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+67
+BACKTRACKING!
+BACKTRACKING!
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be false!
+68
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+69
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be true!
+70
+LvL: 20. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [0] to be true!
+71
+BACKTRACKING!
+LvL: 20. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [0] to be false!
+72
+BACKTRACKING!
+BACKTRACKING!
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be false!
+73
+BACKTRACKING!
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+74
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+BACKTRACKING!
+LvL: 6. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [4] to be false!
+75
+LvL: 7. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [3] to be true!
+76
+BACKTRACKING!
+LvL: 7. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [3] to be false!
+77
+LvL: 8. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [2] to be true!
+78
+BACKTRACKING!
+LvL: 8. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [2] to be false!
+79
+LvL: 9. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [1] to be true!
+80
+BACKTRACKING!
+LvL: 9. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [1] to be false!
+81
+LvL: 10. Guesing on: rule1_green(N) :- node(N),not red(N),not blue(N). - with VarAsign: [0] to be true!
+82
+LvL: 11. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [9] to be true!
+83
+BACKTRACKING!
+LvL: 11. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [9] to be false!
+84
+LvL: 12. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [8] to be true!
+85
+BACKTRACKING!
+LvL: 12. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [8] to be false!
+86
+LvL: 13. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [7] to be true!
+87
+LvL: 14. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [6] to be true!
+88
+BACKTRACKING!
+LvL: 14. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [6] to be false!
+89
+LvL: 15. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [5] to be true!
+90
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be true!
+91
+BACKTRACKING!
+LvL: 16. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [4] to be false!
+92
+LvL: 17. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [3] to be true!
+93
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be true!
+94
+BACKTRACKING!
+LvL: 18. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [2] to be false!
+95
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be true!
+96
+BACKTRACKING!
+LvL: 19. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [1] to be false!
+97
+LvL: 20. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [0] to be true!
+98
+BACKTRACKING!
+LvL: 20. Guesing on: rule2_red(N) :- node(N),not blue(N),not green(N). - with VarAsign: [0] to be false!
+99
+LvL: 21. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [9] to be true!
+100
+BACKTRACKING!
+LvL: 21. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [9] to be false!
+101
+LvL: 22. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [8] to be true!
+102
+BACKTRACKING!
+LvL: 22. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [8] to be false!
+103
+LvL: 23. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [7] to be true!
+104
+BACKTRACKING!
+LvL: 23. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [7] to be false!
+105
+LvL: 24. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [6] to be true!
+106
+BACKTRACKING!
+LvL: 24. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [6] to be false!
+107
+LvL: 25. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [5] to be true!
+108
+BACKTRACKING!
+LvL: 25. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [5] to be false!
+109
+LvL: 26. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [3] to be true!
+110
+BACKTRACKING!
+LvL: 26. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [3] to be false!
+111
+LvL: 27. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [0] to be true!
+112
+BACKTRACKING!
+LvL: 27. Guesing on: rule3_blue(N) :- node(N),not red(N),not green(N). - with VarAsign: [0] to be false!
+113
+No more choice at level = 27
+1
+Found: 1 answersets!
+Termianted final Calculation
+Time needed for parsing: 0.016
+Time needed overAll: 0.098
+Time needed for calculation: 0.042
