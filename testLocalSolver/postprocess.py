@@ -100,7 +100,7 @@ def main(argv):
     engines = ['clingo', 'dlv', 'asperix', 'omiga']
     engines_abbrev = ['c', 'd', 'a', 'o']
     #testnames = ['reach', 'birds', 'party', '3col', 'stratProg']
-    testnames = ['reach', 'birds', '3col','stratProg','cutedge']
+    testnames = ['reach', '3col','stratProg','cutedge']
 
     count_testruns = []
     for testname in testnames:
@@ -111,6 +111,8 @@ def main(argv):
                      # each row corresponding to a testname and 
                      # each column to an engine
     final_shade = []
+
+    test_instances = []
     testruns = []
 
     with open('instances_to_table.txt', 'r') as f:
@@ -172,7 +174,6 @@ def main(argv):
 
     print instances
     print count_instances
-    print count_testruns
     print final_table
 
     
@@ -194,12 +195,12 @@ def main(argv):
         f.write('\\centering\n')
         f.write('\\scriptsize\n')
 
-        f.write('\\begin{tabular}{|l')
+        f.write('\\begin{tabular}{|l|')
 
-        for testname in testnames:
-            test_id = testnames.index(testname)
-            if (count_testruns[test_id] > 0):
-                for i in range(count_testruns[test_id]):
+        for instance in instances:
+            test_id = instances.index(instance)
+            if (count_instances[test_id] > 0):
+                for i in range(count_instances[test_id]):
                     if (i == 0):
                         f.write('r')
                     else:
@@ -207,13 +208,24 @@ def main(argv):
                 f.write('|')
         f.write('}\n')
 
-        f.write('\\hline\n')
+        f.write('\\cline{2-' + str(total_run+1) + '}\n')
         #f.write('\\textbf{Solver}')
 
+        f.write('\\multicolumn{1}{c|}{}')
         for testname in testnames:
             test_id = testnames.index(testname)
             if (count_testruns[test_id] > 0):
                 f.write(' & \\multicolumn{' + str(count_testruns[test_id]) + '}{c|}{\\textbf{' + testname + '}}')
+        f.write('\\\\\n')
+        f.write('\\cline{2-' + str(total_run+1) + '}\n')
+
+        f.write('\\multicolumn{1}{c|}{}')
+        for instance in instances:
+            ins_id = instances.index(instance)
+            first_dash = instance.find('-')
+            instance_name = instance[first_dash+1:]
+            print instance_name
+            f.write(' & \\multicolumn{' + str(count_instances[ins_id]) + '}{c|}{\\textbf{' + instance_name + '}}')
         f.write('\\\\\n')
 
         for en in engines:
@@ -223,15 +235,16 @@ def main(argv):
             for testrun in testruns:
                 test_id = testruns.index(testrun)
                 #f.write(' & ' + str(final_table[test_id][en_id]))
+                f.write(' & ')
                 if (final_shade[test_id][en_id] == 0):
-                    f.write(' & ' + str(final_table[test_id][en_id]))
+                    f.write(str(final_table[test_id][en_id]))
                 else:
-                    f.write(' & \\textit{' + str(final_table[test_id][en_id]) + '}')
+                    f.write('\\textbf{' + str(final_table[test_id][en_id]) + '}')
             f.write('\\\\\n')
 
         f.write('\\hline\n')
-        f.write('\\end{tabular}\n')
-        f.write('\\caption{Evaluation of the solver.}\n')
+        f.write('\\end{tabular}\\vspace{2ex}\n')
+        f.write('\\caption{Evaluation of the solvers (\\textbf{c}: clingo, \\textbf{d}: dlv, \\textbf{a}: ASPeRix, \\textbf{o}: \\omiga\n).}\n')
         f.write('\\label{tab:experiment}\n')
         f.write('\\end{table}\n')
 
