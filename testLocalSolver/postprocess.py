@@ -3,6 +3,7 @@
 import getopt, sys
 import optparse
 import string
+import os.path
 
 # Check whether the test got PASS or FAILED
 def check_status(log_status):
@@ -39,8 +40,8 @@ def get_running_time(time_file):
                 secs = string.atoi(str_secs)
 
                 secs += 60*minutes
+                    
                 str_time = str(secs) + '.' + str_psecs
-
                 break
     l.closed
     return str_time
@@ -66,6 +67,9 @@ def get_status(out_file):
 # Return '---' in case of timeout, 'M' in case of memout
 def get_outcome(outname):
     log_status = outname + '.log'
+    if (os.path.isfile(log_status) == False):
+        return '---'
+
     status = check_status(log_status)
 
     mess = ''
@@ -94,19 +98,22 @@ def main(argv):
     #rs.closed
 
     engines = ['clingo', 'dlv', 'asperix', 'omiga']
+    engines_abbrev = ['c', 'd', 'a', 'o']
     #testnames = ['reach', 'birds', 'party', '3col', 'stratProg']
-    testnames = ['reach', 'birds']
-    count_testruns = [0, 0]
+    testnames = ['reach', 'birds', '3col','stratProg','cutedge']
+
+    count_testruns = []
+    for testname in testnames:
+        count_testruns.append(0)
+
     count_instances = []
     final_table = [] # this will be constructed as a 2-dimensional table, 
                      # each row corresponding to a testname and 
                      # each column to an engine
     final_shade = []
-
-    dir_name = ''
-
     testruns = []
-    with open('instances.txt', 'r') as f:
+
+    with open('instances_to_table.txt', 'r') as f:
         for line in f:
             # Get rid of the last '\n' character
             line = line[:len(line)-1]
@@ -118,7 +125,7 @@ def main(argv):
     for testname in testnames:
         for testrun in testruns:
             if (testrun.find(testname) != -1):
-                print 'Found ' + testname + ' in ' + testrun
+                #print 'Found ' + testname + ' in ' + testrun
 
                 test_id = testnames.index(testname)
                 count_testruns[test_id] = count_testruns[test_id] + 1
@@ -129,14 +136,16 @@ def main(argv):
                 if (instances.count(instance) == 0):
                     count_instances.append(1)
                     instances.append(instance)
-                    print 'Add instance: ' + instance
+                    #print 'Add instance: ' + instance
                 else:
                     ins_id = instances.index(instance)
                     count_instances[ins_id] = count_instances[ins_id] + 1;
 
     for instance in instances:
+        print 'instance = ' + instance
         for testrun in testruns:
-            if (testrun.find(instance) != -1):
+            if (testrun.find(instance + '-') != -1):
+                print '   testrun = ' + testrun
                 timing = []
                 shade = []
 
@@ -153,7 +162,10 @@ def main(argv):
                     outname = testrun + '-' + en
                     outcome = get_outcome(outname)
                     timing.append(outcome)
-                    print "reading from " + outname + ". got outcome = " + outcome
+                    #print "reading from " + outname + ". got outcome = " + outcome
+
+                sys.stdout.write('timing = ')
+                print timing
 
                 final_table.append(timing)
                 final_shade.append(shade)
@@ -161,6 +173,7 @@ def main(argv):
     print instances
     print count_instances
     print count_testruns
+    print final_table
 
     
 
@@ -168,8 +181,7 @@ def main(argv):
     i = 0
 
     for testrun in testruns:
-        print '   ' + testrun + ':'
-        sys.stdout.write('   ')
+        sys.stdout.write('   ' + testrun + ': ')
         print final_table[i]
         i = i+1
 
@@ -180,37 +192,47 @@ def main(argv):
     with open('table.tex', 'w') as f:
         f.write('\\begin{table}[t]\n')
         f.write('\\centering\n')
-        f.write('\\caption{Evaluation of the solver.}\n')
-        f.write('\\label{tab:experiment}\n')
-        f.write('\\footnotesize\n')
+        f.write('\\scriptsize\n')
 
-        f.write('\\begin{tabular}{l')
-        for i in range(total_run):
-            f.write('c')
-        f.write('}\n')
-
-        f.write('\\toprule\n')
-        f.write('Solver')
+        f.write('\\begin{tabular}{|l')
 
         for testname in testnames:
             test_id = testnames.index(testname)
-            f.write(' & \\multicolumn{' + str(count_testruns[test_id]) + '}{c}{' + testname + '}')
+            if (count_testruns[test_id] > 0):
+                for i in range(count_testruns[test_id]):
+                    if (i == 0):
+                        f.write('r')
+                    else:
+                        f.write('@{~~\!}r')
+                f.write('|')
+        f.write('}\n')
+
+        f.write('\\hline\n')
+        #f.write('\\textbf{Solver}')
+
+        for testname in testnames:
+            test_id = testnames.index(testname)
+            if (count_testruns[test_id] > 0):
+                f.write(' & \\multicolumn{' + str(count_testruns[test_id]) + '}{c|}{\\textbf{' + testname + '}}')
         f.write('\\\\\n')
 
         for en in engines:
-            f.write('\\midrule\n')
+            f.write('\\hline\n')
             en_id = engines.index(en)
-            f.write(en)
+            f.write('\\textbf{' + engines_abbrev[en_id] + '}')
             for testrun in testruns:
                 test_id = testruns.index(testrun)
+                #f.write(' & ' + str(final_table[test_id][en_id]))
                 if (final_shade[test_id][en_id] == 0):
                     f.write(' & ' + str(final_table[test_id][en_id]))
                 else:
-                    f.write(' & xxx' + str(final_table[test_id][en_id]))
+                    f.write(' & \\textit{' + str(final_table[test_id][en_id]) + '}')
             f.write('\\\\\n')
 
-        f.write('\\bottomrule\n')
+        f.write('\\hline\n')
         f.write('\\end{tabular}\n')
+        f.write('\\caption{Evaluation of the solver.}\n')
+        f.write('\\label{tab:experiment}\n')
         f.write('\\end{table}\n')
 
     f.closed
