@@ -43,6 +43,14 @@ public class main_FINAL_NormalASP {
     
     public static void main(String args[]) /*throws FactSizeException, RuleNotSafeException*/{
         long start = System.currentTimeMillis();
+        
+        System.out.println("OMiGA -- An Open Minded Grounding on-the-fly Answer-Set Solver.");
+        
+        if(args.length == 0 ) {
+            System.out.println("Usage is:");
+            help();
+            return;
+        }
        
         //filename = "birds_ASPERIX_nbb=100.txt";
         //filename = "StableMarriage/01-stable_marriage-0-0.txt";
@@ -125,14 +133,16 @@ public class main_FINAL_NormalASP {
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets,outprint,filter);
 
-        System.out.println("Termianted final Calculation");
+        System.out.println("Terminated final Calculation");
         System.out.println("Time needed for parsing: "+(parsing_time/1000.0f));
         System.out.println("Time needed overAll: " + (1.0F*(System.currentTimeMillis()-start)/1000));
         System.out.println("Time needed for calculation: " +(1.0F*(System.currentTimeMillis()-beforeCalc)/1000));
     }
     
     private static void help(){
-        System.out.println("java -jar woc <filename> [-answersets=X, -filter=predicateName -rewriting=0-2 | 0=No rewriting, 1=Rewriting, 2=AlreadyRewritten]");
+        System.out.println("java -jar woc <filename> [-answersets=NumAnswerSetsDesired, -filter=predicateName -rewriting=0-2]"
+                + "\n\t rewriting: 0=No rewriting, 1=Normal rewriting, 2=Input is already rewritten"
+                + "\n\t filter: a comma-separated list of predicate names to print (no whitespace)");
     }
     
 }
