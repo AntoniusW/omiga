@@ -103,7 +103,7 @@ public class main_FINAL_NormalASP {
                     long start_parsing_time = System.currentTimeMillis();
                     parser.woc_program();
                     parsing_time = System.currentTimeMillis() - start_parsing_time;
-                    System.out.println("Parsed program, starting rewriting...");
+                    //System.out.println("Parsed program, starting rewriting...");
                     
                     Rewriter_easy rewriter = new Rewriter_easy();
                     rewctx = rewriter.rewrite(ctx);
@@ -130,7 +130,7 @@ public class main_FINAL_NormalASP {
 
 
         
-        System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
+        //System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
         
         
         Manager m = new Manager(rewctx);
