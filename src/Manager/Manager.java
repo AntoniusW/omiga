@@ -173,17 +173,17 @@ public class Manager {
                     if(c.isSatisfiable()){
                         //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
-                                System.out.println("Found Answer: " + answerSetCount);
+                                System.out.println("Answer set: " + (answerSetCount+1));
                                 c.printAnswerSet(filter);
                             }
                             answerSetCount++;
-                            System.out.println(answerSetCount);
+                            //System.out.println(answerSetCount);
                             if(answersets != null && answerSetCount == answersets) break;
                         //}
                     }
                     else
                     {
-                        System.out.println("No more choice but UNSAT");
+                        //System.out.println("No more choice but UNSAT");
                     }
                    if (c.getChoiceUnit().getDecisionLevel() > 0) {
                        c.backtrack();
@@ -193,7 +193,7 @@ public class Manager {
                 }
             }
         }
-        System.out.println("Found: " + this.answerSetCount + " answersets!");
+        System.out.println("Found: " + this.answerSetCount + " answer sets.");
         
     }
     

@@ -47,7 +47,6 @@ public class main_FINAL_NormalASP {
         System.out.println("OMiGA -- An Open Minded Grounding on-the-fly Answer-Set Solver.");
         
         if(args.length == 0 ) {
-            System.out.println("Usage is:");
             help();
             return;
         }
@@ -71,14 +70,21 @@ public class main_FINAL_NormalASP {
         filter = null;
         outprint =true;
         
-        if (args.length == 2)
-        {
-            answersets = Integer.parseInt(args[1]);
-        }
-        
-        if (args.length == 3)
-        {
-            filter = args[2];
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if(args[i].startsWith("-filter=")) {
+                filter = args[i].substring("-filter=".length());
+            }
+            if(args[i].startsWith("-answersets=")) {
+                answersets = Integer.parseInt(args[i].substring("-answersets=".length()));
+            }
+            if(args[i].startsWith("-rewriting=")) {
+                rewriting = Integer.parseInt(args[i].substring("-rewriting=".length()));
+            }
+            if(args[i].startsWith("-help") || args[i].startsWith("--help") || args[i].startsWith("-?")) {
+                help();
+                return;
+            }
         }
         
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
@@ -130,23 +136,24 @@ public class main_FINAL_NormalASP {
 
 
         
-        //System.out.println("STARTING: " + filename + "Answersets2Derive: " + answersets + "rewriting="+rewriting + "-filter= " + filter + " StartingTime: " + System.currentTimeMillis());
+        //System.out.println("STARTING: " + filename + " answersets=" + answersets + " rewriting="+rewriting + " filter=" + filter + " StartingTime=" + System.currentTimeMillis());
         
         
         Manager m = new Manager(rewctx);
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets,outprint,filter);
 
-        System.out.println("Terminated final Calculation");
+        System.out.println("Calculation finished.");
         System.out.println("Time needed for parsing: "+(parsing_time/1000.0f));
-        System.out.println("Time needed overAll: " + (1.0F*(System.currentTimeMillis()-start)/1000));
+        System.out.println("Time needed overall: " + (1.0F*(System.currentTimeMillis()-start)/1000));
         System.out.println("Time needed for calculation: " +(1.0F*(System.currentTimeMillis()-beforeCalc)/1000));
     }
     
     private static void help(){
-        System.out.println("java -jar woc <filename> [-answersets=NumAnswerSetsDesired, -filter=predicateName -rewriting=0-2]"
+        System.out.println("Usage is:");
+        System.out.println("java -jar omiga.jar <filename> [-answersets=NumAnswerSetsDesired, -filter=predicateNames -rewriting=0-2]"
                 + "\n\t rewriting: 0=No rewriting, 1=Normal rewriting, 2=Input is already rewritten"
-                + "\n\t filter: a comma-separated list of predicate names to print (no whitespace)");
+                + "\n\t filter: a comma-separated list of predicate names to print (no whitespace)\n");
     }
     
 }

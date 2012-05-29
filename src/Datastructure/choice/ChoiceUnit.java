@@ -495,7 +495,8 @@ public class ChoiceUnit {
             }
              SCCSize.add(SCC.get(i).size());
         }
-        
+
+        /*
         /*System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
         for(int i = 0; i < this.SCC.size();i++){
             System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i));

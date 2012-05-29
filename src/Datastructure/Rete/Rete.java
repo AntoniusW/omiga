@@ -224,13 +224,14 @@ public class Rete {
      *        is null, all predicates are printed
      */
     public void printAnswerSet(String filter){
-        boolean densePrint = true;
+        boolean onlyPrintIN = true;
+        boolean densePrint = false; //true;
         boolean filtering = filter==null? false : true;
         //System.out.println("Printing Answerset: ");
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         //System.out.println("Positive Facts: ");
         System.out.println("-----------------------------");
-        System.out.println("IN:");
+        //System.out.println("IN:");
         String filter_use="";
         if(filtering)
             filter_use = "," + filter + ",";
@@ -249,6 +250,7 @@ public class Rete {
                 System.out.println();
             }
         }
+        if( !onlyPrintIN ) {
         //System.out.println("Negative Facts: ");
         System.out.println("OUT:");
         for (Predicate p : this.basicLayerMinus.keySet()) {
@@ -305,7 +307,7 @@ public class Rete {
                 }
             }            
         }*/
-        
+        } // end if (onlyPrintIN)
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         System.out.println("-----------------------------");
     }
