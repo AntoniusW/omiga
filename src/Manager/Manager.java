@@ -153,7 +153,7 @@ public class Manager {
             }
             return;
         }
-        System.out.println("Preparing to Guess: " + System.currentTimeMillis());
+        //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
         while(!finished){
             if(c.choice()){
@@ -168,7 +168,7 @@ public class Manager {
                     //c.printAnswerSet(null);
                 }
             }else{
-                System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
+                //System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
                 if(c.getChoiceUnit().getDecisionLevel() >= 0){
                     if(c.isSatisfiable()){
                         //if(c.getChoiceUnit().check4AnswerSet()){

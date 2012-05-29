@@ -295,7 +295,7 @@ public class ChoiceUnit {
     public void backtrack(){
         
         //System.err.println(this.stackybool.size() + " vs: " + this.memory.getDecisonLevel());
-        System.out.println("BACKTRACKING!");
+        //System.out.println("BACKTRACKING!");
         //this.printAllChoiceNodes();
         // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
         this.backtrackchoiceNodesDecisionLayer();
@@ -471,7 +471,7 @@ public class ChoiceUnit {
     protected int actualSCC;
     protected Stack<Integer> closedAt;
     public void DeriveSCC(){
-        System.out.println("DeriveSCC called in ChoiceUnit.");
+        //System.out.println("DeriveSCC called in ChoiceUnit.");
         SCC = new ArrayList<ArrayList<ChoiceNode>>();
         SCCPreds = new ArrayList<ArrayList<Predicate>>();
         SCCSize = new ArrayList<Integer>();
@@ -496,19 +496,19 @@ public class ChoiceUnit {
              SCCSize.add(SCC.get(i).size());
         }
         
-        System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
+        /*System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
         for(int i = 0; i < this.SCC.size();i++){
             System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i));
         }
         for(int i = 0; i < this.SCC.size();i++){
             System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i) + " :::: " + this.SCC.get(i));
-        }
+	    }
         int i = 0;
         for(DirectedSubgraph gsg: g.getSCCs()){
             i++;
             System.out.println("SCC: " + i);
             System.out.println(gsg.vertexSet());
-        }
+	    }*/
     }
     
     public boolean killSoloSCC(){

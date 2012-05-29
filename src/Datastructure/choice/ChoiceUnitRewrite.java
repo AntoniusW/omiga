@@ -132,7 +132,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
             this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
-            System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
+            //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
             //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);
@@ -151,7 +151,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 //System.out.println("POSITIVE GUESS possible!");
                 this.addChoicePoint();
                 Instance inz = cN.getAllInstances().get(0);
-                System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
+                //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                 for(Atom a: cN.getRule().getBodyMinus()){
                     Instance toAdd = Unifyer.unifyAtom(a,inz, cN.getVarPositions());
                     //System.out.println("Adding: " + toAdd + " to: " + a.getPredicate());
@@ -208,7 +208,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
             this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
-            System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
+            //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
             //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);
@@ -255,7 +255,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
             this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
-            System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
+            //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
             //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);
@@ -279,7 +279,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 //System.out.println("POSITIVE GUESS possible!");
                 this.addChoicePoint();
                 Instance inz = cN.getAllInstances().get(0);
-                System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
+                //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + cN.getRule() + " - with VarAsign: " + inz + " to be true!\n" + i);
                 for(Atom a: cN.getRule().getBodyMinus()){
                     Instance toAdd = Unifyer.unifyAtom(a,inz, cN.getVarPositions());
                     //System.out.println("Adding: " + toAdd + " to: " + a.getPredicate());
