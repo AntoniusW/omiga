@@ -64,7 +64,6 @@ public class main_FINAL_NormalASP {
         //filename ="single_import_pos.txt";
         //filename ="single_import_neg.txt";
         //filename = "Xir2.txt";
-        //filename = "scholarship.txt";
         
         filename = args[0];
         rewriting = 1;
@@ -75,6 +74,11 @@ public class main_FINAL_NormalASP {
         if (args.length == 2)
         {
             answersets = Integer.parseInt(args[1]);
+        }
+        
+        if (args.length == 3)
+        {
+            filter = args[2];
         }
         
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
