@@ -45,13 +45,11 @@ public class Rewriter_easyMCS {
     public ContextASPMCSRewriting rewrite(ContextASPMCSRewriting c) throws RuleNotSafeException, FactSizeException{
         int counter = 0;
         ContextASPMCSRewriting ret = new ContextASPMCSRewriting();
-        //ret.setINFActs(c.getAllINFacts());
-        //ret.setOUTFActs(c.getAllOUTFacts());
-        //ret.setChoiceUnit(c.getChoiceUnit());
         
         
         HashMap<Predicate,ArrayList<Rule>> sorted = new HashMap<Predicate,ArrayList<Rule>>();
         
+        //We sort all the rules by it's head predicate
         for(Rule r: c.getAllRules()){
             if(!r.isConstraint()){
                 if(!sorted.containsKey(r.getHead().getPredicate())){
@@ -76,6 +74,10 @@ public class Rewriter_easyMCS {
                 
                 heads.add(head.getAtomAsReteKey()); // We add the atoms as ReteKeys to obtain unified variables for the rule over rules.
                 
+                 // Now we create negative rules for optimisation that put heads into out if a rule cannot be fullfilled anymore.
+                // We can not do this in general, but we do it for Bodyatoms which Variables are equal to those of the head
+                // this way it's easy to determine that a rule will never lead to the grounded head.
+                // For everything else no optimisation is done. Maybe we can find additional rules here to further optimize?
                 for(Atom a: r.getBodyPlus()){
                     boolean flag1 = true;
                     //All Variables of the head must occur within the atom
@@ -152,10 +154,9 @@ public class Rewriter_easyMCS {
                 
             }
             
-            //Since the old head and the new heads are of same size, reteKey will derive same variables for same positions, therefore generating correct rules!
-            //TODO: Retebuilder cannot handle negRules with bodysize > 1.
-            //ret.addNegRule(new Rule(Atom.getAtom(p.getName(),p.getArity(),heads.get(0).getAtomAsReteKey().getTerms()),new ArrayList<Atom>(),heads,new ArrayList<Operator>()));
-            //TODO The rule above is not correct. We have to generate one such rule for each Rule of the actual HashMapposition
+             // Now we generate one negative rule for all rules of same original head for each such head
+            // The head of this rule is the original head and the body consists only of body minus containing 
+            // all heads of the new positive rules we allready created in our rewriting
             for(int i = 0; i < sorted.get(p).size();i++){
             Rule r1 = sorted.get(p).get(i);
                 ArrayList<Atom> BodyMinus = new ArrayList<Atom>();
@@ -173,6 +174,7 @@ public class Rewriter_easyMCS {
             }
         }
         
+        // We preserve all facts of the old context
         for(Predicate p: c.getAllINFacts().keySet()){
             for(Instance inz: c.getAllINFacts().get(p)){
                 ret.addFact2IN(p, inz);
@@ -183,7 +185,7 @@ public class Rewriter_easyMCS {
                 ret.addFact2OUT(p, inz);
             }
         }
-        
+        // We preserve all states for facts that can come from outside
         for (Predicate predicate : c.getFromOutside().keySet()) {
             ret.registerFactFromOutside(predicate);
         }

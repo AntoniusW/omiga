@@ -24,7 +24,7 @@ import java.util.HashMap;
  * The Rewriting does the following:
  * For each rule head(X,Y) :- body(X,Y)... .
  * We create another rule: rule1_head(X,Y) :- body(X,Y)... .
- * This we we obtain that rules where choices are made on have unique heads.
+ * This way we obtainthe situation that rules where choices are made, have unique heads.
  * Then another rule is added for:
  * head(X,Y) :- ruleI_head(X,Y)... . // for all I rules with the same head
  * 
@@ -38,19 +38,20 @@ public class Rewriter_easy {
     
     /**
      * 
+     * Rewrites the given context in such a way that no two rules have the same head.
+     * by preserving the same answersets.
+     * 
      * @param c The context you want to rewrite
      * @return the rewritten context
      */
     public ContextASPRewriting rewrite(ContextASP c) throws RuleNotSafeException, FactSizeException{
         int counter = 0;
         ContextASPRewriting ret = new ContextASPRewriting();
-        //ret.setINFActs(c.getAllINFacts());
-        //ret.setOUTFActs(c.getAllOUTFacts());
-        //ret.setChoiceUnit(c.getChoiceUnit());
         
         
         HashMap<Predicate,ArrayList<Rule>> sorted = new HashMap<Predicate,ArrayList<Rule>>();
         
+        //We sort all the rules by it's head predicate
         for(Rule r: c.getAllRules()){
             if(!r.isConstraint()){
                 if(!sorted.containsKey(r.getHead().getPredicate())){
@@ -75,6 +76,10 @@ public class Rewriter_easy {
                 
                 heads.add(head.getAtomAsReteKey()); // We add the atoms as ReteKeys to obtain unified variables for the rule over rules.
                 
+                // Now we create negative rules for optimisation that put heads into out if a rule cannot be fullfilled anymore.
+                // We can not do this in general, but we do it for Bodyatoms which Variables are equal to those of the head
+                // this way it's easy to determine that a rule will never lead to the grounded head.
+                // For everything else no optimisation is done. Maybe we can find additional rules here to further optimize?
                 for(Atom a: r.getBodyPlus()){
                     boolean flag1 = true;
                     //All Variables of the head must occur within the atom
@@ -151,10 +156,12 @@ public class Rewriter_easy {
                 
             }
             
-            //Since the old head and the new heads are of same size, reteKey will derive same variables for same positions, therefore generating correct rules!
-            //TODO: Retebuilder cannot handle negRules with bodysize > 1.
-            //ret.addNegRule(new Rule(Atom.getAtom(p.getName(),p.getArity(),heads.get(0).getAtomAsReteKey().getTerms()),new ArrayList<Atom>(),heads,new ArrayList<Operator>()));
-            //TODO The rule above is not correct. We have to generate one such rule for each Rule of the actual HashMapposition
+            // Now we generate one negative rule for all rules of same original head for each such head
+            // The head of this rule is the original head and the body consists only of body minus containing 
+            // all heads of the new positive rules we allready created in our rewriting
+            // TO OPTIMIZE: Better optimisation for heads with Constants. For those heads seperate rules may be created
+            // since there might be a rule that leads to p(X,Y) and one that leads to p(X,a), then we can derive
+            // -p(a,b) even if p(a,a) can still be derived, which is not possible in the actual implementeion.
             for(int i = 0; i < sorted.get(p).size();i++){
             Rule r1 = sorted.get(p).get(i);
                 ArrayList<Atom> BodyMinus = new ArrayList<Atom>();
@@ -172,6 +179,7 @@ public class Rewriter_easy {
             }
         }
         
+        // We keep all Facts of the input context as they are and put them into the rewritten context as well
         for(Predicate p: c.getAllINFacts().keySet()){
             for(Instance inz: c.getAllINFacts().get(p)){
                 ret.addFact2IN(p, inz);
