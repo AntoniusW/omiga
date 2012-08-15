@@ -156,7 +156,9 @@ public class Manager {
         //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
         while(!finished){
+            //System.out.println("Doing while!");
             if(c.choice()){
+                //System.out.println("choice was done!");
                 //System.out.println("Found a choice. Now propagate");
                 c.propagate();
                 //System.out.println("After propagation. Interpretation is:");

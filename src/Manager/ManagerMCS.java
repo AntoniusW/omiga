@@ -47,6 +47,7 @@ public class ManagerMCS {
     }
     
     public void calculate(Integer answersets, boolean output, String filter){
+        System.out.println("MCS Calculater!");
         //long pure_solving_time = 0;
         //long start_action;
         

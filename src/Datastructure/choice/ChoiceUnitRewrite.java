@@ -128,10 +128,19 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             //nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
             //We do not have to have constraints node anymore but then we have to kill the instance of the choice node here.
             nextNode.removeInstance(nextInstance);
-            Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
+            nextNode.getConstraintNode().addInstance(nextInstance, true);
+            //Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
-            this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
+            
+            if(nextNode.getRule().isHeadFixed()) {
+                //this is an optimisation
+                //System.out.println("HELLO?");
+                Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
+                this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
+            }
+            
+            
             //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
             //we push false,nextNode,nextInstance to our stacks, to later on backtracking know that we did a negative guess on this instance for this node
             this.stackybool.push(false);

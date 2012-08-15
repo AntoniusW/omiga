@@ -29,6 +29,8 @@ public class Rule {
     protected ArrayList<Atom> bodyPlus;
     protected ArrayList<Atom> bodyMinus;
     protected ArrayList<Operator> operators;
+    protected HashSet<Variable> bodyMinusVars;
+    protected boolean headIsFixedByBodyMinus;
     
     /**
      * 
@@ -44,6 +46,15 @@ public class Rule {
         this.bodyPlus = bodyPlus;
         this.bodyMinus = bodyMinus;
         this.operators = operators;
+        this.bodyMinusVars = new HashSet<Variable>();
+        for(int i = 0; i < bodyMinus.size(); i++){
+            Atom a = bodyMinus.get(i);
+            for(Term t: a.getTerms()){
+                for(Variable v: t.getUsedVariables()){
+                    bodyMinusVars.add(v);
+                }
+            }
+        }
     }
     
     /**
@@ -55,6 +66,7 @@ public class Rule {
         this.bodyPlus = new ArrayList<Atom>();
         this.bodyMinus = new ArrayList<Atom>();
         this.operators = new ArrayList<Operator>();
+        this.bodyMinusVars = new HashSet<Variable>();
     }
     
     /**
@@ -80,6 +92,11 @@ public class Rule {
      */
     public void addAtomMinus(Atom p){
         this.bodyMinus.add(p);
+        for(Term t: p.getTerms()){
+            for(Variable v: t.getUsedVariables()){
+                this.bodyMinusVars.add(v);
+            }
+        }
     }
      /**
      * This method is only needed when working with the empty constructor.
@@ -219,6 +236,20 @@ public class Rule {
     
     public boolean isConstraint(){
         return this.head == null;
+    }
+    
+    private void setHeadIsFixed(){
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        for(Term t: head.getTerms()){
+            for(Variable v: t.getUsedVariables()){
+                vars.add(v);
+            }
+        }
+        this.headIsFixedByBodyMinus = vars.containsAll(bodyMinusVars);
+    }
+    
+    public boolean isHeadFixed(){
+        return this.headIsFixedByBodyMinus;
     }
 
 }
