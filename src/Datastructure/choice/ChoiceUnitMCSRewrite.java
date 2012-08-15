@@ -162,10 +162,18 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             //nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
             //We do not have to have constraints node anymore but then we have to kill the instance of the choice node here.
             nextNode.removeInstance(nextInstance);
-            Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
-            //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
-            //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
-            this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
+            //This is the code that should work properly
+            nextNode.getConstraintNode().addInstance(nextInstance, true);
+            if(nextNode.getRule().isHeadFixed()) {
+                //this is an optimisation: We put the rules head out iff there is no other way of it beeing derived by the rwritten program
+                Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
+                this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
+            }
+            //This is the code when adding head on negative guesses in the buggy version
+            //Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
+            //this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
+            
+            
             //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!");
             //we push false,nextNode,nextInstance to our stacks, to later, on backtracking, know that we did a negative guess on this instance for this node
             this.stackybool.push(false);

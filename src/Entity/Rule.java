@@ -182,6 +182,7 @@ public class Rule {
                 }
             }
         }
+        this.setHeadIsFixed();
         return true;
     }
     
@@ -238,6 +239,12 @@ public class Rule {
         return this.head == null;
     }
     
+    /**
+     * This method needs to be called after a rule has been complelty built
+     * then the flag is set indicating if it contains all Variables of body minus
+     * This is used for optimizing negative guesses. If the flag is true
+     * we can simply add the rules unified head to the outset
+     */
     private void setHeadIsFixed(){
         ArrayList<Variable> vars = new ArrayList<Variable>();
         for(Term t: head.getTerms()){
@@ -248,6 +255,10 @@ public class Rule {
         this.headIsFixedByBodyMinus = vars.containsAll(bodyMinusVars);
     }
     
+    /**
+     * 
+     * indicating if we can put the unified head into the outset when doing a negative guess
+     */
     public boolean isHeadFixed(){
         return this.headIsFixedByBodyMinus;
     }

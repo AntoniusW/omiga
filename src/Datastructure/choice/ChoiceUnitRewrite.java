@@ -105,7 +105,6 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
     int i = 0; //TODO: Remove this counter
     @Override
     public boolean choice(){
-        //System.out.println("CHOICE IS CALLED! : ChoiceUNIT REWRITE");
         //System.out.println(this.choiceNodes);
         /*System.out.println("CHOICE IS CALLED!");
         System.out.println(this.choiceNodes);
@@ -132,10 +131,8 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             //Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
-            
             if(nextNode.getRule().isHeadFixed()) {
-                //this is an optimisation
-                //System.out.println("HELLO?");
+                //this is an optimisation: We put the rules head out iff there is no other way of it beeing derived by the rwritten program
                 Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
                 this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
             }
