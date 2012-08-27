@@ -1,18 +1,18 @@
-	Command being timed: "dlv input/reach/reach-3.txt -filter=nothing -n=1"
-	User time (seconds): 30.66
+	Command being timed: "/home/staff/aweinz/src/bin/dlv input/reach/reach-3.txt -filter=nothing -n=1"
+	User time (seconds): 2.04
 	System time (seconds): 0.02
 	Percent of CPU this job got: 99%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:30.72
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.07
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 293008
+	Maximum resident set size (kbytes): 292528
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 18604
+	Minor (reclaiming a frame) page faults: 18571
 	Voluntary context switches: 4
-	Involuntary context switches: 3252
+	Involuntary context switches: 291
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 8

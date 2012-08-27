@@ -1,13 +1,29 @@
 Parsed program, starting rewriting...
-STARTING: input/reach/reach-5.txtAnswersets2Derive: 1rewriting=1-filter= null StartingTime: 1337776588983
+STARTING: input/reach/reach-5.txtAnswersets2Derive: 1rewriting=1-filter= null StartingTime: 1337870177956
 DeriveSCC called in ChoiceUnit.
-Calling close SCC!
-Calling close SCC!
-Calling close SCC!
-Calling close SCC!
-Calling close SCC!
+DGraph initialized. SCCSize: 5
+SCC0 is of size: 0
+SCC1 is of size: 0
+SCC2 is of size: 0
+SCC3 is of size: 0
+SCC4 is of size: 0
+SCC0 is of size: 0 :::: []
+SCC1 is of size: 0 :::: []
+SCC2 is of size: 0 :::: []
+SCC3 is of size: 0 :::: []
+SCC4 is of size: 0 :::: []
+SCC: 1
+[edge]
+SCC: 2
+[rule1_reachable]
+SCC: 3
+[reachable, rule2_reachable]
+SCC: 4
+[rule3_special]
+SCC: 5
+[special]
 GuessFree Context found 1 AnswerSet
 Termianted final Calculation
-Time needed for parsing: 3.026
-Time needed overAll: 16.149
-Time needed for calculation: 12.552
+Time needed for parsing: 3.123
+Time needed overAll: 33.224
+Time needed for calculation: 29.522

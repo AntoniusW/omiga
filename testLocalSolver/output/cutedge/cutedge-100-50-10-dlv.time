@@ -1,18 +1,18 @@
-	Command being timed: "dlv input/cutedge/cutedge-100-50.txt -filter=nothing -n=10"
-	User time (seconds): 543.06
-	System time (seconds): 0.09
+	Command being timed: "/home/staff/aweinz/src/bin/dlv input/cutedge/cutedge-100-50.txt -filter=nothing -n=10"
+	User time (seconds): 599.21
+	System time (seconds): 0.14
 	Percent of CPU this job got: 99%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 9:03.78
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 10:00.08
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 607408
+	Maximum resident set size (kbytes): 609152
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 36445
-	Voluntary context switches: 8
-	Involuntary context switches: 56365
+	Minor (reclaiming a frame) page faults: 36479
+	Voluntary context switches: 12
+	Involuntary context switches: 62405
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 24

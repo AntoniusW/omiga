@@ -244,7 +244,7 @@ def main(argv):
 
         f.write('\\hline\n')
         f.write('\\end{tabular}\\vspace{2ex}\n')
-        f.write('\\caption{Evaluation of the solvers (\\textbf{c}: clingo, \\textbf{d}: dlv, \\textbf{a}: ASPeRix, \\textbf{o}: \\omiga\n).}\n')
+        f.write('\\caption{Evaluation of the solvers (\\textbf{c}: clingo, \\textbf{d}: dlv, \\textbf{a}: ASPeRix, \\textbf{o}: \\omiga).}\n')
         f.write('\\label{tab:experiment}\n')
         f.write('\\end{table}\n')
 

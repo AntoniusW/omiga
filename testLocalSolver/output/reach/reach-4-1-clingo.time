@@ -1,19 +1,19 @@
 Command exited with non-zero status 10
 	Command being timed: "/home/staff/aweinz/src/clingo/clingo-3.0.4-x86-linux/clingo input/reach/reach-4.txt -n 1 -q"
-	User time (seconds): 4.79
-	System time (seconds): 0.10
-	Percent of CPU this job got: 99%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:04.90
+	User time (seconds): 4.76
+	System time (seconds): 0.15
+	Percent of CPU this job got: 98%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.00
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 1365648
+	Maximum resident set size (kbytes): 1361488
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 84154
-	Voluntary context switches: 6
-	Involuntary context switches: 519
+	Minor (reclaiming a frame) page faults: 84405
+	Voluntary context switches: 9
+	Involuntary context switches: 538
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 8

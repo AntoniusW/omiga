@@ -1,18 +1,18 @@
-	Command being timed: "dlv input/stratProg/stratProg-300.txt -filter=nothing -n=10"
-	User time (seconds): 62.53
-	System time (seconds): 0.82
+	Command being timed: "/home/staff/aweinz/src/bin/dlv input/stratProg/stratProg-300.txt -filter=nothing -n=10"
+	User time (seconds): 60.86
+	System time (seconds): 0.12
 	Percent of CPU this job got: 99%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:03.46
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:01.05
 	Average shared text size (kbytes): 0
 	Average unshared data size (kbytes): 0
 	Average stack size (kbytes): 0
 	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 1552256
+	Maximum resident set size (kbytes): 1285424
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 96144
-	Voluntary context switches: 5
-	Involuntary context switches: 7935
+	Minor (reclaiming a frame) page faults: 80194
+	Voluntary context switches: 12
+	Involuntary context switches: 6372
 	Swaps: 0
 	File system inputs: 0
 	File system outputs: 16
