@@ -179,8 +179,6 @@ for TEST in $TESTCASES ; do
     declare -i end_now=$start_now
     let "end_now += ${no_test_names[$i]}"
 
-    echo start_now is $start_now
-    echo end_now is   $end_now
     for (( j=$start_now; j < $end_now; ++j )) ; do
 	INPUT=input/$TEST/$TEST-${test_names[$j]}
 	echo $INPUT
