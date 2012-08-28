@@ -58,7 +58,7 @@ declare -a start_test_names=(0 2 4 6)
 
 declare -a n_answers=(1 1 10 1 10 1 10)
 declare -a no_n_answers=(1 2 2 2)
-declare -a startno_n_answers=(0 1 3 5)
+declare -a start_n_answers=(0 1 3 5)
 
 
 ###########################################################################
