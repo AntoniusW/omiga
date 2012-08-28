@@ -54,7 +54,7 @@ RUNGASP=no
 export TESTCASES="reach 3col stratProg cutedge"  
 declare -a test_names=(1 4 10-18 20-38 200 400 100-30 100-50)
 declare -a no_test_names=(2 2 2 2)
-declare -a start_n_answers=(0 2 4 6)
+declare -a start_test_names=(0 2 4 6)
 
 declare -a n_answers=(1 1 10 1 10 1 10)
 declare -a no_n_answers=(1 2 2 2)
@@ -179,6 +179,8 @@ for TEST in $TESTCASES ; do
     declare -i end_now=$start_now
     let "end_now += ${no_test_names[$i]}"
 
+    echo start_now is $start_now
+    echo end_now is   $end_now
     for (( j=$start_now; j < $end_now; ++j )) ; do
 	INPUT=input/$TEST/$TEST-${test_names[$j]}
 	echo $INPUT
