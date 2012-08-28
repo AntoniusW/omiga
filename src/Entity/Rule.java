@@ -246,6 +246,11 @@ public class Rule {
      * we can simply add the rules unified head to the outset
      */
     private void setHeadIsFixed(){
+        if(head == null) {
+            //fixed head criteria is not needed for constraints, since there si no head we can deduce from it.
+            this.headIsFixedByBodyMinus = false;
+            return;
+        }
         ArrayList<Variable> vars = new ArrayList<Variable>();
         for(Term t: head.getTerms()){
             for(Variable v: t.getUsedVariables()){
