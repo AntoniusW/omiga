@@ -7,6 +7,7 @@ package Entity;
 import Interfaces.Term;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -21,31 +22,43 @@ import java.util.HashSet;
  */
 public class FuncTerm extends Term implements Serializable {
         
+    private static HashMap<String, FuncTerm> functerms = new HashMap<String, FuncTerm>();
+    
     private ArrayList<Term> children;
     private FunctionSymbol function_symbol;
     
     
     /**
      * If you want to generate a FuncTerm use this method, since the constructor is private in order to prevent generation of
-     * double FuncTerms instances. (Please note that this factory pattern is not as powerfull like the one we use for 
-     * variables and constants, since we have to create a funcTerm, before we are able to check it's existence.
-     * Anyway this may save some space, as the functerm created for lookUp can be destroyed by garbage collction as soon
-     * as this method terminates. (While if we simple create Functerms when needed, the functerms are stored within our rete,
-     * and therefore double functerms could not be destroyed by garbage collection, as they are in use.
+     * double FuncTerms instances. 
      * 
      * @param name the name of your desired FuncTerm
      * @param children a list of Terms representing those terms that are contained within this functerm. (in the ordering of the list)
      * @return the desired Functerm with given name and children
      */
     public static FuncTerm getFuncTerm(String name, ArrayList<Term> children){
-        FuncTerm t = new FuncTerm(name, children);
+        String lookup = name +"(";
+        for(Term t: children){
+            lookup = lookup + t.toString();
+        }
+        lookup = lookup+")";
+        if(functerms.containsKey(lookup)){
+            return functerms.get(lookup);
+        }else{
+            FuncTerm ft = new FuncTerm(name, children); 
+            functerms.put(lookup, ft);
+            return ft;
+        }
+        /*
+         * Old code, before guaranteeing functerms to be unique. New code should be much faster.
+         * FuncTerm t = new FuncTerm(name, children);
         // TODO AW: check if below code can be removed!
         if(Term.containsTerm(t)){
             return (FuncTerm)Term.getTerm(t);
         }else{
             Term.addTerm(t);
             return t;
-        }
+        }*/
     }
     
     /**
@@ -80,16 +93,15 @@ public class FuncTerm extends Term implements Serializable {
     }    
 
     /**
-     * Since function terms have to be created during calculation we cannot apply the factory patterns
-     * in such a way that we can use == for equals, because creating a function Term like we do with 
-     * variables or constants would take to long (since there can be unlimited many functerms).
+     * Since functionterms are unique we simple use the == operator to verify equality
      * 
      * @param o the object we want to compare with this function term
      * @return wether this fucntion term equals o
      */
     @Override
     public boolean equals(Object o) {
-        // functerms only equal functerms
+        return (this == o);
+        /*// functerms only equal functerms
         if(o.getClass().equals(FuncTerm.class)){
             FuncTerm t = (FuncTerm)o;
             // Functerms of different arity or different name are not equal
@@ -104,7 +116,7 @@ public class FuncTerm extends Term implements Serializable {
                 return true;
             }
         }
-        return false;
+        return false;*/
     }
     
     /**
@@ -120,6 +132,14 @@ public class FuncTerm extends Term implements Serializable {
         return s.substring(0,s.length()-1) + ")";
     }    
     
+    /**
+     * 
+     * this method is used to determine if a functerm is a super scema to another one.
+     * This used within selectionnodes, to determine if an instance matches a scema.
+     * 
+     * @param t
+     * @return 
+     */
     public boolean fatherOf(Term t){
         if(!this.getClass().equals(t.getClass())) return false;
         FuncTerm that = (FuncTerm) t;

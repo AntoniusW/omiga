@@ -11,11 +11,13 @@ import Entity.Instance;
 import Entity.Operator;
 import Entity.Predicate;
 import Entity.Rule;
+import Entity.Variable;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -65,10 +67,27 @@ public class Rewriter_easy {
         }
         
         for(Predicate p: sorted.keySet()){
+            //wir gehen jeweils alle regeln mit gleichem head durch
             ArrayList<Atom> heads = new ArrayList<Atom>();
             for(Rule r: sorted.get(p)){
                 counter++;
-                Atom head = Atom.getAtom("rule"+counter+"_"+r.getHead().getName(), r.getHead().getArity(), r.getHead().getTerms());
+                HashSet<Variable> temp = new HashSet<Variable>();
+                
+                for(Atom a: r.getBodyPlus()){
+                    for(Term t: a.getTerms()){
+                        if(t.getClass().equals(Variable.class)){
+                            temp.add((Variable)t);
+                        }
+                    }
+                }
+                Variable[] newHeadVars = new Variable[temp.size()];
+                int i = 0;
+                for(Variable v: temp){
+                    newHeadVars[i] = v;
+                    i++;
+                }
+                //the new Head contains all Variables of the rules body, to be unique
+                Atom head = Atom.getAtom("rule"+counter+"_"+r.getHead().getName(), r.getHead().getArity(), newHeadVars);
                 ret.addRule(new Rule(head,r.getBodyPlus(),r.getBodyMinus(), r.getOperators())); // newHead :- oldBody.
                 ArrayList<Atom> bodyPos = new ArrayList<Atom>();
                 bodyPos.add(head);
@@ -80,6 +99,8 @@ public class Rewriter_easy {
                 // We can not do this in general, but we do it for Bodyatoms which Variables are equal to those of the head
                 // this way it's easy to determine that a rule will never lead to the grounded head.
                 // For everything else no optimisation is done. Maybe we can find additional rules here to further optimize?
+                //This optimisation could be done for all new rules (newHead :- oldhead.), but this has no sence, since they only trigger
+                // derivation of the oldhead, and newHead is not contained in any negative body.
                 for(Atom a: r.getBodyPlus()){
                     boolean flag1 = true;
                     //All Variables of the head must occur within the atom

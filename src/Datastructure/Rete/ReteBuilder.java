@@ -134,6 +134,9 @@ public class ReteBuilder {
         ((SelectionNode)actualNode).resetVarPosition(actual);
 
         //We create variables for the partner, the ChoiceNode and HeadNodeConstraint for this rule
+        //Please note that they are not used in the current implementation, as our rewriting only leads to
+        // very simple negative rules. If you want to fully feature negative rules, adept the follwoing code
+        // to the positive rules by adding the choiceNode and constraint Node to your liking.
         Atom partner;
         ChoiceNode cN = null;
         HeadNodeConstraint constraintNode = null; 

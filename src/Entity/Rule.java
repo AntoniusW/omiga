@@ -182,7 +182,7 @@ public class Rule {
                 }
             }
         }
-        this.setHeadIsFixed();
+        //this.setHeadIsFixed();
         return true;
     }
     
@@ -244,6 +244,8 @@ public class Rule {
      * then the flag is set indicating if it contains all Variables of body minus
      * This is used for optimizing negative guesses. If the flag is true
      * we can simply add the rules unified head to the outset
+     * 
+     * THIS METHOD WAS USED BEFORE WE USED THE REWRITING WHERE WE BLOW UP HEADS SO THEY REALLY ARE UNIQUE IN ALL THE CASES!
      */
     private void setHeadIsFixed(){
         if(head == null) {

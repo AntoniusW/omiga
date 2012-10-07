@@ -163,12 +163,11 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
             //We do not have to have constraints node anymore but then we have to kill the instance of the choice node here.
             nextNode.removeInstance(nextInstance);
             //This is the code that should work properly
-            nextNode.getConstraintNode().addInstance(nextInstance, true);
-            if(nextNode.getRule().isHeadFixed()) {
+            //if(nextNode.getRule().isHeadFixed()) {
                 //this is an optimisation: We put the rules head out iff there is no other way of it beeing derived by the rwritten program
                 Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
                 this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
-            }
+            //}
             //This is the code when adding head on negative guesses in the buggy version
             //Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
             //this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);

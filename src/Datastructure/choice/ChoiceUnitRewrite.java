@@ -127,15 +127,14 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             //nextNode.getConstraintNode().saveConstraintInstance(nextInstance);
             //We do not have to have constraints node anymore but then we have to kill the instance of the choice node here.
             nextNode.removeInstance(nextInstance);
-            nextNode.getConstraintNode().addInstance(nextInstance, true);
             //Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
             //System.out.println("OLD: Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + nextInstance + " to OUT!");
             //System.out.println("Adding head: " + nextNode.getRule().getHead() + " nextInstance: " + toAdd + " to OUT!");
-            if(nextNode.getRule().isHeadFixed()) {
+            //if(nextNode.getRule().isHeadFixed()) {
                 //this is an optimisation: We put the rules head out iff there is no other way of it beeing derived by the rwritten program
                 Instance toAdd = Unifyer.unifyAtom(nextNode.getRule().getHead(), nextInstance, nextNode.getVarPositions());
                 this.c.getRete().addInstanceMinus(nextNode.getRule().getHead().getPredicate(), toAdd);
-            }
+            //}
             
             
             //System.out.println("LvL: " + this.memory.getDecisonLevel() + ". Guesing on: " + nextNode.getRule() + " - with VarAsign: " + nextInstance + " to be false!\n" + i);
