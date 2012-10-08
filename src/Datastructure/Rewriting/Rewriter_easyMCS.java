@@ -12,11 +12,13 @@ import Entity.Instance;
 import Entity.Operator;
 import Entity.Predicate;
 import Entity.Rule;
+import Entity.Variable;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -66,7 +68,23 @@ public class Rewriter_easyMCS {
             ArrayList<Atom> heads = new ArrayList<Atom>();
             for(Rule r: sorted.get(p)){
                 counter++;
-                Atom head = Atom.getAtom("rule"+counter+"_"+r.getHead().getName(), r.getHead().getArity(), r.getHead().getTerms());
+                HashSet<Variable> temp = new HashSet<Variable>();
+                
+                for(Atom a: r.getBodyPlus()){
+                    for(Term t: a.getTerms()){
+                        if(t.getClass().equals(Variable.class)){
+                            temp.add((Variable)t);
+                        }
+                    }
+                }
+                Variable[] newHeadVars = new Variable[temp.size()];
+                int i = 0;
+                for(Variable v: temp){
+                    newHeadVars[i] = v;
+                    i++;
+                }
+                
+                Atom head = Atom.getAtom("rule"+counter+"_"+r.getHead().getName(), newHeadVars.length, newHeadVars);
                 ret.addRule(new Rule(head,r.getBodyPlus(),r.getBodyMinus(), r.getOperators())); // newHead :- oldBody.
                 ArrayList<Atom> bodyPos = new ArrayList<Atom>();
                 bodyPos.add(head);
