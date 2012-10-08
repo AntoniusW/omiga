@@ -87,7 +87,7 @@ public class Rewriter_easy {
                     i++;
                 }
                 //the new Head contains all Variables of the rules body, to be unique
-                Atom head = Atom.getAtom("rule"+counter+"_"+r.getHead().getName(), r.getHead().getArity(), newHeadVars);
+                Atom head = Atom.getAtom("rule"+counter+"_"+r.getHead().getName(), newHeadVars.length, newHeadVars);
                 ret.addRule(new Rule(head,r.getBodyPlus(),r.getBodyMinus(), r.getOperators())); // newHead :- oldBody.
                 ArrayList<Atom> bodyPos = new ArrayList<Atom>();
                 bodyPos.add(head);

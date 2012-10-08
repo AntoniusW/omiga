@@ -132,7 +132,8 @@ public class SelectionNode extends Node{
             // we create our variable assignment by taking all the values of the variables of our varOrdering.
             varAssignment2Add[i] = varOrdering[i].getValue();
         }
-        /*System.err.println("SIZE of varOrderong: "  + varOrdering.length);
+        /*System.err.println("I am: " + this);
+        System.err.println("SIZE of varOrderong: "  + varOrdering.length);
         System.err.println("SIZE of varAss: " + varAssignment2Add.length);
         System.err.println("varAssighnment2Add: " + Instance.getInstanceAsString(varAssignment2Add));*/
         Instance instance2Add = Instance.getInstance(varAssignment2Add);

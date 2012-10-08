@@ -60,7 +60,7 @@ public class BasicNode extends Node{
      */
     public void addInstance(Instance instance){
         super.addInstance(instance, true);
-        //System.out.println("Adding Instace: " + instance + " to " + this);
+        //System.err.println("BASICNODE: Adding Instace: " + instance + " to " + this);
         memory.addInstance(instance);
         this.toPropagate.add(instance); 
     }
@@ -76,6 +76,7 @@ public class BasicNode extends Node{
         boolean ret = this.toPropagate.size() > 0;
         while(!this.toPropagate.isEmpty() && rete.satisfiable){
             Instance ins = toPropagate.pop();
+            //System.err.println("BasicNode Sending: " + ins);
             for(SelectionNode sN: basicChildren){
                 sN.addInstance(ins, true);
             }
@@ -95,7 +96,9 @@ public class BasicNode extends Node{
     public void AddAtom(Atom atom){
         if(this.getChildNode(atom.getAtomAsReteKey()) == null){
             //System.out.println("Adding new SelectionNode!: " + atom);
-            this.basicChildren.add(new SelectionNode(atom.getAtomAsReteKey(), this.rete));
+            SelectionNode sel = new SelectionNode(atom.getAtomAsReteKey(), this.rete);
+            //System.err.println("I am: " + this + "of size:  " + this.pred.getArity() + " - I'm adding positive selectionNode: " + sel);
+            this.basicChildren.add(sel);
         }
     }
     

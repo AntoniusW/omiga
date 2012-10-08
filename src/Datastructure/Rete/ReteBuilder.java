@@ -203,11 +203,13 @@ public class ReteBuilder {
      * @param r the rule that should be added
      */
     public void addRule(Rule r){
+        //System.err.println("RETEBUILDER: Adding rule: " + r);
         //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
         VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
         HashMap<Atom,HashMap<Variable,Integer>> varPositions = new HashMap<Atom, HashMap<Variable,Integer>>();
         
         if(r.getHead()!=null) {
+            //System.err.println("Adding head: " + r.getHead() + " - Pred= " + r.getHead().getPredicate() + " - PredArity: " + r.getHead().getPredicate().getArity() + " - Atomarity: " + r.getHead().getArity());
             this.addAtomPlus(r.getHead());
             varPositions.put(r.getHead(), SelectionNode.getVarPosition(r.getHead()));
         }
@@ -233,6 +235,8 @@ public class ReteBuilder {
         
         Atom actual;
         Node actualNode;
+        //System.err.println("RetebuilderBLUBB: atomsPlus " + atomsPlus); 
+        //System.err.println("RetebuilderBLUBB: atomsMInus " + atomsMinus);
         //we choose an atom with which we want to start
         if(!atomsPlus.isEmpty()){
             actual = getBestNextAtom(atomsPlus);
@@ -242,7 +246,13 @@ public class ReteBuilder {
             actualNode = this.rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
         }
         
-        //Atom actual = getBestNextAtom(atomsPlus);
+         
+        /*System.err.println("RetebuilderBLUBB: actual " + actual); 
+        System.err.println("RetebuilderBLUBB: actualPred: " + actual.getPredicate() + " - arity= " + actual.getPredicate().getArity());
+        System.err.println("RetebuilderBLUBB: actualNode " + actualNode); 
+        System.err.println("RetebuilderBLUBB: BASICNODE: " +  this.rete.getBasicLayerPlus().get(actual.getPredicate()) + " = " + this.rete.getBasicLayerPlus().get(actual.getPredicate()).getPred().getArity()); 
+        */
+          //Atom actual = getBestNextAtom(atomsPlus);
         
         // From the actual Atom we easily derive the corresponding node
         //Node actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());

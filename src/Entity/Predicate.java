@@ -28,6 +28,7 @@ import network.ANodeImpl;
  */
 public class Predicate implements Serializable {
     
+    //should there be a program with many predicates this has to be reworked to a HashMap but we do not expect a context to have more than a hundred predicates.
     private static ArrayList<Predicate> predicates = new ArrayList<Predicate>();
     
     
