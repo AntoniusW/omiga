@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
-import parser.antlr.wocLexer;
-import parser.antlr.wocParser;
+import parser.antlr.OmigaLexer;
+import parser.antlr.OmigaParser;
 
 /**
  *
@@ -134,8 +134,8 @@ public class ANodeImpl implements ANodeInterface {
         // parsing with ANTLR
         try {
             // setting up lexer and parser
-            wocLexer lex = new wocLexer(new ANTLRFileStream(filename));
-            wocParser parser = new wocParser(new CommonTokenStream(lex));
+            OmigaLexer lex = new OmigaLexer(new ANTLRFileStream(filename));
+            OmigaParser parser = new OmigaParser(new CommonTokenStream(lex));
         
             // set context
             parser.setContext(ctx);

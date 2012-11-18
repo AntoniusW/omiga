@@ -3,8 +3,9 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-            <name>WOC - Wings of Change</name>
+            <name>Omiga</name>
             <source-roots>
+                <root id="src.grammar.dir" name="ANTLR Grammar"/>
                 <root id="src.dir"/>
             </source-roots>
             <test-roots>

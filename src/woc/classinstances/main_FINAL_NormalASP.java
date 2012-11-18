@@ -96,9 +96,9 @@ public class main_FINAL_NormalASP {
         long parsing_time = 0;
         try {
             // setting up lexer and parser
-            wocLexer lex = new wocLexer(new ANTLRFileStream(filename));
+            OmigaLexer lex = new OmigaLexer(new ANTLRFileStream(filename));
             CommonTokenStream tokens = new CommonTokenStream(lex);
-            wocParser parser = new wocParser(tokens);
+            OmigaParser parser = new OmigaParser(tokens);
         
             // set context
             parser.setContext(ctx);

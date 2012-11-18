@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.Stack;
 import network.Pair;
 import org.jgrapht.graph.DirectedSubgraph;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 /**
@@ -269,7 +268,7 @@ public class ChoiceUnitMCSRewrite extends ChoiceUnitRewrite {
     @Override
     protected void closeActualSCC(){
         // TODO AW fix/delete
-        if(true) throw new NotImplementedException();
+        if(true) { throw new UnsupportedOperationException(); }
         c.getRete().propagate(); //think this is not really needed anymore
         for(Predicate p: SCCPreds.get(actualSCC)){
             if(!c.getClosureStatusForOutside(p)){
