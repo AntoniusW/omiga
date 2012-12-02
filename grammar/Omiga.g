@@ -146,9 +146,9 @@ INT :	'0'..'9'+
     */
 
 COMMENT
-    :   '//' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
-    |	'%' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
-    |   '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;}
+    :   '//' ~('\n'|'\r')* '\r'? '\n' {skip();}
+    |	'%' ~('\n'|'\r')* '\r'? '\n' {skip();}
+    |   '/*' ( options {greedy=false;} : . )* '*/' {skip();}
     ;
     
 
@@ -156,7 +156,7 @@ WS  :   ( ' '
         | '\t'
         | '\r'
         | '\n'
-        ) {$channel=HIDDEN;}
+        ) {skip();}
     ;
 
 STRING

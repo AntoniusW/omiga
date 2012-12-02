@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.UnbufferedTokenStream;
 import parser.Parser;
 import parser.ParserRewrite;
 import parser.antlr.*;
@@ -97,7 +98,8 @@ public class main_FINAL_NormalASP {
         try {
             // setting up lexer and parser
             OmigaLexer lex = new OmigaLexer(new ANTLRFileStream(filename));
-            CommonTokenStream tokens = new CommonTokenStream(lex);
+            UnbufferedTokenStream tokens = new UnbufferedTokenStream(lex);
+            //CommonTokenStream tokens = new CommonTokenStream(lex);
             OmigaParser parser = new OmigaParser(tokens);
         
             // set context
