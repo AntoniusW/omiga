@@ -5,27 +5,17 @@
 package woc.classinstances;
 
 
-import Datastructure.Rete.HeadNode;
-import Datastructure.Rete.Rete;
 import Datastructure.Rewriting.Rewriter_easy;
-import Datastructure.Rewriting.Rewriter_easyMCS;
-import Datastructure.choice.ChoiceUnitRewrite;
 import Entity.*;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
-import Interfaces.Term;
 import Manager.Manager;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.UnbufferedTokenStream;
-import parser.Parser;
-import parser.ParserRewrite;
 import parser.antlr.*;
 
 

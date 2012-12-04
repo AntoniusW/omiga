@@ -6,6 +6,7 @@ package Datastructure.storage;
 
 import Entity.Constant;
 import Entity.Instance;
+import Entity.TrackingInstance;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
@@ -233,6 +234,9 @@ public class Storage {
             for (HashSet<Instance> hashSet : memory[0].values()) {
                 for (Instance instance : hashSet) {
                     System.out.print(pred_name+Term.prettyPrint(instance.getTerms(),false));
+                    if(instance instanceof TrackingInstance) {
+                        System.out.println(" by Rule: "+((TrackingInstance)instance).getCreatedByRule().toString());
+                    }
                     didPrint = true;
                 }
             }

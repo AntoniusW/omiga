@@ -5,13 +5,10 @@
 package Datastructure.Rete;
 
 import Entity.Atom;
-import Entity.Constant;
-import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Rule;
+import Entity.TrackingInstance;
 import Entity.Variable;
-import Interfaces.Term;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -30,7 +27,7 @@ public class HeadNode extends Node{
     protected Atom a;
     protected int[] instanceOrdering;
     Node from;
-    public Rule r; // debug stuff, set in the retebuilder
+    public Rule r; // tracking the origin of derived instances, set in retebuilder
     
     /**
      * 
@@ -136,7 +133,9 @@ public class HeadNode extends Node{
         if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 //if the resolved instance is not contained within our rete we add it
-                rete.addInstancePlus(a.getPredicate(),instance2Add);
+                TrackingInstance inst = new TrackingInstance(instance2Add.getTerms()); // track rule origin
+                inst.setCreatedByRule(r);
+                rete.addInstancePlus(a.getPredicate(),inst);
                 //System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
                 //System.out.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);
             }else{

@@ -25,7 +25,7 @@ public class Instance implements Serializable {
     
     public static int lol = 0;
     public static int lolra = 0;
-    private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();
+    // private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();
         
     Term[] terms;
 
@@ -76,7 +76,7 @@ public class Instance implements Serializable {
      * 
      * @param terms 
      */
-    private Instance(Term[] terms){
+    protected Instance(Term[] terms){
         this.terms = terms;    
         this.hashcode = Term.hashCode(terms);
     }
