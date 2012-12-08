@@ -95,7 +95,7 @@ public class JoinNodeNegative extends JoinNode{
                 if(v.equals(Variable.getVariable("X4"))) System.out.println("X4 would be: " + this.tempVarPosition.get(v));
             }*/
             //selectionCriteria = selCrit1;
-            if(a.containsInstance(Instance.getInstance(selCrit1))){
+            if(a.containsInstance(Instance.getInstance(selCrit1,0))){
                 this.memory.addInstance(instance);
                 //System.out.println(this + " instance added: " + instance + " because of: " + a + " saying: " + a.containsInstance(Instance.getInstance(selCrit1)) + " to: " + Instance.getInstance(selCrit1));
                 this.rete.getChoiceUnit().addInstance(this, instance);

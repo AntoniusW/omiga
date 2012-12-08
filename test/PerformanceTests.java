@@ -47,7 +47,7 @@ public class PerformanceTests {
         for (int i = 0; i < nbb; i++){
             for(int j = 0; j < nbb; j++){
                 Term[] term = {Constant.getConstant(String.valueOf(i)),Constant.getConstant(String.valueOf(j))};
-                aL.add(Instance.getInstance(term));
+                aL.add(Instance.getInstance(term,0));
             }
            
         }

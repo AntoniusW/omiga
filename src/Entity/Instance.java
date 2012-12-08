@@ -6,8 +6,6 @@ package Entity;
 
 import Interfaces.Term;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *
@@ -22,6 +20,8 @@ import java.util.HashSet;
  * @param instances a HashMap of instances in order to not create duplicate instances
  */
 public class Instance implements Serializable {
+    
+    public int propagationLevel;
     
     public static int lol = 0;
     public static int lolra = 0;
@@ -41,9 +41,9 @@ public class Instance implements Serializable {
      * @param terms an array of terms which has to contain only constants or instantiated function terms. This has to be guaranteed by the programmer. Also null values are not valid!
      * @return returns the desired instance based on the terms array
      */
-    public static Instance getInstance(Term[] terms){
+    public static Instance getInstance(Term[] terms, int propagationLevel){
         lol++;
-        return new Instance(terms);
+        return new Instance(terms, propagationLevel);
         /*Instance i = new Instance(terms);
         if(instances.containsKey(i)){
             //System.out.println("Asked for: " + s + " returning: " + instances.get(i)); 
@@ -76,9 +76,10 @@ public class Instance implements Serializable {
      * 
      * @param terms 
      */
-    protected Instance(Term[] terms){
+    protected Instance(Term[] terms, int propagationLevel){
         this.terms = terms;    
         this.hashcode = Term.hashCode(terms);
+        this.propagationLevel = propagationLevel;
     }
     
     /**
@@ -91,7 +92,10 @@ public class Instance implements Serializable {
         return hashcode;
     }
     /**
-     * This method is needed to use Instances in combination with HashMaps/Sets
+     * This method is needed to use Instances in combination with HashMaps/Sets.
+     * Note that the propagationLevel is ignored, since it is important only
+     * for learning, but not whether two instances are equal. Do _not_ compare
+     * propagationLevels (this would break code for checking containment).
      * 
      * @param o The object we want to compare this instance with. Precondition: o must be an instance
      * @return wether the two instances are equal or not

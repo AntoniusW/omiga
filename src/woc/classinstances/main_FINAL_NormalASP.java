@@ -132,6 +132,7 @@ public class main_FINAL_NormalASP {
         
         
         Manager m = new Manager(rewctx);
+        GlobalSettings.getGlobalSettings().setManager(m);
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets,outprint,filter);
 

@@ -90,28 +90,28 @@ public class Birds {
         System.err.println("Starting to create facts!");
         for(int i = 1; i <= nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
-            Instance instance = Instance.getInstance(terms);
+            Instance instance = Instance.getInstance(terms,0);
             //c.addFact2IN(p.getPredicate(), instance);
             rete.addInstancePlus(p.getPredicate(),instance);
         }
         System.err.println("1GESCHAFFT");
         for(int i = 1; i <= nbb/10;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
-            Instance instance = Instance.getInstance(terms);
+            Instance instance = Instance.getInstance(terms,0);
             //c.addFact2IN(p.getPredicate(), instance);
             rete.addInstancePlus(p.getPredicate(),instance);
         }
         System.err.println("2GESCHAFFT");
         for(int i = nbb-(nbb/5); i <= nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
-            Instance instance = Instance.getInstance(terms);
+            Instance instance = Instance.getInstance(terms,0);
             //c.addFact2IN(p.getPredicate(), instance);
             rete.addInstancePlus(p.getPredicate(),instance);
         }
         System.err.println("3GESCHAFFT");
         for(int i = nbb-(nbb/10); i <= nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
-            Instance instance = Instance.getInstance(terms);
+            Instance instance = Instance.getInstance(terms,0);
             //c.addFact2IN(p.getPredicate(), instance);
             rete.addInstancePlus(p.getPredicate(),instance);
         }

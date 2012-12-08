@@ -234,6 +234,7 @@ public class Storage {
             for (HashSet<Instance> hashSet : memory[0].values()) {
                 for (Instance instance : hashSet) {
                     System.out.print(pred_name+Term.prettyPrint(instance.getTerms(),false));
+                    System.out.print("@pL="+instance.propagationLevel+" ");
                     if(instance instanceof TrackingInstance) {
                         System.out.println(" by Rule: "+((TrackingInstance)instance).getCreatedByRule().toString());
                     }

@@ -67,8 +67,8 @@ public class WOCClassInstances {
         int nbb = 1000;
         for(int i = 0; i < nbb; i++){
             Term[] instance = {Constant.getConstant(String.valueOf(i))};
-            rete.addInstancePlus(body1.getPredicate(),Instance.getInstance(instance));
-            rete.addInstancePlus(body2.getPredicate(), Instance.getInstance(instance));
+            rete.addInstancePlus(body1.getPredicate(),Instance.getInstance(instance,0));
+            rete.addInstancePlus(body2.getPredicate(), Instance.getInstance(instance,0));
         }
         
         /*Term[] instance1 = {Constant.getConstant("a")};

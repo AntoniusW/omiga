@@ -5,6 +5,7 @@
 package Datastructure.Rete;
 
 import Entity.Atom;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Rule;
 import Entity.TrackingInstance;
@@ -133,8 +134,12 @@ public class HeadNode extends Node{
         if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 //if the resolved instance is not contained within our rete we add it
-                TrackingInstance inst = new TrackingInstance(instance2Add.getTerms()); // track rule origin
+                TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
+                                                instance2Add.propagationLevel+1); // track rule origin
                 inst.setCreatedByRule(r);
+                inst.setFullInstance(instance);
+                inst.setDecisionLevel(GlobalSettings.getGlobalSettings().
+                        getManager().getContext().getChoiceUnit().getDecisionLevel());
                 rete.addInstancePlus(a.getPredicate(),inst);
                 //System.out.println("HeadNode added: " + this.a + " : " + instance2Add);
                 //System.out.println("HEADNODE ADDING: " + instance2Add + "because this was added: " + instance + " and Atom of head is: " + a);

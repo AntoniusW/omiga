@@ -5,9 +5,7 @@
 package Datastructure.Rewriting;
 
 import Entity.Atom;
-import Entity.ContextASP;
 import Entity.ContextASPMCSRewriting;
-import Entity.ContextASPRewriting;
 import Entity.Instance;
 import Entity.Operator;
 import Entity.Predicate;

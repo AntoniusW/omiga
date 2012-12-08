@@ -30,6 +30,10 @@ public class Manager {
     
     private ContextASP c;
     private int answerSetCount;
+
+    public ContextASP getContext() {
+        return c;
+    }
     
     /**
      * public constructor

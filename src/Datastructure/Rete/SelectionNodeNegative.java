@@ -33,14 +33,14 @@ public class SelectionNodeNegative extends SelectionNode{
         if(closed){
             
             if(instance.getSize() == 0){
-                return !rete.containsInstance(atom, Instance.getInstance(atom.getTerms()), true);
+                return !rete.containsInstance(atom, Instance.getInstance(atom.getTerms(),0), true);
             }
             
             //System.out.println(this + " returning: " + !rete.containsInstance(atom, instance, true) + "when asked for: " + instance + " BECAUSE OF CLOSURE!");
             return !rete.containsInstance(atom, instance, true);
         }else{
             if(instance.getSize() == 0){
-                return this.memory.containsInstance(Instance.getInstance(atom.getTerms()));
+                return this.memory.containsInstance(Instance.getInstance(atom.getTerms(),0));
             }
             //System.out.println(this + " returning: " + this.memory.containsInstance(instance) + "when asked for: " + instance);
             return this.memory.containsInstance(instance);

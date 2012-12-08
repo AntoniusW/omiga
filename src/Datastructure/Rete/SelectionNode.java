@@ -99,7 +99,7 @@ public class SelectionNode extends Node{
         
         if(varOrdering.length == 0){
             // if this node encapsulates a fact atom
-            Instance instance2Add = Instance.getInstance(this.atom.getTerms());
+            Instance instance2Add = Instance.getInstance(this.atom.getTerms(),0);
             this.memory.addInstance(instance2Add);
             super.addInstance(instance2Add, from);
             
@@ -136,7 +136,7 @@ public class SelectionNode extends Node{
         System.err.println("SIZE of varOrderong: "  + varOrdering.length);
         System.err.println("SIZE of varAss: " + varAssignment2Add.length);
         System.err.println("varAssighnment2Add: " + Instance.getInstanceAsString(varAssignment2Add));*/
-        Instance instance2Add = Instance.getInstance(varAssignment2Add);
+        Instance instance2Add = Instance.getInstance(varAssignment2Add, instance.propagationLevel);
         super.addInstance(instance2Add, true); // registering the adding of an instance within the choiceUnit
         //System.err.println(this + " Adding Instance: " + instance2Add);
         this.memory.addInstance(instance2Add);

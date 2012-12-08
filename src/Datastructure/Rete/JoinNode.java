@@ -278,6 +278,8 @@ public class JoinNode extends Node{
         // for each joinpartner we build a variable assignment we then add to this joinnodes memory
         //System.err.println("Join Partners for: " + from + " -:-: " + selectFromHere + "satis: " + rete.satisfiable + " joinpartnerSize: " + joinPartners.size());
         for(Instance varAssignment: joinPartners){
+            int propagationLevel = instance.propagationLevel > varAssignment.propagationLevel ?
+                                    instance.propagationLevel : varAssignment.propagationLevel;
             Term[] toAdd = new Term[this.instanceOrdering.length];
             for(int i = 0; i < this.instanceOrdering.length;i++){
                 if(from){
@@ -294,7 +296,9 @@ public class JoinNode extends Node{
                     }
                 }
             }
-            Instance instance2Add = Instance.getInstance(toAdd);
+            Instance instance2Add = Instance.getInstance(toAdd, propagationLevel);
+            instance2Add.propagationLevel = instance.propagationLevel > varAssignment.propagationLevel ?
+                        instance.propagationLevel : varAssignment.propagationLevel;
             /*System.out.println(this + "Adding " + instance2Add + " because of " + instance + " from " + from);
             System.out.println("Found JoindPartner: " + varAssignment);
             System.out.println(this.tempVarPosition);
@@ -360,7 +364,9 @@ public class JoinNode extends Node{
             //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
             //if(!rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i))){
             //System.out.println("Does rete not contain: " + temp.get(i) + ": " + !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))));
-            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null || sN.containsInstance((Instance.getInstance(selCrit1))) ){
+            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null ||
+               rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null ||
+               sN.containsInstance((Instance.getInstance(selCrit1,0))) ){
 
                 if(!this.memory.containsInstance(temp.get(i))){
                      this.memory.addInstance(temp.get(i));

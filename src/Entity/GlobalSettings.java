@@ -4,6 +4,8 @@
  */
 package Entity;
 
+import Manager.Manager;
+
 /**
  *  Store global settings here
  * @author Antonius
@@ -11,6 +13,17 @@ package Entity;
 public class GlobalSettings {
     
     static GlobalSettings instance = null;
+    
+    private Manager manager;
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+    
     //boolean stringbasedHashCode;
     
     public static GlobalSettings getGlobalSettings() {

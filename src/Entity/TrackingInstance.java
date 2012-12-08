@@ -14,6 +14,25 @@ public class TrackingInstance extends Instance {
 
     private Rule createdByRule;
 
+    public int getDecisionLevel() {
+        return decisionLevel;
+    }
+
+    public void setDecisionLevel(int decisionLevel) {
+        this.decisionLevel = decisionLevel;
+    }
+
+    private Instance fullInstance;
+    private int decisionLevel;
+
+    public Instance getFullInstance() {
+        return fullInstance;
+    }
+
+    public void setFullInstance(Instance fullInstance) {
+        this.fullInstance = fullInstance;
+    }
+
     public Rule getCreatedByRule() {
         return createdByRule;
     }
@@ -22,7 +41,7 @@ public class TrackingInstance extends Instance {
         this.createdByRule = createdByRule;
     }
 
-    public TrackingInstance(Term[] terms) {
-        super(terms);
+    public TrackingInstance(Term[] terms, int propagationLevel) {
+        super(terms, propagationLevel);
     }
 }

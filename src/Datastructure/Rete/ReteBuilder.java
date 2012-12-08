@@ -6,8 +6,6 @@ package Datastructure.Rete;
 
 import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
-import Entity.ContextASP;
-import Entity.Instance;
 import Entity.Operator;
 import Entity.Predicate;
 import Entity.Rule;

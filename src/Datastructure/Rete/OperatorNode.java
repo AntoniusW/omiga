@@ -92,7 +92,7 @@ public class OperatorNode extends Node{
                     instanceArray[this.getVarPositions().get(v)] = v.getValue();
             }
             //System.err.println(Instance.getInstanceAsString(instanceArray));
-            Instance instance2Add = Instance.getInstance(instanceArray);
+            Instance instance2Add = Instance.getInstance(instanceArray,instance.propagationLevel);
             this.memory.addInstance(instance2Add);
             super.addInstance(instance2Add, from); // Register this instance in our backtracking structure.
             for(int i = 0; i < this.children.size();i++){

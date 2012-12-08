@@ -42,7 +42,7 @@ rule_or_fact throws RuleNotSafeException, FactSizeException
 				context.addRule(r);}
 	|	'.' {	// TODO: throw better exception if there is no head, currently throws NullPointerException
 			context.addFact2IN(Predicate.getPredicate($fact.name,$fact.terms.size()),
-				Instance.getInstance($fact.terms.toArray(new Term[$fact.terms.size()])));})
+				Instance.getInstance($fact.terms.toArray(new Term[$fact.terms.size()]),0));})
 	{ //System.out.println("Parsing rule_or_fact No.: "+rule_or_fact_counter++);
 	}
 	;
