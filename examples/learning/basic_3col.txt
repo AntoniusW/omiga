@@ -1,17 +1,8 @@
-p(a).
-p(b).
-r(a,b).
+col(N,b) :- node(N), not col(N,r), not col(N,g).
+col(N,r) :- node(N), not col(N,b), not col(N,g).
+col(N,g) :- node(N), not col(N,r), not col(N,b).
 
-q(X) :- r(X,Y), p(X), p(Y).
-t(X) :- q(X), p(X), q(X).
-
-blue(N) :- node(N), not red(N), not green(N).
-red(N) :- node(N), not blue(N), not green(N).
-green(N) :- node(N), not red(N), not blue(N).
-
-:- link(N1,N2), blue(N1), blue(N2).
-:- link(N1,N2), red(N1), red(N2).
-:- link(N1,N2), green(N1), green(N2).
+:- link(N1,N2), N1 != N2, col(N1,C), col(N2,C).
 
 node(0).
 node(1).

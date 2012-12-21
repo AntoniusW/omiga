@@ -5,14 +5,12 @@
 package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
-import Entity.Atom;
 import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *

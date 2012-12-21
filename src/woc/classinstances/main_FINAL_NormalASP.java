@@ -66,6 +66,10 @@ public class main_FINAL_NormalASP {
             if(args[i].startsWith("-filter=")) {
                 filter = args[i].substring("-filter=".length());
             }
+             if(args[i].startsWith("-version")) {
+                System.out.println("Version: "+GlobalSettings.version);
+                return;
+            }
             if(args[i].startsWith("-answersets=")) {
                 answersets = Integer.parseInt(args[i].substring("-answersets=".length()));
             }
@@ -144,9 +148,10 @@ public class main_FINAL_NormalASP {
     
     private static void help(){
         System.out.println("Usage is:");
-        System.out.println("java -jar omiga.jar <filename> [-answersets=NumAnswerSetsDesired, -filter=predicateNames -rewriting=0-2]"
+        System.out.println("java -jar omiga.jar <filename> [-answersets=NumAnswerSetsDesired, -filter=predicateNames -rewriting=0-2] -version"
                 + "\n\t rewriting: 0=No rewriting, 1=Normal rewriting, 2=Input is already rewritten"
-                + "\n\t filter: a comma-separated list of predicate names to print (no whitespace)\n");
+                + "\n\t filter: a comma-separated list of predicate names to print (no whitespace)"
+                + "\n\t version: print git-version/hash this binary was built with, then exit.\n");
     }
     
 }

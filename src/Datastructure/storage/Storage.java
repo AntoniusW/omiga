@@ -236,6 +236,7 @@ public class Storage {
                     System.out.print(pred_name+Term.prettyPrint(instance.getTerms(),false));
                     System.out.print("@pL="+instance.propagationLevel+" ");
                     if(instance instanceof TrackingInstance) {
+                        System.out.print("DL="+((TrackingInstance)instance).getDecisionLevel()+" ");
                         System.out.println(" by Rule: "+((TrackingInstance)instance).getCreatedByRule().toString());
                     }
                     didPrint = true;

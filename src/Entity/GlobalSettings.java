@@ -7,12 +7,17 @@ package Entity;
 import Manager.Manager;
 
 /**
- *  Store global settings here
+ *  Store global settings (eg, version number) here.
+ * Note: renaming/moving this class requires adaptions to the build script.
  * @author Antonius
  */
 public class GlobalSettings {
     
     static GlobalSettings instance = null;
+    
+    // below string is replaced by build-script automatically,
+    // do not change line breaking
+    public static String version="5d4b297daf6e8b5379d2a3427ac52314f1e8ce07";
     
     private Manager manager;
 

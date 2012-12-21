@@ -15,6 +15,20 @@
     <import file="nbproject/build-antlr-impl.xml"/>
     <target name="-pre-init" depends="-antlr-pre-init"/>
     <target name="-pre-compile" depends="antlr" />
+    
+    <target name="-post-init" description="Get the hash/version-number from git
+    and replace corresponding string at GlobalSettings.java">
+        <exec outputproperty="git.version" executable="git">
+               <arg value="log"/>
+               <arg value="-1"/>
+               <arg value="--pretty=%H"/>
+        </exec>
+        <echo>Git version: ${git.version}</echo>
+        <replaceregexp file="src/Entity/GlobalSettings.java"
+                       match="version=(.*)"
+                       replace='version="${git.version}";' />
+    </target>
+    
     <!--
 
     There exist several targets which are by default empty and which can be 

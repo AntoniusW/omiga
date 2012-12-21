@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
@@ -35,6 +31,8 @@ public abstract class Node {
     protected ArrayList<Node> childrenR;
     protected Rete rete;
     protected HashMap<Variable,Integer> tempVarPosition;
+    
+    protected Node[] parents;   // required for learning (backwards reconstruction of derivations)
     
     public static HashSet<Node> nodes = new HashSet<Node>();
     
