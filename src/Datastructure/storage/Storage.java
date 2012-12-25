@@ -105,7 +105,7 @@ public class Storage {
         }
     }
     
-    
+     
     // Following variables are defined public, since the select method is called very often during calculation
     // Therefore many objects would be created if these variables were defined within the method itself
     // Having them outside and just resetting them is much faster

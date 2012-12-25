@@ -4,12 +4,9 @@
  */
 package Interfaces;
 
-import Entity.FuncTerm;
-import Entity.GlobalSettings;
 import Entity.Variable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *

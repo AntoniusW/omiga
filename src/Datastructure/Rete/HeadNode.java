@@ -10,6 +10,7 @@ import Entity.Instance;
 import Entity.Rule;
 import Entity.TrackingInstance;
 import Entity.Variable;
+import Learning.GraphLearner;
 import java.util.HashMap;
 
 /**
@@ -26,8 +27,8 @@ import java.util.HashMap;
 public class HeadNode extends Node{
     
     protected Atom a;
-    protected int[] instanceOrdering;
-    Node from;
+    //protected int[] instanceOrdering; // AW: unused member?
+    public Node from;
     public Rule r; // tracking the origin of derived instances, set in retebuilder
     
     /**
@@ -72,6 +73,8 @@ public class HeadNode extends Node{
         }
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
+            GraphLearner gl = new GraphLearner();
+            gl.learnRule(r, instance, this);
             rete.satisfiable = false;
             //System.out.println("UNSATISFIABLE!: " + instance + " Rule: " + r);
             //rete.printAnswerSet();
@@ -154,6 +157,8 @@ public class HeadNode extends Node{
                 //System.out.println("HeadNode Of: " + this.from);
                 //rete.printAnswerSet();
                 //System.out.println("UNSATISFIABLE because of HeadNode: " + " instance: " + instance + " Atom: " + a);
+                GraphLearner gl = new GraphLearner();
+                gl.learnRule(r, instance, this);
                 this.rete.satisfiable = false;
             }
         }/*else{

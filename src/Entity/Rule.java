@@ -69,6 +69,15 @@ public class Rule {
         this.bodyMinusVars = new HashSet<Variable>();
     }
     
+    public Rule(Rule copy) {
+        this.bodyMinus = copy.bodyMinus;
+        this.bodyMinusVars = copy.bodyMinusVars;
+        this.bodyPlus = copy.bodyPlus;
+        this.head = copy.head;
+        this.headIsFixedByBodyMinus = copy.headIsFixedByBodyMinus;
+        this.operators = copy.operators;
+    }
+    
     /**
      * This method is only needed when working with the empty constructor.
      * 

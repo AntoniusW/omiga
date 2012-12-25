@@ -4,10 +4,8 @@
  */
 package Entity;
 
-import Enumeration.OP;
 import Interfaces.OperandI;
 import Interfaces.Term;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

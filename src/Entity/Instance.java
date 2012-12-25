@@ -23,8 +23,8 @@ public class Instance implements Serializable {
     
     public int propagationLevel;
     
-    public static int lol = 0;
-    public static int lolra = 0;
+    public static int instance_count = 0;
+    // public static int lolra = 0;
     // private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();
         
     Term[] terms;
@@ -42,7 +42,7 @@ public class Instance implements Serializable {
      * @return returns the desired instance based on the terms array
      */
     public static Instance getInstance(Term[] terms, int propagationLevel){
-        lol++;
+        instance_count++;
         return new Instance(terms, propagationLevel);
         /*Instance i = new Instance(terms);
         if(instances.containsKey(i)){

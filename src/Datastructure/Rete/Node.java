@@ -29,7 +29,7 @@ public abstract class Node {
     public Storage memory;
     protected ArrayList<Node> children;
     protected ArrayList<Node> childrenR;
-    protected Rete rete;
+    public Rete rete;
     protected HashMap<Variable,Integer> tempVarPosition;
     
     protected Node[] parents;   // required for learning (backwards reconstruction of derivations)
@@ -42,6 +42,7 @@ public abstract class Node {
      */
     public HashMap<Variable,Integer> getVarPositions(){
         //TODO remove this method --> Extra treatment for choiceNOdes needed then, but tempVars should not be used anymore!
+        //KEEP removal requires changes to GraphLearner/learning
         return this.tempVarPosition;
     }
     

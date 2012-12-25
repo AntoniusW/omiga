@@ -253,7 +253,7 @@ public class JoinNode extends Node{
                     selCrit2[i] = instance.get( selectionCriterion2[i]);
                 }
             }
-            selectionCriteria = selCrit2;;
+            selectionCriteria = selCrit2;
         }else{
             //the instance came from node b
             selectFromHere = a;

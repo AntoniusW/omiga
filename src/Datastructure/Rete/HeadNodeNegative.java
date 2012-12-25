@@ -5,12 +5,8 @@
 package Datastructure.Rete;
 
 import Entity.Atom;
-import Entity.Constant;
-import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Variable;
-import Interfaces.Term;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

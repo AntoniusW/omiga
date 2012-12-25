@@ -4,11 +4,9 @@
  */
 package Entity;
 
-import Entity.Predicate;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *

@@ -81,7 +81,7 @@ public class WOCClassInstances {
         rete.printAnswerSet(null);
         
         
-        System.out.println("LOL = " + Instance.lol);
+        System.out.println("LOL = " + Instance.instance_count);
         
         
     }

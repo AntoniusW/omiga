@@ -1,5 +1,6 @@
 package Learning;
 
+import Datastructure.Rete.HeadNode;
 import Entity.Atom;
 import Entity.Instance;
 import Entity.Operator;
@@ -29,7 +30,7 @@ public class GroundRule {
      * @param varAssignment
      * @return 
      */
-    public static GroundRule ground(Rule r, Instance varAssignment) {
+    public static GroundRule ground(Rule r, Instance var_assignment, HeadNode node) {
         GroundRule gr = new GroundRule();
         
         for(Atom at : r.getBodyPlus()) {

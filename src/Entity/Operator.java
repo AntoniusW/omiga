@@ -20,8 +20,8 @@ public class Operator implements OperandI{
     
     private static Constant zero = Constant.getConstant("0");
     
-    OperandI left;
-    OperandI right;
+    public OperandI left;
+    public OperandI right;
     OP op;
 
     public Operator(OperandI left, OperandI right, OP op){

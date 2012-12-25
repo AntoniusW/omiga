@@ -118,7 +118,7 @@ public class Birds {
         System.err.println("4GESCHAFFT: Starting to propagate: " + System.currentTimeMillis());
         
         rete.propagate();
-        System.out.println("Instances created = " + Instance.lol);
+        System.out.println("Instances created = " + Instance.instance_count);
         System.out.println("SATISFIABLE: " +rete.satisfiable);;
         System.out.println(System.currentTimeMillis());
         
