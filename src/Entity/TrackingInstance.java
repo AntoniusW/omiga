@@ -4,6 +4,7 @@
  */
 package Entity;
 
+import Datastructure.Rete.HeadNode;
 import Interfaces.Term;
 
 /**
@@ -13,6 +14,15 @@ import Interfaces.Term;
 public class TrackingInstance extends Instance {
 
     private Rule createdByRule;
+    private HeadNode createdByHeadNode;
+
+    public HeadNode getCreatedByHeadNode() {
+        return createdByHeadNode;
+    }
+
+    public void setCreatedByHeadNode(HeadNode createdByHeadNode) {
+        this.createdByHeadNode = createdByHeadNode;
+    }
 
     public int getDecisionLevel() {
         return decisionLevel;

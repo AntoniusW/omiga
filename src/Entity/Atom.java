@@ -43,7 +43,7 @@ public class Atom {
      */
     public static Atom getAtom(String name, int arity, Term[] terms){
         boolean flag;
-        for(Atom a: atoms){
+        for(Atom a: atoms){ // TODO: possible bottleneck, linear search here.
             if(a.getPredicate().getName().equals(name) && a.getPredicate().getArity() == arity && a.getTerms().length == terms.length){
                 flag = true;
                 for(int i = 0; i < a.getTerms().length;i++){

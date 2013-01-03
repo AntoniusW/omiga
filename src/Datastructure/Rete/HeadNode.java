@@ -140,6 +140,7 @@ public class HeadNode extends Node{
                 TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
                                                 instance2Add.propagationLevel+1); // track rule origin
                 inst.setCreatedByRule(r);
+                inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);
                 inst.setDecisionLevel(GlobalSettings.getGlobalSettings().
                         getManager().getContext().getChoiceUnit().getDecisionLevel());

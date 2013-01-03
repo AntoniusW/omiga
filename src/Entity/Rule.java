@@ -69,14 +69,17 @@ public class Rule {
         this.bodyMinusVars = new HashSet<Variable>();
     }
     
-    public Rule(Rule copy) {
-        this.bodyMinus = copy.bodyMinus;
-        this.bodyMinusVars = copy.bodyMinusVars;
-        this.bodyPlus = copy.bodyPlus;
-        this.head = copy.head;
-        this.headIsFixedByBodyMinus = copy.headIsFixedByBodyMinus;
-        this.operators = copy.operators;
-    }
+    /*
+     * Copy constructor, copies lists and sets, but Atoms are not cloned.
+     */
+//    public Rule(Rule copy) {
+//        this.bodyMinus = new ArrayList<Atom>(copy.bodyMinus);
+//        this.bodyMinusVars = new HashSet<Variable>(copy.bodyMinusVars);
+//        this.bodyPlus = new ArrayList<Atom>(copy.bodyPlus);
+//        this.head = Atom.getAtom(copy.head.getName(), copy.head.getArity(), copy.head.getTerms());
+//        this.headIsFixedByBodyMinus = copy.headIsFixedByBodyMinus;
+//        this.operators = new ArrayList<Operator>(copy.operators);
+//    }
     
     /**
      * This method is only needed when working with the empty constructor.
