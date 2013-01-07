@@ -4,15 +4,7 @@
  */
 package Manager;
 
-import Datastructure.DependencyGraph.DGraph;
-import Datastructure.Rete.Rete;
-import Datastructure.choice.ChoiceUnit;
-import Entity.Constant;
 import Entity.ContextASP;
-import Entity.Predicate;
-import Entity.Rule;
-import java.io.FileNotFoundException;
-import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  *
@@ -107,21 +99,9 @@ public class Manager {
                     //c.resetSatisfiable();
                 }else{
                     finished = true;
-                    /*if(this.answerSetCount == 0){
-                        if(c.getChoiceUnit().check4AnswerSet()){
-                            System.out.println("AnswerSet Found! There is only one AnswerSet and that's without apllying any guesses: ");
-                            c.printAnswerSet();
-                            answerSetCount++;
-                        }
-                    }*/
                 }
             }
         }
-        //System.out.println("Found: " + this.answerSetCount + " answersets!");
-        //System.out.println(this.c.getChoiceUnit().getMemory().getNodes());
-        /*System.out.println("HashCode red: " + Constant.getConstant("red"));
-        System.out.println("HashCode green: " + Constant.getConstant("green"));
-        System.out.println("Equals? red = green: " + Constant.getConstant("red").equals(Constant.getConstant("green")));*/
         
         /*DGraph g = new DGraph();
         for(Rule r: c.getAllRules()){

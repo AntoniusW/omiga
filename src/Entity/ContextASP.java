@@ -4,6 +4,8 @@
  */
 package Entity;
 
+import Datastructure.Rete.BasicNode;
+import Datastructure.Rete.BasicNodeNegative;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
 import Datastructure.choice.ChoiceUnit;
@@ -11,6 +13,7 @@ import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import network.ReplyMessage;
 
 /**
@@ -209,6 +212,19 @@ public class ContextASP {
     public void backtrack(){
         this.resetSatisfiable();
         this.choiceUnit.backtrack3();
+        
+        printAnswerSet(null);
+        
+        // we might have learned some new rule, start its basic propagation
+        for (Map.Entry<Predicate, BasicNode> basicEntry : rete.getBasicLayerPlus().entrySet()) {
+            basicEntry.getValue().propagateAfterLearning();
+        }
+        for (Map.Entry<Predicate, BasicNodeNegative> basicEntry : rete.getBasicLayerMinus().entrySet()) {
+            basicEntry.getValue().propagateAfterLearning();
+        }
+        
+        printAnswerSet(null);
+        
     }
     
     public void backtrackTo(int decisionlevel){

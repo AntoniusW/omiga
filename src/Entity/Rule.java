@@ -281,5 +281,9 @@ public class Rule {
     public boolean isHeadFixed(){
         return this.headIsFixedByBodyMinus;
     }
+    
+    public void setOperators(ArrayList<Operator> operators) {
+        this.operators = operators;
+    }
 
 }

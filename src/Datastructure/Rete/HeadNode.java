@@ -74,7 +74,7 @@ public class HeadNode extends Node{
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
             GraphLearner gl = new GraphLearner();
-            gl.learnRule(r, instance, this);
+            gl.learnRuleAndAddToRete(r, instance, this);
             rete.satisfiable = false;
             //System.out.println("UNSATISFIABLE!: " + instance + " Rule: " + r);
             //rete.printAnswerSet();
@@ -159,7 +159,7 @@ public class HeadNode extends Node{
                 //rete.printAnswerSet();
                 //System.out.println("UNSATISFIABLE because of HeadNode: " + " instance: " + instance + " Atom: " + a);
                 GraphLearner gl = new GraphLearner();
-                gl.learnRule(r, instance, this);
+                gl.learnRuleAndAddToRete(r, instance, this);
                 this.rete.satisfiable = false;
             }
         }/*else{

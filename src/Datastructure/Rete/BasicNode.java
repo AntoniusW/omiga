@@ -30,6 +30,8 @@ public class BasicNode extends Node{
     protected Stack<Instance> toPropagate;
     protected Predicate pred;
     
+    protected ArrayList<SelectionNode> newChildrenAfterLearning;
+    
     /**
      * 
      * public constructor. Creates a new BasicNode with initialized data structures.
@@ -40,10 +42,11 @@ public class BasicNode extends Node{
      */
     public BasicNode(int arity, Rete rete, Predicate pred){
         super(rete);
-        this.memory = new Storage(arity);
-        this.basicChildren = new ArrayList<SelectionNode>();
-        this.toPropagate = new Stack<Instance>();
+        memory = new Storage(arity);
+        basicChildren = new ArrayList<SelectionNode>();
+        toPropagate = new Stack<Instance>();
         this.pred = pred;
+        newChildrenAfterLearning = new ArrayList<SelectionNode>();
         //this.rete.getChoiceUnit().addNode(this);
     }
     
@@ -81,6 +84,38 @@ public class BasicNode extends Node{
             }*/
         }
         return ret;
+    }
+      
+    /**
+     * Propagates whole memory to its new children.
+     */
+    public void propagateAfterLearning() {
+        // push every instance to all new nodes
+        for (Node node : newChildrenAfterLearning) {
+            for (Instance inst : memory.getAllInstances()) {
+                node.addInstance(inst, true);
+            }
+        }
+        
+        // reset list of new children
+        newChildrenAfterLearning = new ArrayList<SelectionNode>();
+    }
+    
+
+    /**
+     * Behaves like AddAtom, but also marks newly created SelectionNodes for
+     * propagation after learning.
+     * @param atom 
+     */
+     public void AddAtomFromLearning(Atom atom) {
+         SelectionNode sel;
+        if (this.getChildNode(atom.getAtomAsReteKey()) == null) {
+            sel = new SelectionNode(atom.getAtomAsReteKey(), this.rete);
+            this.basicChildren.add(sel);
+        } else {
+            sel = getChildNode(atom.getAtomAsReteKey());
+        }
+        newChildrenAfterLearning.add(sel);
     }
     
     /**

@@ -4,7 +4,6 @@
  */
 package Datastructure.storage;
 
-import Entity.Constant;
 import Entity.Instance;
 import Entity.TrackingInstance;
 import Entity.Variable;

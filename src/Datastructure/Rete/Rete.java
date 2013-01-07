@@ -224,7 +224,7 @@ public class Rete {
      *        is null, all predicates are printed
      */
     public void printAnswerSet(String filter){
-        boolean onlyPrintIN = true;
+        boolean onlyPrintIN = false; // TODO: for testing set to false
         boolean densePrint = false; //true;
         boolean filtering = filter==null? false : true;
         //System.out.println("Printing Answerset: ");
