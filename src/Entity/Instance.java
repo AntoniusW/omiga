@@ -67,7 +67,11 @@ public class Instance implements Serializable {
      * @return the term a position i of this instance
      */
     public Term get(int i){
+        try {
         return terms[i];
+        } catch (ArrayIndexOutOfBoundsException e){
+            return null;
+        }
     }
     
     /**

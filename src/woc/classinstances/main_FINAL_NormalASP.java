@@ -144,6 +144,7 @@ public class main_FINAL_NormalASP {
         System.out.println("Time needed for parsing: "+(parsing_time/1000.0f));
         System.out.println("Time needed overall: " + (1.0F*(System.currentTimeMillis()-start)/1000));
         System.out.println("Time needed for calculation: " +(1.0F*(System.currentTimeMillis()-beforeCalc)/1000));
+        System.out.println("Total decisions done: "+GlobalSettings.decisionCounter);
     }
     
     private static void help(){

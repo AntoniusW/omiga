@@ -5,6 +5,7 @@
 package Entity;
 
 import Enumeration.OP;
+import Exceptions.LearningException;
 import Interfaces.OperandI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +41,24 @@ public class Operator implements OperandI{
     
     public OP getOP(){
         return op;
+    }
+    
+    public void changeEqualityToAssign() {
+        // this should only be called during learning
+        if( op == OP.EQUAL && left instanceof Variable) {
+            op = OP.ASSIGN;
+        } else {
+            throw new LearningException("Learning Bug: trying to change equality to assignment on invalid rule.");
+        }
+    }
+    
+    public void changeAssignToEquality() {
+        // should only be called during learning
+        if (op == OP.ASSIGN) {
+            op = OP.EQUAL;
+        } else {
+            throw new LearningException("Learning Bug: trying to change assignment to equality on invalid rule.");
+        }
     }
     
    private int punktrechnung = 0;

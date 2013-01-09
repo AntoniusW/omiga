@@ -6,11 +6,7 @@ package Entity;
 
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
-import Datastructure.choice.ChoiceUnit;
-import Datastructure.choice.ChoiceUnitMCS;
 import Datastructure.choice.ChoiceUnitRewrite;
-import Exceptions.FactSizeException;
-import Exceptions.RuleNotSafeException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import network.ReplyMessage;

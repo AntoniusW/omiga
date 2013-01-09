@@ -4,28 +4,17 @@
  */
 package Datastructure.choice;
 
-import Datastructure.DependencyGraph.DGraph;
 import Datastructure.Rete.ChoiceNode;
-import Datastructure.Rete.HeadNode;
-import Datastructure.Rete.HeadNodeConstraint;
-import Datastructure.Rete.Node;
 import Datastructure.Rete.Unifyer;
 import Entity.Atom;
-import Entity.Constant;
 import Entity.ContextASP;
-import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Predicate;
-import Entity.Rule;
-import Entity.Variable;
-import Exceptions.FactSizeException;
-import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 import network.ReplyMessage;
-import org.jgrapht.graph.DirectedSubgraph;
 
 
 /**
@@ -142,6 +131,9 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             this.stackybool.push(false);
             this.stackyNode.push(nextNode);
             this.stackyInstance.push(nextInstance);
+            
+            System.out.println("Choice point: non-fire "+nextNode.getRule()+" "+toAdd);
+            
             //We set nextNode=null. So the next guess will be a positive one if no backtracking is apllied in between
             nextNode = null;
             
@@ -168,6 +160,9 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 this.stackybool.push(true); 
                 this.stackyInstance.push(inz); 
                 //c.printAnswerSet(null);
+                
+                System.out.println("Choice point: fire "+cN.getRule()+" "+inz);
+                
                 return true;
             }
         }

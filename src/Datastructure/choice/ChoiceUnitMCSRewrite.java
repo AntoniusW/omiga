@@ -6,27 +6,17 @@ package Datastructure.choice;
 
 import Datastructure.DependencyGraph.DGraph;
 import Datastructure.Rete.ChoiceNode;
-import Datastructure.Rete.HeadNode;
-import Datastructure.Rete.HeadNodeConstraint;
-import Datastructure.Rete.Node;
 import Datastructure.Rete.Unifyer;
 import Entity.Atom;
-import Entity.Constant;
-import Entity.ContextASP;
 import Entity.ContextASPMCSRewriting;
-import Entity.FuncTerm;
 import Entity.Instance;
 import Entity.Predicate;
 import Entity.Rule;
-import Entity.Variable;
-import Exceptions.FactSizeException;
-import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 import network.Pair;
-import org.jgrapht.graph.DirectedSubgraph;
 
 
 /**

@@ -69,6 +69,7 @@ public class ContextASP {
     }
     
     public boolean choice(){
+        GlobalSettings.decisionCounter++;   // for statistics, count total decisions done.
         return this.choiceUnit.choice();
     }
     
@@ -212,19 +213,7 @@ public class ContextASP {
     public void backtrack(){
         this.resetSatisfiable();
         this.choiceUnit.backtrack3();
-        
-        printAnswerSet(null);
-        
-        // we might have learned some new rule, start its basic propagation
-        for (Map.Entry<Predicate, BasicNode> basicEntry : rete.getBasicLayerPlus().entrySet()) {
-            basicEntry.getValue().propagateAfterLearning();
-        }
-        for (Map.Entry<Predicate, BasicNodeNegative> basicEntry : rete.getBasicLayerMinus().entrySet()) {
-            basicEntry.getValue().propagateAfterLearning();
-        }
-        
-        printAnswerSet(null);
-        
+             
     }
     
     public void backtrackTo(int decisionlevel){

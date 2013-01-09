@@ -6,6 +6,7 @@ package Datastructure.Rete;
 
 import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Operator;
 import Entity.Predicate;
@@ -15,6 +16,7 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Stack;
 
@@ -72,6 +74,22 @@ public class Rete {
      */
     public void propagate(){
         //System.out.println("RETE: PROPAGATION!");
+
+        if( GlobalSettings.didLearn ) {
+            GlobalSettings.didLearn = false;
+        System.out.println("Propagation before learning:");
+        printAnswerSet(null);
+        // we might have learned some new rule, start its basic propagation first
+        for (Map.Entry<Predicate, BasicNode> basicEntry : getBasicLayerPlus().entrySet()) {
+            basicEntry.getValue().propagateAfterLearning();
+        }
+        for (Map.Entry<Predicate, BasicNodeNegative> basicEntry : getBasicLayerMinus().entrySet()) {
+            basicEntry.getValue().propagateAfterLearning();
+        }
+        System.out.println("Propagation after learning:");
+        printAnswerSet(null);
+        }
+
         boolean flag = true;
         while(flag && satisfiable){
             flag = false;
@@ -225,7 +243,7 @@ public class Rete {
      */
     public void printAnswerSet(String filter){
         boolean onlyPrintIN = false; // TODO: for testing set to false
-        boolean densePrint = false; //true;
+        boolean densePrint = true; //true;
         boolean filtering = filter==null? false : true;
         //System.out.println("Printing Answerset: ");
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");

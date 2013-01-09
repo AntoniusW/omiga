@@ -7,6 +7,7 @@ import Datastructure.Rete.ReteBuilder;
 import Entity.Atom;
 import Entity.Constant;
 import Entity.FuncTerm;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Operator;
 import Entity.Rule;
@@ -19,6 +20,7 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Reconstructs a partial implication graph from a given rule and variable
@@ -45,45 +47,81 @@ public class GraphLearner {
         newrule = traceBody(r, var_assignment, rete, starting, new HashMap<Variable, Variable>());
 
         removeUnusedVars(newrule);
-        System.out.println("Learned rule:\n\t"+newrule.toString());
+        System.out.println("Learned rule:\n\t" + newrule.toString());
 
         // assume we learned a constraint
         if (true) { // TODO: check if we learned a constraint
             // remove one atom from rule body and put its negation as head
-            for (int i = 0; i < newrule.getBodyPlus().size() +
-                    newrule.getBodyMinus().size(); i++) {
+            for (int i = 0; i < newrule.getBodyPlus().size()
+                    + newrule.getBodyMinus().size(); i++) {
 
                 // copy body lists for modification
                 @SuppressWarnings("unchecked")
                 ArrayList<Atom> atomsPlus = (ArrayList<Atom>) newrule.getBodyPlus().clone();
                 @SuppressWarnings("unchecked")
                 ArrayList<Atom> atomsMinus = (ArrayList<Atom>) newrule.getBodyMinus().clone();
-                
+
                 Atom head;
                 boolean isHeadPositive;
-                if( i < newrule.getBodyPlus().size() ) {
+                if (i < newrule.getBodyPlus().size()) {
                     // remove positive body atom and use as head
                     head = atomsPlus.get(i);
                     atomsPlus.remove(i);
                     isHeadPositive = false;
                 } else {
                     // remove negative body atom and use as head
-                    
+
                     // TODO: requires a MUST-BE-TRUE, since the head would be
                     // positive. Code removed for the time being.
                     continue;
                     /*
-                    head = atomsMinus.get(i-newrule.getBodyPlus().size());
-                    atomsMinus.remove(i-newrule.getBodyPlus().size());
-                    isHeadPositive = true;
-                    */
+                     head = atomsMinus.get(i-newrule.getBodyPlus().size());
+                     atomsMinus.remove(i-newrule.getBodyPlus().size());
+                     isHeadPositive = true;
+                     */
                 }
 
-                Rule ruleFromConstraint = new Rule(head, atomsPlus, atomsMinus, newrule.getOperators()) ;
-                rB.addPropagationOnlyRule(ruleFromConstraint, isHeadPositive);
-            }        
+                Rule ruleFromConstraint = new Rule(head, atomsPlus, atomsMinus, newrule.getOperators());
+
+                // TODO: variable equalities must be resolved here
+                // the following code is just a quick workaround
+
+                // some equality X=c might require to be changed to assignment X is c
+                // and vice versa
+                HashSet<Variable> bound_vars = boundVars(ruleFromConstraint);
+                HashSet<Variable> head_vars = new HashSet<Variable>();
+                findVariables(head, head_vars);
+
+                // create variable mapping for replacement
+                HashMap<Variable, Term> var_replace = new HashMap<Variable, Term>();
+
+                // if body contains X=c and X only occurs in head, replace X by c
+                for (Variable var : head_vars) {
+                    if (!bound_vars.contains(var)) {
+                        boolean foundEquality = false;
+                        for (Iterator<Operator> opIt = ruleFromConstraint.getOperators().iterator(); opIt.hasNext();) {
+                            Operator op = opIt.next();
+                            if (op.getOP() == OP.EQUAL && op.left == var) {
+                                var_replace.put(var, (Term) op.right);
+                                opIt.remove();
+                                foundEquality = true;
+                            }
+                        }
+                        if (!foundEquality) {
+                            throw new LearningException("Failed to find an equality for unbound variable " + var + " in rule " + ruleFromConstraint);
+                        }
+                    }
+                }
+
+                Atom replaced_head = replaceVariable(ruleFromConstraint.getHead(), var_replace);
+                Rule final_rule = new Rule(replaced_head, ruleFromConstraint.getBodyPlus(), ruleFromConstraint.getBodyMinus(), ruleFromConstraint.getOperators());
+
+                System.out.println("Adding to Rete: " + final_rule.toString());
+                rB.addPropagationOnlyRule(final_rule, isHeadPositive);
+                GlobalSettings.didLearn = true;
+            }
         }
-        current.getVarPositions();
+        //current.getVarPositions();
 
         //stop_criterion_met = true;
 
@@ -128,14 +166,20 @@ public class GraphLearner {
                         getBasicLayerPlus().get(at.getPredicate()).
                         getMemory().select(selectionCriterion).iterator().next();
             } else {
+                // instance only exists if the node is not closed
+                if( !rete.getBasicLayerMinus().get(at.getPredicate()).isClosed() ) {
                 at_inst = (Instance) rete.
                         getBasicLayerMinus().get(at.getPredicate()).
                         getMemory().select(selectionCriterion).iterator().next();
+                } else {
+                    // node is closed, stop tracing
+                    learnedrule.addAtomMinus(at);
+                    continue;
+                }
             }
 
 
-            if (at_inst instanceof TrackingInstance //&& ((TrackingInstance) at_inst).getDecisionLevel() == rete.getChoiceUnit().getDecisionLevel()
-                    ) {
+            if (at_inst instanceof TrackingInstance && ((TrackingInstance) at_inst).getDecisionLevel() == rete.getChoiceUnit().getDecisionLevel()) {
                 // instance was derived by a rule at same DL, trace subrule
                 TrackingInstance tr_inst = (TrackingInstance) at_inst;
                 Rule subrule = tr_inst.getCreatedByRule(); // copy subrule
@@ -306,35 +350,40 @@ public class GraphLearner {
 
     }
 
+    private HashSet<Variable> boundVars(Rule r) {
+        HashSet<Variable> vars = new HashSet<Variable>();
+        for (Atom at : r.getBodyPlus()) {
+            findVariables(at, vars);
+        }
+        for (Atom at : r.getBodyMinus()) {
+            findVariables(at, vars);
+        }
+        // also add variables from assignment operators
+        for (Operator op : r.getOperators()) {
+            if (op.getOP() == OP.ASSIGN) {
+                vars.add((Variable) op.left);
+            }
+        }
+        return vars;
+    }
+
     /*
      * Searches operators for unneeded equalities where an otherwise unused
      * variable is made equal to something else.
      */
     private void removeUnusedVars(Rule newrule) {
-        HashSet<Variable> needed_vars = new HashSet<Variable>();
-        for (Atom at : newrule.getBodyPlus()) {
-            findVariables(at,needed_vars);
-        }
-        for (Atom at : newrule.getBodyMinus()) {
-            findVariables(at, needed_vars);
-        }
-        // also add variables from assignment operators
-        for (Operator op : newrule.getOperators()) {
-            if( op.getOP() == OP.ASSIGN) {
-                needed_vars.add((Variable)op.left);
-            }
-        }
-        
+        HashSet<Variable> needed_vars = boundVars(newrule);
+
         ArrayList<Operator> reducedops = new ArrayList<Operator>();
         for (Operator op : newrule.getOperators()) {
             // only remove operators like X = c
-            if(op.getOP() == OP.EQUAL && op.left instanceof Variable && !(op.right instanceof Variable)) {
-                Variable var = (Variable)op.left;
+            if (op.getOP() == OP.EQUAL && op.left instanceof Variable && !(op.right instanceof Variable)) {
+                Variable var = (Variable) op.left;
                 // keep operator if variable also occurs somewhere else
-                if( needed_vars.contains(var)) {
+                if (needed_vars.contains(var)) {
                     reducedops.add(op);
                 }
-                    // otherwise ignore/remove operator and variable
+                // otherwise ignore/remove operator and variable
             } else {
                 // keep all other operators
                 reducedops.add(op);
@@ -343,23 +392,48 @@ public class GraphLearner {
         newrule.setOperators(reducedops);
     }
 
-    /*
+    /**
      * Collects all variables used in the Atom and adds them to the HashSet.
      */
     private void findVariables(Atom at, HashSet<Variable> needed_vars) {
         for (int i = 0; i < at.getTerms().length; i++) {
             Term term = at.getTerms()[i];
-            if( term instanceof Constant) {
+            if (term instanceof Constant) {
                 // do nothing
             } else if (term instanceof FuncTerm) {
-                FuncTerm ft = (FuncTerm)term;
+                FuncTerm ft = (FuncTerm) term;
                 needed_vars.addAll(ft.getUsedVariables());
             } else if (term instanceof Variable) {
-                if (!needed_vars.contains((Variable)term)) {
-                    needed_vars.add((Variable)term);
+                if (!needed_vars.contains((Variable) term)) {
+                    needed_vars.add((Variable) term);
                 }
             }
         }
     }
-    
- }
+
+    /**
+     * Replaces the variables in an Atom by Terms, if a mapping is given.
+     *
+     * @param head the Atom where Variables have to be replaced.
+     * @param var_replace the replacement-mapping of Variables to Terms.
+     * @return a new Atom with variables replaced.
+     */
+    private Atom replaceVariable(Atom head, HashMap<Variable, Term> var_replace) {
+        Term[] t = head.getTerms();
+        Term[] newterm = new Term[t.length];
+        for (int i = 0; i < t.length; i++) {
+            Term term = t[i];
+            if (term instanceof Variable) {
+                Variable var = (Variable) term;
+                if (var_replace.containsKey(var)) {
+                    newterm[i] = var_replace.get(var);
+                } else {
+                    newterm[i] = t[i];
+                }
+            } else {
+                newterm[i] = t[i];
+            }
+        }
+        return Atom.getAtom(head.getName(), head.getArity(), newterm);
+    }
+}

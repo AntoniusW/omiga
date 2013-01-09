@@ -4,15 +4,9 @@
  */
 package Datastructure.choice;
 
-import Datastructure.Rete.BasicNode;
-import Datastructure.Rete.ChoiceNode;
 import Datastructure.Rete.Node;
-import Datastructure.Rete.Rete;
 import Entity.Instance;
-import Entity.Predicate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import network.Pair;
 

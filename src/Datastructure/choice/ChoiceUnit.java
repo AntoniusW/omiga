@@ -293,6 +293,7 @@ public class ChoiceUnit {
      * backtrack one decisionlevel and bring memory back to state before last guess
      */
     public void backtrack(){
+        System.out.println("Backtracking.");
         
         //System.err.println(this.stackybool.size() + " vs: " + this.memory.getDecisonLevel());
         //System.out.println("BACKTRACKING!");

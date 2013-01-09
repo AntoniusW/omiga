@@ -13,11 +13,15 @@ import Manager.Manager;
  */
 public class GlobalSettings {
     
+    public static int decisionCounter = 0;
+    
+    public static boolean didLearn = false;
+    
     static GlobalSettings instance = null;
     
     // below string is replaced by build-script automatically,
     // do not change line breaking
-    public static String version="7cfa7055a8396136cd57203a2a785530b2b33d6e";
+    public static String version="3bcafdcb4ad6300fec1933b4863c1291c6b6c96f";
     
     private Manager manager;
 

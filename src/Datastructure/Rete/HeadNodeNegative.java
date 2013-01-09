@@ -5,7 +5,9 @@
 package Datastructure.Rete;
 
 import Entity.Atom;
+import Entity.GlobalSettings;
 import Entity.Instance;
+import Entity.TrackingInstance;
 import Entity.Variable;
 import java.util.HashMap;
 
@@ -51,11 +53,21 @@ public class HeadNodeNegative extends HeadNode{
         
         if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
-                rete.addInstanceMinus(a.getPredicate(),instance2Add);
+    
+                TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
+                        instance2Add.propagationLevel + 1); // track rule origin
+                inst.setCreatedByRule(r);
+                inst.setCreatedByHeadNode(this);
+                inst.setFullInstance(instance);
+                inst.setDecisionLevel(GlobalSettings.getGlobalSettings().
+                        getManager().getContext().getChoiceUnit().getDecisionLevel());
+                rete.addInstanceMinus(a.getPredicate(), inst);
+
+                //rete.addInstanceMinus(a.getPredicate(),instance2Add);
                 //System.out.println("HeadNodeNegative adds: " + instance2Add + " because of: " + instance);
             }
         }else{
-            System.out.println("HeadNodeNegative kills Sat!");
+            System.out.println("HeadNodeNegative kills interpretation: "+r+" "+instance2Add);
             this.rete.satisfiable = false;
         }
     }
