@@ -117,7 +117,7 @@ public class GraphLearner {
                 Rule final_rule = new Rule(replaced_head, ruleFromConstraint.getBodyPlus(), ruleFromConstraint.getBodyMinus(), ruleFromConstraint.getOperators());
 
                 System.out.println("Adding to Rete: " + final_rule.toString());
-                rB.addPropagationOnlyRule(final_rule, isHeadPositive);
+//                rB.addPropagationOnlyRule(final_rule, isHeadPositive);
                 GlobalSettings.didLearn = true;
             }
         }
@@ -237,9 +237,15 @@ public class GraphLearner {
     private Rule traceBody(Rule r, Instance varAssignment, Rete rete, Node lastJoin, HashMap<Variable, Variable> newvar_to_oldvar) {
         Rule learnedrule = new Rule();
 
-        traceBodyPlusMinus(true, r, varAssignment, rete, lastJoin, newvar_to_oldvar, learnedrule);
+        Instance fullInstance;
+        if (varAssignment instanceof TrackingInstance) { 
+            fullInstance = ((TrackingInstance)varAssignment).getFullInstance();
+        } else {
+            fullInstance = varAssignment;
+        }
+        traceBodyPlusMinus(true, r, fullInstance, rete, lastJoin, newvar_to_oldvar, learnedrule);
 
-        traceBodyPlusMinus(false, r, varAssignment, rete, lastJoin, newvar_to_oldvar, learnedrule);
+        traceBodyPlusMinus(false, r, fullInstance, rete, lastJoin, newvar_to_oldvar, learnedrule);
 
         for (Operator op : r.getOperators()) {
             learnedrule.addOperator(op);

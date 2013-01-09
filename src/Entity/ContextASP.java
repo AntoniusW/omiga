@@ -27,6 +27,20 @@ import network.ReplyMessage;
  */
 public class ContextASP {
     
+        
+    protected ArrayList<Rule> negRules;
+
+    public ArrayList<Rule> getNegRules() {
+        return negRules;
+    }
+    
+        
+    public void addNegRule(Rule r){
+        this.negRules.add(r);
+        //reteBuilder.addNegRule(r);
+        reteBuilder.addRuleNeg(r);
+    }
+    
     protected static int nextID = 0;
     
     protected static int getNextID(){
@@ -55,6 +69,7 @@ public class ContextASP {
         this.rete = new Rete(choiceUnit);
         this.reteBuilder = new ReteBuilder(rete);
         this.id=getNextID();
+        negRules = new ArrayList<Rule>();
     }
     
     public int getID(){

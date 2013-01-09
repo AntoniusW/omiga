@@ -150,5 +150,9 @@ public class FuncTerm extends Term implements Serializable {
         }
         return true;
     }
-    
+
+    @Override
+    public int getIntValue() {
+        throw new UnsupportedOperationException("getIntValue called on FuncTerm, this should not happen."); // TODO: adapt interface to avoid this
+    }
 }

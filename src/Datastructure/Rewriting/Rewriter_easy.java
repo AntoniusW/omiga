@@ -211,6 +211,10 @@ public class Rewriter_easy {
                 ret.addFact2OUT(p, inz);
             }
         }
+        // keep all rules with negative heads
+        for (Rule negrule : c.getNegRules()) {
+            ret.addNegRule(negrule);
+        }
         
         return ret;
     }

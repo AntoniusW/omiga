@@ -33,13 +33,14 @@ woc_program throws RuleNotSafeException, FactSizeException
 	;
 
 rule_or_fact throws RuleNotSafeException, FactSizeException
-@init{ boolean hasHead = false; }
-	:	(fact{hasHead=true;})?
+@init{ boolean hasHead = false;  boolean negativeHead = false;}
+	:	(('-'{negativeHead=true;})? fact{hasHead=true;})?
 		(':-' {Rule r = new Rule();} body[r] '.' {if(hasHead ) {
 				Term[] termarr=(Term[])$fact.terms.toArray(new Term[$fact.terms.size()]);
 				Atom head=Atom.getAtom($fact.name,$fact.terms.size(),termarr);
 				r.setHead(head); }
-				context.addRule(r);}
+                                                                        if( negativeHead ) { context.addNegRule(r);}
+				else {context.addRule(r);}}
 	|	'.' {	// TODO: throw better exception if there is no head, currently throws NullPointerException
 			context.addFact2IN(Predicate.getPredicate($fact.name,$fact.terms.size()),
 				Instance.getInstance($fact.terms.toArray(new Term[$fact.terms.size()]),0));})
@@ -83,8 +84,7 @@ mult_expression returns[OperandI op]
 	;
 	
 primary_expression returns[OperandI op]
-	:	INT {$op=Constant.getConstant($INT.text);}
-	|	VAR {$op=Variable.getVariable($VAR.text);}
+	:	 term {$op=$term.term;}
 	|	'(' expression ')' {$op=$expression.op;}
 	;
 	

@@ -22,7 +22,7 @@ import java.util.HashMap;
  * 
  * 
  */
-public abstract class Term {
+public abstract class Term  implements OperandI {
     
     
     private static HashMap<Term,Term> terms = new HashMap<Term,Term>();

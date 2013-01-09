@@ -21,8 +21,7 @@ import network.ReplyMessage;
  * 
  */
 public class ContextASPRewriting extends ContextASP{
-    
-    protected ArrayList<Rule> negRules;
+
     
     /**
      * public constructor
@@ -37,15 +36,9 @@ public class ContextASPRewriting extends ContextASP{
         this.rete = new Rete(choiceUnit);
         this.reteBuilder = new ReteBuilder(rete);
         this.id=getNextID();
-        negRules = new ArrayList<Rule>();
+        
     }
-    
-    public void addNegRule(Rule r){
-        this.negRules.add(r);
-        //reteBuilder.addNegRule(r);
-        reteBuilder.addRuleNeg(r);
-    }
-    
+
     
     /**
      * prints all rules and facts of this context to standard out
@@ -79,5 +72,5 @@ public class ContextASPRewriting extends ContextASP{
         return this.choiceUnit.choicePlusInfo();
     }
     
-    
+      
 }
