@@ -55,7 +55,7 @@ public class Unifyer {
                 }
             }  
         }
-        Instance ret = Instance.getInstance(retTerms,variableAssignment.propagationLevel);
+        Instance ret = Instance.getInstance(retTerms,variableAssignment.propagationLevel,variableAssignment.decisionLevel);
         return ret;
     }
     

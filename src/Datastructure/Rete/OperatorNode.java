@@ -9,7 +9,6 @@ import Entity.Constant;
 import Entity.Instance;
 import Entity.Operator;
 import Entity.Variable;
-import Enumeration.OP;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +20,7 @@ import java.util.HashMap;
 public class OperatorNode extends Node{
     
     private Operator op; // note that this can only be equals, notequals, bigger or smaller if allSet is true, and only PLUS or MINUS if allSet is false
-    //private boolean allSet;
-    //Variable badOne = null;
+
     
     public OperatorNode(Rete rete, Operator op, Node from){
         super(rete);
@@ -33,45 +31,21 @@ public class OperatorNode extends Node{
             // There is one Variable that has to be calculated by the Operator therefore we add one further Variable into this VarPositions
             this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
             this.tempVarPosition.put((Variable)op.getLeft(), tempVarPosition.size());
-            this.memory = new Storage(tempVarPosition.size()+1);
+            memory.initStorage(tempVarPosition.size()+1);
+            //this.memory = new Storage(tempVarPosition.size()+1);
         }else{
             // All Variables of the Operator are set
             this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
-            this.memory = new Storage(tempVarPosition.size());
+            memory.initStorage(tempVarPosition.size());
+            //this.memory = new Storage(tempVarPosition.size());
             //System.err.println("OMGraraga: " + op +" - "+ tempVarPosition + " - from: " + from);
         }
-        
-        /*allSet = true;
-        for(Variable v: op.getUsedVariables()){
-            //System.out.println("v= " + v);
-            if(!from.getVarPositions().containsKey(v)){
-                //System.out.println("NOT CONTAINED!: " + from.getVarPositions());
-                allSet = false;
-                badOne = v;
-                break;
-            }
-        }
-        if(allSet){
-            // All Variables of the Operator are set
-            this.tempVarPosition = from.getVarPositions();
-            this.memory = new Storage(tempVarPosition.size());
-            // We do not have to do anything. just check when adding an Instance that the Operator has toi be fullfilled
-        }else{
-            // There is one Variable that has to be calculated by the Operator therefore we add one further Variable into this VarPositions
-            this.tempVarPosition = (HashMap<Variable, Integer>) from.getVarPositions().clone();
-            this.tempVarPosition.put(badOne, tempVarPosition.size());
-            this.memory = new Storage(tempVarPosition.size());
-        }*/
         
     }
     
     @Override
-    public void addInstance(Instance instance, boolean from){
+    public void addInstance(Instance instance){
         
-        /*System.err.println("AddInstance in OPNode called!: " + instance);
-        System.err.println("OP= " + op);
-        System.err.println("TempVar= " + this.tempVarPosition);*/
-        //System.out.println("AllSet = " + allSet);
         
         if(op.getOP().equals(Enumeration.OP.ASSIGN)){
             ArrayList<Variable> temp = op.getUsedVariables();
@@ -92,86 +66,42 @@ public class OperatorNode extends Node{
                     instanceArray[this.getVarPositions().get(v)] = v.getValue();
             }
             //System.err.println(Instance.getInstanceAsString(instanceArray));
-            Instance instance2Add = Instance.getInstance(instanceArray,instance.propagationLevel);
-            this.memory.addInstance(instance2Add);
-            super.addInstance(instance2Add, from); // Register this instance in our backtracking structure.
-            for(int i = 0; i < this.children.size();i++){
+            Instance instance2Add = Instance.getInstance(instanceArray,instance.propagationLevel,instance.decisionLevel);
+            memory.addInstance(instance2Add);
+            //super.addInstance(instance2Add); // Register this instance in our backtracking structure.
+            for (Node child : children) {
+                sendInstanceToChild(instance2Add, child);
+            }
+            /*for(int i = 0; i < this.children.size();i++){
                 this.children.get(i).addInstance(instance2Add, false);
             }
             for(int i = 0; i < this.childrenR.size();i++){
                 this.childrenR.get(i).addInstance(instance2Add, true);
-            }
+            }*/
         }else{
             for(Variable v: op.getUsedVariables()){
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
-                /*System.err.println(this.op);
-                System.err.println(this.getVarPositions());
-                System.err.println(v + " - " + this.getVarPositions().get(v));*/
                 v.setValue(instance.get(this.getVarPositions().get(v)));
             }
             if(op.getIntValue() == 1){
                 // The instance fullfills the operator
-                this.memory.addInstance(instance);
-                super.addInstance(instance, from); // Register this instance in our backtracking structure.
-                for(int i = 0; i < this.children.size();i++){
+                memory.addInstance(instance);
+                //super.addInstance(instance); // Register this instance in our backtracking structure.
+                for (Node child : children) {
+                    sendInstanceToChild(instance, child);
+                }
+                /*for(int i = 0; i < this.children.size();i++){
                     this.children.get(i).addInstance(instance, false);
                 }
                 for(int i = 0; i < this.childrenR.size();i++){
                     this.childrenR.get(i).addInstance(instance, true);
-                }
+                }*/
             }else{
                 //else we do not add the instance
                 //System.out.println("Operatorcheck not passed!");
             }
         }
             
-        
-        /*if(this.allSet){
-            for(Variable v: op.getUsedVariables()){
-                //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
-                v.setValue(instance.get(this.getVarPositions().get(v)));
-            }
-            if(op.getIntValue(null) == 1){
-                // The instance fullfills the operator
-                this.memory.addInstance(instance);
-                super.addInstance(instance, from); // Register this instance in our backtracking structure.
-                for(int i = 0; i < this.children.size();i++){
-                    this.children.get(i).addInstance(instance, false);
-                }
-                for(int i = 0; i < this.childrenR.size();i++){
-                    this.childrenR.get(i).addInstance(instance, true);
-                }
-            }else{
-                //else we do not add the instance
-                //System.out.println("Operatorcheck not passed!");
-            }
-            
-        }else{
-            //TODO
-            ArrayList<Variable> temp = op.getUsedVariables();
-            temp.remove(this.badOne);
-            for(Variable v: temp){
-                //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
-                v.setValue(instance.get(this.getVarPositions().get(v)));
-            }
-            badOne.setValue(Constant.getConstant(String.valueOf(op.calculate(badOne))));
-            Term instanceArray[] = new Term[this.tempVarPosition.size()];
-            for(Variable v: this.getVarPositions().keySet()){
-                instanceArray[this.getVarPositions().get(v)] = v.getValue();
-            }
-            Instance instance2Add = Instance.getInstance(instanceArray);
-            this.memory.addInstance(instance);
-                super.addInstance(instance2Add, from); // Register this instance in our backtracking structure.
-                for(int i = 0; i < this.children.size();i++){
-                    this.children.get(i).addInstance(instance2Add, false);
-                }
-                for(int i = 0; i < this.childrenR.size();i++){
-                    this.childrenR.get(i).addInstance(instance2Add, true);
-                }
-        }*/
-        
-        
-        //this.memory.addInstance(instance);
     }
     
 }

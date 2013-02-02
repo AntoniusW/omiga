@@ -71,11 +71,11 @@ public class BasicNodeNegative extends BasicNode{
                     // If it is not a jonnode it is an Operator Node or an ReductionNode (These nodes are planned for optimisation/nicer handling but not implemented yet!)
                 }
             }*/
-            for(int i = 0; i < sN.getChildrenR().size();i++){
-                if(sN.getChildrenR().get(i).getClass().equals(JoinNodeNegative.class)){
-                    JoinNode jn = (JoinNode)sN.getChildrenR().get(i);
+            for(int i = 0; i < sN.getChildren().size();i++){
+                if(sN.getChildren().get(i).getClass().equals(JoinNodeNegative.class)){
+                    JoinNodeNegative jn = (JoinNodeNegative)sN.getChildren().get(i);
                     //System.err.println("Closed --> Inform JoinNode right: " + jn);
-                    jn.informOfClosure(sN,true);
+                    jn.informOfClosure(sN);
                 }else{
                 //cant be a headnode since only negative nodes are closed, which must result in a joinNode. If it results in a headnode the rule would not be save
                     // If it is not a jonnode it is an Operator Node or an ReductionNode (These nodes are planned for optimisation/nicer handling but not implemented yet!)
@@ -143,11 +143,8 @@ public class BasicNodeNegative extends BasicNode{
             Instance ins = toPropagate.pop();
             for(SelectionNode sN: basicChildren){
                 //System.out.println("Adding: " + ins + " to: " + sN);
-                sN.addInstance(ins, true);
+                sendInstanceToChild(ins, sN);
             }
-            /*for(int i = 0; i < basicChildren.size();i++){
-                basicChildren.get(i).addInstance(ins, true);
-            }*/
         }
         return ret;
     }

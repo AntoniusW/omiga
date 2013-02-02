@@ -4,6 +4,7 @@ import Datastructure.Rete.HeadNode;
 import Datastructure.Rete.Node;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
+import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
 import Entity.Constant;
 import Entity.FuncTerm;
@@ -32,8 +33,12 @@ public class GraphLearner {
 
     private static int varcount = 1;
     private static String renamed_var_prefix = "lVar:";
-
-    public Rule learnRuleAndAddToRete(Rule r, Instance var_assignment, HeadNode starting) throws LearningException {
+    
+    // repository of already learned rules to detect duplicates.
+    private static ArrayList<Rule> learnedRules = new ArrayList<Rule>();
+    
+    public void learnRuleAndAddToRete(Rule r, Instance var_assignment, HeadNode starting) throws LearningException {
+    if( true) return;
         Rule newrule;// = new Rule();
         Node current = starting;
         Node lastJoin = starting.from;
@@ -46,8 +51,8 @@ public class GraphLearner {
 
         newrule = traceBody(r, var_assignment, rete, starting, new HashMap<Variable, Variable>());
 
-        removeUnusedVars(newrule);
-        System.out.println("Learned rule:\n\t" + newrule.toString());
+        removeUnusedEquality(newrule);
+        System.out.println("Learned rule body:\n\t" + newrule.toString());
 
         // assume we learned a constraint
         if (true) { // TODO: check if we learned a constraint
@@ -79,6 +84,12 @@ public class GraphLearner {
                      atomsMinus.remove(i-newrule.getBodyPlus().size());
                      isHeadPositive = true;
                      */
+                }
+
+                // if learned head is from 0-th SCC, skip the rule
+                ChoiceUnit cu = GlobalSettings.getGlobalSettings().getManager().getContext().getChoiceUnit();
+                if (cu.getPredicateSCC(head.getPredicate()) < cu.getCurrentSCC()) {
+                    continue;
                 }
 
                 Rule ruleFromConstraint = new Rule(head, atomsPlus, atomsMinus, newrule.getOperators());
@@ -115,8 +126,15 @@ public class GraphLearner {
 
                 Atom replaced_head = replaceVariable(ruleFromConstraint.getHead(), var_replace);
                 Rule final_rule = new Rule(replaced_head, ruleFromConstraint.getBodyPlus(), ruleFromConstraint.getBodyMinus(), ruleFromConstraint.getOperators());
+                
+                // skip rule, if it was learned already
+                if( ruleIsDuplicate(final_rule) ) {
+                    continue;
+                }
 
                 System.out.println("Adding to Rete: " + final_rule.toString());
+                learnedRules.add(final_rule);
+                rB.addRuleNeg(final_rule);
 //                rB.addPropagationOnlyRule(final_rule, isHeadPositive);
                 GlobalSettings.didLearn = true;
             }
@@ -127,7 +145,7 @@ public class GraphLearner {
 
         //}
 
-        return newrule;
+        //return newrule;
     }
 
     private void traceBodyPlusMinus(boolean isPlus, Rule r, Instance varAssignment,
@@ -167,10 +185,10 @@ public class GraphLearner {
                         getMemory().select(selectionCriterion).iterator().next();
             } else {
                 // instance only exists if the node is not closed
-                if( !rete.getBasicLayerMinus().get(at.getPredicate()).isClosed() ) {
-                at_inst = (Instance) rete.
-                        getBasicLayerMinus().get(at.getPredicate()).
-                        getMemory().select(selectionCriterion).iterator().next();
+                if (!rete.getBasicLayerMinus().get(at.getPredicate()).isClosed()) {
+                    at_inst = (Instance) rete.
+                            getBasicLayerMinus().get(at.getPredicate()).
+                            getMemory().select(selectionCriterion).iterator().next();
                 } else {
                     // node is closed, stop tracing
                     learnedrule.addAtomMinus(at);
@@ -179,7 +197,7 @@ public class GraphLearner {
             }
 
 
-            if (at_inst instanceof TrackingInstance && ((TrackingInstance) at_inst).getDecisionLevel() == rete.getChoiceUnit().getDecisionLevel()) {
+            if (at_inst instanceof TrackingInstance && ((TrackingInstance) at_inst).decisionLevel == rete.getChoiceUnit().getDecisionLevel()) {
                 // instance was derived by a rule at same DL, trace subrule
                 TrackingInstance tr_inst = (TrackingInstance) at_inst;
                 Rule subrule = tr_inst.getCreatedByRule(); // copy subrule
@@ -238,8 +256,8 @@ public class GraphLearner {
         Rule learnedrule = new Rule();
 
         Instance fullInstance;
-        if (varAssignment instanceof TrackingInstance) { 
-            fullInstance = ((TrackingInstance)varAssignment).getFullInstance();
+        if (varAssignment instanceof TrackingInstance) {
+            fullInstance = ((TrackingInstance) varAssignment).getFullInstance();
         } else {
             fullInstance = varAssignment;
         }
@@ -373,28 +391,33 @@ public class GraphLearner {
         return vars;
     }
 
-    /*
-     * Searches operators for unneeded equalities where an otherwise unused
-     * variable is made equal to something else.
+    /**
+     * Searches operators for unneeded equalities.
      */
-    private void removeUnusedVars(Rule newrule) {
+    private void removeUnusedEquality(Rule newrule) {
         HashSet<Variable> needed_vars = boundVars(newrule);
 
-        ArrayList<Operator> reducedops = new ArrayList<Operator>();
-        for (Operator op : newrule.getOperators()) {
-            // only remove operators like X = c
-            if (op.getOP() == OP.EQUAL && op.left instanceof Variable && !(op.right instanceof Variable)) {
-                Variable var = (Variable) op.left;
-                // keep operator if variable also occurs somewhere else
-                if (needed_vars.contains(var)) {
-                    reducedops.add(op);
+        ArrayList<Operator> reducedops = new ArrayList<Operator>(newrule.getOperators());
+        for (Iterator<Operator> it = reducedops.iterator(); it.hasNext();) {
+            Operator op = it.next();
+
+            // remove equality operators only
+            if (op.getOP() == OP.EQUAL) {
+                // case X = c
+                if (op.left instanceof Variable && !(op.right instanceof Variable)) {
+                    Variable var = (Variable) op.left;
+                    // remove operator if variable occurs nowhere else
+                    if (!needed_vars.contains(var)) {
+                        it.remove();
+                    }
                 }
-                // otherwise ignore/remove operator and variable
-            } else {
-                // keep all other operators
-                reducedops.add(op);
+                // case r = r or X = X
+                if (op.left == op.right) {
+                    it.remove();
+                }
             }
         }
+        // use reduced operators for the rule
         newrule.setOperators(reducedops);
     }
 
@@ -441,5 +464,19 @@ public class GraphLearner {
             }
         }
         return Atom.getAtom(head.getName(), head.getArity(), newterm);
+    }
+
+    /**
+     * Very simple duplicate check, based on toString() comparison.
+     * @param final_rule
+     * @return 
+     */
+    private boolean ruleIsDuplicate(Rule final_rule) {
+        for (Rule rule : learnedRules) {
+            if( final_rule.toString().equals(rule.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

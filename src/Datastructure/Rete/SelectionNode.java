@@ -30,20 +30,13 @@ import java.util.HashSet;
 public class SelectionNode extends Node{
     
     protected Atom atom;
-    //boolean neg = true; // TODO: Remove neg when it works
-    
-    /*public void setNeg(){
-        this.neg = false;
-    }*/
+
     
     public Atom getAtom(){
         return atom;
     }
     
-    
-    /*public SelectionNode(Rete rete){
-        super(rete);
-    }*/
+
     /**
      * 
      * public constructor. Creates a new SelectionNode with initialized data structures.
@@ -68,15 +61,10 @@ public class SelectionNode extends Node{
         }
         varOrdering = new Variable[vars.size()];
         vars.toArray(varOrdering);
-        //System.err.println("VAR ORDERING: " + this);
-        /*for(Variable v: varOrdering){
-            System.err.println(v);
-        }*/
         
         // memory is initialized with the size of the var ordering (as we only need to save variableassignments
-        memory = new Storage(atom.getArity());
-        //System.err.println("SelectionNode Created!: " + atom + " memory: " + this.memory);
-        //this.rete.getChoiceUnit().addNode(this);
+        memory.initStorage(atom.getArity());
+        //memory = new Storage(atom.getArity());
     }
     
     /**
@@ -94,20 +82,17 @@ public class SelectionNode extends Node{
      * @param from not used, only needed for extending SelectionNode
      */
     @Override
-    public void addInstance(Instance instance, boolean from){
+    public void addInstance(Instance instance){
         //System.err.println("Trying to add instance: " + instance);
         
         if(varOrdering.length == 0){
             // if this node encapsulates a fact atom
-            Instance instance2Add = Instance.getInstance(this.atom.getTerms(),0);
-            this.memory.addInstance(instance2Add);
-            super.addInstance(instance2Add, from);
+            Instance instance2Add = Instance.getInstance(this.atom.getTerms(),0,instance.decisionLevel);
+            memory.addInstance(instance2Add);
+            //super.addInstance(instance2Add);
             
-            for(int i = 0; i < this.children.size();i++){
-                children.get(i).addInstance(instance2Add, false);
-            }
-            for(int i = 0; i < this.childrenR.size();i++){
-                childrenR.get(i).addInstance(instance2Add, true);
+            for (Node child : children) {
+                sendInstanceToChild(instance2Add, child);
             }
             
             return;
@@ -132,28 +117,16 @@ public class SelectionNode extends Node{
             // we create our variable assignment by taking all the values of the variables of our varOrdering.
             varAssignment2Add[i] = varOrdering[i].getValue();
         }
-        /*System.err.println("I am: " + this);
-        System.err.println("SIZE of varOrderong: "  + varOrdering.length);
-        System.err.println("SIZE of varAss: " + varAssignment2Add.length);
-        System.err.println("varAssighnment2Add: " + Instance.getInstanceAsString(varAssignment2Add));*/
-        Instance instance2Add = Instance.getInstance(varAssignment2Add, instance.propagationLevel);
-        super.addInstance(instance2Add, true); // registering the adding of an instance within the choiceUnit
-        //System.err.println(this + " Adding Instance: " + instance2Add);
-        this.memory.addInstance(instance2Add);
+
+        Instance instance2Add = Instance.getInstance(varAssignment2Add, instance.propagationLevel,instance.decisionLevel);
+        //super.addInstance(instance2Add); // registering the adding of an instance within the choiceUnit
+        
+        memory.addInstance(instance2Add);
         
         // we transfer the inserted varAssignment to all childnodes
-        /*for(Node n: this.children){
-            n.addInstance(instance2Add,false);
-        }
-        for(Node n: this.childrenR){
-            n.addInstance(instance2Add,true);
-        }*/
-        
-        for(int i = 0; i < this.children.size();i++){
-            children.get(i).addInstance(instance2Add, false);
-        }
-        for(int i = 0; i < this.childrenR.size();i++){
-            childrenR.get(i).addInstance(instance2Add, true);
+
+        for (Node child : children) {
+            sendInstanceToChild(instance2Add, child);
         }
         
         

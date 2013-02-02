@@ -37,7 +37,7 @@ public class HeadNodeConstraint extends Node{
      */
     public HeadNodeConstraint(Rete rete, int arity){
         super(rete); // HeadNodeConstraints are saved within the DecisionMemory of the choiceUnit!
-        this.memory = new Storage(arity);
+        memory.initStorage(arity);
         //this.rete.getChoiceUnit().addNode(this);
     }
     
@@ -58,16 +58,13 @@ public class HeadNodeConstraint extends Node{
     public void saveConstraintInstance(Instance instance){
         // we call super because super only handles the istance storage in the choice layer.
         // so we can use it althaugh this is not the addFunction in common sense
-        super.addInstance(instance, true);
-        this.memory.addInstance(instance);
+//        super.addInstance(instance, true);
+//        this.memory.addInstance(instance);
+//        super.addInstance(instance);
         //System.out.println("The constraintNode removes an instance: " + this + " becasue of: " + instance);
         this.cN.removeInstance(instance); // we remove the corresponding instance from the choice node, since this instance shall not be true, and therefore should never be guessed
     }
     
-    /*public void removeInstance(Instance inz){
-        System.out.println("TRying to remove: " + inz + " from memory of size: " + this.memory.arity);
-        this.memory.removeInstance(inz);
-    }/*/
     
     /**
      * 
@@ -77,15 +74,7 @@ public class HeadNodeConstraint extends Node{
      * @param instance 
      */
     @Override
-    public void addInstance(Instance instance, boolean from){
-        /*Term[] selectionCriteria = new Term[instance.getSize()];
-            for(int j = 0; j < instance.getSize();j++){
-                selectionCriteria[j] = Variable.getVariable("X");
-            }
-            System.out.println("Instanzen der HeadConstraint Node!: " + this.memory.select(selectionCriteria).size());
-            for(Instance inz: this.memory.select(selectionCriteria)){
-                System.out.println("Instance: " + inz);
-            }*/
+    public void addInstance(Instance instance){
             
             
         if(this.memory.containsInstance(instance)){

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
-import network.Pair;
+import Entity.Pair;
 
 
 /**

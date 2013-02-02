@@ -4,11 +4,13 @@
  */
 package Datastructure.choice;
 
+import Datastructure.Rete.ChoiceNode;
 import Datastructure.Rete.Node;
 import Entity.Instance;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import network.Pair;
+import Entity.Pair;
+import java.util.HashMap;
 
 /**
  *
@@ -96,14 +98,16 @@ public class DecisionMemory {
     }
     
     /**
-     * Adds an instance to the decisionMemory, at the actual level
+     * Adds an instance to the decisionMemory, at the decision level of the
+     * given instance.
      * 
      * @param n the node the instance belongs to
-     * @param instance the instance you want to add
+     * @param instance the instance to add
      */
     public void addInstance(Node n, Instance instance){
+        decisionLayer.get(instance.decisionLevel).add(new Pair<Node, Instance>(n,instance));
         //if(this.decisionLevel < 1) return;  // TODO AW out-commented this, as it leads to ignoring all facts, was there another reason for this?
-       this.decisionLayer.get(decisionLevel).add(new Pair<Node, Instance>(n,instance));
+// previous code      this.decisionLayer.get(decisionLevel).add(new Pair<Node, Instance>(n,instance));
         // this.decisionLayer.get(this.decisionLevel).get(n).add(instance);
     }
     
@@ -111,18 +115,24 @@ public class DecisionMemory {
      * decreases the decisionlevel by one, deletes all the instances from the nodes and removes the memory for that decisionlevel.
      */
     public void backtrack(){
-        //System.out.println("STARTING BACKTRACKING!");
-        for(Pair<Node,Instance> pa: this.decisionLayer.get(decisionLevel)){
-            pa.getArg1().simpleRemoveInstance(pa.getArg2());
+        Node n;
+        for (Node node : Node.nodes) {
+            node.backtrackTo(decisionLevel-1);
         }
+
+        // TODO remove/change code below
+        //System.out.println("STARTING BACKTRACKING!");
+//        for(Pair<Node,Instance> pa: this.decisionLayer.get(decisionLevel)){
+//            pa.getArg1().simpleRemoveInstance(pa.getArg2());
+//        }
         /*for(Node n: this.decisionLayer.get(this.decisionLevel).keySet()){
             for(Instance inz: this.decisionLayer.get(this.decisionLevel).get(n)){
                 //System.out.println("Trying to remove: " + inz + " from: " + n);
                 n.simpleRemoveInstance(inz);
             }
         }*/
-        this.decisionLayer.remove(this.decisionLevel);
-        this.decisionLevel--;
+//        this.decisionLayer.remove(this.decisionLevel);
+        decisionLevel--;
         //System.out.println("FINISHED BACKTRACKING!");
     }
     
@@ -131,19 +141,46 @@ public class DecisionMemory {
      * @param i the decisionlevel you want to backtrack.
      */
     public void backtrackTo(int i){
-        while(this.decisionLevel > i) backtrack();
+        for (Node node : Node.nodes) {
+            node.backtrackTo(i);
+        }
+        decisionLevel = i-1;    // choice adds 1 to decisionLevel at first
+//        while(this.decisionLevel > i) backtrack();
     }
     
     /**
      * prints the DecisionMemory to standard Out sorted by decisionlevel then Node, writing each Instance into one row.
      */
     public void printDecisionMemory(){
-        for(int i = 0; i < this.decisionLayer.size();i++){
-            System.out.println("DECISION LVL: " + i);
-            for(Pair<Node,Instance> pa: this.decisionLayer.get(decisionLevel)){
-                System.out.println(pa);
-            }
+        if( true ) {    // debug only
+            return;
         }
+        for (int i = 0; i <= decisionLevel; i++) {
+            System.out.println("DecisionLevel: "+i);
+            for (Node node : Node.nodes) {
+                if( node instanceof ChoiceNode ) {
+                    System.out.println("  Node "+node.toString());
+                    System.out.print("    ");
+                    ((ChoiceNode)node).printChoiceNodeInstances();
+                    continue;
+                }
+                if( node.getMemory().getBacktrackInstances() == null) {
+                    continue;
+                }
+                ArrayList<Instance> instances_in_dl = node.getMemory().getBacktrackInstances().get(i);
+                if( instances_in_dl != null && !instances_in_dl.isEmpty()) {
+                    System.out.println("  Node "+node.toString());
+                    System.out.print("    ");
+                    for (Instance instance : instances_in_dl) {
+                        System.out.print(instance.toString());
+                        System.out.print(" ");
+                    }
+                    System.out.println();
+                }
+            }
+            
+        }
+        System.out.println("DecisionLevels end.");
     }
     
     /**
@@ -160,9 +197,63 @@ public class DecisionMemory {
      * @return A HashMap of Predicates with corrsponding instances
      */
     public ArrayList<LinkedList<Pair<Node,Instance>>> deriveNewFactsSindsDecisionLevel(){
+        // search all nodes for instances in new decision
         
         return this.decisionLayer;
         
     }
     
+    /**
+     * Debug helper to find missing entries in the decision memory.
+     * @return 
+     */
+    public boolean debug_isEveryInstanceCovered() {
+        if( true) { // debug: disable method
+            return true;
+        }
+        // collect all instances of all nodes
+        ArrayList<Pair<Node,Instance>> all_instances = new ArrayList<Pair<Node, Instance>>();
+        for (Node node : Node.nodes) {
+            if( node.getMemory() == null || node instanceof ChoiceNode) {
+                continue;
+            }
+            for (Instance inst : node.getMemory().getAllInstances()) {
+                all_instances.add(new Pair<Node, Instance>(node, inst));
+            }
+        }
+        
+        // check that every one is covered in the decisionLayer
+        for (Pair<Node, Instance> inst : all_instances) {
+            // skip facts
+            if( inst.getArg2().decisionLevel == 0) {
+                continue;
+            }
+            boolean covered = false;
+            int decLevelCounter = -1;
+            for (LinkedList<Pair<Node, Instance>> dL : decisionLayer) {
+                decLevelCounter++;
+                for (Pair<Node, Instance> dec_pair : dL) {
+                    if( dec_pair.getArg1() == inst.getArg1() && dec_pair.getArg2() == inst.getArg2()) {
+                        covered = true;
+                        // check if decision levels mismatch
+                        if( decLevelCounter != inst.getArg2().decisionLevel ) {
+                            continue;
+                        }
+                    }
+                }
+            }
+            if ( !covered ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Sets decisionLevel.
+     * @param decisionLevel 
+     */
+    public void setDecisionLevel(int decisionLevel) {
+        this.decisionLevel = decisionLevel;
+    }
 }

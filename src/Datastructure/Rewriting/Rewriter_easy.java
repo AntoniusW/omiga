@@ -4,6 +4,7 @@
  */
 package Datastructure.Rewriting;
 
+import Datastructure.Rete.Node;
 import Entity.Atom;
 import Entity.ContextASP;
 import Entity.ContextASPRewriting;
@@ -49,6 +50,9 @@ public class Rewriter_easy {
     public ContextASPRewriting rewrite(ContextASP c) throws RuleNotSafeException, FactSizeException{
         int counter = 0;
         ContextASPRewriting ret = new ContextASPRewriting();
+        
+        // reset global nodes container
+        Node.nodes = new HashSet<Node>();
         
         
         HashMap<Predicate,ArrayList<Rule>> sorted = new HashMap<Predicate,ArrayList<Rule>>();

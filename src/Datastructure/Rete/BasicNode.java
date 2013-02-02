@@ -6,6 +6,7 @@ package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
 import Entity.Atom;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Predicate;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class BasicNode extends Node{
     protected Stack<Instance> toPropagate;
     protected Predicate pred;
     
-    protected ArrayList<SelectionNode> newChildrenAfterLearning;
+    
     
     /**
      * 
@@ -42,11 +43,10 @@ public class BasicNode extends Node{
      */
     public BasicNode(int arity, Rete rete, Predicate pred){
         super(rete);
-        memory = new Storage(arity);
+        memory.initStorage(arity);
         basicChildren = new ArrayList<SelectionNode>();
         toPropagate = new Stack<Instance>();
         this.pred = pred;
-        newChildrenAfterLearning = new ArrayList<SelectionNode>();
         //this.rete.getChoiceUnit().addNode(this);
     }
     
@@ -58,10 +58,8 @@ public class BasicNode extends Node{
      * @param instance The instance you want to add
      */
     public void addInstance(Instance instance){
-        super.addInstance(instance, true);
-        //System.err.println("BASICNODE: Adding Instace: " + instance + " to " + this);
         memory.addInstance(instance);
-        this.toPropagate.add(instance); 
+        toPropagate.push(instance);
     }
     
     /**
@@ -77,7 +75,7 @@ public class BasicNode extends Node{
             Instance ins = toPropagate.pop();
             //System.err.println("BasicNode Sending: " + ins);
             for(SelectionNode sN: basicChildren){
-                sN.addInstance(ins, true);
+                sendInstanceToChild(ins, sN);
             }
             /*for(int i = 0; i < basicChildren.size();i++){
                 basicChildren.get(i).addInstance(ins, true);
@@ -86,38 +84,10 @@ public class BasicNode extends Node{
         return ret;
     }
       
-    /**
-     * Propagates whole memory to its new children.
-     */
-    public void propagateAfterLearning() {
-        // push every instance to all new nodes
-        for (Node node : newChildrenAfterLearning) {
-            for (Instance inst : memory.getAllInstances()) {
-                node.addInstance(inst, true);
-            }
-        }
-        
-        // reset list of new children
-        newChildrenAfterLearning = new ArrayList<SelectionNode>();
-    }
+
     
 
-    /**
-     * Behaves like AddAtom, but also marks newly created SelectionNodes for
-     * propagation after learning.
-     * @param atom 
-     */
-     public void AddAtomFromLearning(Atom atom) {
-         SelectionNode sel;
-        if (this.getChildNode(atom.getAtomAsReteKey()) == null) {
-            sel = new SelectionNode(atom.getAtomAsReteKey(), this.rete);
-            this.basicChildren.add(sel);
-        } else {
-            sel = getChildNode(atom.getAtomAsReteKey());
-        }
-        newChildrenAfterLearning.add(sel);
-    }
-    
+   
     /**
      * 
      * this registers an Atom to this basicNode. The basicNode creates a selectionNode for that atom and adds it to it's children
@@ -186,8 +156,10 @@ public class BasicNode extends Node{
      */
     @Override
     public void addChild(Node n){
-        //TODO: Check if this method is ever used 
-        if (!this.basicChildren.contains((SelectionNode)n)) this.basicChildren.add((SelectionNode)n);
+        if (!basicChildren.contains((SelectionNode)n)) {
+            basicChildren.add((SelectionNode)n);
+            ReteModificationHelper.getReteModificationHelper().recordNewChild(this, n);
+        }
     }
     
     /**

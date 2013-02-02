@@ -39,87 +39,6 @@ public class Manager {
         answerSetCount = 0;
     }
     
-    /**
-     * calculates all answersets of the given ASP-Context, by first applieng propagation, and then
-     * guessing til no more guessing can be done, (while after each guess propagation is
-     * done til no more facts can be propagated). When unsatisfiability is reached or
-     * no more guesses can be done, the calculation backtracks to the last choice,
-     * and guesses the other way. (If it already was the other way, we backtrack once more).
-     * If we cannot backtrakc anymore the calculation is finished.
-     */
-    public void calculate(){
-        System.out.println("Standard calc called --> WRONG!");
-        boolean finished = false;
-        c.propagate();
-        //System.err.println("First Propagation finsihed: " + System.currentTimeMillis());
-        c.getChoiceUnit().DeriveSCC();
-        if(!c.getChoiceUnit().killSoloSCC()){
-            //System.err.println("Killed all SCC: " + System.currentTimeMillis());
-            //We killed all SCC --> This context is guessfree
-            if(c.isSatisfiable()){
-                c.printAnswerSet(null);
-                System.out.println("GuessFree Context found 1 AnswerSet");
-            }else{
-                System.out.println("GuessFree Context UNSATISFIABLE!");
-            }
-            return;
-        }
-        //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
-        //c.printAnswerSet();
-        while(!finished){
-            if(c.choice()){
-                //System.out.println("choice Reurned true");
-                //System.out.println("StartPropagation: " + System.currentTimeMillis());
-                c.propagate();
-                //c.printAnswerSet();
-                if(!c.isSatisfiable()){
-                    //System.out.println("UNSAT why?");
-                    c.backtrack();
-                }
-                 //System.out.println("RESAT?? " + c.isSatisfiable());
-                 //System.out.println("Next Choice!");
-            }else{
-                //System.out.println("Chocie returned false");
-                // No more chocies can be made
-                
-                if(c.getChoiceUnit().getDecisionLevel() > 0){
-                    if(c.isSatisfiable()){
-                        if(c.getChoiceUnit().check4AnswerSet()){
-                            // We have found an answerset, print it!
-                            //System.out.println("ANSWERSET FOUND!");
-                            //c.printAnswerSet();
-                            answerSetCount++;
-                            //break;
-                        }else{
-                            // constraint Violation detected: No answerSet!
-                            //System.out.println("CONSTRAINT VIOLATION!");
-                        }
-                    }
-                    c.backtrack();
-                    //c.resetSatisfiable();
-                }else{
-                    finished = true;
-                }
-            }
-        }
-        
-        /*DGraph g = new DGraph();
-        for(Rule r: c.getAllRules()){
-            g.addRule(r);
-        }
-        //g.gd.addEdge(Predicate.getPredicate("p",2), Predicate.getPredicate("s",1));
-        int i = 0;
-        for(DirectedSubgraph gsg: g.getSCCs()){
-            i++;
-            System.out.println("SCC: " + i);
-            System.out.println(gsg.vertexSet());
-        }
-        
-        System.out.println(g.gd.getAllEdges(Predicate.getPredicate("q", 1), Predicate.getPredicate("s",1)));*/
-        
-    }
-    
-    
     public void calculate(Integer answersets, boolean output, String filter){
         boolean finished = false;
         c.propagate();
@@ -140,11 +59,14 @@ public class Manager {
         //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
         while(!finished){
+//getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
             //System.out.println("Doing while!");
             if(c.choice()){
                 //System.out.println("choice was done!");
                 //System.out.println("Found a choice. Now propagate");
+//getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
                 c.propagate();
+//            getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
                 //System.out.println("After propagation. Interpretation is:");
                 //c.printAnswerSet(null);
                 if(!c.isSatisfiable()){

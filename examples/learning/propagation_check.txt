@@ -1,0 +1,25 @@
+p(1,X) :- p(0,X).
+p(2,X) :- p(1,X).
+
+p(0,a) :- q(a,X).
+p(0,b) :- q(a,X).
+
+%% Falsch: GuessFree Context found 1 AnswerSet
+q(a,3) :- not q(b,3).
+q(b,3) :- not q(a,3).
+
+%% IndexOutOfBoundsException in rule1_q.containsInstance
+%q(a,3) :- dom(3), not q(b,3).
+%q(b,3) :- dom(3), not q(a,3).
+
+%% Falsch: liefert 0 answer sets
+%q(a,3) :- dom(X), not q(b,3).
+%q(b,3) :- dom(X), not q(a,3).
+
+
+%% funktioniert
+%q(a,X) :- dom(X), not q(b,X).
+%q(b,X) :- dom(X), not q(a,X).
+
+
+dom(3).

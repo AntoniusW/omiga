@@ -2,6 +2,7 @@ package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
 import Entity.Atom;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 
 /**
  *
- * @author Gerald Weidinger 0526105
+ * @author Gerald Weidinger, Antonius Weinzierl
  * 
  * Abstract Class Node, is the father class of all other nodes of which the rete network is built.
  * 
@@ -28,11 +29,8 @@ public abstract class Node {
     protected Variable[] varOrdering;
     public Storage memory;
     protected ArrayList<Node> children;
-    protected ArrayList<Node> childrenR;
     public Rete rete;
     protected HashMap<Variable,Integer> tempVarPosition;
-    
-    protected Node[] parents;   // required for learning (backwards reconstruction of derivations)
     
     public static HashSet<Node> nodes = new HashSet<Node>();
     
@@ -65,24 +63,8 @@ public abstract class Node {
                 }
             }
         }
-        //System.err.println(this + ": varPositions: " + tempVarPosition);
     }
     
-    //TODO: Remove not used? Now in Atom?!
-    /*public HashMap<Variable,Integer> getVarPosition(Atom atom){
-        HashMap<Variable,Integer> ret = new HashMap<Variable,Integer>();
-        Term[] terms = atom.getTerms();
-        for(int i = 0; i < terms.length;i++){
-            Term t = terms[i];
-            for(int j = 0;j < t.getUsedVariables().size();j++){
-                Variable v = t.getUsedVariables().get(j);
-                if(!ret.containsKey(v)){
-                    ret.put(v, ret.size());
-                }
-            }
-        }
-        return ret;
-    }*/
     
     /**
      * 
@@ -95,10 +77,10 @@ public abstract class Node {
     public Node(Rete rete){
         this.rete = rete;
         this.children = new ArrayList<Node>();
-        this.childrenR = new ArrayList<Node>();
         tempVarPosition = new HashMap<Variable,Integer>();
         this.rete.getChoiceUnit().addNode(this);
         nodes.add(this);
+        memory = new Storage();
     }
     
     /**
@@ -191,17 +173,10 @@ public abstract class Node {
      * 
      * @return the children of this node
      */
-    public ArrayList<Node> getChildren(){
-        return this.children;
+    protected ArrayList<Node> getChildren(){
+        return children;
     }
-    /**
-     * 
-     * @return the childrenR of this node
-     */
-    public ArrayList<Node> getChildrenR(){
-        return this.childrenR;
-    }
-    
+
     /**
      * 
      * Adds a child to this node
@@ -209,18 +184,58 @@ public abstract class Node {
      * @param n the node you want to add as a child for this node
      */
     public void addChild(Node n){
-        if (!this.children.contains(n)) this.children.add(n);
-    }
-    
-    public void addChildR(Node n){
-        if (!this.childrenR.contains(n)) this.childrenR.add(n);
+        if (!children.contains(n)) {
+            children.add(n);
+            ReteModificationHelper.getReteModificationHelper().recordNewChild(this, n);
+        }
     }
     
     public Storage getMemory(){
-        return this.memory;
+        return memory;
     }
     
+    /**
+     * Propagates each stored instance to the indicated children.
+     * @param children the list of children to send the instances to
+     */
+    protected void propagateToChildren(ArrayList<Node> children) {
+        ArrayList<Instance> all_inst = memory.getAllInstances();
+        for (Node child : children) {
+            for (Instance instance : all_inst) {
+                sendInstanceToChild(instance, child);
+            }
+        }
+    }
+    
+    /**
+     * Tests whether child is a JoinNode and calls addInstance with respective
+     * parameters.
+     *
+     * @param inst
+     * @param child
+     */
+    protected void sendInstanceToChild(Instance inst, Node child) {
+        if (child instanceof JoinNode) {
+            ((JoinNode) child).addInstance(inst, this);
+        } else {
+            child.addInstance(inst);
+        }
+    }
 
-    
-    
+    /**
+     * Adds an instance to this node; Node only stores the instance in memory.
+     *
+     * @param instance
+     */
+    public abstract void addInstance(Instance instance);
+
+    /**
+     * Backtracks its local memory (removes all instances greater than
+     * decisionLevel).
+     *
+     * @param decisionLevel
+     */
+    public void backtrackTo(int decisionLevel) {
+        memory.backtrackTo(decisionLevel);
+    }
 }

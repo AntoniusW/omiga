@@ -47,7 +47,7 @@ public class HeadNodeNegative extends HeadNode{
      * @param from only needed for extending class Node
      */
     @Override
-    public void addInstance(Instance instance, boolean from){
+    public void addInstance(Instance instance){
         Instance instance2Add = Unifyer.unifyAtom(a, instance, tempVarPosition);
         
         
@@ -55,12 +55,12 @@ public class HeadNodeNegative extends HeadNode{
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
     
                 TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
-                        instance2Add.propagationLevel + 1); // track rule origin
+                        instance2Add.propagationLevel + 1, instance.decisionLevel); // track rule origin
                 inst.setCreatedByRule(r);
                 inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);
-                inst.setDecisionLevel(GlobalSettings.getGlobalSettings().
-                        getManager().getContext().getChoiceUnit().getDecisionLevel());
+                //inst.setDecisionLevel(GlobalSettings.getGlobalSettings().
+                //        getManager().getContext().getChoiceUnit().getDecisionLevel());
                 rete.addInstanceMinus(a.getPredicate(), inst);
 
                 //rete.addInstanceMinus(a.getPredicate(),instance2Add);

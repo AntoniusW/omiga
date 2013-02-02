@@ -7,8 +7,10 @@ package Datastructure.Rete;
 import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -34,7 +36,15 @@ public class JoinNodeNegative extends JoinNode{
     }
     
     @Override
-    public void addInstance(Instance instance, boolean from){
+    public void addInstance(Instance instance, Node fromNode){
+         boolean from; // TODO: check boolean value
+        if( a == fromNode) {
+            from = true;
+        } else if ( b == fromNode ) {
+            from = false;
+        } else {
+            throw new RuntimeException("JoinNode received input from unknown parent node");
+        }
         //System.out.println("Instance: " + instance + " reaches JoinNode: " + this + " from: " + from);
         //TODO: selectFromHere and selectioNCriteria can be omitted here!
         Term[] selectionCriteria; // TODO: check if putting thise two variable outside this method decreases runtime
@@ -59,21 +69,40 @@ public class JoinNodeNegative extends JoinNode{
             //System.out.println("selCrit: " + Instance.getInstanceAsString(selCrit2));
             //System.out.println("JoinNodeNegative has this many children: " + this.children);
             for(Instance inz: joinPartners){
-                this.memory.addInstance(inz);
-                this.rete.getChoiceUnit().addInstance(this, inz);
+                /*int decisionLevel;
+                int propagationLevel;
+                // use higher decision level
+                if (instance.decisionLevel > inz.decisionLevel) {
+                    decisionLevel = instance.decisionLevel;
+                    propagationLevel = instance.propagationLevel;
+                } else if (instance.decisionLevel == inz.decisionLevel) {
+                    decisionLevel = inz.decisionLevel;
+                    // use higher propagation level if both decision levels are equal
+                    propagationLevel = instance.propagationLevel > inz.propagationLevel
+                            ? instance.propagationLevel : inz.propagationLevel;
+                } else {
+                    decisionLevel = inz.decisionLevel;
+                    propagationLevel = inz.propagationLevel;
+                }
+                Instance inst2add = new Instance(inz);
+                inst2add.decisionLevel = decisionLevel;
+                inst2add.propagationLevel = decisionLevel;*/
+                
+                Instance inst2add = newInstanceFromJoin(instance, inz, inz);
+                
+                this.memory.addInstance(inst2add);
+                //this.rete.getChoiceUnit().addInstance(this, inz);
                 //System.out.println("TEMPVARPOSITION: " + this.tempVarPosition);
                 //System.out.println(this + " instance added: " + inz + " JOINPARTNERS: " + joinPartners + " because of: " + instance + " from: " + from);
-                for(int i = 0; i < this.children.size();i++){
+                
+                for (Node child : children) {
+                    sendInstanceToChild(inst2add, child);
+                }
+                /*for(int i = 0; i < this.children.size();i++){
                     this.children.get(i).addInstance(inz, false);
                 }
                 for(int i = 0; i < this.childrenR.size();i++){
                     this.childrenR.get(i).addInstance(inz, true);
-                }
-                /*for(Node n: this.children){
-                    n.addInstance(inz,false);
-                }
-                for(Node n: this.childrenR){
-                    n.addInstance(inz,true);
                 }*/
             }
         }else{
@@ -89,32 +118,91 @@ public class JoinNodeNegative extends JoinNode{
             /*System.out.println("TEMPVARPOSITION: " + this.tempVarPosition);
             System.out.println("SelCrit1[0] = so because selCriterion1= " + selectionCriterion1[0]);
             for(Variable v: this.tempVarPosition.keySet()){
-                if(this.tempVarPosition.get(v) == selectionCriterion1[0]){
-                    System.out.println("And the variable equal to that Pos =  "+v);
-                }
-                if(v.equals(Variable.getVariable("X4"))) System.out.println("X4 would be: " + this.tempVarPosition.get(v));
+            if(this.tempVarPosition.get(v) == selectionCriterion1[0]){
+            System.out.println("And the variable equal to that Pos =  "+v);
+            }
+            if(v.equals(Variable.getVariable("X4"))) System.out.println("X4 would be: " + this.tempVarPosition.get(v));
             }*/
             //selectionCriteria = selCrit1;
-            if(a.containsInstance(Instance.getInstance(selCrit1,0))){
-                this.memory.addInstance(instance);
+            //Instance selInst = Instance.getInstance(selCrit1,0,0);
+            
+            // we need to select a join partner to get correct decision level
+            Collection<Instance> joinPartners = a.select(selCrit1);
+            if(//a.containsInstance(selInst)
+                    !joinPartners.isEmpty()){
+                Iterator<Instance> it = joinPartners.iterator();
+                Instance inst2add = newInstanceFromJoin(instance, it.next(), instance);
+                //Instance inst2add = newInstanceFromJoin(instance, selInst, instance);
+                this.memory.addInstance(inst2add);
                 //System.out.println(this + " instance added: " + instance + " because of: " + a + " saying: " + a.containsInstance(Instance.getInstance(selCrit1)) + " to: " + Instance.getInstance(selCrit1));
-                this.rete.getChoiceUnit().addInstance(this, instance);
-                for(int i = 0; i < this.children.size();i++){
+                //this.rete.getChoiceUnit().addInstance(this, instance);
+                for (Node child : children) {
+                    sendInstanceToChild(inst2add, child);
+                }
+                /*for(int i = 0; i < this.children.size();i++){
                     this.children.get(i).addInstance(instance, false);
                 }
                 for(int i = 0; i < this.childrenR.size();i++){
                     this.childrenR.get(i).addInstance(instance, true);
-                }
-                 /*for(Node n: this.children){
-                    n.addInstance(instance2Add,false);
-                }
-                for(Node n: this.childrenR){
-                    n.addInstance(instance2Add,true);
                 }*/
             }
         }
         
         
+    }
+    
+    public void informOfClosure(SelectionNode sN) {
+        boolean from;
+        if (a == sN) {
+            from = true;
+        } else if (b == sN) {
+            from = false;
+        } else {
+            throw new RuntimeException("JoinNode received input from unknown parent node");
+        }
+        ArrayList<Instance> temp;
+        //System.out.println("Closure of: " + sN);
+        //TODO: A closed notification always come from the right side! just kick this if statement. No need for bool nor sN
+        Node actual; // The node that is not closed
+        if (from) {
+            // the right partner is closed
+            actual = b;
+        } else {
+            //the left partner is closed
+            actual = a;
+        }
+        temp = actual.memory.getAllInstances();
+
+        for (int i = 0; i < temp.size(); i++) {
+
+            for (int j = 0; j < selectionCriterion1.length; j++) {
+                if (selectionCriterion1[j] == null) {
+                    selCrit1[j] = tempVar;
+                } else {
+                    selCrit1[j] = temp.get(i).get(selectionCriterion1[j]);
+                }
+            }
+
+            if (rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null
+                    || rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null
+                    || sN.containsInstance((Instance.getInstance(selCrit1, 0, 0)))) {
+
+                if (!this.memory.containsInstance(temp.get(i))) {
+                    //Instance Inst = new Instance(temp.get(i));
+                    // create instance with DL and PL set correctly
+                    Instance tempInst = Instance.getInstance(temp.get(i).getTerms(), 0, rete.getChoiceUnit().getDecisionLevel());
+                    Instance inst2Add = newInstanceFromJoin(tempInst, temp.get(i), tempInst);
+                    memory.addInstance(inst2Add);
+                    //memory.addInstance(temp.get(i));
+                    //super.addInstance(temp.get(i)); // register the adding of this variableassignment within the choiceUnit
+                    //System.out.println("Dervied newly through Closure: " + temp.get(i) + " to " + this);
+                    for (Node child : children) {
+                        sendInstanceToChild(inst2Add, child);
+                        //sendInstanceToChild(temp.get(i), child);
+                    }
+                }
+            }
+        }
     }
     
     

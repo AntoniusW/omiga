@@ -14,14 +14,16 @@ import Manager.Manager;
 public class GlobalSettings {
     
     public static int decisionCounter = 0;
+    public static int maxDecisionLevel = 0;
     
     public static boolean didLearn = false;
+    public static boolean initialReteBuilding = true;   // indicates whether Rete nodes are added from learning new rules.
     
     static GlobalSettings instance = null;
     
     // below string is replaced by build-script automatically,
     // do not change line breaking
-    public static String version="6fb255ede28db511d4fec48b5aa5d8d81ec5dedc";
+    public static String version="c0967e291bf1950cc0938271f9aab666672e174f";
     
     private Manager manager;
 

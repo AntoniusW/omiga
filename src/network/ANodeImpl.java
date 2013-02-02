@@ -4,6 +4,7 @@
  */
 package network;
 
+import Entity.Pair;
 import Datastructure.Rete.BasicNode;
 import Datastructure.Rete.Node;
 import Datastructure.Rewriting.Rewriter_easyMCS;

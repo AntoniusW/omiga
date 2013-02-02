@@ -51,45 +51,6 @@ public class ReteBuilder {
         this.headNodes = new HashMap<Predicate,ArrayList<HeadNode>>();
     }
     
-    public void addNegRule(Rule r){
-        VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
-        HashMap<Atom,HashMap<Variable,Integer>> varPositions = new HashMap<Atom, HashMap<Variable,Integer>>();
-        
-        if(r.getHead()!=null) {
-            this.addAtomMinus(r.getHead());
-            varPositions.put(r.getHead(), SelectionNode.getVarPosition(r.getHead()));
-        }
-        
-        for(Atom a: r.getBodyPlus()){
-            this.addAtomPlus(a);
-            this.addAtomMinus(a);
-            varPositions.put(a, SelectionNode.getVarPosition(a));
-        }
-        for(Atom a: r.getBodyMinus()){
-            this.addAtomMinus(a);
-            this.addAtomPlus(a); // We also create apositive SelectionNode for each negative one, since then it is easier to look them up for closed nodes.
-            varPositions.put(a, SelectionNode.getVarPosition(a));
-        }
-        
-        if(r.getBodyPlus().isEmpty()){
-            Atom actual = r.getBodyMinus().get(0);
-            SelectionNode actualNode = this.rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
-            actualNode.resetVarPosition(actual);
-            HeadNode hN = new HeadNodeNegative(r.getHead(),rete, SelectionNode.getVarPosition(actual),actualNode);
-            hN.r = r;
-            actualNode.addChild(hN);
-            //this.addHeadNode(actual.getPredicate(), hN);
-        }else{
-            Atom actual = r.getBodyPlus().get(0);
-            SelectionNode actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
-            actualNode.resetVarPosition(actual);
-            HeadNode hN = new HeadNodeNegative(r.getHead(),rete, SelectionNode.getVarPosition(actual),actualNode);
-            hN.r=r;
-            actualNode.addChild(hN);
-            //this.addHeadNode(actual.getPredicate(), hN);
-        }
-    }
-    
     public void addRuleNeg(Rule r){
 //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
         VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
@@ -507,11 +468,11 @@ public class ReteBuilder {
         // create necessary selection nodes
         // and mark them as new children to the basic nodes
         for (Atom at : r.getBodyPlus()) {
-            rete.getBasicLayerPlus().get(at.getPredicate()).AddAtomFromLearning(at);
+            rete.getBasicLayerPlus().get(at.getPredicate()).AddAtom(at);
             varPositions.put(at, SelectionNode.getVarPosition(at));
         }
         for (Atom at : r.getBodyMinus()) {
-            rete.getBasicLayerMinus().get(at.getPredicate()).AddAtomFromLearning(at);
+            rete.getBasicLayerMinus().get(at.getPredicate()).AddAtom(at);
             varPositions.put(at, SelectionNode.getVarPosition(at));
         }
         

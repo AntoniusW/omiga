@@ -99,20 +99,20 @@ public class testPropagation {
         // Facts for p
         for(int i = 0; i < nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
-            Instance instance = Instance.getInstance(terms,0);
+            Instance instance = Instance.getInstance(terms,0,0);
             rete.addInstancePlus(p_Z.getPredicate(), instance);
         }
         //facts for q
         for(int i = nbb; i < 2*nbb;i++){
             Term[] terms = {Constant.getConstant(String.valueOf(i))};
-            Instance instance = Instance.getInstance(terms,0);
+            Instance instance = Instance.getInstance(terms,0,0);
             rete.addInstancePlus(q_Z.getPredicate(), instance);
         }
         //facts for s
         for(int i = 0; i < nbb; i++){
             for(int j = 0; j < nbb; j++){
                 Term[] terms = {Constant.getConstant(String.valueOf(i)),Constant.getConstant(String.valueOf(j))};
-                Instance instance = Instance.getInstance(terms,0);
+                Instance instance = Instance.getInstance(terms,0,0);
                 rete.addInstancePlus(s.getPredicate(), instance);
             }
         }

@@ -10,7 +10,6 @@ import Datastructure.Rete.ReteBuilder;
 import Datastructure.choice.ChoiceUnitMCSRewrite;
 import Interfaces.ContextMCSInterface;
 import java.util.*;
-import network.Pair;
 import network.ReplyMessage;
 
 /**

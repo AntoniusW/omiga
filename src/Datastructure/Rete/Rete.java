@@ -8,17 +8,11 @@ import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
 import Entity.GlobalSettings;
 import Entity.Instance;
-import Entity.Operator;
 import Entity.Predicate;
-import Entity.Rule;
 import Entity.Variable;
 import Interfaces.Term;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Stack;
 
 /**
  *
@@ -74,20 +68,20 @@ public class Rete {
      */
     public void propagate(){
         //System.out.println("RETE: PROPAGATION!");
+        
+//        System.out.println("Memory before propagation:");
+//        printAnswerSet(null);
 
-        if( GlobalSettings.didLearn ) {
+        if (GlobalSettings.didLearn) {
             GlobalSettings.didLearn = false;
-        System.out.println("Propagation before learning:");
-        printAnswerSet(null);
-        // we might have learned some new rule, start its basic propagation first
-        for (Map.Entry<Predicate, BasicNode> basicEntry : getBasicLayerPlus().entrySet()) {
-            basicEntry.getValue().propagateAfterLearning();
-        }
-        for (Map.Entry<Predicate, BasicNodeNegative> basicEntry : getBasicLayerMinus().entrySet()) {
-            basicEntry.getValue().propagateAfterLearning();
-        }
-        System.out.println("Propagation after learning:");
-        printAnswerSet(null);
+            System.out.println("Propagation before learning:");
+            printAnswerSet(null);
+            
+            // we might have learned some new rule, start its basic propagation first
+            ReteModificationHelper.getReteModificationHelper().triggerPropagationAfterModification();
+
+            System.out.println("Propagation after learning:");
+            printAnswerSet(null);
         }
 
         boolean flag = true;
@@ -116,6 +110,9 @@ public class Rete {
         System.out.println("____________________");
         this.choiceUnit.printAllChoiceNodes();
         System.out.println("____________________");*/
+        
+//        System.out.println("Memory after propagation:");
+//        printAnswerSet(null);
     }
     
    
@@ -127,6 +124,7 @@ public class Rete {
      */ 
     public void addInstancePlus(Predicate p, Instance instance){
         if(this.containsInstance(p, instance, false)) {
+            System.out.println("Adding "+p.getName()+instance+" to positive memory, but exists in negative already.");
             //System.out.println("HAHA UNSAT! via plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
@@ -145,6 +143,7 @@ public class Rete {
      */ 
     public void addInstanceMinus(Predicate p,Instance instance){
         if(this.containsInstance(p, instance, true)) {
+            System.out.println("Adding "+p.getName()+instance+" to negative memory, but exists in positive already.");
             //System.out.println("HAHA UNSAT via minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             this.satisfiable = false;
         }
@@ -178,6 +177,26 @@ public class Rete {
                 return false;
             }
         }
+    }
+    
+    public boolean containsInstanceInBasicNode(Atom a, Instance instance, boolean positiveMemory) {
+        if (positiveMemory) {
+            if (basicLayerPlus.containsKey(a.getPredicate())
+                    && basicLayerPlus.get(a.getPredicate()).containsInstance(instance)) {
+                return true;
+            }
+        } else {
+            if (basicLayerMinus.containsKey(a.getPredicate())) {
+                if (((BasicNodeNegative) basicLayerMinus.get(a.getPredicate())).isClosed()) {
+                    return !containsInstance(a, instance, true);
+                }
+                if (basicLayerMinus.containsKey(a.getPredicate())
+                        && basicLayerMinus.get(a.getPredicate()).containsInstance(instance)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     /**

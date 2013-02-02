@@ -22,6 +22,7 @@ import java.io.Serializable;
 public class Instance implements Serializable {
     
     public int propagationLevel;
+    public int decisionLevel;
     
     public static int instance_count = 0;
     // public static int lolra = 0;
@@ -41,9 +42,9 @@ public class Instance implements Serializable {
      * @param terms an array of terms which has to contain only constants or instantiated function terms. This has to be guaranteed by the programmer. Also null values are not valid!
      * @return returns the desired instance based on the terms array
      */
-    public static Instance getInstance(Term[] terms, int propagationLevel){
+    public static Instance getInstance(Term[] terms, int propagationLevel, int decisionLevel){
         instance_count++;
-        return new Instance(terms, propagationLevel);
+        return new Instance(terms, propagationLevel, decisionLevel);
         /*Instance i = new Instance(terms);
         if(instances.containsKey(i)){
             //System.out.println("Asked for: " + s + " returning: " + instances.get(i)); 
@@ -80,10 +81,23 @@ public class Instance implements Serializable {
      * 
      * @param terms 
      */
-    protected Instance(Term[] terms, int propagationLevel){
+    protected Instance(Term[] terms, int propagationLevel, int decisionLevel){
         this.terms = terms;    
         this.hashcode = Term.hashCode(terms);
+            // Note: hashcode ignores decision/propagation levels on purpose (selection methods need terms only)
         this.propagationLevel = propagationLevel;
+        this.decisionLevel = decisionLevel;
+    }
+    
+    /**
+     * Copy constructor, makes shallow copy.
+     * @param copy the instance to copy.
+     */
+    public Instance(Instance copy) {
+        terms = copy.terms;
+        hashcode = copy.hashcode;
+        propagationLevel = copy.propagationLevel;
+        decisionLevel = copy.decisionLevel;
     }
     
     /**

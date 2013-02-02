@@ -25,33 +25,6 @@ import java.util.HashMap;
 public abstract class Term  implements OperandI {
     
     
-    private static HashMap<Term,Term> terms = new HashMap<Term,Term>();
-    
-    /**
-     * 
-     * @param t the term you want to register
-     */
-    public static void addTerm(Term t){
-        terms.put(t, t);
-    }
-    /**
-     * 
-     * @param t the term for which you want to get the unique term
-     * @return the unique instance of t or null if there is no such term yet
-     */
-    public static Term getTerm(Term t){
-        return terms.get(t);
-    }
-    /**
-     * 
-     * @param t the term for which you want to verify if it is already there
-     * @return wether t is already there
-     */
-    public static boolean containsTerm(Term t){
-        return terms.containsKey(t);
-    }
-    
-    
     protected String name;
     protected int hash;
     protected int hashcode;
@@ -92,8 +65,9 @@ public abstract class Term  implements OperandI {
     }
     
     public static int hashCode(Term[] terms) {
-        if(terms.length==0)
+        if(terms.length==0) {
             return 0;
+        }
         int result = 17;
         for(int i=0; i<terms.length;i++) {
             result = result*37+terms[i].hashCode();
@@ -102,8 +76,9 @@ public abstract class Term  implements OperandI {
     }
     
      public static int hashCode(ArrayList<Term> terms) {
-        if(terms.isEmpty())
-            return 0;
+        if(terms.isEmpty()) {
+             return 0;
+         }
         int result = 17;
          for (Term term : terms) {
              result = result*37+term.hashCode();             

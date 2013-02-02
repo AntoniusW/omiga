@@ -4,6 +4,7 @@
  */
 package network;
 
+import Entity.Pair;
 import Entity.Instance;
 import Entity.Predicate;
 import java.rmi.Remote;

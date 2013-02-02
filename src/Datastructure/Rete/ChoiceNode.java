@@ -5,12 +5,16 @@
 package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
+import Entity.Atom;
 import Entity.Instance;
+import Entity.Pair;
 import Entity.Rule;
 import Entity.Variable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -40,6 +44,7 @@ public class ChoiceNode extends Node{
     private HeadNodeConstraint constraintNode;
     //private ArrayList<Instance> allInstances;
     private HashSet<Instance> allInstances;
+    private HashMap<Instance,Integer> disabledInstances;    // DL at which an instance was no longer guessable due to some negative atom being derived positively
     
     /**
      * 
@@ -54,11 +59,11 @@ public class ChoiceNode extends Node{
     public ChoiceNode(Rete rete, int arity, Rule r, HashMap<Variable,Integer> varPosition, HeadNodeConstraint constraintNode){
         super(rete);
         this.r = r;
-        if(arity == 0){
-            this.memory = new Storage(100);
+        /*if(arity == 0){
+            memory.initStorage(100);
         }else{
-            this.memory = new Storage(arity);
-        }
+            memory.initStorage(arity);
+        }*/
         //System.out.println("ChoiceNode created!");
         rete.getChoiceUnit().addChoiceNode(this); // The choiceNode is registered on creation within the choiceUnit
         this.tempVarPosition = varPosition;
@@ -67,6 +72,7 @@ public class ChoiceNode extends Node{
         //this.allInstances = new ArrayList<Instance>(); //TODO Init size of this list?
         this.allInstances = new HashSet<Instance>();
         //this.rete.getChoiceUnit().addNode(this);
+        disabledInstances = new HashMap<Instance, Integer>();
     }
     
     /**
@@ -86,10 +92,9 @@ public class ChoiceNode extends Node{
      * @param from the node the instance comes from. (Can be null. just needed to extend class Node)
      */
     @Override
-    public void addInstance(Instance instance, boolean from){
-        super.addInstance(instance, true);
-        this.memory.addInstance(instance);
-        this.allInstances.add(instance);  
+    public void addInstance(Instance instance){
+        //memory.addInstanceWithoutBacktracking(instance);
+        allInstances.add(instance);  
     }
     
     /**
@@ -102,8 +107,9 @@ public class ChoiceNode extends Node{
     public void removeInstance(Instance instance){
 //        rete.getChoiceUnit().AddInstanceRemovement(this, instance);
         //super.removeInstance(instance);
-        if(memory.containsInstance(instance)){
-            this.memory.removeInstance(instance);
+        if(allInstances.contains(instance)){
+        //if(memory.containsInstance(instance)){
+            //this.memory.removeInstance(instance);
             this.allInstances.remove(instance);
             this.rete.getChoiceUnit().addInstanceForRemovement(this, instance);
         }
@@ -121,7 +127,7 @@ public class ChoiceNode extends Node{
     @Override
     public void simpleRemoveInstance(Instance instance){
         //TODO: Is this method used? (It's not used when no guessing occures)
-        this.memory.removeInstance(instance);
+        //this.memory.removeInstance(instance);
         this.allInstances.remove(instance);
     }
     /**
@@ -132,7 +138,7 @@ public class ChoiceNode extends Node{
      */
     @Override
     public void simpleAddInstance(Instance instance){
-        this.memory.addInstance(instance);
+        //memory.addInstanceWithoutBacktracking(instance);
         this.allInstances.add(instance);
     }
     
@@ -148,16 +154,106 @@ public class ChoiceNode extends Node{
      * 
      * @return the string representation of this Choice Node
      */
+    @Override
     public String toString(){
         return "ChoiceNode: " + this.r;
     }
     
     /**
      * 
-     * @return allInstances that are stored within this choice node
+     * @return all instances that are stored within this choice node
      */
     public ArrayList<Instance> getAllInstances(){
-        return new ArrayList<Instance>(this.allInstances);
+        ArrayList<Instance> ret = new ArrayList<Instance>(allInstances);
+        
+        return ret;
+        //return new ArrayList<Instance>(this.allInstances);
+    }
+
+    /**
+     * ChoiceNode has specific memory, this method should not be called.
+     * @return a RuntimeException if called.
+     */
+    @Override
+    public Storage getMemory() {
+        throw new RuntimeException("Bug: ChoideNode.getMemory() called. ChoiceNode has no standard memory.");
+    }
+
+    @Override
+    public void backtrackTo(int decisionLevel) {
+        // remove instances for guessing
+        for (Iterator<Instance> inst = allInstances.iterator(); inst.hasNext();) {
+            Instance instance = inst.next();
+            if( instance.decisionLevel >= decisionLevel ) {
+                inst.remove();
+            }
+        }
+        // re-enable instances that were disabled
+        for (Iterator<Map.Entry<Instance, Integer>> it = disabledInstances.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<Instance, Integer> entry = it.next();
+            // only re-enable higher decision levels, since disabling is one decision level "late"
+            if( entry.getValue() >= decisionLevel ) {
+                it.remove();
+            }
+        }
+    }
+    
+    /**
+     * Finds an instance in this ChoiceNode which can be added, i.e., whose
+     * negative body is not in conflict with the current partial interpretation.
+     *
+     * @return a list of atoms and instances which must be added to negative
+     * memory to make a rule fire.
+     */
+    public Pair<Instance,ArrayList<Pair<Atom, Instance>>> nextChoiceableInstance() {
+        ArrayList<Pair<Atom, Instance>> toMakeNegative;
+        // check all instances stored in this node
+        for (Iterator<Instance> it = allInstances.iterator(); it.hasNext();) {
+            Instance instance = it.next();
+            // skip disabled instances
+            if( disabledInstances.containsKey(instance)) {
+                continue;
+            }
+            toMakeNegative = new ArrayList<Pair<Atom, Instance>>();
+            boolean groundAtomInPositiveMemory = false;
+            // check all atoms in its negative body
+            for (Atom at : r.getBodyMinus()) {
+                Instance toAdd = Unifyer.unifyAtom(at, instance, getVarPositions());
+                toAdd.decisionLevel = rete.getChoiceUnit().getDecisionLevel();   // set new decision level
+                toAdd.propagationLevel = 0;
+                // if ground atom is in positive memory, skip this ground rule.
+                if (rete.containsInstanceInBasicNode(at, toAdd, true)) {
+                    groundAtomInPositiveMemory = true;
+                    // disable instance for further guesses
+                    disabledInstances.put(instance, rete.getChoiceUnit().getDecisionLevel());
+                    break;
+                } else {
+                    toMakeNegative.add(new Pair(at, toAdd));
+                }
+            }
+            if (!groundAtomInPositiveMemory) {
+                // disable instance to avoid it being multiply guessed.
+                disabledInstances.put(instance, rete.getChoiceUnit().getDecisionLevel());
+                return new Pair<Instance, ArrayList<Pair<Atom, Instance>>>(instance, toMakeNegative);
+            }
+        }
+        // no instance found where a positive guess would not directly yield inconsistency.
+        return null;
+    }    
+
+    public void printChoiceNodeInstances() {
+        for (Instance inst : allInstances) {
+            System.out.print(inst.toString()+" ");
+        }
+        System.out.print("\n  Disabled:");
+        for (Map.Entry<Instance, Integer> entry : disabledInstances.entrySet()) {
+            System.out.print(entry.getKey().toString()+"@"+entry.getValue()+" ");
+        }
+        System.out.println();
+    }
+    
+    public void disableInstance(Instance inst, int decisionLevel) {
+        disabledInstances.put(inst, decisionLevel);
     }
     
     

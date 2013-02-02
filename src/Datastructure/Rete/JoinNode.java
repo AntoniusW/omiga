@@ -41,75 +41,6 @@ public class JoinNode extends Node{
     
     protected Variable tempVar; // used as a Variable for the lookup
     
-    //TODO: Remove ID when found bug!
-        static int ID = 0;
-    int id;
-    
-    public static int getNextID(){
-        ID++;
-        return ID;
-    }
-    
-    /**
-     * 
-     * resets the tempVarPosition by clearing it and then adding all variables from both parentNodes.
-     * This method also initializes the instanceOrdering, where the variables of node a are set to
-     * the first n positions, and the variables from b, that are not contained in a, make up the rest.
-     * 
-     * @param a the node that is the first join partner
-     * @param b the node that is the second join partner
-     */
-    /*public void resetVarPosition(Node a, Node b){
-        System.err.println("RESETVARPOSITION of joinNOdes is used!");
-        tempVarPosition.clear();
-        HashMap<Variable,Integer> termsA = a.getVarPositions();
-        HashMap<Variable, Integer> termsB = b.getVarPositions();
-        // first we add all Variables of Node a (These will reach from 0 to a.arity)
-        for(Variable v: termsA.keySet()){
-            this.tempVarPosition.put(v,a.getVarPositions().get(v));
-            instanceOrdering[a.getVarPositions().get(v)] = a.getVarPositions().get(v)+1; // +1  because we have to distinguish between Node a,b. and +0 = -0. SO we map the positions to 1..n, -1..-n
-            //System.err.println("Got: " + v)
-        }
-        // then we add all Nodes of B, without the Ordering of B. They take the last positions of our instances
-        for(Variable v: termsB.keySet()){
-            if(!this.tempVarPosition.containsKey(v)){
-                this.tempVarPosition.put(v,this.tempVarPosition.size());
-                System.err.println("LOL: " + (this.tempVarPosition.size()-1) + " v = " + v);
-                instanceOrdering[this.tempVarPosition.size()-1] = (b.getVarPositions().get(v)+1)*-1;
-            }
-            
-        }
-        //String testTemp = "[";
-        //for(int i: instanceOrdering){
-        //    testTemp = testTemp + i + ",";
-        //}
-        //testTemp = testTemp + "]";
-        //System.err.println("LOLRAGARIAGA: " + testTemp);
-    }*/
-    
-    
-    
-    
-    
-    /*public HashMap<Variable,Integer> getVarPosition(HashMap<Variable,Integer> varPosLeft, HashMap<Variable,Integer> varPosRight){
-        HashMap<Variable,Integer> ret = new HashMap<Variable,Integer>();
-        // first we add all Variables of Node a (These will reach from 0 to a.arity)
-        for(Variable v: varPosLeft.keySet()){
-            ret.put(v,varPosLeft.get(v));
-        }
-        // then we add all Nodes of B, without the Ordering of B. They take the last positions of our instances
-        for(Variable v: varPosRight.keySet()){
-            if(!ret.containsKey(v)){
-                ret.put(v,ret.size());
-            }
-            
-        }
-        return ret;
-    }*/
-    
-    
-    
-    
     /*
      * Select: Wir gehen einfach das Variable Ordering der anderen Node durch und setzen alle Variablen nach der Instanz davon
      */
@@ -125,8 +56,6 @@ public class JoinNode extends Node{
     public JoinNode(Node a, Node b, Rete rete, HashMap<Variable,Integer> varPosA, HashMap<Variable,Integer> varPosB){
         super(rete); // registering this node within the ChoiceUnit
 
-        this.id = getNextID();
-        
         this.a = a;
         this.b = b;
 
@@ -138,33 +67,29 @@ public class JoinNode extends Node{
         
         //We initialize this nodes memory
         if(instanceOrdering.length == 0){
-            this.memory = new Storage(a.getMemory().arity + b.getMemory().arity);
+            memory.initStorage(a.getMemory().arity + b.getMemory().arity);
+            //this.memory = new Storage(a.getMemory().arity + b.getMemory().arity);
         }else{
-            this.memory = new Storage(instanceOrdering.length);
+            memory.initStorage(instanceOrdering.length);
+            //this.memory = new Storage(instanceOrdering.length);
         }
         
         
         //We register this joinNode within it's two partners as child
-        this.a.addChildR(this);
-        this.b.addChild(this);
+        a.addChild(this);
+        b.addChild(this);
         
         // We set the selectionCriterias by putting the number of the other predicates position for that position into the array
         this.selectionCriterion1 = new Integer[varPosA.size()];
         for(Variable v: varPosB.keySet()){
             if(varPosA.containsKey(v)){
-                //System.out.println(v);
                 selectionCriterion1[varPosA.get(v)] = varPosB.get(v);
-                //System.out.println("Setting Var position selCrit1: " + varPosA.get(v) +  " to: " + varPosB.get(v));
-                //System.out.println("Because I select from: " + varPosA);
             }
         }
         this.selectionCriterion2 = new Integer[varPosB.size()];
         for(Variable v: varPosA.keySet()){
             if(varPosB.containsKey(v)){
-                //System.out.println(v);
                 selectionCriterion2[varPosB.get(v)] = varPosA.get(v);
-                //System.out.println("Setting Var position selCrit2: " + varPosB.get(v) +  " to: " + varPosA.get(v));
-                //System.out.println("Because I select from: " + varPosB);
             }
         }
         selCrit1 = new Term[selectionCriterion1.length];
@@ -194,7 +119,6 @@ public class JoinNode extends Node{
             instanceOrdering[varPosB.get(v)] = (varPosB.get(v)+1)*-1;// +1  because we have to distinguish between Node a,b. and +0 = -0. SO we map the positions to 1..n, -1..-n
             //instanceOrdering[temp2.size()-1] = (varPosB.get(v)+1)*-1; // +1  because we have to distinguish between Node a,b. and +0 = -0. SO we map the positions to 1..n, -1..-n
         }
-        //System.out.println("VERDAMMT1: " + temp2);
         // then we add all Nodes of B, without the Ordering of B. They take the last positions of our instances
         for(Variable v: varPosA.keySet()){
             if(!temp2.containsKey(v)){
@@ -203,26 +127,8 @@ public class JoinNode extends Node{
             }
             
         }
-        //System.out.println("INSTANCEORDERING: " + Instance.getInstanceAsString(instanceOrdering));
-        //HashMap<Variable,Integer> temp2 = new HashMap<Variable,Integer>();
-        /*for(Variable v: varPosA.keySet()){
-            temp2.put(v,varPosA.get(v)); //temp2.size()
-            instanceOrdering[varPosA.get(v)] = varPosA.get(v)+1; // +1  because we have to distinguish between Node a,b. and +0 = -0. SO we map the positions to 1..n, -1..-n
-        }
-        System.out.println("VERDAMMT1: " + temp2);
-        // then we add all Nodes of B, without the Ordering of B. They take the last positions of our instances
-        for(Variable v: varPosB.keySet()){
-            if(!temp2.containsKey(v)){
-                temp2.put(v,temp2.size());
-                instanceOrdering[temp2.size()-1] = (varPosB.get(v)+1)*-1;
-            }
-            
-        }
-        System.out.println("VERDAMMT2: " + temp2);*/
+
         this.tempVarPosition = temp2;
-        
-        //System.err.println("Creating JoinNode for: A= " + a + " _ B= " + b + " MemorySIze= " + this.memory.arity);
-        //this.rete.getChoiceUnit().addNode(this);
     }
     
     /**
@@ -234,8 +140,15 @@ public class JoinNode extends Node{
      * @param instance the new instance that has arrived
      * @param n the node where the instance arrived (a or b)
      */
-    @Override
-    public void addInstance(Instance instance, boolean from){
+    public void addInstance(Instance instance, Node fromNode){
+        boolean from; // TODO: check boolean value
+        if( a == fromNode) {
+            from = true;
+        } else if ( b == fromNode ) {
+            from = false;
+        } else {
+            throw new RuntimeException("JoinNode received input from unknown parent node");
+        }
         //System.err.println("ADD Instance called: " + instance + " -" + from + " - " + this);
         Term[] selectionCriteria; // TODO: check if putting thise two variable outside this method decreases runtime
         Node selectFromHere; // TODO: check if putting thise two variable outside this method decreases runtime
@@ -268,16 +181,25 @@ public class JoinNode extends Node{
         }
         
         // We select all instances that match the selectionCriterion, and therefore are joinable with the new instance, from the other node
-        //System.out.println("selectionCriteria: " + Instance.getInstanceAsString(selectionCriteria));
-        //System.out.println("Node " + selectFromHere);
         Collection<Instance> joinPartners = selectFromHere.select(selectionCriteria);
-        //System.out.println("All Join PArtners: " + joinPartners);
-        //System.out.println("JoinNode instance added: " + instance + " JOINPARTNERS: " + joinPartners);
+
         // for each joinpartner we build a variable assignment we then add to this joinnodes memory
-        //System.err.println("Join Partners for: " + from + " -:-: " + selectFromHere + "satis: " + rete.satisfiable + " joinpartnerSize: " + joinPartners.size());
         for(Instance varAssignment: joinPartners){
-            int propagationLevel = instance.propagationLevel > varAssignment.propagationLevel ?
-                                    instance.propagationLevel : varAssignment.propagationLevel;
+            /*int decisionLevel;
+            int propagationLevel;
+            // use higher decision level
+            if( instance.decisionLevel > varAssignment.decisionLevel ) {
+                decisionLevel = instance.decisionLevel;
+                propagationLevel = instance.propagationLevel;
+            } else if ( instance.decisionLevel == varAssignment.decisionLevel ) {
+                decisionLevel = varAssignment.decisionLevel;
+                // use higher propagation level if both decision levels are equal
+                propagationLevel = instance.propagationLevel > varAssignment.propagationLevel ? 
+                        instance.propagationLevel : varAssignment.propagationLevel;
+            } else {
+                decisionLevel = varAssignment.decisionLevel;
+                propagationLevel = varAssignment.propagationLevel;                
+            }*/
             Term[] toAdd = new Term[this.instanceOrdering.length];
             for(int i = 0; i < this.instanceOrdering.length;i++){
                 if(from){
@@ -294,28 +216,16 @@ public class JoinNode extends Node{
                     }
                 }
             }
-            Instance instance2Add = Instance.getInstance(toAdd, propagationLevel);
-            instance2Add.propagationLevel = instance.propagationLevel > varAssignment.propagationLevel ?
-                        instance.propagationLevel : varAssignment.propagationLevel;
-            /*System.out.println(this + "Adding " + instance2Add + " because of " + instance + " from " + from);
-            System.out.println("Found JoindPartner: " + varAssignment);
-            System.out.println(this.tempVarPosition);
-            System.out.println(Instance.getInstanceAsString(this.instanceOrdering));*/
-            this.memory.addInstance(instance2Add);
-            super.addInstance(instance2Add, true); // register the adding of this variableassignment within the choiceUnit
+            Instance tempInst = Instance.getInstance(toAdd, 0, 0);
+            Instance instance2Add = newInstanceFromJoin(varAssignment, instance, tempInst);
+            //Instance instance2Add = Instance.getInstance(toAdd, propagationLevel, decisionLevel);
+
+            memory.addInstance(instance2Add);
+            //super.addInstance(instance2Add); // register the adding of this variableassignment within the choiceUnit
             // We inform all children of this node that a new instance has arrived
-            /*for(Node n: this.children){
-                n.addInstance(instance2Add,false);
-            }
-            for(Node n: this.childrenR){
-                n.addInstance(instance2Add,true);
-            }*/
-        
-            for(int i = 0; i < this.children.size();i++){
-                this.children.get(i).addInstance(instance2Add, false);
-            }
-            for(int i = 0; i < this.childrenR.size();i++){
-                this.childrenR.get(i).addInstance(instance2Add, true);
+            
+            for (Node child : children) {
+                sendInstanceToChild(instance2Add, child);
             }
         }
     }
@@ -326,79 +236,50 @@ public class JoinNode extends Node{
      */
     @Override
     public String toString(){
-        return "JoinNode" + this.id + ": " + "[" + this.b.toString() + "] [" + this.a.toString() + "] ";
+        return "JoinNode" + this.hashCode() + ": " + "[" + this.b.toString() + "] [" + this.a.toString() + "] ";
     }
     
     //Actually this method is only called for JoinNodeNegative
     
-    public void informOfClosure(SelectionNode sN, boolean from){
-        ArrayList<Instance> temp;
-        //System.out.println("Closure of: " + sN);
-        //TODO: A closed notification always come from the right side! just kick this if statement. No need for bool nor sN
-        Node actual; // The node that is not closed
-        if(from){
-            // the right partner is closed
-            actual = b;
-        }else{
-            //the left partner is closed
-            actual = a;
-        }
-        temp = actual.memory.getAllInstances();
-        //System.out.println("ACTUAL = " + actual);
-        //System.err.println("informed of closure: " + this + " #instances: " + temp.size() + " time: " + System.currentTimeMillis());
-        //System.err.println("EXAMPLE INSTANCE: " + temp.get(0));
-        //System.out.println("TEMPSIZE: " + temp.size() + "of node: " + actual);
-        for(int i = 0; i < temp.size();i++){
-            
-            for(int j = 0; j < selectionCriterion1.length;j++){
-                if (selectionCriterion1[j] == null){
-                    selCrit1[j] = tempVar;
-                }else{
-                    selCrit1[j] = temp.get(i).get( selectionCriterion1[j]);
-                }
-            }
-            
-            //rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i));
-            //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
-            //if(!rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance(temp.get(i))){
-            //System.out.println("Does rete not contain: " + temp.get(i) + ": " + !rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()).containsInstance((Instance.getInstance(selCrit1))));
-            if(rete.getBasicNodePlus(sN.getAtom().getPredicate()) == null ||
-               rete.getBasicNodePlus(sN.getAtom().getPredicate()).getChildNode(sN.getAtom()) == null ||
-               sN.containsInstance((Instance.getInstance(selCrit1,0))) ){
 
-                if(!this.memory.containsInstance(temp.get(i))){
-                     this.memory.addInstance(temp.get(i));
-                    super.addInstance(temp.get(i), true); // register the adding of this variableassignment within the choiceUnit
-                    //System.out.println("Dervied newly through Closure: " + temp.get(i) + " to " + this);
-                    for(int j = 0; j < this.children.size();j++){
-                        this.children.get(j).addInstance(temp.get(i), false);
-                    }
-                    for(int j = 0; j < this.childrenR.size();j++){
-                        this.childrenR.get(j).addInstance(temp.get(i), true);
-                    }
-                }
-            //if(!rete.containsInstance(sN.getAtom().getPredicate(), temp.get(i), true)){
-                //System.out.println("Rete contains: " + sN.getAtom().getPredicate() + "(" + temp.get(i) + ")" + "SN = " + sN.getAtom());
-                //System.err.println("ADDING: " + temp.get(i) + " to this join node");
-               
-            }
-        }
-        //System.err.println("Finished closing: " + System.currentTimeMillis());
-        
-        /*for(Instance inz: actual.memory.getAllInstances()){
-            if(!rete.containsInstance(sN.getAtom().getPredicate(), inz, true)){
-                this.memory.addInstance(inz);
-                for(Node n: this.children){
-                    n.addInstance(inz, false);
-                }
-                for(Node n: this.childrenR){
-                    n.addInstance(inz, true);
-                }
-            }
-        }*/
+
+    @Override
+    public void addInstance(Instance instance) {
+        throw new RuntimeException("JoinNode.addInstance called without parameter fromNode.");
     }
     
-    
+    /**
+     * Helper for joining: creates a new instance based on another instance
+     * where decision level and propagation level are set according to two
+     * joined instances.
+     *
+     * @param joinA join partner one
+     * @param joinB join partner two
+     * @param base the instance the returned node is based on
+     * @return a (shallow) copy of base where DL and PL are the maximum of joinA
+     * and joinB
+     */
+    public static Instance newInstanceFromJoin(Instance joinA, Instance joinB, Instance base) {
+        int decisionLevel;
+        int propagationLevel;
+        // use higher decision level
+        if (joinA.decisionLevel > joinB.decisionLevel) {
+            decisionLevel = joinA.decisionLevel;
+            propagationLevel = joinA.propagationLevel;
+        } else if (joinA.decisionLevel == joinB.decisionLevel) {
+            decisionLevel = joinB.decisionLevel;
+            // use higher propagation level if both decision levels are equal
+            propagationLevel = joinA.propagationLevel > joinB.propagationLevel
+                    ? joinA.propagationLevel : joinB.propagationLevel;
+        } else {
+            decisionLevel = joinB.decisionLevel;
+            propagationLevel = joinB.propagationLevel;
+        }
+        Instance ret = new Instance(base);
+        ret.decisionLevel = decisionLevel;
+        ret.propagationLevel = propagationLevel;
+        return ret;
+    }
     
     
 }

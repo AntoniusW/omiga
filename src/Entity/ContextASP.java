@@ -85,6 +85,10 @@ public class ContextASP {
     
     public boolean choice(){
         GlobalSettings.decisionCounter++;   // for statistics, count total decisions done.
+        // for statistics count maximum depth of decision tree
+        if( choiceUnit.getDecisionLevel()+1 >= GlobalSettings.maxDecisionLevel ) {
+            GlobalSettings.maxDecisionLevel = choiceUnit.getDecisionLevel()+1;
+        }
         return this.choiceUnit.choice();
     }
     

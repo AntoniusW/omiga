@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -30,19 +32,25 @@ public class Storage {
     public int arity; //TODO delete. Only needed for test use
     
     HashMap<Term,HashSet<Instance>>[] memory; // this is where we store our stuff
+    private HashMap<Integer,ArrayList<Instance>> backtrackInstances;    // stores instances for backtracking
+
+    public HashMap<Integer, ArrayList<Instance>> getBacktrackInstances() {
+        return backtrackInstances;
+    }
     
     /**
-     * Constructs an memory array of size arity and fills it with HashMaps
+     * Initializes the storage, constructs an memory array of size arity and fills it with HashMaps
      * 
      * @param arity The arity of the predicate this storage is used for
      */
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
-    public Storage(int arity){
+    public void initStorage(int arity){
         this.arity = arity;
         this.memory = new HashMap[arity];
         for(int i = 0; i < memory.length;i++){
             memory[i] = new HashMap<Term,HashSet<Instance>>();
         }
+        backtrackInstances = new HashMap<Integer, ArrayList<Instance>>();
     }
     
     /**
@@ -54,6 +62,7 @@ public class Storage {
      * 
      */
     public void addInstance(Instance instance){
+        registerForBacktracking(instance);
         for(int i = 0; i < instance.getSize();i++){
             // The try stuff is definitly faster than the if block ~3seconds for 2kk instances
             /*
@@ -72,6 +81,22 @@ public class Storage {
             //*/
         }
         //System.out.println(this + " Added: " + Instance.getInstanceAsString(instance));
+    }
+    
+    /**
+     * Adds an instance into the memory without registering it for backtracking.
+     * Useful only for ChoiceNodes, which backtrack by adding instances back into their memory.
+     * 
+     * @param instance 
+     */
+    public void addInstanceWithoutBacktracking(Instance instance) {
+        for (int i = 0; i < instance.getSize(); i++) {
+            if (!memory[i].containsKey(instance.get(i))) {
+                memory[i].put(instance.get(i), new HashSet<Instance>());
+            }
+
+            memory[i].get(instance.get(i)).add(instance);
+        }
     }
     
     /**
@@ -214,6 +239,9 @@ public class Storage {
     
     public boolean prettyPrintAllInstances(String pred_name, boolean densePrint){
         boolean didPrint = false;
+        if( arity== 0) {    // dont print if predicate arity is zero
+            return false;
+        }
         if( densePrint ) {
             for (HashSet<Instance> hashSet : memory[0].values()) {
                 for (Instance instance : hashSet) {
@@ -235,7 +263,7 @@ public class Storage {
                     System.out.print(pred_name+Term.prettyPrint(instance.getTerms(),false));
                     System.out.print("@pL="+instance.propagationLevel+" ");
                     if(instance instanceof TrackingInstance) {
-                        System.out.print("DL="+((TrackingInstance)instance).getDecisionLevel()+" ");
+                        System.out.print("DL="+((TrackingInstance)instance).decisionLevel+" ");
                         System.out.println(" by Rule: "+((TrackingInstance)instance).getCreatedByRule().toString());
                     }
                     didPrint = true;
@@ -267,4 +295,41 @@ public class Storage {
     }
     
     
+    /**
+     * Registers an instance to remove when backtracking.
+     * @param instance 
+     */
+    private void registerForBacktracking(Instance instance) {
+        ArrayList<Instance> backtrackList;
+        if( backtrackInstances.get(instance.decisionLevel) != null) {
+            backtrackList = backtrackInstances.get(instance.decisionLevel);
+        } else {
+            backtrackList = new ArrayList<Instance>();
+            backtrackInstances.put(instance.decisionLevel, backtrackList);
+        }
+        backtrackList.add(instance);
+    }
+    
+    /**
+     * Removes all instances whose decision level is greater than the given one.
+     * @param decisionLevel 
+     */
+    public void backtrackTo(int decisionLevel) {
+        for (Iterator<Map.Entry<Integer, ArrayList<Instance>>> it = backtrackInstances.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<Integer, ArrayList<Instance>> entry = it.next();
+            
+        //}
+        //for (Map.Entry<Integer, ArrayList<Instance>> entry : backtrackInstances.entrySet()) {
+            // check if decision level is greater than given one
+            if( entry.getKey().intValue() >= decisionLevel ) {
+                for (Instance instance : entry.getValue()) {
+                    // remove instance from node memory
+                    removeInstance(instance);
+                }
+                // remove from backtracking memory
+                it.remove();
+                //backtrackInstances.remove(entry.getKey());
+            }
+        }
+    }
 }
