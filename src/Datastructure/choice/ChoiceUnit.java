@@ -438,12 +438,13 @@ public class ChoiceUnit {
         }
         //g.gd.addEdge(Predicate.getPredicate("p",2), Predicate.getPredicate("s",1));
         // for each SCC
-        for(int i = 0; i < g.getSortedSCCs().size();i++){
+        ArrayList<ArrayList<Predicate>> sorted_scc = g.getSortedSCCs();
+        for(int i = 0; i < sorted_scc.size();i++){
             SCC.add(new ArrayList<ChoiceNode>());
-            SCCPreds.add(g.getSortedSCCs().get(i));
+            SCCPreds.add(sorted_scc.get(i));
             //SCCSize.add(g.getSortedSCCs().get(i).size());
             // for every predicate in an SCC
-            for(int j = 0; j < g.getSortedSCCs().get(i).size();j++){
+            for(int j = 0; j < sorted_scc.get(i).size();j++){
                for(ChoiceNode cN: this.choiceNodes){
                    // find the ChoiceNode to the predicate
                    if(cN.getRule().getHead().getPredicate().equals(g.getSortedSCCs().get(i).get(j))){

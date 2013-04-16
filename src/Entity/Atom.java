@@ -61,7 +61,7 @@ public class Atom {
         atoms.add(ret);
         return ret;
     }
-    
+        
     /**
      * private constructor. In order to obtain atoms use the static getAtom method.
      * gets the corresponding predicate and sets it. Furthermore the hashValue of
@@ -125,10 +125,16 @@ public class Atom {
     @Override
     public String toString(){
         String s = p.getName() + "(";
+        boolean first = true;
         for(Term pa: terms){
-            s = s + pa + ",";
+            if( !first ) {
+                s += ",";
+            }
+            s +=pa;
+            first = false;
         }
-        return s.substring(0, s.length()-1) + ")";
+        return s+")";
+        //return s.substring(0, s.length()-1) + ")";
     }
     
     /**

@@ -14,6 +14,8 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import Learning.GraphLearner;
+import Entity.GlobalSettings;
 
 /**
  *
@@ -85,8 +87,16 @@ public class SelectionNode extends Node{
     public void addInstance(Instance instance){
         //System.err.println("Trying to add instance: " + instance);
         
+        // if this node covers a ground atom
         if(varOrdering.length == 0){
-            // if this node encapsulates a fact atom
+            
+            // check that instance matches atom
+            for (int i = 0; i < instance.getTerms().length; i++) {
+                if( instance.get(i) != atom.getTerms()[i] ) {
+                    return;
+                }
+            }
+            
             Instance instance2Add = Instance.getInstance(this.atom.getTerms(),0,instance.decisionLevel);
             memory.addInstance(instance2Add);
             //super.addInstance(instance2Add);
@@ -176,7 +186,7 @@ public class SelectionNode extends Node{
      */
     @Override
     public String toString(){
-        return "SelectionNode " + this.atom;
+        return "SelectionNode"+this.hashCode()+" " + this.atom;
     }
     
     /**

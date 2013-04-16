@@ -5,6 +5,7 @@ p(0,a) :- q(a,X).
 p(0,b) :- q(a,X).
 
 %% Falsch: GuessFree Context found 1 AnswerSet
+%% Falsch2: Fixed SCC, then SelectionNode.addInstance treats ground instances wrongly.
 q(a,3) :- not q(b,3).
 q(b,3) :- not q(a,3).
 
@@ -23,3 +24,20 @@ q(b,3) :- not q(a,3).
 
 
 dom(3).
+
+%a(0) :- b(0).
+%b(0).
+
+
+
+%% JOIN check
+%Learned rule body:
+%	 :- link(N1,N2),col(N1,C),col(N2,C),N1 != N2.
+%Adding to Rete: col(N1,C) :- link(N1,N2),col(N2,C),N1 != N2.
+%Adding to Rete: col(N2,C) :- link(N1,N2),col(N1,C),N1 != N2.
+
+
+-r( X, C) :- base(X,Y), r(Y,C), X!=Y.
+
+base(1,2).
+r(1,blau).

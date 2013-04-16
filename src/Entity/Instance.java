@@ -68,11 +68,16 @@ public class Instance implements Serializable {
      * @return the term a position i of this instance
      */
     public Term get(int i){
-        try {
+        if ( terms.length != 0) {
+            return terms[i];
+        } else {
+            return null;
+        }
+        /*try {
         return terms[i];
         } catch (ArrayIndexOutOfBoundsException e){
             return null;
-        }
+        }*/
     }
     
     /**
@@ -135,10 +140,16 @@ public class Instance implements Serializable {
     @Override
     public String toString(){
         String s = "[";
+        boolean isFirst = true;
         for(int i = 0; i < this.terms.length;i++){
-            s = s + terms[i] + ",";
+            if( ! isFirst ) {
+                s+= ",";
+            }
+            s += terms[i];
+            isFirst = false;
         }
-        return s.substring(0, s.length()-1) + "]";
+        return s+"]";
+        //return s.substring(0, s.length()-1) + "]";
     }
     
     

@@ -42,6 +42,10 @@ public class Manager {
     public void calculate(Integer answersets, boolean output, String filter){
         boolean finished = false;
         c.propagate();
+        if( !c.isSatisfiable() ) {
+            System.out.println("Program is unsatisfiable after first propagation (no choices done).");
+            return;
+        }
         c.getChoiceUnit().DeriveSCC();
         if(!c.getChoiceUnit().killSoloSCC()){
             //System.err.println("Killed all SCC: " + System.currentTimeMillis());
@@ -50,9 +54,9 @@ public class Manager {
                 if(output){
                     c.printAnswerSet(filter);
                 }
-                System.out.println("GuessFree Context found 1 AnswerSet");
+                System.out.println("GuessFree Program found 1 AnswerSet");
             }else{
-                System.out.println("GuessFree Context UNSATISFIABLE!");
+                System.out.println("GuessFree Program UNSATISFIABLE!");
             }
             return;
         }
@@ -76,7 +80,7 @@ public class Manager {
                     //c.printAnswerSet(null);
                 }
             }else{
-                //System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
+                System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
                 if(c.getChoiceUnit().getDecisionLevel() >= 0){
                     if(c.isSatisfiable()){
                         //if(c.getChoiceUnit().check4AnswerSet()){

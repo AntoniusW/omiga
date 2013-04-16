@@ -1,6 +1,7 @@
 package Datastructure.Rete;
 
 import Entity.Pair;
+import Exceptions.ImmediateBacktrackingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,12 +44,16 @@ public class ReteModificationHelper {
      * recordNewChild.
      */
     public void triggerPropagationAfterModification() {
+        try {
         if (!isInitPhase) {
             for (Map.Entry<Node, ArrayList<Node>> entryNodeChildren : newChildren.entrySet()) {
                 entryNodeChildren.getKey().propagateToChildren(entryNodeChildren.getValue());
             }
         }
         newChildren = new HashMap<Node, ArrayList<Node>>();
+        } catch (ImmediateBacktrackingException e) {
+            throw e;
+        }
     }
 
     /**

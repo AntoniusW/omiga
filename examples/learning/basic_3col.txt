@@ -6,13 +6,20 @@ col(N,g) :- node(N), not col(N,r), not col(N,b).
 
 %%%% Without learning, requires 2971 decisions and 18 decision levels.
 
-% Rules below are everything we currently learn. Requires 581 decisions and 18 decision levels.
+% Rules below are everything we currently learn. Requires 581 decisions and 18 decision levels, if given from beginning.
 %-col(N2,b) :- link(N1,N2),node(N1),not col(N1,r),not col(N1,g),N1 != N2.
 %-col(N1,b) :- link(N1,N2),node(N2),not col(N2,r),not col(N2,g),N1 != N2.
 %-col(N2,r) :- link(N1,N2),node(N1),not col(N1,b),not col(N1,g),N1 != N2.
 %-col(N1,r) :- link(N1,N2),node(N2),not col(N2,b),not col(N2,g),N1 != N2.
 %-col(N1,C) :- link(N1,N2),col(N2,C),N1 != N2.
 %-col(N2,C) :- link(N1,N2),col(N1,C),N1 != N2.
+
+%% Learning above rules during solving requires 587 decisions and 18 decision levels.
+%% Sometimes, also only requires 575 decisions, depending on iteration order of children that receive instances
+%% 575 triggers constraint (and learning) while 587 triggers HeadNodeNegative and just backtracking.
+
+%% simulate more clever rewriting, create constraint for every unsat detected in a HeadNode
+% :- col(X,C), not col(X,C).
 
 
 node(0).

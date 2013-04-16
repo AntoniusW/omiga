@@ -6,12 +6,14 @@ package Datastructure.Rete;
 
 import Datastructure.choice.ChoiceUnit;
 import Entity.Atom;
+import Entity.Instance;
 import Entity.Operator;
 import Entity.Predicate;
 import Entity.Rule;
 import Entity.Variable;
 import Enumeration.OP;
 import Exceptions.LearningException;
+import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,27 +53,27 @@ public class ReteBuilder {
         this.headNodes = new HashMap<Predicate,ArrayList<HeadNode>>();
     }
     
-    public void addRuleNeg(Rule r){
+    public void addRuleNeg(Rule r) {
 //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
-        VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
-        HashMap<Atom,HashMap<Variable,Integer>> varPositions = new HashMap<Atom, HashMap<Variable,Integer>>();
-        
-        if(r.getHead()!=null) {
+        VarPosNodes = new HashMap<Node, HashMap<Variable, Integer>>();
+        HashMap<Atom, HashMap<Variable, Integer>> varPositions = new HashMap<Atom, HashMap<Variable, Integer>>();
+
+        if (r.getHead() != null) {
             this.addAtomPlus(r.getHead());
             varPositions.put(r.getHead(), SelectionNode.getVarPosition(r.getHead()));
         }
-        
-        for(Atom a: r.getBodyPlus()){
+
+        for (Atom a : r.getBodyPlus()) {
             this.addAtomPlus(a);
             this.addAtomMinus(a);
             varPositions.put(a, SelectionNode.getVarPosition(a));
         }
-        for(Atom a: r.getBodyMinus()){
+        for (Atom a : r.getBodyMinus()) {
             this.addAtomMinus(a);
             this.addAtomPlus(a); // We also create apositive SelectionNode for each negative one, since then it is easier to look them up for closed nodes.
             varPositions.put(a, SelectionNode.getVarPosition(a));
         }
-        
+
         // We clone the different parts of the rules body, so we can change them without changing the rule
         @SuppressWarnings("unchecked") // AW: workaround for array conversion
         ArrayList<Atom> atomsPlus = (ArrayList<Atom>) r.getBodyPlus().clone();
@@ -79,20 +81,20 @@ public class ReteBuilder {
         ArrayList<Atom> atomsMinus = (ArrayList<Atom>) r.getBodyMinus().clone();
         @SuppressWarnings("unchecked") // AW: workaround for array conversion
         ArrayList<Operator> operators = (ArrayList<Operator>) r.getOperators().clone();
-        
+
         //we choose an atom with which we want to start
         Atom actual;
         Node actualNode;
-        if(atomsPlus.isEmpty()){
+        if (atomsPlus.isEmpty()) {
             actual = getBestNextAtom(atomsMinus);
             actualNode = this.rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
-        }else{
+        } else {
             actual = getBestNextAtom(atomsPlus);
             actualNode = this.rete.getBasicLayerPlus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
         }
         VarPosNodes.put(actualNode, varPositions.get(actual));
         //We cast to selectionNode, since this is always a selection Node
-        ((SelectionNode)actualNode).resetVarPosition(actual);
+        ((SelectionNode) actualNode).resetVarPosition(actual);
 
         //We create variables for the partner, the ChoiceNode and HeadNodeConstraint for this rule
         //Please note that they are not used in the current implementation, as our rewriting only leads to
@@ -100,33 +102,33 @@ public class ReteBuilder {
         // to the positive rules by adding the choiceNode and constraint Node to your liking.
         Atom partner;
         ChoiceNode cN = null;
-        HeadNodeConstraint constraintNode = null; 
-        while(!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()){
+        HeadNodeConstraint constraintNode = null;
+        while (!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()) {
             //While there is still seomthing in the rules body
-            if(!atomsPlus.isEmpty()){
+            if (!atomsPlus.isEmpty()) {
                 //There is still something within the positive body of the rule --> take it --> it's the new partner
                 partner = getBestPartner(atomsPlus, actualNode);
                 //Create a joinNode from the actualNode and the partner
                 //System.out.println("RULE: " + r);
-                if(actualNode.getClass().equals(SelectionNode.class)){
-                    actualNode = this.createJoin(actual, partner, true,varPositions);
+                if (actualNode.getClass().equals(SelectionNode.class)) {
+                    actualNode = this.createJoin(actual, partner, true, varPositions);
                     //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
-                }else{
-                    actualNode = this.createJoin(actualNode, partner, true,varPositions);
+                } else {
+                    actualNode = this.createJoin(actualNode, partner, true, varPositions);
                     //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
                 }
-            }else{
-                if(!operators.isEmpty()){
-                    for(Operator op: operators){
-                        if(op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())){
+            } else {
+                if (!operators.isEmpty()) {
+                    for (Operator op : operators) {
+                        if (op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())) {
                             OperatorNode opN = new OperatorNode(rete, op, actualNode);
                             actualNode.addChild(opN);
                             actualNode = opN;
                             VarPosNodes.put(opN, opN.getVarPositions());
                             operators.remove(op);
                             break;
-                        }else{
-                            if(op.isInstanciated(actualNode.tempVarPosition.keySet())){
+                        } else {
+                            if (op.isInstanciated(actualNode.tempVarPosition.keySet())) {
                                 OperatorNode opN = new OperatorNode(rete, op, actualNode);
                                 actualNode.addChild(opN);
                                 actualNode = opN;
@@ -136,28 +138,28 @@ public class ReteBuilder {
                             }
                         }
                     }
-                }else{
-                     if(!atomsMinus.isEmpty()){
-                    //There is still something within the negative body of the rule --> take it --> it's the new partner
-                    partner = getBestPartner(atomsMinus, actualNode);
-                    //Create a joinNode from the actualNode and the partner
-                    //System.out.println("RULE: " + r);
-                    if(actualNode.getClass().equals(SelectionNode.class)){
-                        actualNode = this.createJoinNegative(actual, partner, false,varPositions); // TODO createJoinNegative
-                        //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
-                    }else{
-                        actualNode = this.createJoinNegative(actualNode, partner, false,varPositions); // TODO createJoinNegative
-                        //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                } else {
+                    if (!atomsMinus.isEmpty()) {
+                        //There is still something within the negative body of the rule --> take it --> it's the new partner
+                        partner = getBestPartner(atomsMinus, actualNode);
+                        //Create a joinNode from the actualNode and the partner
+                        //System.out.println("RULE: " + r);
+                        if (actualNode.getClass().equals(SelectionNode.class)) {
+                            actualNode = this.createJoinNegative(actual, partner, false, varPositions); // TODO createJoinNegative
+                            //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                        } else {
+                            actualNode = this.createJoinNegative(actualNode, partner, false, varPositions); // TODO createJoinNegative
+                            //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                        }
+                    } else {
+                        // Negative Rules do not contain operators. At least for our easy rewriting.
                     }
-                }else{
-                    // Negative Rules do not contain operators. At least for our easy rewriting.
-                }
                 }
             }
         }
         //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
-        HeadNode hN = new HeadNodeNegative(r.getHead(),rete, this.VarPosNodes.get(actualNode),actualNode);
-        hN.r=r;
+        HeadNode hN = new HeadNodeNegative(r.getHead(), rete, this.VarPosNodes.get(actualNode), actualNode);
+        hN.r = r;
         actualNode.addChild(hN);
     }
     
@@ -186,6 +188,11 @@ public class ReteBuilder {
      * @param r the rule that should be added
      */
     public void addRule(Rule r){
+        
+        if( r.getBodyPlus().isEmpty() && r.getBodyMinus().isEmpty()) {
+            throw new RuntimeException("Rule "+r+" neither has positive literals nor negative literals.");
+        }
+        
         //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
         VarPosNodes = new HashMap<Node,HashMap<Variable,Integer>>();
         HashMap<Atom,HashMap<Variable,Integer>> varPositions = new HashMap<Atom, HashMap<Variable,Integer>>();
@@ -217,6 +224,7 @@ public class ReteBuilder {
         
         Atom actual;
         Node actualNode;
+        boolean hasNoPositiveLiteral = false;
         //we choose an atom with which we want to start
         if(!atomsPlus.isEmpty()){
             actual = getBestNextAtom(atomsPlus);
@@ -224,6 +232,7 @@ public class ReteBuilder {
         }else{
             actual = getBestNextAtom(atomsMinus);
             actualNode = rete.getBasicLayerMinus().get(actual.getPredicate()).getChildNode(actual.getAtomAsReteKey());
+            hasNoPositiveLiteral = true;
         }
         
          
@@ -239,15 +248,36 @@ public class ReteBuilder {
         HeadNodeConstraint constraintNode = null;
         
         
-        if(atomsPlus.isEmpty() && operators.isEmpty() && !atomsMinus.isEmpty() && !r.isConstraint()){
+        // immediately create ChoiceNode if rule has no positive body
+        boolean doneChoiceNode = false;
+        if( hasNoPositiveLiteral && operators.isEmpty() && !r.isConstraint()){
             // if the rule consisted only of one positive atom no operators and has a negative body we have to create the choice and constraint Node here.
             constraintNode = new HeadNodeConstraint(rete, varPositions.get(actual).size());
             cN = new ChoiceNode(rete, varPositions.get(actual).size(),r,varPositions.get(actual), constraintNode);
             actualNode.addChild(cN);
+            
+            // rule's positive body is always fulfilled, hence add empty instance
+            Term [] zero_term = {};
+            Instance zero_inst = Instance.getInstance(zero_term, 0, 0);
+            cN.addInstance(zero_inst);
+            
+            doneChoiceNode = true;
         }
+        
         
         while(!atomsPlus.isEmpty() || !atomsMinus.isEmpty() || !operators.isEmpty()){
             //While there is still seomthing in the rules body
+
+            if (atomsPlus.isEmpty() && operators.isEmpty() && !r.isConstraint() && !doneChoiceNode) {
+                // if atomPlus is now empty  we removed the last atom from here.
+                // If there is a negative part and no operators are within this Rule then we now add the ChoiceNode and constraintNode
+                // since the positive part of the rule is satisfied now
+                constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
+                cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(), r, actualNode.tempVarPosition, constraintNode);
+                actualNode.addChild(cN);
+                doneChoiceNode = true;
+            }
+            
             if(!atomsPlus.isEmpty()){
                 //There is still something within the positive body of the rule --> take it --> it's the new partner
                 partner = getBestPartner(atomsPlus, actualNode);
@@ -258,15 +288,6 @@ public class ReteBuilder {
                     actualNode = createJoin(actualNode, partner, true,varPositions);
                 }
                 
-                
-                if(atomsPlus.isEmpty() && operators.isEmpty() && !atomsMinus.isEmpty() && !r.isConstraint()){
-                    // if atomPlus is now empty  we removed the last atom from here.
-                    // If there is a negative part and no operators are within this Rule then we now add the ChoiceNode and constraintNode
-                    // since the positive part of the rule is satisfied now
-                    constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
-                    cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(),r,actualNode.tempVarPosition, constraintNode);
-                    actualNode.addChild(cN);
-                }
             }else{
                 if(!operators.isEmpty()){
                     for(Operator op: operators){

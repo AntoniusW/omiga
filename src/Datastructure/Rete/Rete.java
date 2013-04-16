@@ -10,6 +10,7 @@ import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Predicate;
 import Entity.Variable;
+import Exceptions.ImmediateBacktrackingException;
 import Interfaces.Term;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -74,25 +75,32 @@ public class Rete {
 
         if (GlobalSettings.didLearn) {
             GlobalSettings.didLearn = false;
-            System.out.println("Propagation before learning:");
-            printAnswerSet(null);
+//            System.out.println("Propagation before learning:");
+//            printAnswerSet(null);
             
             // we might have learned some new rule, start its basic propagation first
             ReteModificationHelper.getReteModificationHelper().triggerPropagationAfterModification();
 
-            System.out.println("Propagation after learning:");
-            printAnswerSet(null);
+//            System.out.println("Propagation after learning:");
+//            printAnswerSet(null);
         }
 
         boolean flag = true;
         while(flag && satisfiable){
             flag = false;
             // we propagate all instances from positive and negative basic layer
-            for(BasicNode bn: this.basicLayerPlus.values()){
-                if(bn.propagate()) flag = true;
-            }
-            for(BasicNode bn: this.basicLayerMinus.values()){
-                if(bn.propagate()) flag = true;
+            try {   // fail-fast on unsatisfiability by an ImmediateBacktrackingException.
+                for (BasicNode bn : this.basicLayerPlus.values()) {
+                    if (bn.propagate()) {
+                        flag = true;
+                    }
+                }
+                for (BasicNode bn : this.basicLayerMinus.values()) {
+                    if (bn.propagate()) {
+                        flag = true;
+                    }
+                }
+            } catch (ImmediateBacktrackingException e) {
             }
         }
         if(!satisfiable){
@@ -124,9 +132,9 @@ public class Rete {
      */ 
     public void addInstancePlus(Predicate p, Instance instance){
         if(this.containsInstance(p, instance, false)) {
-            System.out.println("Adding "+p.getName()+instance+" to positive memory, but exists in negative already.");
+            //System.out.println("Adding "+p.getName()+instance+" to positive memory, but exists in negative already.");
             //System.out.println("HAHA UNSAT! via plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
-            this.satisfiable = false;
+            //this.satisfiable = false;
         }
         if(this.containsInstance(p, instance, true)) {
             //System.out.println("BLING!: DOUBLE ADD!");
@@ -142,15 +150,16 @@ public class Rete {
      * @param instance the instance you want to add
      */ 
     public void addInstanceMinus(Predicate p,Instance instance){
-        if(this.containsInstance(p, instance, true)) {
-            System.out.println("Adding "+p.getName()+instance+" to negative memory, but exists in positive already.");
-            //System.out.println("HAHA UNSAT via minus!: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
-            this.satisfiable = false;
-        }
-        if(this.containsInstance(p, instance, false)) {
+        if (this.containsInstance(p, instance, false)) {
             //System.out.println("BLING!: DOUBLE ADD!");
+//            System.out.println("Double add to memory; returning. "+p+" "+ instance);
             return;
         } // TODO: Somehow avoid this if.
+        if(this.containsInstance(p, instance, true)) {
+//            System.out.println("Adding "+p.getName()+instance+" to negative memory, but exists in positive already.");
+            // TODO: let constraints handle this case
+            //this.satisfiable = false;
+        }
         //System.err.println("AddingMINUS: " + p.getName() + "(" + instance + ")");
         /*System.err.println(basicLayerMinus.get(p));*/
         basicLayerMinus.get(p).addInstance(instance);

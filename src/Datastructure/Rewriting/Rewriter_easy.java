@@ -19,6 +19,7 @@ import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  *
@@ -202,6 +203,22 @@ public class Rewriter_easy {
                 Rule rule2Add = new Rule(headAtom, new ArrayList<Atom>(), BodyMinus, new ArrayList<Operator>());
                 ret.addNegRule(rule2Add);
             }
+        }
+        
+        // for each predicate pred(X,Y,Z), create a constraint
+        // :- pred(X,Z,Y), not pred(X,Y,Z).
+        for (Iterator it = Predicate.getPredicatesIterator(); it.hasNext();) {
+            Predicate predicate = (Predicate)it.next();
+            Rule predConstraint = new Rule();
+            Term[] terms = new Term[predicate.getArity()];
+            for (int i = 0; i < terms.length; i++) {
+                terms[i] = Variable.getVariable("T"+i);
+            }
+            Atom at = Atom.getAtom(predicate.getName(), predicate.getArity(), terms);
+            predConstraint.addAtomPlus(at);
+            predConstraint.addAtomMinus(at);
+            
+            ret.addRule(predConstraint);
         }
         
         // We keep all Facts of the input context as they are and put them into the rewritten context as well

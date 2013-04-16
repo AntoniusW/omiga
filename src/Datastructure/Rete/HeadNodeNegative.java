@@ -7,8 +7,12 @@ package Datastructure.Rete;
 import Entity.Atom;
 import Entity.GlobalSettings;
 import Entity.Instance;
+import Entity.Rule;
 import Entity.TrackingInstance;
 import Entity.Variable;
+import Interfaces.Term;
+import Learning.GraphLearner;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -55,7 +59,8 @@ public class HeadNodeNegative extends HeadNode{
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
     
                 TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
-                        instance2Add.propagationLevel + 1, instance.decisionLevel); // track rule origin
+                          0, rete.getChoiceUnit().getDecisionLevel()
+                        /*instance2Add.propagationLevel + 1, instance.decisionLevel*/); // track rule origin
                 inst.setCreatedByRule(r);
                 inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);
@@ -67,8 +72,35 @@ public class HeadNodeNegative extends HeadNode{
                 //System.out.println("HeadNodeNegative adds: " + instance2Add + " because of: " + instance);
             }
         }else{
-            System.out.println("HeadNodeNegative kills interpretation: "+r+" "+instance2Add);
-            this.rete.satisfiable = false;
+//            System.out.println("HeadNodeNegative makes inconsistent: "+r+" "+instance2Add);
+            //this.rete.satisfiable = false;
+            // let constraint handle this inconsistency, add instance
+            TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
+                        0, rete.getChoiceUnit().getDecisionLevel()
+                        /*instance2Add.propagationLevel + 1, instance.decisionLevel*/); // track rule origin
+                inst.setCreatedByRule(r);
+                inst.setCreatedByHeadNode(this);
+                inst.setFullInstance(instance);
+                //inst.setDecisionLevel(GlobalSettings.getGlobalSettings().
+                //        getManager().getContext().getChoiceUnit().getDecisionLevel());
+                rete.addInstanceMinus(a.getPredicate(), inst);
+            
+/*          // TODO: avoid below generation of constraint, add these directly in the rewriting!
+            // create a new constraint of the form:
+            // :- hd_r(X,Y,Z), -hd_r(X,Y,Z).
+            Rule constraint = new Rule();
+            int arity = r.getHead().getArity();
+            Term[] vars = new Term[arity];
+            for (int i = 0; i < vars.length; i++) {
+                vars[i] = Variable.getVariable("cVar:"+i);
+            }
+            Atom head_allvars = Atom.getAtom(r.getHead().getName(), arity, vars);
+            constraint.addAtomMinus(head_allvars);
+            constraint.addAtomPlus(head_allvars);
+            System.out.println("Creating new constraint: "+constraint);
+            GraphLearner gl = new GraphLearner();
+            gl.learnRuleAndAddToRete(constraint, instance2Add, this);
+*/            
         }
     }
     

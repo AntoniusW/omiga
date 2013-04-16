@@ -66,7 +66,10 @@ public class ChoiceNode extends Node{
         }*/
         //System.out.println("ChoiceNode created!");
         rete.getChoiceUnit().addChoiceNode(this); // The choiceNode is registered on creation within the choiceUnit
-        this.tempVarPosition = varPosition;
+        // TODO/FIX: addNegRule somehow changes varPositions (after learning)
+        // workaround: copy HashMap
+        this.tempVarPosition = (HashMap<Variable, Integer>) varPosition.clone();
+        //this.tempVarPosition = varPosition;
         this.constraintNode = constraintNode;
         //constraintNode.setChoicenode(this);
         //this.allInstances = new ArrayList<Instance>(); //TODO Init size of this list?
@@ -253,7 +256,9 @@ public class ChoiceNode extends Node{
     }
     
     public void disableInstance(Instance inst, int decisionLevel) {
-        disabledInstances.put(inst, decisionLevel);
+        if( !disabledInstances.containsKey(inst)) {
+            disabledInstances.put(inst, decisionLevel);
+        }
     }
     
     

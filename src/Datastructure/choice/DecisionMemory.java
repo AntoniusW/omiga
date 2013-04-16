@@ -152,6 +152,15 @@ public class DecisionMemory {
      * prints the DecisionMemory to standard Out sorted by decisionlevel then Node, writing each Instance into one row.
      */
     public void printDecisionMemory(){
+        System.out.println("Decision memory:");
+        for (Node node : Node.nodes) {
+                if( node instanceof ChoiceNode ) {
+                    System.out.println("  Node "+node.toString());
+                    System.out.print("    ");
+                    ((ChoiceNode)node).printChoiceNodeInstances();
+                    continue;
+                }
+        }
         if( true ) {    // debug only
             return;
         }

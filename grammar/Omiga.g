@@ -19,6 +19,7 @@ import Enumeration.OP;
 
 @members{
 private ContextASPMCSRewriting context;
+private static int anonVarCounter = 0;
 int rule_or_fact_counter;
 
 public void setContext(ContextASPMCSRewriting context) {
@@ -65,8 +66,8 @@ literal[Rule r]
 	;
 	
 operation returns[Operator op]
-	:	v1=VAR comp_sym e1=expression {$op=new Operator(Variable.getVariable($v1.text),$e1.op,$comp_sym.openu);}
-	|	v2=VAR 'is' e2=expression {$op=new Operator(Variable.getVariable($v2.text),$e2.op,OP.ASSIGN);}
+	:	v1=var comp_sym e1=expression {$op=new Operator($v1.variable,$e1.op,$comp_sym.openu);}
+	|	v2=var 'is' e2=expression {$op=new Operator($v2.variable,$e2.op,OP.ASSIGN);}
 	;
 	
 expression returns[OperandI op]
@@ -106,7 +107,7 @@ termlist returns[ArrayList<Term> termlist]
 	
 term	returns[Term term]
 	:	constant {$term=$constant.constnt;}
-	|	VAR {$term=Variable.getVariable($VAR.text);}
+	|	var {$term=$var.variable;}
 	|	function {$term=FuncTerm.getFuncTerm($function.name,$function.terms);}
 	;
 	
@@ -127,6 +128,10 @@ comp_sym returns[OP openu]
 	|	'=' {$openu=OP.EQUAL;}
 	|	'!=' {$openu=OP.NOTEQUAL;}
 	;
+
+var returns[Variable variable]
+        :       VAR {$variable = $VAR.text.equals("_") ? Variable.getVariable("V"+anonVarCounter++) : Variable.getVariable($VAR.text);}
+        ;
 	
 
 ID  :	('a'..'z') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*

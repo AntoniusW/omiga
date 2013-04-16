@@ -30,6 +30,7 @@ public class main_FINAL_NormalASP {
     private static String filename;
     private static Integer answersets;
     private static boolean outprint;
+    private static boolean showRewrittenProgram;
 
     public static void main(String args[]) /*throws FactSizeException, RuleNotSafeException*/ {
         long start = System.currentTimeMillis();
@@ -40,15 +41,6 @@ public class main_FINAL_NormalASP {
             help();
             return;
         }
-        
-        Term[] t1 = {Constant.getConstant("0")};
-        Term[] t2 = {Constant.getConstant("9")};
-        int hc1 = Term.hashCode(t1);
-        int hc2 = Term.hashCode(t2);
-        int hc1b = t1.hashCode();
-        int hc2b = t2.hashCode();
-        Instance inst1 = Instance.getInstance(t1, 0, 0);
-        Instance inst2 = Instance.getInstance(t2, 0, 0);
 
 
         filename = args[0];
@@ -56,6 +48,7 @@ public class main_FINAL_NormalASP {
         answersets = 1;
         filter = null;
         outprint = true;
+        showRewrittenProgram = false;
 
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
@@ -72,6 +65,9 @@ public class main_FINAL_NormalASP {
             if (args[i].startsWith("-rewriting=")) {
                 rewriting = Integer.parseInt(args[i].substring("-rewriting=".length()));
             }
+            if (args[i].startsWith("-showrewriting")) {
+                showRewrittenProgram = true;
+            }
             if (args[i].startsWith("-help") || args[i].startsWith("--help") || args[i].startsWith("-?")) {
                 help();
                 return;
@@ -79,9 +75,11 @@ public class main_FINAL_NormalASP {
         }
 
         //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
+        System.out.println("Input file: "+filename);
 
         // create context
         ContextASPMCSRewriting ctx = new ContextASPMCSRewriting();
+        ctx.setStoresRulesOnly(true);   // dont create Rete in this context
         ContextASPRewriting rewctx = null;
         // parsing with ANTLR
         long parsing_time = 0;
@@ -107,6 +105,10 @@ public class main_FINAL_NormalASP {
                     Rewriter_easy rewriter = new Rewriter_easy();
                     rewctx = rewriter.rewrite(ctx);
 
+                    if( showRewrittenProgram) {
+                        rewctx.printContext();
+                    }
+                    
                     //System.out.println("Read in program is: ");
                     //ctx.printContext();
                 } catch (RuleNotSafeException ex) {

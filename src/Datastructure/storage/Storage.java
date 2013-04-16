@@ -46,7 +46,11 @@ public class Storage {
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
     public void initStorage(int arity){
         this.arity = arity;
-        this.memory = new HashMap[arity];
+        if ( arity == 0 ) { // 0-ary predicates need memory for true-false as empty instance
+            memory = new HashMap[1];
+        } else {
+            this.memory = new HashMap[arity];
+        }
         for(int i = 0; i < memory.length;i++){
             memory[i] = new HashMap<Term,HashSet<Instance>>();
         }

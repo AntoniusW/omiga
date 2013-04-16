@@ -27,6 +27,13 @@ import network.ReplyMessage;
  */
 public class ContextASP {
     
+    // the first context is only used to store the rules of the original program
+    private boolean storesRulesOnly;
+
+    public void setStoresRulesOnly(boolean storesRulesOnly) {
+        this.storesRulesOnly = storesRulesOnly;
+    }
+    
         
     protected ArrayList<Rule> negRules;
 
@@ -38,7 +45,8 @@ public class ContextASP {
     public void addNegRule(Rule r){
         this.negRules.add(r);
         //reteBuilder.addNegRule(r);
-        reteBuilder.addRuleNeg(r);
+        if ( !storesRulesOnly )
+            reteBuilder.addRuleNeg(r);
     }
     
     protected static int nextID = 0;
@@ -70,6 +78,7 @@ public class ContextASP {
         this.reteBuilder = new ReteBuilder(rete);
         this.id=getNextID();
         negRules = new ArrayList<Rule>();
+        storesRulesOnly = false;
     }
     
     public int getID(){
@@ -101,7 +110,8 @@ public class ContextASP {
     public void addRule(Rule r) throws RuleNotSafeException{
         if(r.isSafe()) {
             rules.add(r);
-            reteBuilder.addRule(r);
+            if( !storesRulesOnly)
+                reteBuilder.addRule(r);
         }else{
             throw new RuleNotSafeException("This rule is not safe: " + r);
         }
@@ -121,12 +131,13 @@ public class ContextASP {
         }
         if(!factsIN.containsKey(p)) {
             factsIN.put(p, new ArrayList<Instance>());
-            if(!rete.containsPredicate(p, true)){
+            if( !storesRulesOnly && !rete.containsPredicate(p, true)){
                 rete.addPredicatePlus(p);
             }    
         }
         factsIN.get(p).add(instance);
-        rete.addInstancePlus(p, instance);
+        if( !storesRulesOnly)
+            rete.addInstancePlus(p, instance);
     }
     
     /**
@@ -143,7 +154,8 @@ public class ContextASP {
         }
         if(!factsOUT.containsKey(p)) factsOUT.put(p, new ArrayList<Instance>());
         factsOUT.get(p).add(instance);
-        rete.addInstanceMinus(p, instance);
+        if( !storesRulesOnly )
+            rete.addInstanceMinus(p, instance);
     }
     
     /**

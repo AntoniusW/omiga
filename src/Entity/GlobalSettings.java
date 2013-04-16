@@ -13,6 +13,8 @@ import Manager.Manager;
  */
 public class GlobalSettings {
     
+    public boolean debugHelper = false;
+    
     public static int decisionCounter = 0;
     public static int maxDecisionLevel = 0;
     
@@ -23,7 +25,7 @@ public class GlobalSettings {
     
     // below string is replaced by build-script automatically,
     // do not change line breaking
-    public static String version="c0967e291bf1950cc0938271f9aab666672e174f";
+    public static String version="97ccdc4d15899518be057cf0b0c81dc5c98c93dc";
     
     private Manager manager;
 
@@ -47,18 +49,7 @@ public class GlobalSettings {
     }
     
     private GlobalSettings() {  
-        //stringbasedHashCode=true;
+        debugHelper = false;
     }
-
-    /*
-    public boolean isStringbasedHashCode() {
-        return stringbasedHashCode;
-    }
-
-    public void setStringbasedHashCode(boolean stringbasedHashCode) {
-        this.stringbasedHashCode = stringbasedHashCode;
-    }
-     */
-
     
 }

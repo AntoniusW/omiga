@@ -7,6 +7,7 @@ package Entity;
 import Enumeration.OP;
 import Interfaces.Term;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -27,10 +28,20 @@ public class Rule {
     
     protected Atom head;
     protected ArrayList<Atom> bodyPlus;
+
+    public void setBodyPlus(ArrayList<Atom> bodyPlus) {
+        this.bodyPlus = bodyPlus;
+    }
+
+    public void setBodyMinus(ArrayList<Atom> bodyMinus) {
+        this.bodyMinus = bodyMinus;
+    }
     protected ArrayList<Atom> bodyMinus;
     protected ArrayList<Operator> operators;
     protected HashSet<Variable> bodyMinusVars;
     protected boolean headIsFixedByBodyMinus;
+    
+    public ArrayList<Pair<Variable,Term>> variableEqualities; // used during learning
     
     /**
      * 
@@ -55,6 +66,7 @@ public class Rule {
                 }
             }
         }
+        variableEqualities = null;
     }
     
     /**
@@ -62,11 +74,12 @@ public class Rule {
      * but using this constructor and then the addPostive/Negative Atom methods, has proven more be more comfortable.
      */
     public Rule(){
-        this.head = null;
-        this.bodyPlus = new ArrayList<Atom>();
-        this.bodyMinus = new ArrayList<Atom>();
-        this.operators = new ArrayList<Operator>();
-        this.bodyMinusVars = new HashSet<Variable>();
+        head = null;
+        bodyPlus = new ArrayList<Atom>();
+        bodyMinus = new ArrayList<Atom>();
+        operators = new ArrayList<Operator>();
+        bodyMinusVars = new HashSet<Variable>();
+        variableEqualities = new ArrayList<Pair<Variable, Term>>();
     }
     
     /*
@@ -189,6 +202,89 @@ public class Rule {
                 for(Variable v: t.getUsedVariables()){
                     if(!hs.contains(v)) {
                         System.err.println("Head not Safe: " + head);
+                        return false;
+                    }
+                }
+            }
+        }
+        //this.setHeadIsFixed();
+        return true;
+    }
+    
+    public boolean isSafePropagation() {
+        HashSet<Variable> hs = new HashSet<Variable>();
+        // We create a HashSet containing all Variables occuring in the body.
+        for(Atom ba: bodyPlus){
+            Atom pir = (Atom)ba;
+            if(ba.getClass().equals(Atom.class)){
+                for(Term t: pir.getTerms()){
+                    for(Variable v: t.getUsedVariables()){
+                        hs.add(v);
+                    }
+                }
+            }
+        }
+        for(Atom ba: bodyMinus){
+            Atom pir = (Atom)ba;
+            if(ba.getClass().equals(Atom.class)){
+                for(Term t: pir.getTerms()){
+                    for(Variable v: t.getUsedVariables()){
+                        hs.add(v);
+                    }
+                }
+            }
+        }
+        
+        for(Operator op: this.operators){
+            for(Operator op2: this.operators){
+                int i = 0;
+                for(Variable v: op2.getUsedVariables()){
+                    if(hs.contains(v)) i++;
+                }
+                if(op2.getOP().equals(OP.ASSIGN) && (i >= op2.getUsedVariables().size()-1)){
+                    hs.addAll(op2.getUsedVariables());
+                }else{
+                    if(i == op2.getUsedVariables().size()){
+                        hs.addAll(op2.getUsedVariables());
+                    }else{
+                        
+                    }
+                }
+                /*if(i >= op2.getUsedVariables().size()-1){ // All but one Variables of this operator are fixed --> Add the new one
+                    hs.addAll(op2.getUsedVariables());
+                }*/
+            }
+        }
+        // we check for each Operator if it is well defined (all Variables in HS)
+        for(Operator op: this.operators){
+            for(Variable v: op.getUsedVariables()){
+                if(!hs.contains(v)) {
+//                    System.err.println("Operator not Safe: " + op + " because of: " + v);
+                    return false;
+                }
+            }
+        }
+        
+/*        // we check for each Variable of the negative body if it also occurs in the positive body
+        for(Atom ba: bodyMinus){
+            if(ba.getClass().equals(Atom.class)){
+                Atom pir = (Atom)ba;
+                for(Term t: pir.getTerms()){
+                    for(Variable v: t.getUsedVariables()){
+                        if(!hs.contains(v)) {
+                            System.err.println("Atom not Safe: not " + ba);
+                            return false;
+                        }
+                    }
+                }
+            }
+        }*/
+        // we check if the variables of the head atom are contained in the positive body
+        if(head != null){
+            for(Term t: this.head.getTerms()){
+                for(Variable v: t.getUsedVariables()){
+                    if(!hs.contains(v)) {
+//                        System.err.println("Head not Safe: " + head);
                         return false;
                     }
                 }

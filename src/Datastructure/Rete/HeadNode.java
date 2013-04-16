@@ -58,20 +58,22 @@ public class HeadNode extends Node{
      */
     @Override
     public void addInstance(Instance instance){
-        System.out.println("HeadNode "+this.toString()+" adding instance "+instance.toString()+" @DL="+instance.decisionLevel);
+//        System.out.println("HeadNode "+this.toString()+" adding instance "+instance.toString()+" @DL="+instance.decisionLevel);
        //System.err.println("HeadNode instance reached: " + instance + " FROM: " + from + " Atom: " + this.a);
         //System.out.println(this.tempVarPosition);
         for(int i=0; i < this.children.size();i++){
         // the only children of HeadNodes are choice Nodes --> We remove the actual Instance from the choice Node
         // The instance should match the instance of the choice Node, since after the positive Part + Operators have been apllied no more Variables are added to the assignment
             //this.children.get(i).removeInstance(instance);
-            ((ChoiceNode)children.get(i)).disableInstance(instance, instance.decisionLevel);
+            ((ChoiceNode)children.get(i)).disableInstance(instance, /*instance.decisionLevel*/rete.getChoiceUnit().getDecisionLevel());
         }
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
+            System.out.println("Constraint violated: "+r+" "+instance.toString());
             GraphLearner gl = new GraphLearner();
-            gl.learnRuleAndAddToRete(r, instance, this);
-            rete.satisfiable = false;
+            gl.learnRuleFromConflict(r, instance, this, rete);
+//            gl.learnRuleAndAddToRete(r, instance, this);
+            //rete.satisfiable = false;
             return;
         }
         //We unify the headAtom of the corresponding rule
@@ -79,22 +81,23 @@ public class HeadNode extends Node{
         Instance instance2Add = Unifyer.unifyAtom(a, instance, tempVarPosition);
         
         if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
-            if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
+            //if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 //if the resolved instance is not contained within our rete we add it
                 //int currentDL = GlobalSettings.getGlobalSettings().
                 //        getManager().getContext().getChoiceUnit().getDecisionLevel();
                 TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
-                                                instance.propagationLevel+1, instance.decisionLevel); // track rule origin
+                                                0, rete.getChoiceUnit().getDecisionLevel()
+                                                /*instance.propagationLevel+1, instance.decisionLevel*/); // track rule origin
                 inst.setCreatedByRule(r);
                 inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);
                 rete.addInstancePlus(a.getPredicate(),inst);
-            }else{
+            //}else{
                 //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.
-                GraphLearner gl = new GraphLearner();
+//                GraphLearner gl = new GraphLearner();
 //                gl.learnRuleAndAddToRete(r, instance, this);
-                this.rete.satisfiable = false;
-            }
+                //this.rete.satisfiable = false;
+            //}
         }
     }
 

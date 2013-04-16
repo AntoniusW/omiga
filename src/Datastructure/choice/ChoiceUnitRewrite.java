@@ -121,8 +121,8 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         
         nextGuessIsNegative = true;
 
-        System.out.println("Decision memory before backtracking:");
-        printDecisionMemory();
+        //System.out.println("Decision memory before backtracking:");
+        //printDecisionMemory();
 
         // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
         memory.backtrackTo(backtrackTo);
@@ -167,8 +167,8 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 }
             }
         }*/
-        System.out.println("Decision memory after backtracking:");
-        printDecisionMemory();
+        //System.out.println("Decision memory after backtracking:");
+        //printDecisionMemory();
     }
     
     
@@ -247,16 +247,16 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             ArrayList<Pair<Atom, Instance>> toMakeNegative = choicePair.getArg2();
             Instance choiceInstance = new Instance(choicePair.getArg1());
             //if( toMakeNegative != null ) {
-                System.out.println("POSITIVE Guess.");
+//                System.out.println("POSITIVE Guess.");
                 for (Pair<Atom, Instance> pair : toMakeNegative) {
                     c.getRete().addInstanceMinus(pair.getArg1().getPredicate(), pair.getArg2());
-                    System.out.println("Adding: " + pair.getArg2() + " to: "
-                            + pair.getArg1() +" @DL="+pair.getArg2().decisionLevel);
+//                    System.out.println("Adding: " + pair.getArg2() + " to: "
+//                            + pair.getArg1() +" @DL="+pair.getArg2().decisionLevel);
                 }
                 choiceInstance.decisionLevel = getDecisionLevel();
                 choiceStack.add(new Pair<ChoiceNode, Instance>(cN, choiceInstance));
                 
-                System.out.println("Choice point: fire "+cN.getRule()+" "+choiceInstance);
+                System.out.println("Choice point: fire "+cN.getRule()+" "+choiceInstance+" @DL="+getDecisionLevel());
                 
                 return true;
             //}
