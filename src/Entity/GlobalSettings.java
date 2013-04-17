@@ -18,6 +18,7 @@ public class GlobalSettings {
     public static int decisionCounter = 0;
     public static int maxDecisionLevel = 0;
     
+    public static boolean noLearning = false;
     public static boolean didLearn = false;
     public static boolean initialReteBuilding = true;   // indicates whether Rete nodes are added from learning new rules.
     

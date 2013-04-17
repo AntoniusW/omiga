@@ -86,8 +86,8 @@ public class HeadNode extends Node{
                 //int currentDL = GlobalSettings.getGlobalSettings().
                 //        getManager().getContext().getChoiceUnit().getDecisionLevel();
                 TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
-                                                0, rete.getChoiceUnit().getDecisionLevel()
-                                                /*instance.propagationLevel+1, instance.decisionLevel*/); // track rule origin
+                                                /*0, rete.getChoiceUnit().getDecisionLevel()*/
+                                                instance.propagationLevel+1, instance.decisionLevel); // track rule origin
                 inst.setCreatedByRule(r);
                 inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);

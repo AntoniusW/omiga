@@ -2,6 +2,8 @@ col(N,b) :- node(N), not col(N,r), not col(N,g).
 col(N,r) :- node(N), not col(N,b), not col(N,g).
 col(N,g) :- node(N), not col(N,r), not col(N,b).
 
+foo(X1) :- node(X), X1 is X+1.
+
 :- link(N1,N2), N1 != N2, col(N1,C), col(N2,C).
 
 %%%% Without learning, requires 2971 decisions and 18 decision levels.

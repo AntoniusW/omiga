@@ -17,6 +17,11 @@ import java.util.Collection;
 public class BasicNodeNegative extends BasicNode{
     
     private boolean closed;
+    private int closedAtDL;
+
+    public int getClosedAtDL() {
+        return closedAtDL;
+    }
     
     public BasicNodeNegative(int arity, Rete rete, Predicate pred){
         super(arity,rete,pred);
@@ -53,6 +58,7 @@ public class BasicNodeNegative extends BasicNode{
      */
     public void close(){
         //System.err.println(this + " --> closed");
+        closedAtDL = rete.getChoiceUnit().getDecisionLevel();
         this.closed = true;
         //for(SelectionNode sN: this.basicChildren){
         SelectionNodeNegative sN;

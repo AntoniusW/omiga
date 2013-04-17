@@ -59,8 +59,8 @@ public class HeadNodeNegative extends HeadNode{
             if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
     
                 TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
-                          0, rete.getChoiceUnit().getDecisionLevel()
-                        /*instance2Add.propagationLevel + 1, instance.decisionLevel*/); // track rule origin
+                          /*0, rete.getChoiceUnit().getDecisionLevel()*/
+                        instance2Add.propagationLevel + 1, instance.decisionLevel); // track rule origin
                 inst.setCreatedByRule(r);
                 inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);
@@ -76,8 +76,8 @@ public class HeadNodeNegative extends HeadNode{
             //this.rete.satisfiable = false;
             // let constraint handle this inconsistency, add instance
             TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
-                        0, rete.getChoiceUnit().getDecisionLevel()
-                        /*instance2Add.propagationLevel + 1, instance.decisionLevel*/); // track rule origin
+                        /*0, rete.getChoiceUnit().getDecisionLevel()*/
+                        instance2Add.propagationLevel + 1, instance.decisionLevel); // track rule origin
                 inst.setCreatedByRule(r);
                 inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);

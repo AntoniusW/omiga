@@ -8,4 +8,9 @@ package Exceptions;
  */
 public class ImmediateBacktrackingException extends RuntimeException 
 {
+    public int conflictCauseAtDL;
+
+    public ImmediateBacktrackingException(int conflictCauseAtDL) {
+        this.conflictCauseAtDL = conflictCauseAtDL;
+    }
 }

@@ -4,6 +4,7 @@
  */
 package Datastructure.choice;
 
+import Datastructure.Rete.BasicNode;
 import Datastructure.Rete.ChoiceNode;
 import Datastructure.Rete.Unifyer;
 import Entity.Atom;
@@ -18,6 +19,8 @@ import java.util.HashSet;
 import java.util.Stack;
 import network.ReplyMessage;
 import Datastructure.Rete.Node;
+import Exceptions.ImmediateBacktrackingException;
+import Entity.GlobalSettings;
 
 
 /**
@@ -72,15 +75,16 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         calculationFinished = false;
     }
     
-    protected void closeActualSCC(){
-        c.getRete().propagate();
-        for(Predicate p: SCCPreds.get(actualSCC)){
-           if(c.getRete().containsPredicate(p, false)) {
-               c.getRete().getBasicNodeMinus(p).close();
-           }
-        }
-        this.actualSCC++;
-        this.closedAt.add(this.memory.getDecisonLevel());
+    protected void closeActualSCC() {
+            //memory.setDecisionLevel(getDecisionLevel()+1);
+            c.getRete().propagate();
+            for (Predicate p : SCCPreds.get(actualSCC)) {
+                if (c.getRete().containsPredicate(p, false)) {
+                    c.getRete().getBasicNodeMinus(p).close();
+                }
+            }
+            this.actualSCC++;
+            this.closedAt.add(this.memory.getDecisonLevel());
     }
     
     protected void openActualSCC(){
@@ -97,6 +101,12 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
     @Override
     public void backtrack() {
         throw new RuntimeException("ChoiceUnitRewrite.backtrack: Should not come here.");
+    }
+
+    @Override
+    public void printDecisionMemory() {
+        System.out.println("ChoiceStack: "+choiceStack);
+        super.printDecisionMemory();
     }
     
     
@@ -121,8 +131,8 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         
         nextGuessIsNegative = true;
 
-        //System.out.println("Decision memory before backtracking:");
-        //printDecisionMemory();
+//        System.out.println("Decision memory before backtracking:");
+//        printDecisionMemory();
 
         // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
         memory.backtrackTo(backtrackTo);
@@ -167,8 +177,8 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 }
             }
         }*/
-        //System.out.println("Decision memory after backtracking:");
-        //printDecisionMemory();
+//        System.out.println("Decision memory after backtracking:");
+//        printDecisionMemory();
     }
     
     
@@ -235,6 +245,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         
         //We need to do a positive guess
         //addChoicePoint();
+        System.out.println("Searching positive guess:");
         memory.setDecisionLevel(getDecisionLevel()+1);  // increase decision level
         for(ChoiceNode cN: SCC.get(actualSCC)){
             Pair<Instance,ArrayList<Pair<Atom, Instance>>> choicePair = cN.nextChoiceableInstance();
@@ -283,26 +294,42 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 return true;
             }*/
         }
+        System.out.println("No positive guess found in current SCC, closing SCCs now.");
         memory.setDecisionLevel(getDecisionLevel()-1);  // nothing was added, decrease decision level again.
         
         //if we reach this point this means the actual SCC contains no more guesses
         // therefore we close each Predicate of this SCC (HeadPredicates)
-        this.closeActualSCC(); // closing the SCC increases actual SCC to the next SCC
-        if(SCC.size() <= actualSCC) {
-            return false;
-        } // We have no more ChoiceNode to guess on!
-
-        //We can close all reached SCCs that are of size one (as they have no more input and do not depend on anything else!
-        while(this.SCCSize.get(actualSCC) <= 1){
-            
-            if(SCCSize.get(actualSCC) == 1){
-               if(SCCPreds.get(actualSCC).size() > 1) break;
-            }
-            
+        try {
             this.closeActualSCC(); // closing the SCC increases actual SCC to the next SCC
-            if(SCC.size() <= actualSCC) {
+            if (SCC.size() <= actualSCC) {
                 return false;
             } // We have no more ChoiceNode to guess on!
+
+            //We can close all reached SCCs that are of size one (as they have no more input and do not depend on anything else!
+            while (this.SCCSize.get(actualSCC) <= 1) {
+                if (SCCSize.get(actualSCC) == 1) {
+                    if (SCCPreds.get(actualSCC).size() > 1) {
+                        break;
+                    }
+                }
+
+                this.closeActualSCC(); // closing the SCC increases actual SCC to the next SCC
+                if (SCC.size() <= actualSCC) {
+                    return false;
+                } // We have no more ChoiceNode to guess on!
+            }
+        } catch (ImmediateBacktrackingException e) {
+            // closing resulted in inconsistency, backtrack
+
+            // Since we store facts within the basic Nodes on a stack, we have to empty this stack
+            // in case of unsatisfiability, since the stack has to be empty for the next propagation after backtracking
+            for(BasicNode bn: c.getRete().getBasicLayerPlus().values()){
+                bn.resetPropagation();
+            }
+            for(BasicNode bn: c.getRete().getBasicLayerMinus().values()){
+                bn.resetPropagation();
+            }
+            c.backtrack();
         }
         return choice();
     }

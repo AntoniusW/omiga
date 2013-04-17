@@ -68,6 +68,9 @@ public class main_FINAL_NormalASP {
             if (args[i].startsWith("-showrewriting")) {
                 showRewrittenProgram = true;
             }
+            if (args[i].startsWith("-nolearning")) {
+                 GlobalSettings.noLearning = true;
+            }
             if (args[i].startsWith("-help") || args[i].startsWith("--help") || args[i].startsWith("-?")) {
                 help();
                 return;

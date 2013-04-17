@@ -427,9 +427,21 @@ public class GraphLearner {
     // helper
     enum Body { POSITIVE_BODY, NEGATIVE_BODY };
     
-    public Rule learnRuleFromConflict(Rule r, Instance varAssignment, HeadNode starting, Rete rete) {
+    public void learnRuleFromConflict(Rule r, Instance varAssignment, HeadNode starting, Rete rete) {
+        
+        // for benchmarks: skip learning if required
+        if (GlobalSettings.noLearning) {
+            rete.satisfiable = false;
+            System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
+            throw new ImmediateBacktrackingException(rete.getChoiceUnit().getDecisionLevel());
+        }
+        
+        int conflictCauseAtDL;
+
         //System.out.println("Start unfoldConstraint.");
-        Rule learnedConstraint = unfoldConstraint(r, varAssignment, starting, new HashMap<Variable, Variable>(),rete);
+        Pair<Rule,Integer> learned = unfoldConstraint(r, varAssignment, starting, new HashMap<Variable, Variable>(),rete);
+        Rule learnedConstraint = learned.getArg1();
+        conflictCauseAtDL = learned.getArg2();
         //System.out.println("Unfolded constraint:\n\t"+learnedConstraint);
         //System.out.println("Equalities:\n\t"+learnedConstraint.variableEqualities);
         
@@ -437,12 +449,14 @@ public class GraphLearner {
         resolveEquality(learnedConstraint);
         //System.out.println("Resolved equalities:\n\t"+learnedConstraint);
         System.out.println("Learned constraint: "+learnedConstraint);
+        System.out.println("Conflict cause @DL="+conflictCauseAtDL);
+        System.out.println("Decision Level: "+rete.getChoiceUnit().getDecisionLevel());
         
         ChoiceUnit cu = GlobalSettings.getGlobalSettings().getManager().getContext().getChoiceUnit();
         
         // avoid learning too big rules, restrict rule/constraint size
         int bodySize = learnedConstraint.getBodyPlus().size() + learnedConstraint.getBodyMinus().size();
-        if (bodySize > 6 + Math.log(cu.getDecisionLevel())) {
+        if (bodySize > 6 + Math.sqrt(cu.getDecisionLevel())) {
             System.out.println("Skipping too large rules of size " + bodySize + " at DL=" + cu.getDecisionLevel());
         } else {
 
@@ -510,7 +524,10 @@ public class GraphLearner {
         // everything went well, halt propagation immediately
         rete.satisfiable = false;
         System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
-        throw new ImmediateBacktrackingException();
+        if ( conflictCauseAtDL != rete.getChoiceUnit().getDecisionLevel()) {
+            conflictCauseAtDL = conflictCauseAtDL;
+        }
+        throw new ImmediateBacktrackingException(conflictCauseAtDL);
     }
     
     private Term[] getGroundInstance(Atom at, Instance varAssignment, HeadNode starting, Map<Variable, Variable> oldVar2newVar) {
@@ -550,9 +567,10 @@ public class GraphLearner {
         return selectionCriterion;
     }
     
-    public Rule unfoldConstraint(Rule r, Instance varAssignment, HeadNode starting, Map<Variable, Variable> oldVar2newVar, Rete rete) {
+    public Pair<Rule,Integer> unfoldConstraint(Rule r, Instance varAssignment, HeadNode starting, Map<Variable, Variable> oldVar2newVar, Rete rete) {
 
 //        debugRecursionDepth++;
+        int conflictCauseAtDL = 0;
         
         Rule unfoldedBody = new Rule();
         
@@ -594,10 +612,21 @@ public class GraphLearner {
                                 getMemory().select(groundInstance).iterator().next();
                     } else {
                         // node is closed, stop tracing
+                        int closedAtDL = rete.getBasicLayerMinus().get(atom.getPredicate()).getClosedAtDL();
+                        if( closedAtDL > conflictCauseAtDL) {
+                            conflictCauseAtDL = closedAtDL;
+                        }
+                        System.out.println(atom.toString()+"closed @"+conflictCauseAtDL);
                         unfoldedBody.addAtomMinus(atom);
                         continue;
                     }
                 }
+                // save DL of cause
+                if( at_inst.decisionLevel > conflictCauseAtDL) {
+                    conflictCauseAtDL = at_inst.decisionLevel;
+                }
+                System.out.println(atom.toString()+at_inst+"@"+conflictCauseAtDL);
+                
 
                 
                 // check if we should continue tracing
@@ -628,7 +657,12 @@ public class GraphLearner {
 
 //                    System.out.println("Start recursive unfolding.");
                     // recursively unfold rule
-                    Rule recursiveUnfold = unfoldConstraint(freshRule, tr_inst.getFullInstance(), tr_inst.getCreatedByHeadNode(), freshOldVar2newVar, rete);
+                    Pair<Rule,Integer> recursive = unfoldConstraint(freshRule, tr_inst.getFullInstance(), tr_inst.getCreatedByHeadNode(), freshOldVar2newVar, rete);
+                    Rule recursiveUnfold = recursive.getArg1();
+                    int recursiveCauseAtDL = recursive.getArg2();
+                    if( recursiveCauseAtDL > conflictCauseAtDL) {
+                        conflictCauseAtDL = recursiveCauseAtDL;
+                    }
 //                    System.out.println("Return from recursive unfolding.");
 
 
@@ -676,7 +710,7 @@ public class GraphLearner {
 //        System.out.println("Returning unfoldedBody:\t"+unfoldedBody);
 //        System.out.println("unfoldedBody equalities:\t"+unfoldedBody.variableEqualities);
 //        debugRecursionDepth--;
-        return unfoldedBody;
+        return new Pair<Rule, Integer>(unfoldedBody,conflictCauseAtDL);
     }
     
     public static int debugCounter = 0;
@@ -689,294 +723,6 @@ public class GraphLearner {
      * @throws ImmediateBacktrackingException thrown after a successful learning. It must be caught in Context.propagate() and not earlier.
      * @throws LearningException a helper exception for debugging, should be thrown if the learned rule is wrong in some basic aspects.
      */
-    public void learnRuleAndAddToRete(Rule r, Instance var_assignment, HeadNode starting) throws ImmediateBacktrackingException, LearningException {
-    //if( true) return;
-        Rule newrule;// = new Rule();
-        //Node current = starting;
-        Node lastJoin = starting.from;
-        Rete rete = lastJoin.rete;
-        ReteBuilder rB = new ReteBuilder(rete);
-
-        //boolean stop_criterion_met = false;
-
-        //while (!stop_criterion_met) {
-        
-        debugCounter++;
-
-        newrule = traceBody(r, var_assignment, rete, starting, new HashMap<Variable, Variable>());
-
-        System.out.println("Traced rule body:\n\t" + newrule.toString());
-        removeUnusedEquality(newrule);
-        System.out.println("Learned rule body:\n\t" + newrule.toString());
-        System.out.println("debugCounter = "+debugCounter);
-
-        // assume we learned a constraint
-        if (true) { // TODO: check if we learned a constraint
-            // remove one atom from rule body and put its negation as head
-            for (int i = 0; i < newrule.getBodyPlus().size()
-                    + newrule.getBodyMinus().size(); i++) {
-
-                // copy body lists for modification
-                @SuppressWarnings("unchecked")
-                ArrayList<Atom> atomsPlus = (ArrayList<Atom>) newrule.getBodyPlus().clone();
-                @SuppressWarnings("unchecked")
-                ArrayList<Atom> atomsMinus = (ArrayList<Atom>) newrule.getBodyMinus().clone();
-
-                Atom head;
-                boolean isHeadPositive;
-                if (i < newrule.getBodyPlus().size()) {
-                    // remove positive body atom and use as head
-                    head = atomsPlus.get(i);
-                    atomsPlus.remove(i);
-                    isHeadPositive = false;
-                } else {
-                    // remove negative body atom and use as head
-
-                    // TODO: requires a MUST-BE-TRUE, since the head would be
-                    // positive. Code removed for the time being.
-                    continue;
-                    /*
-                     head = atomsMinus.get(i-newrule.getBodyPlus().size());
-                     atomsMinus.remove(i-newrule.getBodyPlus().size());
-                     isHeadPositive = true;
-                     */
-                }
-
-                // if learned head is from 0-th SCC, skip the rule
-                ChoiceUnit cu = GlobalSettings.getGlobalSettings().getManager().getContext().getChoiceUnit();
-                if (cu.getPredicateSCC(head.getPredicate()) < cu.getCurrentSCC()) {
-                    continue;
-                }
-
-                Rule ruleFromConstraint = new Rule(head, atomsPlus, atomsMinus, newrule.getOperators());
-
-                // TODO: variable equalities must be resolved here
-                // the following code is just a quick workaround
-
-                // some equality X=c might require to be changed to assignment X is c
-                // and vice versa
-                HashSet<Variable> bound_vars = boundVars(ruleFromConstraint);
-                HashSet<Variable> head_vars = new HashSet<Variable>();
-                findVariables(head, head_vars);
-
-                // create variable mapping for replacement
-                HashMap<Variable, Term> var_replace = new HashMap<Variable, Term>();
-
-                // if body contains X=c and X only occurs in head, replace X by c
-                for (Variable var : head_vars) {
-                    if (!bound_vars.contains(var)) {
-                        boolean foundEquality = false;
-                        for (Iterator<Operator> opIt = ruleFromConstraint.getOperators().iterator(); opIt.hasNext();) {
-                            Operator op = opIt.next();
-                            if (op.getOP() == OP.EQUAL && op.left == var) {
-                                var_replace.put(var, (Term) op.right);
-                                opIt.remove();
-                                foundEquality = true;
-                            }
-                        }
-                        if (!foundEquality) {
-                            throw new LearningException("Failed to find an equality for unbound variable " + var + " in rule " + ruleFromConstraint);
-                        }
-                    }
-                }
-
-                Atom replaced_head = replaceVariable(ruleFromConstraint.getHead(), var_replace);
-                Rule final_rule = new Rule(replaced_head, ruleFromConstraint.getBodyPlus(), ruleFromConstraint.getBodyMinus(), ruleFromConstraint.getOperators());
-                
-                // skip rule, if it was learned already
-                if( ruleIsDuplicate(final_rule) ) {
-                    continue;
-                }
-                
-                // debug
-/*                if( learnedRules.size() >= 5) {
-                    GlobalSettings.getGlobalSettings().debugHelper = true;
-                    return;
-                }
-*/
-                System.out.println("Adding to Rete: " + final_rule.toString());
-                learnedRules.add(final_rule);
-                rB.addRuleNeg(final_rule);
-//                rB.addPropagationOnlyRule(final_rule, isHeadPositive);
-                GlobalSettings.didLearn = true;
-            }
-        }
-        //current.getVarPositions();
-
-        //stop_criterion_met = true;
-
-        //}
-
-        //return newrule;
-        
-        // everything went well, halt propagation immediately
-        rete.satisfiable = false;
-        System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
-        throw new ImmediateBacktrackingException();
-    }
-
-    private void traceBodyPlusMinus(boolean isPlus, Rule r, Instance varAssignment,
-            Rete rete, Node lastJoin, HashMap<Variable, Variable> newvar_to_oldvar, Rule learnedrule) {
-        ArrayList<Atom> bodyPart;
-        if (isPlus) {
-            bodyPart = r.getBodyPlus();
-        } else {
-            bodyPart = r.getBodyMinus();
-        }
-        for (Atom at : bodyPart) {
-
-            // build a grounded selectionCriterion
-            Term[] selectionCriterion = new Term[at.getArity()];
-            for (int i = 0; i < at.getTerms().length; i++) {
-                Term term = at.getTerms()[i];
-                if (term instanceof Variable) {
-                    // ground the variable
-                    Variable var;
-                    if (newvar_to_oldvar.containsKey((Variable) term)) {
-                        // get un-renamed name of variable
-                        var = newvar_to_oldvar.get((Variable) term);
-                    } else {
-                        var = (Variable) term;
-                    }
-                    selectionCriterion[i] = varAssignment.get(
-                            lastJoin.getVarPositions().get(var)); // get value from variable assignment
-                } else if (term instanceof Constant) {
-                    selectionCriterion[i] = term;
-                }
-
-            }
-            Instance at_inst;
-            if (isPlus) {
-                at_inst = (Instance) rete.
-                        getBasicLayerPlus().get(at.getPredicate()).
-                        getMemory().select(selectionCriterion).iterator().next();
-            } else {
-                // instance only exists if the node is not closed
-                if (!rete.getBasicLayerMinus().get(at.getPredicate()).isClosed()) {
-                    at_inst = (Instance) rete.
-                            getBasicLayerMinus().get(at.getPredicate()).
-                            getMemory().select(selectionCriterion).iterator().next();
-                } else {
-                    // node is closed, stop tracing
-                    learnedrule.addAtomMinus(at);
-                    continue;
-                }
-            }
-
-
-            if (at_inst instanceof TrackingInstance && ((TrackingInstance) at_inst).decisionLevel == rete.getChoiceUnit().getDecisionLevel()) {
-                // instance was derived by a rule at same DL, trace subrule
-                TrackingInstance tr_inst = (TrackingInstance) at_inst;
-                Rule subrule = tr_inst.getCreatedByRule(); // copy subrule
-
-                
-                // TODO: bug seems to be in variable renaming below, check details!
-
-                HashMap<Variable, Variable> sub_varmap = new HashMap<Variable, Variable>();
-                // ensure correct variable renaming, for non-variables, equality operators are added
-                for (int i = 0; i < at.getTerms().length; i++) {
-                    Term selTerm = at.getTerms()[i];
-                    Term headTerm = subrule.getHead().getTerms()[i];
-                    if (headTerm instanceof Variable && selTerm instanceof Variable) {
-                        sub_varmap.put((Variable) headTerm, (Variable) selTerm);
-                    } else {
-                        Operator var_equal = new Operator((OperandI) selTerm, (OperandI) headTerm, OP.EQUAL);
-                        learnedrule.addOperator(var_equal);
-                    }
-                }
-
-                // rename the variables of the subrule
-                HashMap<Variable, Variable> subrenaming = new HashMap<Variable, Variable>();
-                subrule = renameVariables(subrule, subrenaming, sub_varmap);
-
-                // ensure correct variable binding, e.g. X = renamedX, Y = b
-                // to that end, add additional equality atoms to the body of the learned rule
-/*                for (int i = 0; i < at.getTerms().length; i++) {
-                 Term selTerm = at.getTerms()[i];
-                 Term headTerm = subrule.getHead().getTerms()[i];
-                 Operator var_equal = new Operator((OperandI) selTerm, (OperandI) headTerm, OP.EQUAL);
-                 learnedrule.addOperator(var_equal);
-                 }*/
-
-                // trace rule body
-                Rule n1 = traceBody(subrule, tr_inst, rete, tr_inst.getCreatedByHeadNode(), subrenaming);
-
-                // add learned body to current body
-                for (Atom nat : n1.getBodyPlus()) {
-                    learnedrule.addAtomPlus(nat);
-                }
-                for (Atom nat : n1.getBodyMinus()) {
-                    learnedrule.addAtomMinus(nat);
-                }
-                for (Operator nop : n1.getOperators()) {
-                    learnedrule.addOperator(nop);
-                }
-            } else {    // at_inst is a fact or from different decision level
-                if (isPlus) {
-                    learnedrule.addAtomPlus(at);
-                } else {
-                    learnedrule.addAtomMinus(at);
-                }
-            }
-        }
-    }
-
-    private Rule traceBody(Rule r, Instance varAssignment, Rete rete, Node lastJoin, HashMap<Variable, Variable> newvar_to_oldvar) {
-        Rule learnedrule = new Rule();
-
-        Instance fullInstance;
-        if (varAssignment instanceof TrackingInstance) {
-            fullInstance = ((TrackingInstance) varAssignment).getFullInstance();
-        } else {
-            fullInstance = varAssignment;
-        }
-        traceBodyPlusMinus(true, r, fullInstance, rete, lastJoin, newvar_to_oldvar, learnedrule);
-
-        traceBodyPlusMinus(false, r, fullInstance, rete, lastJoin, newvar_to_oldvar, learnedrule);
-
-        for (Operator op : r.getOperators()) {
-            learnedrule.addOperator(op);
-        }
-        return learnedrule;
-    }
-
-    public Rule learnRule1UIP() {
-        return null;
-    }
-
-    private Rule renameVariables(Rule rule, HashMap<Variable, Variable> newvar_to_oldvar, HashMap<Variable, Variable> renaming) {
-        HashMap<Variable, Variable> varmap;
-        // use renaming if given
-        if (renaming != null) {
-            varmap = renaming;
-        } else {
-            varmap = new HashMap<Variable, Variable>();
-        }
-
-        Atom rh = rule.getHead();
-        Term[] hterm = renameTerm(rh.getTerms(), varmap, newvar_to_oldvar);
-        Atom renHead = Atom.getAtom(rh.getName(), rh.getArity(), hterm);
-
-        ArrayList<Atom> renBodyPlus = new ArrayList<Atom>();
-        for (Atom at : rule.getBodyPlus()) {
-            Term[] newterms = renameTerm(at.getTerms(), varmap, newvar_to_oldvar);
-            Atom renAtom;
-            renAtom = Atom.getAtom(at.getName(), at.getArity(), newterms);
-            renBodyPlus.add(renAtom);
-        }
-        ArrayList<Atom> renBodyMinus = new ArrayList<Atom>();
-        for (Atom at : rule.getBodyMinus()) {
-            Term[] newterms = renameTerm(at.getTerms(), varmap, newvar_to_oldvar);
-            Atom renAtom = Atom.getAtom(at.getName(), at.getArity(), newterms);
-            renBodyMinus.add(renAtom);
-        }
-        ArrayList<Operator> renOps = new ArrayList<Operator>();
-        for (Operator op : rule.getOperators()) {
-            renOps.add((Operator) renameOperator(op, varmap, newvar_to_oldvar));
-        }
-
-        return new Rule(renHead, renBodyPlus, renBodyMinus, renOps);
-    }
 
     private Term[] renameTerm(Term[] t, HashMap<Variable, Variable> varmap, HashMap<Variable, Variable> newvar_to_oldvar) {
         Term[] newterm = new Term[t.length];
