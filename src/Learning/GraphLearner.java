@@ -474,16 +474,19 @@ public class GraphLearner {
                 ArrayList<Atom> atomsMinus = (ArrayList<Atom>) learnedConstraint.getBodyMinus().clone();
 
                 Atom head;
+                boolean isMustBeTrue = false;
                 if (i < learnedConstraint.getBodyPlus().size()) {
                     // remove positive body atom and use as head
                     head = atomsPlus.get(i);
                     atomsPlus.remove(i);
                 } else {
                     // remove negative body atom and use as head
-
+                    head = atomsMinus.get(i-learnedConstraint.getBodyPlus().size());
+                    atomsMinus.remove(i-learnedConstraint.getBodyPlus().size());
+                    isMustBeTrue = true;
                     // TODO: requires a MUST-BE-TRUE, since the head would be
                     // positive. Code removed for the time being.
-                    continue;
+                    //continue;
                 }
 
                 // if learned head is from smaller SCC, skip the rule
@@ -496,6 +499,15 @@ public class GraphLearner {
                 }
 
                 Rule ruleFromConstraint = new Rule(head, atomsPlus, atomsMinus, learnedConstraint.getOperators());
+                if( isMustBeTrue ) {
+                    ruleFromConstraint.setHeadType(Rule.HEAD_TYPE.must_be_true);
+                    // TODO: remove continue, after ReteBuilder can add MBT rules,
+                    // and after Storage can backtrack mbt-instances,
+                    // and after answer-sets are checked for mbt-instances (no AS may contain an mbt-instance)
+                    continue;
+                } else {
+                    ruleFromConstraint.setHeadType(Rule.HEAD_TYPE.negative);
+                }
 
                 // skip if head is not safe
                 if (!ruleFromConstraint.isSafePropagation()) {

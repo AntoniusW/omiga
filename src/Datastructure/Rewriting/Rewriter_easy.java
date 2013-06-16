@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  *
@@ -141,7 +142,8 @@ public class Rewriter_easy {
                         ArrayList<Atom> negBody = new ArrayList<Atom>();
                         negBody.add(a);
                         Rule rule2Add = new Rule(head, new ArrayList<Atom>(), negBody, new ArrayList<Operator>());
-                        ret.addNegRule(rule2Add);
+                        checkVariablesAddNegRule(rule2Add, ret);
+                        //ret.addNegRule(rule2Add);
                     }
                 }
                 
@@ -176,7 +178,8 @@ public class Rewriter_easy {
                         ArrayList<Atom> posBody = new ArrayList<Atom>();
                         posBody.add(a);
                         Rule rule2Add= new Rule(head, posBody, new ArrayList<Atom>(), new ArrayList<Operator>());
-                        ret.addNegRule(rule2Add);
+                        checkVariablesAddNegRule(rule2Add, ret);
+                        //ret.addNegRule(rule2Add);
                     }
                 }
                 
@@ -201,7 +204,7 @@ public class Rewriter_easy {
                     //}
                 }
                 Rule rule2Add = new Rule(headAtom, new ArrayList<Atom>(), BodyMinus, new ArrayList<Operator>());
-                ret.addNegRule(rule2Add);
+                checkVariablesAddNegRule(rule2Add,ret);
             }
         }
         
@@ -238,6 +241,19 @@ public class Rewriter_easy {
         }
         
         return ret;
+    }
+
+    private void checkVariablesAddNegRule(Rule rule2Add, ContextASPRewriting ret) {
+        // check if all variables in the head are contained in the body
+        HashSet<Variable> varsHead = rule2Add.getHead().getVariables();
+        HashSet<Variable> varsBody = new HashSet<Variable>();
+        varsBody.addAll(rule2Add.getVariablesInAtoms(rule2Add.getBodyPlus()));
+        varsBody.addAll(rule2Add.getVariablesInAtoms(rule2Add.getBodyMinus()));
+        varsHead.removeAll(varsBody);
+        // only add rule if all head variables are contained in the body
+        if (varsHead.isEmpty()) {
+            ret.addNegRule(rule2Add);
+        }
     }
     
     

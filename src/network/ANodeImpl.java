@@ -435,7 +435,7 @@ public class ANodeImpl implements ANodeInterface {
             //System.out.println("Node[" + local_name + "]: corresponding local level = " + local_dc);
         
             long start_backtrack = System.currentTimeMillis();
-            ctx.backtrackTo(local_dc.intValue());
+// removed for refactoring            ctx.backtrackTo(local_dc.intValue());
             
             
             if (global_to_local_dc.remove(global_level+1) == null)

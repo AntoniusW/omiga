@@ -7,6 +7,7 @@ package Entity;
 import Interfaces.OperandI;
 import Interfaces.Term;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -125,6 +126,13 @@ public class Variable extends Term implements OperandI{
     @Override
     public boolean fatherOf(Term t){
         return true;
+    }
+
+    @Override
+    public HashSet<Variable> getVariables() {
+        HashSet<Variable> vars = new HashSet<Variable>();
+        vars.add(this);
+        return vars;
     }
     
 }

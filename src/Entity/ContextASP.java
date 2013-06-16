@@ -260,6 +260,14 @@ public class ContextASP {
     public ReplyMessage choicePlusInfo() {
         return this.choiceUnit.choicePlusInfo();
     }
-    
+
+    public boolean ContainsNoMustBeTrue() {
+        for (Map.Entry<Predicate, BasicNode> entryPredicateNode : rete.getBasicLayerPlus().entrySet()) {
+            if( entryPredicateNode.getValue().memory.containsMustBeTrue()) {
+                return false;
+            }
+        }
+        return true;
+    }
     
 }

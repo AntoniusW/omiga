@@ -7,6 +7,7 @@ package Interfaces;
 import Entity.Variable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -117,5 +118,7 @@ public abstract class Term  implements OperandI {
     public boolean fatherOf(Term t){
         return true;
     }
+
+    public abstract HashSet<Variable> getVariables();
     
 }

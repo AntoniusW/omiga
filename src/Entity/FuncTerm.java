@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -154,5 +155,14 @@ public class FuncTerm extends Term implements Serializable {
     @Override
     public int getIntValue() {
         throw new UnsupportedOperationException("getIntValue called on FuncTerm, this should not happen."); // TODO: adapt interface to avoid this
+    }
+
+    @Override
+    public HashSet<Variable> getVariables() {
+        HashSet<Variable> vars = new HashSet<Variable>();
+        for (Term term : this.getChildren()) {
+            vars.addAll(term.getVariables());
+        }
+        return vars;
     }
 }

@@ -7,6 +7,8 @@ package Entity;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -255,6 +257,14 @@ public class Atom {
             if(!this.terms[i].fatherOf(a.terms[i])) return false;
         }
         return true;
+    }
+
+    public HashSet<Variable> getVariables() {
+        HashSet<Variable> vars = new HashSet<Variable>();
+        for (Term term : this.terms) {
+            vars.addAll(term.getVariables());
+        }
+        return vars;
     }
      
 }

@@ -82,7 +82,7 @@ public class Manager {
             }else{
                 System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
                 if(c.getChoiceUnit().getDecisionLevel() >= 0){
-                    if(c.isSatisfiable()){
+                    if(c.isSatisfiable() && c.ContainsNoMustBeTrue() ){
                         //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
                                 System.out.println("Answer set: " + (answerSetCount+1));

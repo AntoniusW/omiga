@@ -127,12 +127,12 @@ public class ChoiceNode extends Node{
      * 
      * @param instance 
      */
-    @Override
+/*    @Override
     public void simpleRemoveInstance(Instance instance){
         //TODO: Is this method used? (It's not used when no guessing occures)
         //this.memory.removeInstance(instance);
         this.allInstances.remove(instance);
-    }
+    }*/
     /**
      * 
      * Removes an instance from the memoery and "allInstances" without registering this removement in the ChoiceUnit

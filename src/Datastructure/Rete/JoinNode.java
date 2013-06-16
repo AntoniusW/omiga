@@ -278,6 +278,7 @@ public class JoinNode extends Node{
         Instance ret = new Instance(base);
         ret.decisionLevel = decisionLevel;
         ret.propagationLevel = propagationLevel;
+        ret.isMustBeTrue = ( joinA.isMustBeTrue || joinB.isMustBeTrue );
         return ret;
     }
     

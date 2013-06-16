@@ -26,6 +26,18 @@ import java.util.HashSet;
  */
 public class Rule {
     
+    // new rule head type to identify rule. currently this mostly happens through context of usage.
+    public enum HEAD_TYPE { normal, negative, must_be_true};
+    protected HEAD_TYPE headType;
+
+    public HEAD_TYPE getHeadType() {
+        return headType;
+    }
+
+    public void setHeadType(HEAD_TYPE headType) {
+        this.headType = headType;
+    }
+    
     protected Atom head;
     protected ArrayList<Atom> bodyPlus;
 
@@ -380,6 +392,14 @@ public class Rule {
     
     public void setOperators(ArrayList<Operator> operators) {
         this.operators = operators;
+    }
+
+    public HashSet<Variable> getVariablesInAtoms(ArrayList<Atom> atoms) {
+        HashSet<Variable> vars = new HashSet<Variable>();
+        for (Atom atom : atoms) {
+            vars.addAll(atom.getVariables());
+        }
+        return vars;
     }
 
 }

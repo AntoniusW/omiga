@@ -119,5 +119,10 @@ public class Constant extends Term implements OperandI, Serializable {
         return new AExternalizedForm(ANodeImpl.out_mapping.get(this));
     }
 
+    @Override
+    public HashSet<Variable> getVariables() {
+        return new HashSet<Variable>();
+    }
+
     
 }

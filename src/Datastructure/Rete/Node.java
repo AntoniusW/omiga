@@ -110,14 +110,14 @@ public abstract class Node {
      * 
      * @param instance The instance you want to remove
      */
-    public void simpleRemoveInstance(Instance instance){
+    /*public void simpleRemoveInstance(Instance instance){
         //TODO: Remove if somehow
         //System.err.println("this: " + this + " memory: " + this.memory + " removeSimpelInstnce: " + instance);
         if(this.memory.containsInstance(instance)){ // TODO: das if muss weg. Im Moment sreiekn leider noch die HeadNodeConstraints!
             this.memory.removeInstance(instance);
             //System.err.println("REMOVING INSTANCE: " + instance + " from: " + this);
         }
-    }
+    }*/
     
     /**
      * 
@@ -139,9 +139,9 @@ public abstract class Node {
      * @param instance The instance you want to add
      * @param from true means right JoinPartner false means leftt one. For nonJoinNodes this parameter doese not matter
      */
-    public void addInstance(Instance instance, boolean from){
+    /*public void addInstance(Instance instance, boolean from){
         this.rete.getChoiceUnit().addInstance(this, instance);
-    }
+    }*/
     
     /**
      * 

@@ -12,15 +12,13 @@ import Entity.ContextASP;
 import Entity.Instance;
 import Entity.Pair;
 import Entity.Predicate;
+import Exceptions.ImmediateBacktrackingException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 import network.ReplyMessage;
-import Datastructure.Rete.Node;
-import Exceptions.ImmediateBacktrackingException;
-import Entity.GlobalSettings;
 
 
 /**
@@ -98,10 +96,10 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         this.closedAt.pop();
     }
 
-    @Override
+/*    @Override
     public void backtrack() {
         throw new RuntimeException("ChoiceUnitRewrite.backtrack: Should not come here.");
-    }
+    }*/
 
     @Override
     public void printDecisionMemory() {
@@ -432,7 +430,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                     //System.out.println("Adding: " + toAdd + " to: " + a.getPredicate());
                     c.getRete().addInstanceMinus(a.getPredicate(), toAdd);
                 }
-                cN.simpleRemoveInstance(inz) ;
+                //cN.simpleRemoveInstance(inz) ;
                 this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN).add(inz);
                 this.stackyNode.push(cN);
                 this.stackybool.push(true); 

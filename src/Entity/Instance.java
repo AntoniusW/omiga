@@ -24,6 +24,8 @@ public class Instance implements Serializable {
     public int propagationLevel;
     public int decisionLevel;
     
+    public boolean isMustBeTrue;
+    
     public static int instance_count = 0;
     // public static int lolra = 0;
     // private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();

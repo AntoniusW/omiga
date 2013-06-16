@@ -71,13 +71,14 @@ public class Storage {
             // The try stuff is definitly faster than the if block ~3seconds for 2kk instances
             /*
             try{
-                memory[i].get(instance.get(i)).add(instance);
+            memory[i].get(instance.get(i)).add(instance);
             }catch(Exception e){
-                memory[i].put(instance.get(i), new HashSet<Instance>());
-                memory[i].get(instance.get(i)).add(instance);
+            memory[i].put(instance.get(i), new HashSet<Instance>());
+            memory[i].get(instance.get(i)).add(instance);
             }/*/
-             if(!memory[i].containsKey(instance.get(i))) 
+             if(!memory[i].containsKey(instance.get(i))) {
                 memory[i].put(instance.get(i), new HashSet<Instance>());
+            }
             
             //if(!memory[i].get(instance.get(i)).contains(instance)) {
                 memory[i].get(instance.get(i)).add(instance);
@@ -93,7 +94,7 @@ public class Storage {
      * 
      * @param instance 
      */
-    public void addInstanceWithoutBacktracking(Instance instance) {
+    /*public void addInstanceWithoutBacktracking(Instance instance) {
         for (int i = 0; i < instance.getSize(); i++) {
             if (!memory[i].containsKey(instance.get(i))) {
                 memory[i].put(instance.get(i), new HashSet<Instance>());
@@ -101,7 +102,7 @@ public class Storage {
 
             memory[i].get(instance.get(i)).add(instance);
         }
-    }
+    }*/
     
     /**
      * This method removes the instance from all HashMaps of our memory array.
@@ -335,5 +336,16 @@ public class Storage {
                 //backtrackInstances.remove(entry.getKey());
             }
         }
+    }
+    
+    public boolean containsMustBeTrue() {
+        for (Map.Entry<Term, HashSet<Instance>> entry : memory[0].entrySet()) {
+            for (Instance instance : entry.getValue()) {
+                if( instance.isMustBeTrue ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

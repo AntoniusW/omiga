@@ -91,6 +91,11 @@ public class HeadNode extends Node{
                 inst.setCreatedByRule(r);
                 inst.setCreatedByHeadNode(this);
                 inst.setFullInstance(instance);
+                inst.isMustBeTrue = instance.isMustBeTrue;
+                // if this HeadNode is for a MBT rule, then created instances are mbt
+                if( r.getHeadType() == Rule.HEAD_TYPE.must_be_true ){
+                    inst.isMustBeTrue = true;
+                }
                 rete.addInstancePlus(a.getPredicate(),inst);
             //}else{
                 //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.

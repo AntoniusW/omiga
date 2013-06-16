@@ -4,14 +4,7 @@
  */
 package Entity;
 
-import Datastructure.Rete.Rete;
-import Datastructure.Rete.ReteBuilder;
-import Datastructure.choice.ChoiceUnit;
-import Datastructure.choice.ChoiceUnitMCS;
-import Exceptions.FactSizeException;
-import Exceptions.RuleNotSafeException;
 import Interfaces.Term;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

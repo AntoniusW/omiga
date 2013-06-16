@@ -170,7 +170,7 @@ public class ChoiceUnit {
                     //System.out.println("Adding: " + toAdd + " to: " + a.getPredicate());
                     c.getRete().addInstanceMinus(a.getPredicate(), toAdd);
                 }
-                cN.simpleRemoveInstance(inz) ;
+//                cN.simpleRemoveInstance(inz) ;
                 this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN).add(inz);
                 this.stackyNode.push(cN);
                 this.stackybool.push(true); 
@@ -252,7 +252,7 @@ public class ChoiceUnit {
      * this resets the choiceNodes into the state before the last guess(Except for the guessed one)
      * 
      */
-    public void backtrackchoiceNodesDecisionLayer(){
+/*    public void backtrackchoiceNodesDecisionLayer(){
         for(ChoiceNode cN: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).keySet()){
             for(Instance inz: this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(cN)){
                 //System.out.println("ADDING to CHoiceNode: " + cN + " - " + inz);
@@ -260,7 +260,7 @@ public class ChoiceUnit {
             }
         }
         this.choiceNodesDecisionLayer.remove(this.choiceNodesDecisionLayer.size()-1);
-    }
+    }*/
     
     /**
      * 
@@ -305,7 +305,7 @@ public class ChoiceUnit {
     /**
      * backtrack one decisionlevel and bring memory back to state before last guess
      */
-    public void backtrack(){
+/*    public void backtrack(){
         System.out.println("Backtracking.");
         System.out.println("Decision memory before backtracking:");
         printDecisionMemory();
@@ -314,7 +314,7 @@ public class ChoiceUnit {
         //System.out.println("BACKTRACKING!");
         //this.printAllChoiceNodes();
         // we call backtrack in the decision memory. This way all insatnces that were added after the last guess are removed from their nodes.
-        this.backtrackchoiceNodesDecisionLayer();
+//        this.backtrackchoiceNodesDecisionLayer();
         this.memory.backtrack();
         
         //TODO: backtracking on SCC
@@ -352,7 +352,7 @@ public class ChoiceUnit {
                         stacky.push(inz);
                     }
                     while(!stacky.empty()){
-                        cN.simpleRemoveInstance(stacky.pop());
+//                        cN.simpleRemoveInstance(stacky.pop());
                     }
                     
                 }
@@ -366,21 +366,21 @@ public class ChoiceUnit {
                 System.out.println(n.memory.getAllInstances());
             }
             
-        }*/
+        }
         System.out.println("Decision memory after backtracking:");
         printDecisionMemory();
-    }
+    }*/
     
      /**
      * backtrack one decisionlevel and bring memory back to state before last guess
      */
     public void backtrack3(){
-        while(!this.stackybool.isEmpty() && !this.stackybool.peek()){
+/*        while(!this.stackybool.isEmpty() && !this.stackybool.peek()){
             backtrack();
         }
         if(!this.stackybool.isEmpty()) {
             backtrack();
-        }
+        }*/
     }
     
     
