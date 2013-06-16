@@ -68,9 +68,5 @@ public class ContextASPRewriting extends ContextASP{
         }
     }
     
-    public ReplyMessage choicePlusInfo() {
-        return this.choiceUnit.choicePlusInfo();
-    }
-    
       
 }

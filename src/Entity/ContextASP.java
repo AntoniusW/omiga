@@ -257,10 +257,6 @@ public class ContextASP {
         this.rete.satisfiable = true;
     }
 
-    public ReplyMessage choicePlusInfo() {
-        return this.choiceUnit.choicePlusInfo();
-    }
-
     public boolean ContainsNoMustBeTrue() {
         for (Map.Entry<Predicate, BasicNode> entryPredicateNode : rete.getBasicLayerPlus().entrySet()) {
             if( entryPredicateNode.getValue().memory.containsMustBeTrue()) {
