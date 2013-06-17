@@ -106,7 +106,7 @@ public class ChoiceNode extends Node{
      * 
      * @param instance 
      */
-    @Override
+/*    @Override
     public void removeInstance(Instance instance){
 //        rete.getChoiceUnit().AddInstanceRemovement(this, instance);
         //super.removeInstance(instance);
@@ -118,7 +118,7 @@ public class ChoiceNode extends Node{
         }
         //System.out.println("RemoveInstance: " + this + " - " + instance);
         
-    }
+    }*/
     
     /**
      * 
@@ -209,6 +209,7 @@ public class ChoiceNode extends Node{
      * memory to make a rule fire.
      */
     public Pair<Instance,ArrayList<Pair<Atom, Instance>>> nextChoiceableInstance() {
+        // TODO: this method must search for mbt-values first and it must not forget them!
         ArrayList<Pair<Atom, Instance>> toMakeNegative;
         // check all instances stored in this node
         for (Iterator<Instance> it = allInstances.iterator(); it.hasNext();) {
@@ -226,6 +227,9 @@ public class ChoiceNode extends Node{
                 toAdd.propagationLevel = 0;
                 // if ground atom is in positive memory, skip this ground rule.
                 if (rete.containsInstanceInBasicNode(at, toAdd, true)) {
+                    if(rete.getBasicLayerPlus().get(at.getPredicate()).containsMBTInstance(toAdd)) {
+                        System.out.println("Rejecting choice because of MBT instance.");
+                    }
                     groundAtomInPositiveMemory = true;
                     // disable instance for further guesses
                     disabledInstances.put(instance, rete.getChoiceUnit().getDecisionLevel());

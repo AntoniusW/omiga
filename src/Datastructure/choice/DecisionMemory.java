@@ -114,7 +114,7 @@ public class DecisionMemory {
     /**
      * decreases the decisionlevel by one, deletes all the instances from the nodes and removes the memory for that decisionlevel.
      */
-    public void backtrack(){
+    /*public void backtrack(){
         Node n;
         for (Node node : Node.nodes) {
             node.backtrackTo(decisionLevel-1);
@@ -130,11 +130,11 @@ public class DecisionMemory {
                 //System.out.println("Trying to remove: " + inz + " from: " + n);
                 n.simpleRemoveInstance(inz);
             }
-        }*/
+        }* /
 //        this.decisionLayer.remove(this.decisionLevel);
         decisionLevel--;
         //System.out.println("FINISHED BACKTRACKING!");
-    }
+    }*/
     
     /**
      * backtracks to the desired decisionlevel.

@@ -9,6 +9,7 @@ import Datastructure.Rete.ChoiceNode;
 import Datastructure.Rete.Unifyer;
 import Entity.Atom;
 import Entity.ContextASP;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Pair;
 import Entity.Predicate;
@@ -18,7 +19,6 @@ import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
-import network.ReplyMessage;
 
 
 /**
@@ -200,7 +200,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 choiceStack.add(new Pair<ChoiceNode, Instance>(cN, choiceInstance));
                 
                 System.out.println("Choice point: fire "+cN.getRule()+" "+choiceInstance+" @DL="+getDecisionLevel());
-                
+                GlobalSettings.decisionCounter++;   // for statistics, count total decisions done.
                 return true;
             //}
             

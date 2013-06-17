@@ -252,6 +252,7 @@ public class Rewriter_easy {
         varsHead.removeAll(varsBody);
         // only add rule if all head variables are contained in the body
         if (varsHead.isEmpty()) {
+            rule2Add.setHeadType(Rule.HEAD_TYPE.negative);
             ret.addNegRule(rule2Add);
         }
     }

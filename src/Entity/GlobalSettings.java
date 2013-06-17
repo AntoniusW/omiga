@@ -12,6 +12,7 @@ import Manager.Manager;
  * @author Antonius
  */
 public class GlobalSettings {
+    public static boolean debugOutput = false;
     
     public boolean debugHelper = false;
     
@@ -26,7 +27,7 @@ public class GlobalSettings {
     
     // below string is replaced by build-script automatically,
     // do not change line breaking
-    public static String version="69a76a93e83eeeb052fd4324eac7b6e786ce0e29";
+    public static String version="cfff23052c01529c51ad42e80ce7fea8eb16b57e";
     
     private Manager manager;
 

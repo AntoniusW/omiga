@@ -52,6 +52,13 @@ public class HeadNodeNegative extends HeadNode{
      */
     @Override
     public void addInstance(Instance instance){
+        if( GlobalSettings.debugOutput) {
+        System.out.print("Rule fires: "+instance);
+        //if(instance.isMustBeTrue) System.out.print("MBT");
+        //if(r.getHeadType() == Rule.HEAD_TYPE.must_be_true) System.out.print("rMBT");
+        if(r.getHeadType() == Rule.HEAD_TYPE.negative) System.out.print("-");
+        System.out.println(" "+r);
+        }
         Instance instance2Add = Unifyer.unifyAtom(a, instance, tempVarPosition);
         
         

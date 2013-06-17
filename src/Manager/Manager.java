@@ -5,6 +5,7 @@
 package Manager;
 
 import Entity.ContextASP;
+import Entity.GlobalSettings;
 
 /**
  *
@@ -66,23 +67,34 @@ public class Manager {
 //getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
             //System.out.println("Doing while!");
             if(c.choice()){
+                if (GlobalSettings.debugOutput) {
+                    System.out.println("After choice, interpretation is:");
+                    c.printAnswerSet(null);
+                }
                 //System.out.println("choice was done!");
                 //System.out.println("Found a choice. Now propagate");
 //getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
                 c.propagate();
 //            getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
-                //System.out.println("After propagation. Interpretation is:");
-                //c.printAnswerSet(null);
+                if (GlobalSettings.debugOutput) {
+                    System.out.println("After propagation, interpretation is:");
+                    c.printAnswerSet(null);
+                }
                 if(!c.isSatisfiable()){
-                    //System.out.println("UNSAT. Backtrack now!");
+                    System.out.println("UNSAT. Backtrack now!");
                     c.backtrack();
-                    //System.out.println("After backtracking. Interpretation is:");
-                    //c.printAnswerSet(null);
+                    if (GlobalSettings.debugOutput) {
+                        System.out.println("After backtracking. Interpretation is:");
+                        c.printAnswerSet(null);
+                    }
                 }
             }else{
                 System.out.println("No more choice at level = " + c.getChoiceUnit().getDecisionLevel());
                 if(c.getChoiceUnit().getDecisionLevel() >= 0){
-                    if(c.isSatisfiable() && c.ContainsNoMustBeTrue() ){
+                    if(c.isSatisfiable()){
+                        System.out.println("Triggering final propagation after closing to derive non-MBT.");
+                        c.propagate();
+                        if( c.ContainsNoMustBeTrue() ) {
                         //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
                                 System.out.println("Answer set: " + (answerSetCount+1));
@@ -92,6 +104,7 @@ public class Manager {
                             //System.out.println(answerSetCount);
                             if(answersets != null && answerSetCount == answersets) break;
                         //}
+                        }
                     }
                     else
                     {

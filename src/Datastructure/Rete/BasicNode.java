@@ -58,6 +58,14 @@ public class BasicNode extends Node{
      * @param instance The instance you want to add
      */
     public void addInstance(Instance instance){
+        if( GlobalSettings.debugOutput) {
+            if( instance.isMustBeTrue ) System.out.println("BN/MBT instance adding: "+instance);
+        }
+        // dont add mbt over non-mbt instance
+        if (rejectMBTInstance(instance) ) {
+            System.out.println("Rejecting MBT over non-MBT: "+this.pred+instance);
+            return;
+        }
         memory.addInstance(instance);
         toPropagate.push(instance);
     }
@@ -184,6 +192,21 @@ public class BasicNode extends Node{
      */
     public Predicate getPred(){
         return this.pred;
+    }
+
+    /*
+     * Check if instance is MBT but a non-MBT is already present
+     */
+    protected boolean rejectMBTInstance(Instance instance) {
+        if( instance.isMustBeTrue && memory.containsInstance(instance)
+            && !memory.containsMustBeTrueInstance(instance)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean containsMBTInstance(Instance instance) {
+        return memory.containsMustBeTrueInstance(instance);
     }
     
 }

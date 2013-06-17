@@ -58,6 +58,13 @@ public class HeadNode extends Node{
      */
     @Override
     public void addInstance(Instance instance){
+        if( GlobalSettings.debugOutput ) {
+            System.out.print("Rule fires: "+instance);
+            if(instance.isMustBeTrue) System.out.print("MBT");
+            if(r.getHeadType() == Rule.HEAD_TYPE.must_be_true) System.out.print("rMBT");
+            if(r.getHeadType() == Rule.HEAD_TYPE.negative) System.out.print("-");
+            System.out.println(" "+r);
+        }
 //        System.out.println("HeadNode "+this.toString()+" adding instance "+instance.toString()+" @DL="+instance.decisionLevel);
        //System.err.println("HeadNode instance reached: " + instance + " FROM: " + from + " Atom: " + this.a);
         //System.out.println(this.tempVarPosition);
@@ -80,7 +87,19 @@ public class HeadNode extends Node{
        //System.err.println(this + "Atom: " + a + " - instance: " + instance + "tempVarPos: " + tempVarPosition);
         Instance instance2Add = Unifyer.unifyAtom(a, instance, tempVarPosition);
         
-        if(!rete.containsInstance(a.getPredicate(), instance2Add, true)){
+        if (GlobalSettings.debugOutput) {
+            if (!instance2Add.isMustBeTrue
+                    && r.getHeadType() != Rule.HEAD_TYPE.must_be_true
+                    && rete.getBasicLayerPlus().get(a.getPredicate()).memory.containsMustBeTrueInstance(instance2Add)) {
+                System.out.println("NonMBT instance overwrites MBT: " + instance2Add + " " + r);
+            }
+        }
+        
+        // if instance is not contained or only contained as MustBeTrue and we add as non-mbt
+        if(!rete.containsInstance(a.getPredicate(), instance2Add, true)
+                || (!instance2Add.isMustBeTrue && r.getHeadType() != Rule.HEAD_TYPE.must_be_true
+                && rete.getBasicLayerPlus().get(a.getPredicate()).memory.containsMustBeTrueInstance(instance2Add)) 
+          ){
             //if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
                 //if the resolved instance is not contained within our rete we add it
                 //int currentDL = GlobalSettings.getGlobalSettings().

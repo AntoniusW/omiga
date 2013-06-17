@@ -136,7 +136,8 @@ public class Rete {
             //System.out.println("HAHA UNSAT! via plus: " + p + " : " + instance);// TODO: swap this if into choice true guess, since this is the only way this can happen
             //this.satisfiable = false;
         }
-        if(this.containsInstance(p, instance, true)) {
+        if(this.containsInstance(p, instance, true) && (instance.isMustBeTrue || 
+                !getBasicLayerPlus().get(p).memory.containsMustBeTrueInstance(instance)) ) {
             //System.out.println("BLING!: DOUBLE ADD!");
             return;
         } // TODO: Somehow avoid this if.

@@ -24,6 +24,7 @@ import java.util.HashMap;
 public class ReteBuilder {
     
     protected Rete rete;
+    protected static Rule stemRule = null;  // hack for easier debugging
     
         private HashMap<Predicate,ArrayList<ChoiceNode>> choiceNodes;
         private HashMap<Predicate,ArrayList<HeadNode>> headNodes;
@@ -54,6 +55,7 @@ public class ReteBuilder {
     }
     
     public void addRuleNeg(Rule r) {
+        stemRule = r;
 //We first add all Atoms of the rule to out retenetwork, so we then can work with the selectionnodes that are already there
         VarPosNodes = new HashMap<Node, HashMap<Variable, Integer>>();
         HashMap<Atom, HashMap<Variable, Integer>> varPositions = new HashMap<Atom, HashMap<Variable, Integer>>();
@@ -122,6 +124,7 @@ public class ReteBuilder {
                     for (Operator op : operators) {
                         if (op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())) {
                             OperatorNode opN = new OperatorNode(rete, op, actualNode);
+                            opN.stemRule = stemRule;
                             actualNode.addChild(opN);
                             actualNode = opN;
                             VarPosNodes.put(opN, opN.getVarPositions());
@@ -130,6 +133,7 @@ public class ReteBuilder {
                         } else {
                             if (op.isInstanciated(actualNode.tempVarPosition.keySet())) {
                                 OperatorNode opN = new OperatorNode(rete, op, actualNode);
+                                opN.stemRule = stemRule;
                                 actualNode.addChild(opN);
                                 actualNode = opN;
                                 VarPosNodes.put(opN, opN.getVarPositions());
@@ -157,10 +161,18 @@ public class ReteBuilder {
                 }
             }
         }
-        //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
-        HeadNode hN = new HeadNodeNegative(r.getHead(), rete, this.VarPosNodes.get(actualNode), actualNode);
+        HeadNode hN = null;
+        if (r.getHeadType() == Rule.HEAD_TYPE.negative) {
+            //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
+            hN = new HeadNodeNegative(r.getHead(), rete, this.VarPosNodes.get(actualNode), actualNode);
+            hN.stemRule = stemRule;
+        } else if (r.getHeadType() == Rule.HEAD_TYPE.must_be_true) {
+            hN = new HeadNode(r.getHead(), rete, this.VarPosNodes.get(actualNode), actualNode);
+            hN.stemRule = stemRule;
+        }
         hN.r = r;
         actualNode.addChild(hN);
+
     }
     
     /*private void addHeadNode(Predicate p, HeadNode hn){
@@ -188,6 +200,7 @@ public class ReteBuilder {
      * @param r the rule that should be added
      */
     public void addRule(Rule r){
+        stemRule = r;
         
         if( r.getBodyPlus().isEmpty() && r.getBodyMinus().isEmpty()) {
             throw new RuntimeException("Rule "+r+" neither has positive literals nor negative literals.");
@@ -254,6 +267,7 @@ public class ReteBuilder {
             // if the rule consisted only of one positive atom no operators and has a negative body we have to create the choice and constraint Node here.
             constraintNode = new HeadNodeConstraint(rete, varPositions.get(actual).size());
             cN = new ChoiceNode(rete, varPositions.get(actual).size(),r,varPositions.get(actual), constraintNode);
+            cN.stemRule = stemRule;
             actualNode.addChild(cN);
             
             // rule's positive body is always fulfilled, hence add empty instance
@@ -274,6 +288,7 @@ public class ReteBuilder {
                 // since the positive part of the rule is satisfied now
                 constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
                 cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(), r, actualNode.tempVarPosition, constraintNode);
+                cN.stemRule = stemRule;
                 actualNode.addChild(cN);
                 doneChoiceNode = true;
             }
@@ -293,6 +308,7 @@ public class ReteBuilder {
                     for(Operator op: operators){
                         if(op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())){
                             OperatorNode opN = new OperatorNode(rete, op, actualNode);
+                            opN.stemRule = stemRule;
                             actualNode.addChild(opN);
                             actualNode = opN;
                             VarPosNodes.put(opN, opN.getVarPositions());
@@ -301,6 +317,7 @@ public class ReteBuilder {
                         }else{
                             if(op.isInstanciated(actualNode.tempVarPosition.keySet())){
                                 OperatorNode opN = new OperatorNode(rete, op, actualNode);
+                                opN.stemRule = stemRule;
                                 actualNode.addChild(opN);
                                 actualNode = opN;
                                 VarPosNodes.put(opN, opN.getVarPositions());
@@ -314,7 +331,9 @@ public class ReteBuilder {
                         // If there is a negative part and no operators are within this Rule then we now add the ChoiceNode and constraintNode
                         // since the positive part of the rule is satisfied now
                         constraintNode = new HeadNodeConstraint(rete, actualNode.tempVarPosition.size());
+                        constraintNode.stemRule = stemRule;
                         cN = new ChoiceNode(rete, actualNode.tempVarPosition.size(),r,actualNode.tempVarPosition, constraintNode);
+                        cN.stemRule = stemRule;
                         actualNode.addChild(cN);
                     }
                 }else{
@@ -335,6 +354,7 @@ public class ReteBuilder {
         //We define a headNode and add it to the actualNode (which is the last within this rules joinorder, since we are finsihed now)
         HeadNode hN = new HeadNode(r.getHead(),rete, this.VarPosNodes.get(actualNode),actualNode);
         hN.r = r;
+        hN.stemRule = stemRule;
 
         actualNode.addChild(hN);
         //If we did contruct a constraintNode we add it to the actual Node as well
@@ -363,6 +383,7 @@ public class ReteBuilder {
         bNode.resetVarPosition(b);
         //TODO: Vertausche Nodea mit Nodeb
         JoinNode jn = new JoinNode(bNode,aNode,rete, varPositions.get(b),this.VarPosNodes.get(aNode));
+        jn.stemRule = stemRule;
         //JoinNode jn = new JoinNode(aNode,bNode,rete, aNode.getVarPositions(), varPositions.get(b));
         //VarPosNodes.put(jn,jn.getVarPosition(VarPosNodes.get(aNode), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
@@ -380,6 +401,7 @@ public class ReteBuilder {
             bNode = this.rete.getBasicLayerMinus().get(b.getPredicate()).getChildNode(b.getAtomAsReteKey());
         }
         JoinNode jn = new JoinNode(bNode,aNode,rete, varPositions.get(b), varPositions.get(a));
+        jn.stemRule = stemRule;
         //JoinNode jn = new JoinNode(aNode,bNode,rete, varPositions.get(a), varPositions.get(b));
         //VarPosNodes.put(jn,jn.getVarPosition(varPositions.get(a), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
@@ -395,6 +417,7 @@ public class ReteBuilder {
         }
         bNode.resetVarPosition(b);
         JoinNodeNegative jn = new JoinNodeNegative(bNode,aNode,rete, varPositions.get(b),this.VarPosNodes.get(aNode));
+        jn.stemRule = stemRule;
         //VarPosNodes.put(jn,jn.getVarPosition(VarPosNodes.get(aNode), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
         return jn;
@@ -409,6 +432,7 @@ public class ReteBuilder {
             bNode = this.rete.getBasicLayerMinus().get(b.getPredicate()).getChildNode(b.getAtomAsReteKey());
         }
         JoinNodeNegative jn = new JoinNodeNegative(bNode,aNode,rete, varPositions.get(b), varPositions.get(a));
+        jn.stemRule = stemRule;
         //VarPosNodes.put(jn,jn.getVarPosition(varPositions.get(a), varPositions.get(b)));
         VarPosNodes.put(jn,jn.getVarPositions());
         return jn;
@@ -452,7 +476,9 @@ public class ReteBuilder {
     public void addAtomPlus(Atom atom){   
         rete.addPredicatePlus(atom.getPredicate());
         if(!rete.getBasicLayerPlus().containsKey(atom.getPredicate())){
-            rete.getBasicLayerPlus().put(atom.getPredicate(), new BasicNode(atom.getArity(),rete, atom.getPredicate()));
+            BasicNode bn = new BasicNode(atom.getArity(),rete, atom.getPredicate());
+            bn.stemRule = stemRule;
+            rete.getBasicLayerPlus().put(atom.getPredicate(), bn);
         }    
         rete.getBasicLayerPlus().get(atom.getPredicate()).AddAtom(atom);
         
@@ -466,7 +492,9 @@ public class ReteBuilder {
     public void addAtomMinus(Atom atom){
         rete.addPredicateMinus(atom.getPredicate());
         if(!rete.getBasicLayerMinus().containsKey(atom.getPredicate())){
-            rete.getBasicLayerMinus().put(atom.getPredicate(), new BasicNodeNegative(atom.getArity(),rete, atom.getPredicate()));
+            BasicNodeNegative bn = new BasicNodeNegative(atom.getArity(),rete, atom.getPredicate());
+            bn.stemRule = stemRule;
+            rete.getBasicLayerMinus().put(atom.getPredicate(), bn);
         }   
         rete.getBasicLayerMinus().get(atom.getPredicate()).AddAtom(atom);  
     }
@@ -533,12 +561,14 @@ public class ReteBuilder {
         for (Operator op : r.getOperators()) {
             if(op.getOP() == OP.ASSIGN && op.isInstanciatedButOne(lastNode.tempVarPosition.keySet())) {
                 OperatorNode opNode = new OperatorNode(rete, op, lastNode);
+                opNode.stemRule = stemRule;
                 lastNode.addChild(opNode);
                 lastNode = opNode;
                 VarPosNodes.put(opNode, opNode.getVarPositions());
             } else {
                 if( op.isInstanciated(lastNode.tempVarPosition.keySet())) {
                     OperatorNode opNode = new OperatorNode(rete, op, lastNode);
+                    opNode.stemRule = stemRule;
                     lastNode.addChild(opNode);
                     lastNode = opNode;
                     VarPosNodes.put(opNode, opNode.getVarPositions());
@@ -550,8 +580,10 @@ public class ReteBuilder {
         HeadNode headNode;
         if( isHeadPositive ) {
             headNode = new HeadNode(r.getHead(), rete, VarPosNodes.get(lastNode), lastNode);
+            headNode.stemRule = stemRule;
         } else {
             headNode = new HeadNodeNegative(r.getHead(), rete, VarPosNodes.get(lastNode), lastNode);
+            headNode.stemRule = stemRule;
         }
         headNode.r = r;
         lastNode.addChild(headNode);

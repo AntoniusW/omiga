@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import Datastructure.Rete.ChoiceNode;
+import Entity.Rule;
 
 /**
  *
@@ -34,6 +35,8 @@ public abstract class Node {
     protected HashMap<Variable,Integer> tempVarPosition;
     
     public static HashSet<Node> nodes = new HashSet<Node>();
+    
+    public Rule stemRule;
     
     /**
      * 
@@ -82,6 +85,7 @@ public abstract class Node {
         this.rete.getChoiceUnit().addNode(this);
         nodes.add(this);
         memory = new Storage();
+        this.stemRule = ReteBuilder.stemRule;   // hack for easier debugging
     }
     
     /**
@@ -149,7 +153,7 @@ public abstract class Node {
      * 
      * @param instance The instance you want to remove
      */
-    public void removeInstance(Instance instance){
+/*    public void removeInstance(Instance instance){
         //TODO: Is this method eer called? We only use simpleRemove no?
         //has to be implemented by each NodeType
         if(this.memory.containsInstance(instance)){ // TODO: das if muss weg. Im Moment sreiekn leider noch die HeadNodeConstraints!
@@ -159,7 +163,7 @@ public abstract class Node {
             //System.out.println("TRIED TO REMOVE " + instance + " from: " + this + " BUT WAS NOT THERE!");
         }
         
-    }
+    }*/
     
     /**
      * 

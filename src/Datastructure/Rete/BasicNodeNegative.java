@@ -47,7 +47,8 @@ public class BasicNodeNegative extends BasicNode{
     
     @Override
     public Collection<Instance> select(Term[] selectionCriteria){
-        return null; // TOCHECK: This should never be used!
+        throw new UnsupportedOperationException("BasicNodeNegative.select should not be used.");
+        //return null; // TOCHECK: This should never be used!
     }
     
     /**

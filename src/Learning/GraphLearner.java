@@ -501,10 +501,11 @@ public class GraphLearner {
                 Rule ruleFromConstraint = new Rule(head, atomsPlus, atomsMinus, learnedConstraint.getOperators());
                 if( isMustBeTrue ) {
                     ruleFromConstraint.setHeadType(Rule.HEAD_TYPE.must_be_true);
+                    System.out.println("MBT head rule: "+ruleFromConstraint);
                     // TODO: remove continue, after ReteBuilder can add MBT rules,
                     // and after Storage can backtrack mbt-instances,
                     // and after answer-sets are checked for mbt-instances (no AS may contain an mbt-instance)
-                    continue;
+//                    continue;
                 } else {
                     ruleFromConstraint.setHeadType(Rule.HEAD_TYPE.negative);
                 }
@@ -637,7 +638,7 @@ public class GraphLearner {
                 if( at_inst.decisionLevel > conflictCauseAtDL) {
                     conflictCauseAtDL = at_inst.decisionLevel;
                 }
-                System.out.println(atom.toString()+at_inst+"@"+conflictCauseAtDL);
+//                System.out.println(atom.toString()+at_inst+"@"+conflictCauseAtDL);
                 
 
                 

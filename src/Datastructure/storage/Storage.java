@@ -4,6 +4,7 @@
  */
 package Datastructure.storage;
 
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.TrackingInstance;
 import Entity.Variable;
@@ -38,6 +39,8 @@ public class Storage {
         return backtrackInstances;
     }
     
+    HashMap<Instance,Integer> backtrackMustBeTrue;  // maps mbt-instances to decision level the instance was added
+    
     /**
      * Initializes the storage, constructs an memory array of size arity and fills it with HashMaps
      * 
@@ -55,6 +58,7 @@ public class Storage {
             memory[i] = new HashMap<Term,HashSet<Instance>>();
         }
         backtrackInstances = new HashMap<Integer, ArrayList<Instance>>();
+        backtrackMustBeTrue = new HashMap<Instance, Integer>();
     }
     
     /**
@@ -66,24 +70,19 @@ public class Storage {
      * 
      */
     public void addInstance(Instance instance){
+        if( GlobalSettings.debugOutput && instance.isMustBeTrue ) {
+            System.out.println("MBT instance adding: "+instance);
+        }
         registerForBacktracking(instance);
-        for(int i = 0; i < instance.getSize();i++){
-            // The try stuff is definitly faster than the if block ~3seconds for 2kk instances
-            /*
-            try{
-            memory[i].get(instance.get(i)).add(instance);
-            }catch(Exception e){
-            memory[i].put(instance.get(i), new HashSet<Instance>());
-            memory[i].get(instance.get(i)).add(instance);
-            }/*/
-             if(!memory[i].containsKey(instance.get(i))) {
+        for (int i = 0; i < instance.getSize(); i++) {
+
+            if (!memory[i].containsKey(instance.get(i))) {
                 memory[i].put(instance.get(i), new HashSet<Instance>());
             }
-            
-            //if(!memory[i].get(instance.get(i)).contains(instance)) {
-                memory[i].get(instance.get(i)).add(instance);
-            //}
-            //*/
+
+            // add leaves old instance, remove it first
+            memory[i].get(instance.get(i)).remove(instance);
+            memory[i].get(instance.get(i)).add(instance);   
         }
         //System.out.println(this + " Added: " + Instance.getInstanceAsString(instance));
     }
@@ -113,7 +112,7 @@ public class Storage {
      * @param instance an instance that is within our data structure memory that should be removed
      */
     
-    public void removeInstance(Instance instance){
+    private void removeInstance(Instance instance){
         for(int i = 0; i < instance.getSize();i++){
             memory[i].get(instance.get(i)).remove(instance);
         }
@@ -133,6 +132,26 @@ public class Storage {
             return false;
         }
     }
+    
+    /**
+     * Checks if instance occurs in memory and is a must-be-true instance
+     * @param instance
+     * @return 
+     */
+    public boolean containsMustBeTrueInstance(Instance instance){   
+        try{
+            for (Iterator<Instance> it = memory[0].get(instance.get(0)).iterator(); it.hasNext();) {
+                Instance inst = it.next();
+                if( inst.equals(instance)) {
+                    return inst.isMustBeTrue;
+                }
+            }
+            return false;
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
     
      
     // Following variables are defined public, since the select method is called very often during calculation
@@ -260,6 +279,9 @@ public class Storage {
                         didPrint = true;
                     }
                     System.out.print(" "+Term.prettyPrint(instance.getTerms(),true));
+                    if (instance.isMustBeTrue) {
+                        System.out.print("MBT");
+                    }
                 }
             }
         } else {
@@ -305,6 +327,11 @@ public class Storage {
      * @param instance 
      */
     private void registerForBacktracking(Instance instance) {
+        // if instance is MBT, then register as such
+        if( instance.isMustBeTrue && !backtrackMustBeTrue.containsKey(instance)) {
+            backtrackMustBeTrue.put(instance, instance.decisionLevel);
+        }
+        // register instance for regular backtracking
         ArrayList<Instance> backtrackList;
         if( backtrackInstances.get(instance.decisionLevel) != null) {
             backtrackList = backtrackInstances.get(instance.decisionLevel);
@@ -328,12 +355,26 @@ public class Storage {
             // check if decision level is greater than given one
             if( entry.getKey().intValue() >= decisionLevel ) {
                 for (Instance instance : entry.getValue()) {
-                    // remove instance from node memory
-                    removeInstance(instance);
+                    // check if there existed mbt on lower dl
+                    if( backtrackMustBeTrue.containsKey(instance) &&
+                            backtrackMustBeTrue.get(instance).intValue() < decisionLevel) {
+                        // keep instance in memory, but set it again to mbt
+                        instance.isMustBeTrue = true;
+                    } else {
+                        // remove instance from node memory
+                        removeInstance(instance);
+                    }
                 }
                 // remove from backtracking memory
                 it.remove();
                 //backtrackInstances.remove(entry.getKey());
+            }
+        }
+        // backtrack the MustBeTrue map
+        for (Iterator<Map.Entry<Instance, Integer>> it = backtrackMustBeTrue.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<Instance, Integer> entry = it.next();
+            if( entry.getValue() >= decisionLevel ) {
+                it.remove();
             }
         }
     }

@@ -93,7 +93,7 @@ public class ContextASP {
     }
     
     public boolean choice(){
-        GlobalSettings.decisionCounter++;   // for statistics, count total decisions done.
+        //GlobalSettings.decisionCounter++;   // for statistics, count total decisions done.
         // for statistics count maximum depth of decision tree
         if( choiceUnit.getDecisionLevel()+1 >= GlobalSettings.maxDecisionLevel ) {
             GlobalSettings.maxDecisionLevel = choiceUnit.getDecisionLevel()+1;
@@ -125,6 +125,7 @@ public class ContextASP {
      * @throws FactSizeException if the instance size does not match the predicates arity, this exception is thrown
      */
     public void addFact2IN(Predicate p, Instance instance) throws FactSizeException{
+        instance.isMustBeTrue = false;  // init MBT for facts as false
         if(instance.getSize() != p.getArity()) {
             String s = "Fact: " + instance.toString() + " and Predicate arity of: " + p + " do not match: " + instance.getSize() + " != " + p.getArity();
             throw new FactSizeException(s);
@@ -148,6 +149,7 @@ public class ContextASP {
      * @throws FactSizeException if the instance size does not match the predicates arity, this exception is thrown
      */
     public void addFact2OUT(Predicate p, Instance instance) throws FactSizeException{
+        instance.isMustBeTrue = false; // init MBT for facts as false
         if(instance.getSize() != p.getArity()) {
             String s = "Fact: " + instance.toString() + " and Predicate arity of: " + p + " do not match: " + instance.getSize() + " != " + p.getArity();
             throw new FactSizeException(s);
@@ -258,6 +260,8 @@ public class ContextASP {
     }
 
     public boolean ContainsNoMustBeTrue() {
+        System.out.println("Found AS candidate, checking if it does not contain any MBT instances:");
+        this.printAnswerSet(null);
         for (Map.Entry<Predicate, BasicNode> entryPredicateNode : rete.getBasicLayerPlus().entrySet()) {
             if( entryPredicateNode.getValue().memory.containsMustBeTrue()) {
                 return false;
