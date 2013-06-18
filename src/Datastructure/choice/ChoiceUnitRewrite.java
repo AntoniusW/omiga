@@ -115,13 +115,13 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             // we removed last available decision, computation is over.
             calculationFinished = true;
             c.getRete().satisfiable = false;    // ensures that current interpretation is not treated as answer set
-            System.out.println("BACKTRACK: Stack empty.");
+            if( GlobalSettings.debugDecision ) System.out.println("BACKTRACK: Stack empty.");
             return;
         }
         
         int backtrackTo = lastChoice.getArg2().decisionLevel;
         int numDecisionLevels = getDecisionLevel()-backtrackTo+1;
-        System.out.println("BACKTRACKING: "+numDecisionLevels+" DLs from "+getDecisionLevel());
+        if( GlobalSettings.debugDecision ) System.out.println("BACKTRACKING: "+numDecisionLevels+" DLs from "+getDecisionLevel());
         
         nextGuessIsNegative = true;
 
@@ -168,7 +168,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             toAdd.decisionLevel = getDecisionLevel();
             c.getRete().addInstanceMinus(choicePair.getArg1().getRule().getHead().getPredicate(), toAdd);
             
-            System.out.println("Choice point: non-fire "+choicePair.getArg1().getRule()+" "+toAdd+" @DL="+getDecisionLevel());
+            if( GlobalSettings.debugDecision ) System.out.println("Choice point: non-fire "+choicePair.getArg1().getRule()+" "+toAdd+" @DL="+getDecisionLevel());
             
             nextGuessIsNegative = false;
             return true;
@@ -177,7 +177,7 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
         
         //We need to do a positive guess
         //addChoicePoint();
-        System.out.println("Searching positive guess:");
+        if( GlobalSettings.debugDecision ) System.out.println("Searching positive guess:");
         memory.setDecisionLevel(getDecisionLevel()+1);  // increase decision level
         for(ChoiceNode cN: SCC.get(actualSCC)){
             Pair<Instance,ArrayList<Pair<Atom, Instance>>> choicePair = cN.nextChoiceableInstance();
@@ -199,13 +199,13 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
                 choiceInstance.decisionLevel = getDecisionLevel();
                 choiceStack.add(new Pair<ChoiceNode, Instance>(cN, choiceInstance));
                 
-                System.out.println("Choice point: fire "+cN.getRule()+" "+choiceInstance+" @DL="+getDecisionLevel());
+                if( GlobalSettings.debugDecision ) System.out.println("Choice point: fire "+cN.getRule()+" "+choiceInstance+" @DL="+getDecisionLevel());
                 GlobalSettings.decisionCounter++;   // for statistics, count total decisions done.
                 return true;
             //}
             
         }
-        System.out.println("No positive guess found in current SCC, closing SCCs now.");
+        if( GlobalSettings.debugDecision ) System.out.println("No positive guess found in current SCC, closing SCCs now.");
         memory.setDecisionLevel(getDecisionLevel()-1);  // nothing was added, decrease decision level again.
         
         //if we reach this point this means the actual SCC contains no more guesses

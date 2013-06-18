@@ -260,7 +260,7 @@ public class ContextASP {
     }
 
     public boolean ContainsNoMustBeTrue() {
-        System.out.println("Found AS candidate, checking if it does not contain any MBT instances:");
+        if( GlobalSettings.debugLearning ) System.out.println("Found AS candidate, checking if it does not contain any MBT instances:");
         this.printAnswerSet(null);
         for (Map.Entry<Predicate, BasicNode> entryPredicateNode : rete.getBasicLayerPlus().entrySet()) {
             if( entryPredicateNode.getValue().memory.containsMustBeTrue()) {

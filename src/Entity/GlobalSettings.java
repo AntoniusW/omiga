@@ -13,6 +13,8 @@ import Manager.Manager;
  */
 public class GlobalSettings {
     public static boolean debugOutput = false;
+    public static boolean debugLearning = false;
+    public static boolean debugDecision = false;
     
     public boolean debugHelper = false;
     

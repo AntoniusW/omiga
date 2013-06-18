@@ -436,7 +436,7 @@ public class GraphLearner {
         // for benchmarks: skip learning if required
         if (GlobalSettings.noLearning) {
             rete.satisfiable = false;
-            System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
+            if( GlobalSettings.debugDecision) System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
             throw new ImmediateBacktrackingException(rete.getChoiceUnit().getDecisionLevel());
         }
         
@@ -452,16 +452,18 @@ public class GraphLearner {
         // clean-up equalities in the constraint
         resolveEquality(learnedConstraint);
         //System.out.println("Resolved equalities:\n\t"+learnedConstraint);
+        if( GlobalSettings.debugLearning ) {
         System.out.println("Learned constraint: "+learnedConstraint);
         System.out.println("Conflict cause @DL="+conflictCauseAtDL);
         System.out.println("Decision Level: "+rete.getChoiceUnit().getDecisionLevel());
+        }
         
         ChoiceUnit cu = GlobalSettings.getGlobalSettings().getManager().getContext().getChoiceUnit();
         
         // avoid learning too big rules, restrict rule/constraint size
         int bodySize = learnedConstraint.getBodyPlus().size() + learnedConstraint.getBodyMinus().size();
         if (bodySize > 6 + Math.sqrt(cu.getDecisionLevel())) {
-            System.out.println("Skipping too large rules of size " + bodySize + " at DL=" + cu.getDecisionLevel());
+            if( GlobalSettings.debugLearning) System.out.println("Skipping too large rules of size " + bodySize + " at DL=" + cu.getDecisionLevel());
         } else {
 
 
@@ -505,7 +507,7 @@ public class GraphLearner {
                 Rule ruleFromConstraint = new Rule(head, atomsPlus, atomsMinus, learnedConstraint.getOperators());
                 if( isMustBeTrue ) {
                     ruleFromConstraint.setHeadType(Rule.HEAD_TYPE.must_be_true);
-                    System.out.println("MBT head rule: "+ruleFromConstraint);
+                    if( GlobalSettings.debugLearning ) System.out.println("MBT head rule: "+ruleFromConstraint);
                     // TODO: remove continue, after ReteBuilder can add MBT rules,
                     // and after Storage can backtrack mbt-instances,
                     // and after answer-sets are checked for mbt-instances (no AS may contain an mbt-instance)
@@ -516,7 +518,7 @@ public class GraphLearner {
 
                 // skip if head is not safe
                 if (!ruleFromConstraint.isSafePropagation()) {
-                    System.out.println("Rule not safe, skipping: " + ruleFromConstraint);
+                    if( GlobalSettings.debugLearning )System.out.println("Rule not safe, skipping: " + ruleFromConstraint);
                     continue;
                 }
 
@@ -527,7 +529,7 @@ public class GraphLearner {
                 }
 
                 // add constraint-induced rule to rete
-                System.out.println("Adding to Rete: " + ruleFromConstraint.toString());
+                if( GlobalSettings.debugLearning ) System.out.println("Adding to Rete: " + ruleFromConstraint.toString());
                 learnedRules.add(ruleFromConstraint);
                 reteBuilder.addRuleNeg(ruleFromConstraint);
                 GlobalSettings.didLearn = true;
@@ -540,7 +542,7 @@ public class GraphLearner {
         
         // everything went well, halt propagation immediately
         rete.satisfiable = false;
-        System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
+        if( GlobalSettings.debugDecision ) System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
         if ( conflictCauseAtDL != rete.getChoiceUnit().getDecisionLevel()) {
             conflictCauseAtDL = conflictCauseAtDL;
         }

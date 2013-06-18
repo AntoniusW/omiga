@@ -76,7 +76,7 @@ public class HeadNode extends Node{
         }
         if(a == null){
             // This head Node is a constraint Node. If something arrives here the context is unsatsifiable!
-            System.out.println("Constraint violated: "+r+" "+instance.toString());
+            if( GlobalSettings.debugDecision ) System.out.println("Constraint violated: "+r+" "+instance.toString());
             GraphLearner gl = new GraphLearner();
             gl.learnRuleFromConflict(r, instance, this, rete);
 //            gl.learnRuleAndAddToRete(r, instance, this);
