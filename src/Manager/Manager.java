@@ -6,6 +6,8 @@ package Manager;
 
 import Entity.ContextASP;
 import Entity.GlobalSettings;
+import Learning.GraphLearner;
+import Datastructure.Rete.Node;
 
 /**
  *
@@ -119,6 +121,8 @@ public class Manager {
             }
         }
         System.out.println("Found: " + this.answerSetCount + " answer sets.");
+        System.out.println("Learned rules: "+GraphLearner.getNumLearnedRules());
+        System.out.println("Total number of nodes in Rete: "+Node.nodes.size());
         
     }
     

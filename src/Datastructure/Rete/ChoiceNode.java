@@ -228,7 +228,7 @@ public class ChoiceNode extends Node{
                 // if ground atom is in positive memory, skip this ground rule.
                 if (rete.containsInstanceInBasicNode(at, toAdd, true)) {
                     if(rete.getBasicLayerPlus().get(at.getPredicate()).containsMBTInstance(toAdd)) {
-                        System.out.println("Rejecting choice because of MBT instance.");
+                        System.out.println("Rejecting choice because of MBT instance: "+at+toAdd);
                     }
                     groundAtomInPositiveMemory = true;
                     // disable instance for further guesses

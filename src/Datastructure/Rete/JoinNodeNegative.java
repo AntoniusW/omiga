@@ -35,9 +35,102 @@ public class JoinNodeNegative extends JoinNode{
         }*/
     }
     
+    //@Override
+    public void addInstanceFoo(Instance instance, Node fromNode){
+        boolean from;
+        if( a == fromNode) {
+            from = true;
+        } else if ( b == fromNode ) {
+            from = false;
+        } else {
+            throw new RuntimeException("JoinNode received input from unknown parent node");
+        }
+        //System.out.println("Instance: " + instance + " reaches JoinNode: " + this + " from: " + from);
+        
+        // we determine from which joinpartner the instance arrived, and build our selectionCriteria accordingly
+        // by setting the position to be a variable if selectionCriterionX is null, and to the term of the insatnce's position
+        // otherwise. This way we'll obtain all joinable instances from the other joinpartner.
+        if(from){
+            //The instance came from node a
+            //selectFromHere = b;
+            for(int i = 0; i < selectionCriterion2.length;i++){
+                if (selectionCriterion2[i] == null){
+                    selCrit2[i] = tempVar;
+                }else{
+                    selCrit2[i] = instance.get( selectionCriterion2[i]);
+                }
+            }
+        } else {
+            //the instance came from node b
+            //selectFromHere = a;
+            for(int i = 0; i < selectionCriterion1.length;i++){
+                if (selectionCriterion1[i] == null){
+                    selCrit1[i] = tempVar;
+                }else{
+                    selCrit1[i] = instance.get( selectionCriterion1[i]);
+                }
+            }
+        }
+            
+        //selectionCriteria = selCrit2;
+        Collection<Instance> joinPartners = null;
+        if (from) {
+            // The new instance arived from right, therefore we to push all instances of the select from left to the children
+            joinPartners = b.select(selCrit2);
+        } else {
+            joinPartners = a.select(selCrit1);
+        }
+        //System.out.println("selCrit: " + Instance.getInstanceAsString(selCrit2));
+        //System.out.println("JoinNodeNegative has this many children: " + this.children);
+        for (Instance inz : joinPartners) {
+            
+            Term[] toAdd = new Term[this.instanceOrdering.length];
+            for (int i = 0; i < this.instanceOrdering.length; i++) {
+                if (from) {
+                    if (instanceOrdering[i] < 0) {
+                        toAdd[i] = inz.get((instanceOrdering[i] * -1) - 1);
+                    } else {
+                        toAdd[i] = instance.get(instanceOrdering[i] - 1);
+                    }
+                } else {
+                    if (instanceOrdering[i] >= 0) {
+                        toAdd[i] = inz.get(instanceOrdering[i] - 1);
+                    } else {
+                        toAdd[i] = instance.get((instanceOrdering[i] * -1) - 1);
+                    }
+                }
+            }
+            Instance tempInst = Instance.getInstance(toAdd, 0, 0);
+            
+            if( !from ) {
+                Instance inst2add = newInstanceFromJoin(instance, inz, tempInst/*instance*/);
+                //Instance inst2add = newInstanceFromJoin(instance, selInst, instance);
+                this.memory.addInstance(inst2add);
+                //System.out.println(this + " instance added: " + instance + " because of: " + a + " saying: " + a.containsInstance(Instance.getInstance(selCrit1)) + " to: " + Instance.getInstance(selCrit1));
+                //this.rete.getChoiceUnit().addInstance(this, instance);
+                for (Node child : children) {
+                    sendInstanceToChild(inst2add, child);
+                }
+                break;
+            }
+
+            Instance inst2add = newInstanceFromJoin(instance, inz, tempInst);
+
+            this.memory.addInstance(inst2add);
+
+            for (Node child : children) {
+                sendInstanceToChild(inst2add, child);
+            }
+        }
+    }
+    
     @Override
     public void addInstance(Instance instance, Node fromNode){
-         boolean from; // TODO: check boolean value
+        if( true ) {
+            addInstanceFoo(instance, fromNode);
+            return;
+        }
+        boolean from; // TODO: check boolean value
         if( a == fromNode) {
             from = true;
         } else if ( b == fromNode ) {
@@ -88,7 +181,25 @@ public class JoinNodeNegative extends JoinNode{
                 inst2add.decisionLevel = decisionLevel;
                 inst2add.propagationLevel = decisionLevel;*/
                 
-                Instance inst2add = newInstanceFromJoin(instance, inz, inz);
+/*            Term[] toAdd = new Term[this.instanceOrdering.length];
+            for(int i = 0; i < this.instanceOrdering.length;i++){
+                if(from){
+                    if(instanceOrdering[i] < 0){
+                        toAdd[i] = inz.get((instanceOrdering[i]*-1)-1);
+                    }else{
+                        toAdd[i] = instance.get(instanceOrdering[i] - 1);
+                    }
+                }else{
+                    if(instanceOrdering[i] >= 0){
+                        toAdd[i] = inz.get(instanceOrdering[i] - 1);
+                    }else{
+                        toAdd[i] = instance.get((instanceOrdering[i]*-1)-1);
+                    }
+                }
+            }
+            Instance tempInst = Instance.getInstance(toAdd, 0, 0);  */              
+                
+                Instance inst2add = newInstanceFromJoin(instance, inz, inz/*tempInst*/);
                 
                 this.memory.addInstance(inst2add);
                 //this.rete.getChoiceUnit().addInstance(this, inz);
@@ -151,7 +262,7 @@ public class JoinNodeNegative extends JoinNode{
         
     }
     
-    public void informOfClosure(SelectionNode sN) {
+    public void informOfClosure(SelectionNodeNegative sN) {
         boolean from;
         if (a == sN) {
             from = true;
@@ -174,6 +285,12 @@ public class JoinNodeNegative extends JoinNode{
         temp = actual.memory.getAllInstances();
 
         for (int i = 0; i < temp.size(); i++) {
+            
+            // return if join should create new variable bindings
+            // TODO: fix this to create bindings, if it makes any sense
+            if( temp.get(0).getTerms().length != tempVarPosition.size()) {
+                return;
+            }
 
             for (int j = 0; j < selectionCriterion1.length; j++) {
                 if (selectionCriterion1[j] == null) {

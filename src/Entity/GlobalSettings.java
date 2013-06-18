@@ -27,7 +27,7 @@ public class GlobalSettings {
     
     // below string is replaced by build-script automatically,
     // do not change line breaking
-    public static String version="cfff23052c01529c51ad42e80ce7fea8eb16b57e";
+    public static String version="d5b0a3ad4c83728905223462a364a7e4c8ffdb5c";
     
     private Manager manager;
 

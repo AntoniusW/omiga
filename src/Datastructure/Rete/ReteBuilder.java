@@ -120,7 +120,8 @@ public class ReteBuilder {
                     //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
                 }
             } else {
-                if (!operators.isEmpty()) {
+               /* Previous version of operator-negBody building
+                * if (!operators.isEmpty()) { // TODO: check if all assignments are done, come back later for other operators
                     for (Operator op : operators) {
                         if (op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())) {
                             OperatorNode opN = new OperatorNode(rete, op, actualNode);
@@ -157,8 +158,46 @@ public class ReteBuilder {
                         }
                     } else {
                         // Negative Rules do not contain operators. At least for our easy rewriting.
+                    }*/                
+                if (!atomsMinus.isEmpty()) {    // we build a propagation-rule, so negative body works like positive one
+                    //There is still something within the negative body of the rule --> take it --> it's the new partner
+                    partner = getBestPartner(atomsMinus, actualNode);
+                    //Create a joinNode from the actualNode and the partner
+                    //System.out.println("RULE: " + r);
+                    if (actualNode.getClass().equals(SelectionNode.class)) {
+                        actualNode = this.createJoinNegative(actual, partner, false, varPositions); // TODO createJoinNegative
+                        //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                    } else {
+                        actualNode = this.createJoinNegative(actualNode, partner, false, varPositions); // TODO createJoinNegative
+                        //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
+                    }
+                } else {
+                    if (!operators.isEmpty()) {
+                        for (Operator op : operators) {
+                            if (op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())) {
+                                OperatorNode opN = new OperatorNode(rete, op, actualNode);
+                                opN.stemRule = stemRule;
+                                actualNode.addChild(opN);
+                                actualNode = opN;
+                                VarPosNodes.put(opN, opN.getVarPositions());
+                                operators.remove(op);
+                                break;
+                            } else {
+                                if (op.isInstanciated(actualNode.tempVarPosition.keySet())) {
+                                    OperatorNode opN = new OperatorNode(rete, op, actualNode);
+                                    opN.stemRule = stemRule;
+                                    actualNode.addChild(opN);
+                                    actualNode = opN;
+                                    VarPosNodes.put(opN, opN.getVarPositions());
+                                    operators.remove(op);
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
                     }
                 }
+
             }
         }
         HeadNode hN = null;

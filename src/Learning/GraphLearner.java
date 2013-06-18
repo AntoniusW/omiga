@@ -57,6 +57,10 @@ public class GraphLearner {
     // repository of already learned rules to detect duplicates.
     private static ArrayList<Rule> learnedRules = new ArrayList<Rule>();
     
+    public static int getNumLearnedRules() {
+        return learnedRules.size();
+    }
+    
     private Atom cloneAndRenameVariablesInAtom(Atom atom, Map<Variable, Variable> oldVar2newVar) {
         Term[] oldTerms = atom.getTerms();
         Term[] newTerms = new Term[oldTerms.length];
@@ -493,8 +497,8 @@ public class GraphLearner {
                 // TODO: maybe 0-th SCC is better?
                 // FUTURE WORK: due to learning, some constraint might be violated at lower DL than we currently are.
                 //      Learning only from current SCC also prevents useless learning for lower DLs
-                if (cu.getPredicateSCC(head.getPredicate()) < currentSCC) {
-                    //if (cu.getPredicateSCC(head.getPredicate()) == 0) {
+                //if (cu.getPredicateSCC(head.getPredicate()) < currentSCC) {
+                if (cu.getPredicateSCC(head.getPredicate()) == 0) {
                     continue;
                 }
 
