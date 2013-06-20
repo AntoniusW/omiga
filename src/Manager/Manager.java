@@ -120,10 +120,17 @@ public class Manager {
                 }
             }
         }
-        System.out.println("Found: " + this.answerSetCount + " answer sets.");
-        System.out.println("Learned rules: "+GraphLearner.getNumLearnedRules());
-        System.out.println("Total number of nodes in Rete: "+Node.nodes.size());
-        
+    }
+    
+    public String printStatus() {
+        return "Learned rules are:\n"+GraphLearner.printLearnedRules()+"\n"+
+        "Found: " + this.answerSetCount + " answer sets."+"\n"+
+        "Rejected learned rules because of size: "+GraphLearner.rejectedLargeLearnedRules+"\n"+
+        "Rejected double-learned rules: "+GraphLearner.rejectedDoubleLearnedRules+"\n"+
+        "Total number of nodes in Rete: " + Node.nodes.size()+"\n"+
+        "Total decisions done: " + GlobalSettings.decisionCounter+"\n"+
+        "Maximum decision level: "+GlobalSettings.maxDecisionLevel+"\n"+
+        "Learned rules: " + GraphLearner.getNumLearnedRules()+"\n";
     }
     
     

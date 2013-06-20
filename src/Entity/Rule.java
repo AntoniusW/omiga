@@ -312,6 +312,8 @@ public class Rule {
     @Override
     public String toString(){
         String s = "";
+        if( headType == HEAD_TYPE.must_be_true) s += "+";
+        if( headType == HEAD_TYPE.negative) s +="-";
         if (head != null) s = s + head.toString();
         s = s + " :- ";
         for(Atom ba: bodyPlus){

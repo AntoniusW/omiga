@@ -139,13 +139,12 @@ public class main_FINAL_NormalASP {
         GlobalSettings.getGlobalSettings().setManager(m);
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets, outprint, filter);
+        System.out.println(m.printStatus());
 
         System.out.println("Calculation finished.");
         System.out.println("Time needed for parsing: " + (parsing_time / 1000.0f));
         System.out.println("Time needed overall: " + (1.0F * (System.currentTimeMillis() - start) / 1000));
         System.out.println("Time needed for calculation: " + (1.0F * (System.currentTimeMillis() - beforeCalc) / 1000));
-        System.out.println("Total decisions done: " + GlobalSettings.decisionCounter);
-        System.out.println("Maximum decision level: "+GlobalSettings.maxDecisionLevel);
     }
 
     private static void help() {

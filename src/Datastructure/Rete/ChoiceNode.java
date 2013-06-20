@@ -6,6 +6,7 @@ package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
 import Entity.Atom;
+import Entity.GlobalSettings;
 import Entity.Instance;
 import Entity.Pair;
 import Entity.Rule;
@@ -228,7 +229,9 @@ public class ChoiceNode extends Node{
                 // if ground atom is in positive memory, skip this ground rule.
                 if (rete.containsInstanceInBasicNode(at, toAdd, true)) {
                     if(rete.getBasicLayerPlus().get(at.getPredicate()).containsMBTInstance(toAdd)) {
-                        System.out.println("Rejecting choice because of MBT instance: "+at+toAdd);
+                        if( GlobalSettings.debugLearning ) {
+                            System.out.println("Rejecting choice because of MBT instance: "+at+toAdd);
+                        }
                     }
                     groundAtomInPositiveMemory = true;
                     // disable instance for further guesses

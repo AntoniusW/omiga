@@ -57,8 +57,19 @@ public class GraphLearner {
     // repository of already learned rules to detect duplicates.
     private static ArrayList<Rule> learnedRules = new ArrayList<Rule>();
     
+    public static int rejectedLargeLearnedRules = 0;
+    public static int rejectedDoubleLearnedRules = 0;
+    
     public static int getNumLearnedRules() {
         return learnedRules.size();
+    }
+    
+    public static String printLearnedRules() {
+        String ret = "";
+        for (Rule rule : learnedRules) {
+            ret +="  "+rule+"\n";
+        }
+        return ret;
     }
     
     private Atom cloneAndRenameVariablesInAtom(Atom atom, Map<Variable, Variable> oldVar2newVar) {
@@ -439,7 +450,7 @@ public class GraphLearner {
             if( GlobalSettings.debugDecision) System.out.println("Interpretation unsatisfiable, halting propagation with ImmediateBacktrackingException");
             throw new ImmediateBacktrackingException(rete.getChoiceUnit().getDecisionLevel());
         }
-        
+        varcount = 0;   // reset counter for variable names, drastically reduces amount of learned rules
         int conflictCauseAtDL;
 
         //System.out.println("Start unfoldConstraint.");
@@ -463,6 +474,7 @@ public class GraphLearner {
         // avoid learning too big rules, restrict rule/constraint size
         int bodySize = learnedConstraint.getBodyPlus().size() + learnedConstraint.getBodyMinus().size();
         if (bodySize > 6 + Math.sqrt(cu.getDecisionLevel())) {
+            rejectedLargeLearnedRules++;
             if( GlobalSettings.debugLearning) System.out.println("Skipping too large rules of size " + bodySize + " at DL=" + cu.getDecisionLevel());
         } else {
 
@@ -635,7 +647,7 @@ public class GraphLearner {
                         if( closedAtDL > conflictCauseAtDL) {
                             conflictCauseAtDL = closedAtDL;
                         }
-                        System.out.println(atom.toString()+"closed @"+conflictCauseAtDL);
+                        if( GlobalSettings.debugLearning ) System.out.println(atom.toString()+"closed @"+conflictCauseAtDL);
                         unfoldedBody.addAtomMinus(atom);
                         continue;
                     }
@@ -908,6 +920,7 @@ public class GraphLearner {
     private boolean ruleIsDuplicate(Rule final_rule) {
         for (Rule rule : learnedRules) {
             if( final_rule.toString().equals(rule.toString())) {
+                rejectedDoubleLearnedRules++;
                 return true;
             }
         }
