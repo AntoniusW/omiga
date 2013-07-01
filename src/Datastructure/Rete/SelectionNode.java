@@ -1,21 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
-import Datastructure.storage.Storage;
-import Entity.FuncTerm;
-import Entity.Instance;
 import Entity.Atom;
 import Entity.Constant;
+import Entity.FuncTerm;
+import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import Learning.GraphLearner;
-import Entity.GlobalSettings;
 
 /**
  *

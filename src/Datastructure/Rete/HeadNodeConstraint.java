@@ -1,13 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
-import Datastructure.storage.Storage;
 import Entity.Instance;
-import Entity.Variable;
-import Interfaces.Term;
 import java.util.ArrayList;
 
 /**
@@ -48,22 +41,6 @@ public class HeadNodeConstraint extends Node{
     public void setChoicenode(ChoiceNode cN){
         this.cN = cN;
     }
-    
-    /**
-     * 
-     * saves a constraint to this node.
-     * 
-     * @param instance The instance that should not reach the node. (If it does, unsatisfiability is reached)
-     */
-   /* public void saveConstraintInstance(Instance instance){
-        // we call super because super only handles the istance storage in the choice layer.
-        // so we can use it althaugh this is not the addFunction in common sense
-//        super.addInstance(instance, true);
-//        this.memory.addInstance(instance);
-//        super.addInstance(instance);
-        //System.out.println("The constraintNode removes an instance: " + this + " becasue of: " + instance);
-        this.cN.removeInstance(instance); // we remove the corresponding instance from the choice node, since this instance shall not be true, and therefore should never be guessed
-    }*/
     
     
     /**

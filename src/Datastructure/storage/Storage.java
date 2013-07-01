@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.storage;
 
 import Entity.GlobalSettings;
@@ -87,21 +83,6 @@ public class Storage {
         //System.out.println(this + " Added: " + Instance.getInstanceAsString(instance));
     }
     
-    /**
-     * Adds an instance into the memory without registering it for backtracking.
-     * Useful only for ChoiceNodes, which backtrack by adding instances back into their memory.
-     * 
-     * @param instance 
-     */
-    /*public void addInstanceWithoutBacktracking(Instance instance) {
-        for (int i = 0; i < instance.getSize(); i++) {
-            if (!memory[i].containsKey(instance.get(i))) {
-                memory[i].put(instance.get(i), new HashSet<Instance>());
-            }
-
-            memory[i].get(instance.get(i)).add(instance);
-        }
-    }*/
     
     /**
      * This method removes the instance from all HashMaps of our memory array.
@@ -236,26 +217,6 @@ public class Storage {
                 if(flag) ret.add(instance);
             }
             
-            // for each instance within smallest, we check if the instance fullfills the complete selectionCriteria
-            /*if(selected.isEmpty()){
-                //System.err.println("Storage returns the HashSet of the single variable that was the crit");
-                return smallest;
-            }else{
-                for(Instance instance: smallest){
-                    flag = true;
-                    //System.out.println("INSTANCE: " + instance);
-                    for(int i = 0; i < selectionCriterion.length;i++){
-                        if (!selectionCriterion[i].getClass().equals(Variable.class)){
-                            if(!instance.get(i).equals(selectionCriterion[i])) {
-                                flag = false;
-                            }else{
-                                //System.out.println("Oo: " + instance.get(i) + " == " + selectionCriterion[i]);
-                            }
-                        }
-                    }
-                    if(flag) ret.add(instance);
-                }
-            }*/
         }
         //System.out.println("Storage asked for: " + Instance.getInstanceAsString(selectionCriterion) + " therefore returning: " + ret);
         return ret;
@@ -350,8 +311,6 @@ public class Storage {
         for (Iterator<Map.Entry<Integer, ArrayList<Instance>>> it = backtrackInstances.entrySet().iterator(); it.hasNext();) {
             Map.Entry<Integer, ArrayList<Instance>> entry = it.next();
             
-        //}
-        //for (Map.Entry<Integer, ArrayList<Instance>> entry : backtrackInstances.entrySet()) {
             // check if decision level is greater than given one
             if( entry.getKey().intValue() >= decisionLevel ) {
                 for (Instance instance : entry.getValue()) {
@@ -367,7 +326,6 @@ public class Storage {
                 }
                 // remove from backtracking memory
                 it.remove();
-                //backtrackInstances.remove(entry.getKey());
             }
         }
         // backtrack the MustBeTrue map

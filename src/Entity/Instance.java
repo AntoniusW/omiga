@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
 import Interfaces.Term;
@@ -27,8 +23,6 @@ public class Instance implements Serializable {
     public boolean isMustBeTrue;
     
     public static int instance_count = 0;
-    // public static int lolra = 0;
-    // private static HashMap<Instance,Instance> instances = new HashMap<Instance,Instance>();
         
     Term[] terms;
 
@@ -47,15 +41,6 @@ public class Instance implements Serializable {
     public static Instance getInstance(Term[] terms, int propagationLevel, int decisionLevel){
         instance_count++;
         return new Instance(terms, propagationLevel, decisionLevel);
-        /*Instance i = new Instance(terms);
-        if(instances.containsKey(i)){
-            //System.out.println("Asked for: " + s + " returning: " + instances.get(i)); 
-            return instances.get(i);
-        }else{
-            lol++;
-            instances.put(i, i);
-            return i;
-        }*/
     }
     /**
      * 
@@ -153,36 +138,5 @@ public class Instance implements Serializable {
         return s+"]";
         //return s.substring(0, s.length()-1) + "]";
     }
-    
-    
-    
-    
-    /*
-     * Old Version. Only needed for printouts for testing
-     */
-    public static String getInstanceAsString(Term[] instance){
-        String s = "[";
-        for(int i = 0; i < instance.length;i++){
-            s = s + instance[i] + ",";
-        }
-        return s.substring(0,s.length()-1) + "]";
-    }
-    
-    public static String getInstanceAsString(Integer[] instance){
-        String s = "[";
-        for(int i = 0; i < instance.length;i++){
-            s = s + instance[i] + ",";
-        }
-        return s.substring(0,s.length()-1) + "]";
-    }
-    
-    public static String getInstanceAsString(int[] instance){
-        String s = "[";
-        for(int i = 0; i < instance.length;i++){
-            s = s + instance[i] + ",";
-        }
-        return s.substring(0,s.length()-1) + "]";
-    }
-
 }
 

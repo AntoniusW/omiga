@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -81,15 +76,6 @@ public class Atom {
         this.hashcode = this.hashcode*37 + Term.hashCode(terms);
         //System.out.println(this + " - ATOMHASHCODE: " + this.hashCode() + " - " + name);
     }
-    
-    /*public Atom(String name, int arity){
-        p = Predicate.getPredicate(name, arity);
-        this.terms = new Term[arity];
-    }*/
-    
-    /*public void setAtomAt(int position, Term pa){
-        this.terms[position] = pa;
-    }*/
     
     /**
      * 

@@ -1,14 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
-import Datastructure.storage.Storage;
 import Entity.Instance;
 import Entity.Variable;
 import Interfaces.Term;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -185,21 +179,6 @@ public class JoinNode extends Node{
 
         // for each joinpartner we build a variable assignment we then add to this joinnodes memory
         for(Instance varAssignment: joinPartners){
-            /*int decisionLevel;
-            int propagationLevel;
-            // use higher decision level
-            if( instance.decisionLevel > varAssignment.decisionLevel ) {
-                decisionLevel = instance.decisionLevel;
-                propagationLevel = instance.propagationLevel;
-            } else if ( instance.decisionLevel == varAssignment.decisionLevel ) {
-                decisionLevel = varAssignment.decisionLevel;
-                // use higher propagation level if both decision levels are equal
-                propagationLevel = instance.propagationLevel > varAssignment.propagationLevel ? 
-                        instance.propagationLevel : varAssignment.propagationLevel;
-            } else {
-                decisionLevel = varAssignment.decisionLevel;
-                propagationLevel = varAssignment.propagationLevel;                
-            }*/
             Term[] toAdd = new Term[this.instanceOrdering.length];
             for(int i = 0; i < this.instanceOrdering.length;i++){
                 if(from){

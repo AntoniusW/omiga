@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
-import Datastructure.storage.Storage;
 import Entity.Atom;
 import Entity.GlobalSettings;
 import Entity.Instance;
@@ -25,9 +20,7 @@ import java.util.Stack;
  */
 public class BasicNode extends Node{
     
-    //private Storage memory;
     protected ArrayList<SelectionNode> basicChildren;
-    //private Rete rete;
     protected Stack<Instance> toPropagate;
     protected Predicate pred;
     
@@ -47,7 +40,6 @@ public class BasicNode extends Node{
         basicChildren = new ArrayList<SelectionNode>();
         toPropagate = new Stack<Instance>();
         this.pred = pred;
-        //this.rete.getChoiceUnit().addNode(this);
     }
     
     /**
@@ -85,9 +77,6 @@ public class BasicNode extends Node{
             for(SelectionNode sN: basicChildren){
                 sendInstanceToChild(ins, sN);
             }
-            /*for(int i = 0; i < basicChildren.size();i++){
-                basicChildren.get(i).addInstance(ins, true);
-            }*/
         }
         return ret;
     }
@@ -111,13 +100,6 @@ public class BasicNode extends Node{
         }
     }
     
-    /*public Collection<Instance> select(Term[] selectionCriteria){
-        return memory.select(selectionCriteria);
-    }
-    public boolean containsInstance(Instance instance){
-        return memory.containsInstance(instance);
-    }
-    */
     public void printAllInstances(){
         memory.printAllInstances();
     }

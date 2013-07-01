@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
 import Entity.Atom;
@@ -10,9 +6,6 @@ import Entity.Instance;
 import Entity.Rule;
 import Entity.TrackingInstance;
 import Entity.Variable;
-import Interfaces.Term;
-import Learning.GraphLearner;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -92,22 +85,6 @@ public class HeadNodeNegative extends HeadNode{
                 //        getManager().getContext().getChoiceUnit().getDecisionLevel());
                 rete.addInstanceMinus(a.getPredicate(), inst);
             
-/*          // TODO: avoid below generation of constraint, add these directly in the rewriting!
-            // create a new constraint of the form:
-            // :- hd_r(X,Y,Z), -hd_r(X,Y,Z).
-            Rule constraint = new Rule();
-            int arity = r.getHead().getArity();
-            Term[] vars = new Term[arity];
-            for (int i = 0; i < vars.length; i++) {
-                vars[i] = Variable.getVariable("cVar:"+i);
-            }
-            Atom head_allvars = Atom.getAtom(r.getHead().getName(), arity, vars);
-            constraint.addAtomMinus(head_allvars);
-            constraint.addAtomPlus(head_allvars);
-            System.out.println("Creating new constraint: "+constraint);
-            GraphLearner gl = new GraphLearner();
-            gl.learnRuleAndAddToRete(constraint, instance2Add, this);
-*/            
         }
     }
     

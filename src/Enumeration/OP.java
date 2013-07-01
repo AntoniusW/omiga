@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Enumeration;
 
 /**
@@ -20,23 +16,6 @@ public enum OP {
     LESS_EQ,
     TIMES,
     DIVIDE;
-    
-/*    public static OP valueOf(char c){
-        switch(c){
-            case '+': return PLUS;
-            case '-': return MINUS;
-            case '=': return EQUAL;
-            case '!=': return NOTEQUAL;
-            case '>': return GREATER;
-            case '<': return LESS;
-            default: return null;
-        }
-    }*/
-    
-    /*public boolean isPoint(){
-        if(this.equals(TIMES) || this.equals(DIVIDE)) return true;
-        return false;
-    }*/
     
     public String toString(){
         switch(this){

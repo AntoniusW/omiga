@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
-import Datastructure.storage.Storage;
 import Entity.Atom;
 import Entity.GlobalSettings;
 import Entity.Instance;
@@ -28,7 +23,6 @@ import java.util.HashMap;
 public class HeadNode extends Node{
     
     protected Atom a;
-    //protected int[] instanceOrdering; // AW: unused member?
     public Node from;
     public Rule r; // tracking the origin of derived instances, set in retebuilder
     
@@ -46,7 +40,6 @@ public class HeadNode extends Node{
         this.from = from;
         this.a = atom;
         this.tempVarPosition = varPos;
-        //memory = new Storage(atom.getArity());
     }
     
     /**
@@ -79,8 +72,6 @@ public class HeadNode extends Node{
             if( GlobalSettings.debugDecision ) System.out.println("Constraint violated: "+r+" "+instance.toString());
             GraphLearner gl = new GraphLearner();
             gl.learnRuleFromConflict(r, instance, this, rete);
-//            gl.learnRuleAndAddToRete(r, instance, this);
-            //rete.satisfiable = false;
             return;
         }
         //We unify the headAtom of the corresponding rule
@@ -100,10 +91,6 @@ public class HeadNode extends Node{
                 || (!instance2Add.isMustBeTrue && r.getHeadType() != Rule.HEAD_TYPE.must_be_true
                 && rete.getBasicLayerPlus().get(a.getPredicate()).memory.containsMustBeTrueInstance(instance2Add)) 
           ){
-            //if(!rete.containsInstance(a.getPredicate(), instance2Add, false)){
-                //if the resolved instance is not contained within our rete we add it
-                //int currentDL = GlobalSettings.getGlobalSettings().
-                //        getManager().getContext().getChoiceUnit().getDecisionLevel();
                 TrackingInstance inst = new TrackingInstance(instance2Add.getTerms(),
                                                 /*0, rete.getChoiceUnit().getDecisionLevel()*/
                                                 instance.propagationLevel+1, instance.decisionLevel); // track rule origin
@@ -116,12 +103,6 @@ public class HeadNode extends Node{
                     inst.isMustBeTrue = true;
                 }
                 rete.addInstancePlus(a.getPredicate(),inst);
-            //}else{
-                //if the resolved instance is contained in the outset of our rete, we derive UNSATISFIABLE.
-//                GraphLearner gl = new GraphLearner();
-//                gl.learnRuleAndAddToRete(r, instance, this);
-                //this.rete.satisfiable = false;
-            //}
         }
     }
 

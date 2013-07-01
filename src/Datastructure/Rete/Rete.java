@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
 import Datastructure.choice.ChoiceUnit;
@@ -325,59 +321,13 @@ public class Rete {
         }
         
         if (didPrint) System.out.println();
-        /*}else{
-            String temp = "," + filter + ",";
-            for(Predicate p: this.basicLayerPlus.keySet()){
-                //if(p.getName().equals(filter)){
-                String pred_name = "," + p.getName() + ",";
-                if (temp.indexOf(pred_name) != -1) {
-                    Term[] selectionCriteria = new Term[p.getArity()];
-                    for(int i = 0; i < p.getArity();i++){
-                        selectionCriteria[i] = Variable.getVariable("X");
-                    }
-                    System.out.println("Instances for: " + p + " " + this.basicLayerPlus.get(p).select(selectionCriteria).size());
-                    this.basicLayerPlus.get(p).printAllInstances();
-                }
-            }
-            
-            System.out.println("Negative Facts: ");
-            for(Predicate p: this.basicLayerMinus.keySet()){
-                String pred_name = "," + p.getName() + ",";
-                if (temp.indexOf(pred_name) != -1)
-                {
-                    Term[] selectionCriteria = new Term[p.getArity()];
-                    for(int i = 0; i < p.getArity();i++){
-                        selectionCriteria[i] = Variable.getVariable("X");
-                    }
-                    System.out.println("Instances for: " + this.basicLayerMinus.get(p));// + " " + this.basicLayerMinus.get(p).select(selectionCriteria).size());
-                    this.basicLayerMinus.get(p).printAllInstances();
-                }
-            }            
-        }*/
         } // end if (onlyPrintIN)
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         System.out.println("-----------------------------");
     }
     
     public void printRete(){
-        /*HashSet<BasicNode> basics = new HashSet<BasicNode>();
-        HashSet<SelectionNode> sel = new HashSet<SelectionNode>();
-        HashSet<JoinNode> join = new HashSet<JoinNode>();
-        HashSet<ChoiceNode> choicer = new HashSet<ChoiceNode>();
-        HashSet<HeadNode> heads = new HashSet<HeadNode>();
-        HashSet<HeadNodeConstraint> cons = new HashSet<HeadNodeConstraint>();
-        for(BasicNode bn: this.basicLayerPlus.values()){
-            basics.add(bn);
-        }
-        for(BasicNode bn: this.basicLayerMinus.values()){
-            basics.add(bn);
-        }
-        for(BasicNode bn: basics){
-            for(SelectionNode sn: bn.basicChildren){
-                sel.add(sn);
-            }
-        }*/
-        for(Node n: Node.nodes){
+         for(Node n: Node.nodes){
             System.out.println(n + " :");
             System.out.println("________________________");
             if(n.memory != null) n.memory.printAllInstances();

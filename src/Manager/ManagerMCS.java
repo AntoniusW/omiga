@@ -4,18 +4,8 @@
  */
 package Manager;
 
-import Datastructure.DependencyGraph.DGraph;
-import Datastructure.Rete.Rete;
-import Datastructure.choice.ChoiceUnit;
-import Entity.Constant;
-import Entity.ContextASP;
 import Entity.ContextASPMCSRewriting;
-import Entity.Predicate;
-import Entity.Rule;
-import java.io.FileNotFoundException;
-import network.Action;
 import network.ReplyMessage;
-import org.jgrapht.graph.DirectedSubgraph;
 
 /**
  *
@@ -73,80 +63,6 @@ public class ManagerMCS {
             }
             return;
         }
-        //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
-        //c.printAnswerSet();
-
-        
-        /*
-        Action action = Action.MAKE_CHOICE;
-        while (action != Action.FINISH)
-        {
-            if (action == Action.MAKE_CHOICE)
-            {
-                start_action = System.currentTimeMillis();
-                boolean has_choice = c.choice();
-                pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
-                
-                if (has_choice)
-                {
-                    start_action = System.currentTimeMillis();
-                    c.propagate();
-                    pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
-                    
-                    if (!c.isSatisfiable())
-                        action = Action.MAKE_BRANCH;
-                }
-                else
-                {
-                    if(c.getChoiceUnit().getDecisionLevel() >= 0)
-                    {
-                        start_action = System.currentTimeMillis();
-                        c.propagate();
-                        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
-                        
-                        if (c.isSatisfiable())
-                        {
-                            answerSetCount++;
-                            if (output)
-                            {
-                                System.out.println("Found Answerset: " + answerSetCount);
-                                c.printAnswerSet(filter);
-                            }
-                            if(answersets != 0 && answerSetCount == answersets) break;
-                        }
-                        
-                        start_action = System.currentTimeMillis();
-                        c.backtrack();
-                        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
-                    }
-                }
-            }
-            else if (action == Action.MAKE_BRANCH)
-            {
-                start_action = System.currentTimeMillis();
-                c.backtrack();
-                ReplyMessage rm = c.nextBranch();
-                pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
-                
-                switch (rm)
-                {
-                    case HAS_BRANCH:
-                        start_action = System.currentTimeMillis();
-                        c.propagate();
-                        pure_solving_time = pure_solving_time + System.currentTimeMillis() - start_action;
-                        if (c.isSatisfiable())
-                            action = Action.MAKE_CHOICE;
-                        break;
-                    case NO_MORE_BRANCH:                        
-                        break;
-                    case NO_MORE_ALTERNATIVE:
-                        action = Action.FINISH;
-                        break;
-                }
-            }
-        }
-        
-        System.out.println("INFO: Pure solving time = " + 1.0*pure_solving_time/1000);*/
         
         
         while(!finished){

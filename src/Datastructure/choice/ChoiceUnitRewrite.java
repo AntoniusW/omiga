@@ -189,8 +189,6 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
             
             ArrayList<Pair<Atom, Instance>> toMakeNegative = choicePair.getArg2();
             Instance choiceInstance = new Instance(choicePair.getArg1());
-            //if( toMakeNegative != null ) {
-//                System.out.println("POSITIVE Guess.");
                 for (Pair<Atom, Instance> pair : toMakeNegative) {
                     c.getRete().addInstanceMinus(pair.getArg1().getPredicate(), pair.getArg2());
 //                    System.out.println("Adding: " + pair.getArg2() + " to: "
@@ -248,8 +246,6 @@ public class ChoiceUnitRewrite extends ChoiceUnit {
     @Override
     public void addChoicePoint() {
         memory.setDecisionLevel(memory.getDecisonLevel()+1);
-        //memory.addChoicePoint();
-        //this.IncreasechoiceNodesDecisionLayer();
     }
     
 }

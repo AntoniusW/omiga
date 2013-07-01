@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
 import Interfaces.OperandI;
@@ -43,12 +39,6 @@ public class Variable extends Term implements OperandI{
             vars.put(name, v);
             return v;
         }
-        /*for(Variable var: vars){
-            if(var.getName().equals(name)) return var;
-        }
-        Variable v = new Variable(name);
-        vars.add(v);
-        return v;*/
     }
     
     /**

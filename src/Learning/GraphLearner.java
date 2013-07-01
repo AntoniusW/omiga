@@ -1,7 +1,6 @@
 package Learning;
 
 import Datastructure.Rete.HeadNode;
-import Datastructure.Rete.Node;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
 import Datastructure.choice.ChoiceUnit;
@@ -20,18 +19,11 @@ import Exceptions.ImmediateBacktrackingException;
 import Exceptions.LearningException;
 import Interfaces.OperandI;
 import Interfaces.Term;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import org.antlr.misc.OrderedHashSet;
-import org.jgrapht.Graph;
-import org.jgrapht.alg.TransitiveClosure;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
 
 /**
  * Reconstructs a partial implication graph from a given rule and variable
@@ -469,7 +461,7 @@ public class GraphLearner {
         System.out.println("Decision Level: "+rete.getChoiceUnit().getDecisionLevel());
         }
         
-        ChoiceUnit cu = GlobalSettings.getGlobalSettings().getManager().getContext().getChoiceUnit();
+        ChoiceUnit cu = rete.getChoiceUnit();
         
         // avoid learning too big rules, restrict rule/constraint size
         int bodySize = learnedConstraint.getBodyPlus().size() + learnedConstraint.getBodyMinus().size();
@@ -520,9 +512,6 @@ public class GraphLearner {
                 if( isMustBeTrue ) {
                     ruleFromConstraint.setHeadType(Rule.HEAD_TYPE.must_be_true);
                     if( GlobalSettings.debugLearning ) System.out.println("MBT head rule: "+ruleFromConstraint);
-                    // TODO: remove continue, after ReteBuilder can add MBT rules,
-                    // and after Storage can backtrack mbt-instances,
-                    // and after answer-sets are checked for mbt-instances (no AS may contain an mbt-instance)
 //                    continue;
                 } else {
                     ruleFromConstraint.setHeadType(Rule.HEAD_TYPE.negative);
@@ -566,15 +555,6 @@ public class GraphLearner {
         for (int i = 0; i < at.getTerms().length; i++) {
             Term term = at.getTerms()[i];
             if (term instanceof Variable) {
-                // ground the variable
-/*                        Variable var;
-                 if (newvar_to_oldvar.containsKey((Variable) term)) {
-                 // get un-renamed name of variable
-                 var = newvar_to_oldvar.get((Variable) term);
-                 } else {
-                 var = (Variable) term;
-                 }
-                 */
                 // check if variable was renamed, i.e., reverted-search in oldVar2newVar
                 Variable oldVar = null;
                 boolean isRenamed = false;
@@ -600,7 +580,6 @@ public class GraphLearner {
     
     public Pair<Rule,Integer> unfoldConstraint(Rule r, Instance varAssignment, HeadNode starting, Map<Variable, Variable> oldVar2newVar, Rete rete) {
 
-//        debugRecursionDepth++;
         int conflictCauseAtDL = 0;
         
         Rule unfoldedBody = new Rule();
@@ -677,10 +656,6 @@ public class GraphLearner {
                     Rule freshRule = renamedPair.getArg1();
                     Map<Variable, Variable> freshOldVar2newVar = renamedPair.getArg2();
                     
-//                    System.out.println("Deriving rule: "+derivingRule);
-//                    System.out.println("Cloned and renamed: "+freshRule);
-                    //System.out.println("OldVar2NewVar (fresh): "+freshOldVar2newVar);
-                    
                     // unify renamed rule's head with atom
                     HashMap<Variable, Term> unifier;
                     unifier = unify(atom, freshRule.getHead());
@@ -714,11 +689,6 @@ public class GraphLearner {
 
                     unfoldedBody.variableEqualities.addAll(varEqualities);
                     unfoldedBody.variableEqualities.addAll(recursiveUnfold.variableEqualities);
-                    //unfoldedBody.variableEqualities.putAll(recursiveUnfold.variableEqualities);
-                    /*for (Map.Entry<Variable, Term> equality : unifier.entrySet()) {
-                        Operator eqOp = new Operator(equality.getKey(), equality.getValue(), OP.EQUAL);
-                        unfoldedBody.addOperator(eqOp);
-                    }*/
 //                    System.out.println("Unfolded rule so far: "+unfoldedBody);
 //                    System.out.println("");
 

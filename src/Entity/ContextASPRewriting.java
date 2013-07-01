@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
 import Datastructure.Rete.Rete;
@@ -9,7 +5,6 @@ import Datastructure.Rete.ReteBuilder;
 import Datastructure.choice.ChoiceUnitRewrite;
 import java.util.ArrayList;
 import java.util.HashMap;
-import network.ReplyMessage;
 
 /**
  *

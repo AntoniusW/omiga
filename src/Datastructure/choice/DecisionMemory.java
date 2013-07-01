@@ -1,16 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.choice;
 
 import Datastructure.Rete.ChoiceNode;
 import Datastructure.Rete.Node;
 import Entity.Instance;
+import Entity.Pair;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import Entity.Pair;
-import java.util.HashMap;
 
 /**
  *
@@ -75,26 +70,6 @@ public class DecisionMemory {
         //System.out.println("DecisionMemory.addChoicePoint: method entry.");
         this.decisionLevel++;
         this.decisionLayer.add(new LinkedList<Pair<Node,Instance>>());
-        
-        /*System.out.println("DecisionMemory.addChoicePoint: added new HashMap to decisionLayer.");
-        System.out.println("DecisionLevel is: "+decisionLevel);
-        for(int i = 0; i < nodes.size();i++){
-            try {
-                if(decisionLevel > 277)
-                    System.out.println("Nodes.size is: "+nodes.size() + " i="+i);
-                HashSet<Instance> new_hs = new HashSet<Instance>();
-                if(decisionLevel >277)
-                    System.out.println("New HashSet created.");
-                this.decisionLayer.get(this.decisionLevel).put(nodes.get(i), new_hs);
-                if(decisionLevel >277)
-                    System.out.println("HashSet put.");
-            } catch (Exception e) {
-                System.out.println("Some exception occured."+e);
-                e.printStackTrace();
-            }
-            
-        }*/
-        //System.out.println("DecisionMemory.addChoicePoint: method end.");
     }
     
     /**
@@ -110,31 +85,6 @@ public class DecisionMemory {
 // previous code      this.decisionLayer.get(decisionLevel).add(new Pair<Node, Instance>(n,instance));
         // this.decisionLayer.get(this.decisionLevel).get(n).add(instance);
     }
-    
-    /**
-     * decreases the decisionlevel by one, deletes all the instances from the nodes and removes the memory for that decisionlevel.
-     */
-    /*public void backtrack(){
-        Node n;
-        for (Node node : Node.nodes) {
-            node.backtrackTo(decisionLevel-1);
-        }
-
-        // TODO remove/change code below
-        //System.out.println("STARTING BACKTRACKING!");
-//        for(Pair<Node,Instance> pa: this.decisionLayer.get(decisionLevel)){
-//            pa.getArg1().simpleRemoveInstance(pa.getArg2());
-//        }
-        /*for(Node n: this.decisionLayer.get(this.decisionLevel).keySet()){
-            for(Instance inz: this.decisionLayer.get(this.decisionLevel).get(n)){
-                //System.out.println("Trying to remove: " + inz + " from: " + n);
-                n.simpleRemoveInstance(inz);
-            }
-        }* /
-//        this.decisionLayer.remove(this.decisionLevel);
-        decisionLevel--;
-        //System.out.println("FINISHED BACKTRACKING!");
-    }*/
     
     /**
      * backtracks to the desired decisionlevel.

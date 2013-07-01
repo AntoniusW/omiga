@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Manager;
 
+import Datastructure.Rete.Node;
 import Entity.ContextASP;
 import Entity.GlobalSettings;
 import Learning.GraphLearner;
-import Datastructure.Rete.Node;
 
 /**
  *
@@ -37,8 +33,6 @@ public class Manager {
      */
     public Manager(ContextASP c){
         this.c = c;
-        //this.rete = c.getRete();
-        //this.choiceUnit = c.getChoiceUnit();
         answerSetCount = 0;
     }
     
@@ -51,7 +45,6 @@ public class Manager {
         }
         c.getChoiceUnit().DeriveSCC();
         if(!c.getChoiceUnit().killSoloSCC()){
-            //System.err.println("Killed all SCC: " + System.currentTimeMillis());
             //We killed all SCC --> This context is guessfree
             if(c.isSatisfiable()){
                 if(output){
@@ -63,18 +56,14 @@ public class Manager {
             }
             return;
         }
-        //System.out.println("Preparing to Guess: " + System.currentTimeMillis());
         //c.printAnswerSet();
         while(!finished){
 //getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
-            //System.out.println("Doing while!");
             if(c.choice()){
                 if (GlobalSettings.debugOutput) {
                     System.out.println("After choice, interpretation is:");
                     c.printAnswerSet(null);
                 }
-                //System.out.println("choice was done!");
-                //System.out.println("Found a choice. Now propagate");
 //getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
                 c.propagate();
 //            getContext().getChoiceUnit().getMemory().debug_isEveryInstanceCovered(); // debug
@@ -97,13 +86,11 @@ public class Manager {
                         if( GlobalSettings.debugLearning ) System.out.println("Triggering final propagation after closing to derive non-MBT.");
                         c.propagate();
                         if( c.ContainsNoMustBeTrue() ) {
-                        //if(c.getChoiceUnit().check4AnswerSet()){
                             if(output){
                                 System.out.println("Answer set: " + (answerSetCount+1));
                                 c.printAnswerSet(filter);
                             }
                             answerSetCount++;
-                            //System.out.println(answerSetCount);
                             if(answersets != null && answerSetCount == answersets) break;
                         //}
                         }

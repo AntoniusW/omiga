@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
 import Datastructure.Rete.HeadNode;
 import Interfaces.Term;
 
 /**
- *
+ * TrackingInstances wrap the instances of BasicNodes; they represent an
+ * implication graph implicitly.
  * @author Antonius Weinzierl
  */
 public class TrackingInstance extends Instance {

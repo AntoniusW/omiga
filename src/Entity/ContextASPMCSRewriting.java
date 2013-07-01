@@ -7,7 +7,6 @@ package Entity;
 import Datastructure.Rete.Node;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
-//import Datastructure.choice.ChoiceUnitMCSRewrite;
 import Interfaces.ContextMCSInterface;
 import java.util.*;
 import network.ReplyMessage;
@@ -52,32 +51,6 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
         this.fromOutside = new HashMap<Predicate,Boolean>();
     }
     
-    /*public void definePredicateFromOutSide(ContextASPMCSRewriting c, Predicate p){
-        Predicate toAdd = Predicate.getPredicate(c.getID() +"_"+ p.getName(), p.getArity());
-        this.fromOutside.put(toAdd,true);
-        this.rete.addPredicateMinus(toAdd);
-    }
-    
-    public void informOfClosureFromOutside(ContextASPMCSRewriting c, Predicate p){
-        Predicate toInform = Predicate.getPredicate(c.getID() +"_"+ p.getName(), p.getArity());
-        fromOutside.put(toInform, false);
-    }*/
-    
-    /**
-     * 
-     * returns wether predicate p can come from outside or not
-     * 
-     * @param p
-     * @return true if the predicate cannot come from outside and false otherwise
-     */
-    public boolean getClosureStatusForOutside(Predicate p){
-        if(!this.fromOutside.containsKey(p)) {
-            //System.out.println("getClosureStatus returning: True");
-            return true;
-        }
-        //System.out.println("getClosureStatus returning: " + this.fromOutside.get(p));
-        return this.fromOutside.get(p);
-    }
 
     /**
      * 
@@ -98,17 +71,6 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
         }
     }
 
-    /**
-     * backtracks to the given decision level
-     * @param level 
-     */
-/*    @Override
-    public void backtrackTo(int level) {
-        this.resetSatisfiable();
-        while(this.choiceUnit.getDecisionLevel() > level){
-            this.choiceUnit.backtrack();
-        }
-    }*/
 
     /**
      * registers a fact from outside such that the context knows that this fact can arrive from outside
@@ -129,8 +91,6 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      */
     @Override
     public void addFactFromOutside(Predicate p, Instance inz) {
-/*        ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
-        this.rete.addInstancePlus(p, inz);*/
     }
     
      /**
@@ -138,13 +98,6 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      * @param facts a HashMap containing all the facts (Instances for predicates)
      */
     public void addFactsFromOutside(HashMap<Predicate,ArrayList<Instance>> facts) {
-/*        ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
-        for(Predicate p: facts.keySet()){
-            for(Instance inz: facts.get(p)){
-                this.rete.addInstancePlus(p, inz);
-            }
-        }
-        */
     }
 
     /**
@@ -154,11 +107,6 @@ public class ContextASPMCSRewriting extends ContextASPRewriting implements Conte
      */
     @Override
     public void closeFactFromOutside(Predicate p) {
-        //System.out.println("Closing fact from outside: "+p);
-/*        ((ChoiceUnitMCSRewrite)this.rete.getChoiceUnit()).addExternalNode();
-        this.fromOutside.put(p, true);
-        ((ChoiceUnitMCSRewrite)this.choiceUnit).pushClosureFromOutside(p);
-        */
     }
     
     //Do not use this method for reopening on backtracking. This is done by the sover himself.

@@ -1,6 +1,5 @@
 package Datastructure.Rete;
 
-import Entity.Pair;
 import Exceptions.ImmediateBacktrackingException;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.DependencyGraph;
 
 import Entity.Atom;
@@ -9,12 +5,10 @@ import Entity.Predicate;
 import Entity.Rule;
 import java.util.ArrayList;
 import java.util.List;
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.StrongConnectivityInspector;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedSubgraph;
 
 /**
@@ -71,11 +65,6 @@ public class DGraph {
         }
         
         return ret;
-    }
-    
-    public void test(Predicate p){
-        gd.outgoingEdgesOf(p);
-        gd.incomingEdgesOf(p);
     }
     
 }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
 import Datastructure.choice.ChoiceUnit;
@@ -120,45 +116,6 @@ public class ReteBuilder {
                     //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
                 }
             } else {
-               /* Previous version of operator-negBody building
-                * if (!operators.isEmpty()) { // TODO: check if all assignments are done, come back later for other operators
-                    for (Operator op : operators) {
-                        if (op.getOP().equals(Enumeration.OP.ASSIGN) && op.isInstanciatedButOne(actualNode.tempVarPosition.keySet())) {
-                            OperatorNode opN = new OperatorNode(rete, op, actualNode);
-                            opN.stemRule = stemRule;
-                            actualNode.addChild(opN);
-                            actualNode = opN;
-                            VarPosNodes.put(opN, opN.getVarPositions());
-                            operators.remove(op);
-                            break;
-                        } else {
-                            if (op.isInstanciated(actualNode.tempVarPosition.keySet())) {
-                                OperatorNode opN = new OperatorNode(rete, op, actualNode);
-                                opN.stemRule = stemRule;
-                                actualNode.addChild(opN);
-                                actualNode = opN;
-                                VarPosNodes.put(opN, opN.getVarPositions());
-                                operators.remove(op);
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    if (!atomsMinus.isEmpty()) {
-                        //There is still something within the negative body of the rule --> take it --> it's the new partner
-                        partner = getBestPartner(atomsMinus, actualNode);
-                        //Create a joinNode from the actualNode and the partner
-                        //System.out.println("RULE: " + r);
-                        if (actualNode.getClass().equals(SelectionNode.class)) {
-                            actualNode = this.createJoinNegative(actual, partner, false, varPositions); // TODO createJoinNegative
-                            //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
-                        } else {
-                            actualNode = this.createJoinNegative(actualNode, partner, false, varPositions); // TODO createJoinNegative
-                            //System.err.println("Created JoinNode 4 negative Rule: " + actualNode);
-                        }
-                    } else {
-                        // Negative Rules do not contain operators. At least for our easy rewriting.
-                    }*/                
                 if (!atomsMinus.isEmpty()) {    // we build a propagation-rule, so negative body works like positive one
                     //There is still something within the negative body of the rule --> take it --> it's the new partner
                     partner = getBestPartner(atomsMinus, actualNode);
@@ -213,24 +170,6 @@ public class ReteBuilder {
         actualNode.addChild(hN);
 
     }
-    
-    /*private void addHeadNode(Predicate p, HeadNode hn){
-        if (!this.headNodes.containsKey(p)) headNodes.put(p, new ArrayList<HeadNode>());
-        this.headNodes.get(p).add(hn);
-        if (!this.choiceNodes.containsKey(p)) return;
-        for(ChoiceNode cN: this.choiceNodes.get(p)){
-            hn.addChild(cN);
-        }
-    }
-    
-    private void addChoiceNode(Predicate p, ChoiceNode cn){
-        if (!this.choiceNodes.containsKey(p)) choiceNodes.put(p, new ArrayList<ChoiceNode>());
-        this.choiceNodes.get(p).add(cn);
-        if (!this.headNodes.containsKey(p)) return;
-        for(HeadNode hN: this.headNodes.get(p)){
-            cn.addChild(hN);
-        }
-    }*/
     
     /**
      * 
@@ -536,103 +475,5 @@ public class ReteBuilder {
             rete.getBasicLayerMinus().put(atom.getPredicate(), bn);
         }   
         rete.getBasicLayerMinus().get(atom.getPredicate()).AddAtom(atom);  
-    }
-    
-    /**
-     * Adds to Rete the structure for a rule that only propagates, i.e., the
-     * negative body does not create choice points. The rule is assume to stem
-     * from learning.
-     * @param r the rule to add to Rete
-     * @param isHeadPositive if the rule's head adds to positive or negative memory
-     */
-    public void addPropagationOnlyRule(Rule r, boolean isHeadPositive) throws LearningException {
-        // simply run through whole body and create necessary joins.
-        VarPosNodes = new HashMap<Node, HashMap<Variable, Integer>>();
-        HashMap<Atom, HashMap<Variable,Integer>> varPositions = new HashMap<Atom, HashMap<Variable, Integer>>();
-        
-        // Since rule stems from learning, the BasicNodes for the predicates and
-        // atoms exist already.
-        
-        // create necessary selection nodes
-        // and mark them as new children to the basic nodes
-        for (Atom at : r.getBodyPlus()) {
-            rete.getBasicLayerPlus().get(at.getPredicate()).AddAtom(at);
-            varPositions.put(at, SelectionNode.getVarPosition(at));
-        }
-        for (Atom at : r.getBodyMinus()) {
-            rete.getBasicLayerMinus().get(at.getPredicate()).AddAtom(at);
-            varPositions.put(at, SelectionNode.getVarPosition(at));
-        }
-        
-        // run through body and create join nodes
-        Node lastNode = null;
-        Atom lastAtom = null;
-        for (Atom at : r.getBodyPlus()) {
-            // first node
-            if( lastNode == null ) {
-                lastNode = rete.getBasicLayerPlus().get(at.getPredicate()).getChildNode(at.getAtomAsReteKey());
-                VarPosNodes.put(lastNode, varPositions.get(at));
-                lastNode.resetVarPosition(at);
-                lastAtom = at;
-                continue;
-            }
-            // use helper for remaining nodes
-            lastNode = helperCreateJoin(lastAtom, lastNode, at, true, varPositions);
-            lastAtom = at;
-        }
-        for (Atom at : r.getBodyMinus()) {
-            // first node
-            if( lastNode == null ) {
-                lastNode = rete.getBasicLayerMinus().get(at.getPredicate()).getChildNode(at.getAtomAsReteKey());
-                VarPosNodes.put(lastNode, varPositions.get(at));
-                lastNode.resetVarPosition(at);
-                lastAtom = at;
-                continue;
-            }
-            // use helper for remaining nodes
-            lastNode = helperCreateJoin(lastAtom, lastNode, at, false, varPositions);
-            lastAtom = at;
-        }
-        // quick sanity check
-        if (lastNode == null) {
-            throw new LearningException("Error: Trying to add a rule which only consists of operators.\n Rule is: " + r.toString());
-        }
-        for (Operator op : r.getOperators()) {
-            if(op.getOP() == OP.ASSIGN && op.isInstanciatedButOne(lastNode.tempVarPosition.keySet())) {
-                OperatorNode opNode = new OperatorNode(rete, op, lastNode);
-                opNode.stemRule = stemRule;
-                lastNode.addChild(opNode);
-                lastNode = opNode;
-                VarPosNodes.put(opNode, opNode.getVarPositions());
-            } else {
-                if( op.isInstanciated(lastNode.tempVarPosition.keySet())) {
-                    OperatorNode opNode = new OperatorNode(rete, op, lastNode);
-                    opNode.stemRule = stemRule;
-                    lastNode.addChild(opNode);
-                    lastNode = opNode;
-                    VarPosNodes.put(opNode, opNode.getVarPositions());
-                }
-            }
-        }
-        
-        // connect last node with head node
-        HeadNode headNode;
-        if( isHeadPositive ) {
-            headNode = new HeadNode(r.getHead(), rete, VarPosNodes.get(lastNode), lastNode);
-            headNode.stemRule = stemRule;
-        } else {
-            headNode = new HeadNodeNegative(r.getHead(), rete, VarPosNodes.get(lastNode), lastNode);
-            headNode.stemRule = stemRule;
-        }
-        headNode.r = r;
-        lastNode.addChild(headNode);
-    }
-
-    private Node helperCreateJoin(Atom lastAtom, Node lastNode, Atom curAtom, boolean isAtomPositive, HashMap<Atom, HashMap<Variable, Integer>> varPositions) {
-        if (lastNode.getClass() == SelectionNode.class) {
-            return createJoin(lastAtom, curAtom, isAtomPositive, varPositions);
-        } else {
-            return createJoin(lastNode, curAtom, isAtomPositive, varPositions);
-        }
     }
 }

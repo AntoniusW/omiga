@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
@@ -101,39 +97,6 @@ public class ChoiceNode extends Node{
         allInstances.add(instance);  
     }
     
-    /**
-     * 
-     * removes an instance from the memory and allInstanceList
-     * 
-     * @param instance 
-     */
-/*    @Override
-    public void removeInstance(Instance instance){
-//        rete.getChoiceUnit().AddInstanceRemovement(this, instance);
-        //super.removeInstance(instance);
-        if(allInstances.contains(instance)){
-        //if(memory.containsInstance(instance)){
-            //this.memory.removeInstance(instance);
-            this.allInstances.remove(instance);
-            this.rete.getChoiceUnit().addInstanceForRemovement(this, instance);
-        }
-        //System.out.println("RemoveInstance: " + this + " - " + instance);
-        
-    }*/
-    
-    /**
-     * 
-     * Adds an instance into the memory and "allInstances" without registering this adding in the ChoiceUnit
-     * 
-     * 
-     * @param instance 
-     */
-/*    @Override
-    public void simpleRemoveInstance(Instance instance){
-        //TODO: Is this method used? (It's not used when no guessing occures)
-        //this.memory.removeInstance(instance);
-        this.allInstances.remove(instance);
-    }*/
     /**
      * 
      * Removes an instance from the memoery and "allInstances" without registering this removement in the ChoiceUnit

@@ -2,16 +2,14 @@ package Datastructure.Rete;
 
 import Datastructure.storage.Storage;
 import Entity.Atom;
-import Entity.GlobalSettings;
 import Entity.Instance;
+import Entity.Rule;
 import Entity.Variable;
 import Interfaces.Term;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import Datastructure.Rete.ChoiceNode;
-import Entity.Rule;
 
 /**
  *
@@ -108,20 +106,6 @@ public abstract class Node {
         return memory.select(selectionCriteria);
     }
     
-    /**
-     * 
-     * removes an instance from the memory, without registering this removement in the DecisionMemory
-     * 
-     * @param instance The instance you want to remove
-     */
-    /*public void simpleRemoveInstance(Instance instance){
-        //TODO: Remove if somehow
-        //System.err.println("this: " + this + " memory: " + this.memory + " removeSimpelInstnce: " + instance);
-        if(this.memory.containsInstance(instance)){ // TODO: das if muss weg. Im Moment sreiekn leider noch die HeadNodeConstraints!
-            this.memory.removeInstance(instance);
-            //System.err.println("REMOVING INSTANCE: " + instance + " from: " + this);
-        }
-    }*/
     
     /**
      * 
@@ -132,39 +116,7 @@ public abstract class Node {
     public void simpleAddInstance(Instance instance){
         this.memory.addInstance(instance);
     }
-    
-    /**
-     * 
-     * registeres the adding of an instance in the DecisionMemory.
-     * (Actually does not add this instance into the memory, since this differs from node to node)
-     * Therefore each node has to override this method. (But most of them call super.addInstance,
-     * to register within the Decision Memory)
-     * 
-     * @param instance The instance you want to add
-     * @param from true means right JoinPartner false means leftt one. For nonJoinNodes this parameter doese not matter
-     */
-    /*public void addInstance(Instance instance, boolean from){
-        this.rete.getChoiceUnit().addInstance(this, instance);
-    }*/
-    
-    /**
-     * 
-     * removes an instance from this nodes memory.
-     * 
-     * @param instance The instance you want to remove
-     */
-/*    public void removeInstance(Instance instance){
-        //TODO: Is this method eer called? We only use simpleRemove no?
-        //has to be implemented by each NodeType
-        if(this.memory.containsInstance(instance)){ // TODO: das if muss weg. Im Moment sreiekn leider noch die HeadNodeConstraints!
-            this.memory.removeInstance(instance);
-            //System.err.println("REMOVING INSTANCE: " + instance + " from: " + this);
-        }else{
-            //System.out.println("TRIED TO REMOVE " + instance + " from: " + this + " BUT WAS NOT THERE!");
-        }
         
-    }*/
-    
     /**
      * 
      * @param instance the instance you want to check for

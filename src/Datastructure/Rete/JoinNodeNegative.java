@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
 import Entity.Instance;
@@ -161,43 +157,7 @@ public class JoinNodeNegative extends JoinNode{
             Collection<Instance> joinPartners = b.select(selCrit2);
             //System.out.println("selCrit: " + Instance.getInstanceAsString(selCrit2));
             //System.out.println("JoinNodeNegative has this many children: " + this.children);
-            for(Instance inz: joinPartners){
-                /*int decisionLevel;
-                int propagationLevel;
-                // use higher decision level
-                if (instance.decisionLevel > inz.decisionLevel) {
-                    decisionLevel = instance.decisionLevel;
-                    propagationLevel = instance.propagationLevel;
-                } else if (instance.decisionLevel == inz.decisionLevel) {
-                    decisionLevel = inz.decisionLevel;
-                    // use higher propagation level if both decision levels are equal
-                    propagationLevel = instance.propagationLevel > inz.propagationLevel
-                            ? instance.propagationLevel : inz.propagationLevel;
-                } else {
-                    decisionLevel = inz.decisionLevel;
-                    propagationLevel = inz.propagationLevel;
-                }
-                Instance inst2add = new Instance(inz);
-                inst2add.decisionLevel = decisionLevel;
-                inst2add.propagationLevel = decisionLevel;*/
-                
-/*            Term[] toAdd = new Term[this.instanceOrdering.length];
-            for(int i = 0; i < this.instanceOrdering.length;i++){
-                if(from){
-                    if(instanceOrdering[i] < 0){
-                        toAdd[i] = inz.get((instanceOrdering[i]*-1)-1);
-                    }else{
-                        toAdd[i] = instance.get(instanceOrdering[i] - 1);
-                    }
-                }else{
-                    if(instanceOrdering[i] >= 0){
-                        toAdd[i] = inz.get(instanceOrdering[i] - 1);
-                    }else{
-                        toAdd[i] = instance.get((instanceOrdering[i]*-1)-1);
-                    }
-                }
-            }
-            Instance tempInst = Instance.getInstance(toAdd, 0, 0);  */              
+            for(Instance inz: joinPartners){       
                 
                 Instance inst2add = newInstanceFromJoin(instance, inz, inz/*tempInst*/);
                 
@@ -209,12 +169,6 @@ public class JoinNodeNegative extends JoinNode{
                 for (Node child : children) {
                     sendInstanceToChild(inst2add, child);
                 }
-                /*for(int i = 0; i < this.children.size();i++){
-                    this.children.get(i).addInstance(inz, false);
-                }
-                for(int i = 0; i < this.childrenR.size();i++){
-                    this.childrenR.get(i).addInstance(inz, true);
-                }*/
             }
         }else{
             //the instance came from node b
@@ -250,12 +204,6 @@ public class JoinNodeNegative extends JoinNode{
                 for (Node child : children) {
                     sendInstanceToChild(inst2add, child);
                 }
-                /*for(int i = 0; i < this.children.size();i++){
-                    this.children.get(i).addInstance(instance, false);
-                }
-                for(int i = 0; i < this.childrenR.size();i++){
-                    this.childrenR.get(i).addInstance(instance, true);
-                }*/
             }
         }
         

@@ -168,29 +168,6 @@ public class ChoiceUnit {
         System.out.println("_________________________");
     }
     
-    /**
-     * 
-     * registers the adding of an instance to a node into the decision memory.
-     * 
-     * @param n the node to which the instance was added
-     * @param instance the instance that was added
-     */
-    public void addInstance(Node n, Instance instance){
-        this.memory.addInstance(n, instance);
-    }
-    
-    
-    /**
-     * 
-     * Adds an Instance into the choiceNodeDecisionlayer. Such that this instance is added after backtracking.
-     * 
-     * @param n the Node of the instance
-     * @param instance the instance you want to add
-     */
-    public void addInstanceForRemovement(ChoiceNode n, Instance instance){
-        //System.err.println("ADDING INSTANCE FOR REMOVEMENT!");
-        this.choiceNodesDecisionLayer.get(memory.getDecisonLevel()).get(n).add(instance);
-    }
     
     /**
      * Adds the next Decisionlevel to the choiceNodeDecisionLayer
@@ -224,12 +201,6 @@ public class ChoiceUnit {
      * backtrack one decisionlevel and bring memory back to state before last guess
      */
     public void backtrack3(){
-/*        while(!this.stackybool.isEmpty() && !this.stackybool.peek()){
-            backtrack();
-        }
-        if(!this.stackybool.isEmpty()) {
-            backtrack();
-        }*/
     }
     
     
@@ -240,33 +211,6 @@ public class ChoiceUnit {
      */
     public int getDecisionLevel(){
         return this.memory.getDecisonLevel();
-    }
-    
-    public boolean check4AnswerSet(){
-        // TODO: Constraints of the context!
-        //System.out.println("Check4AnswerSet!");
-        boolean flag = false;
-        for(ChoiceNode cN: this.choiceNodes){
-            HeadNodeConstraint con = cN.getConstraintNode();
-            //System.out.println(con.getAllInstances());
-            //System.out.println("HEADCONSTRAINT: " + cN.getRule());
-            for(Instance inz: con.getAllInstances()){
-                //System.out.println("INZ: " + inz);
-                flag = true;
-                for(Atom a: cN.getRule().getBodyMinus()){
-                    Instance unified = Unifyer.unifyAtom(a, inz, cN.getVarPositions());
-                    if(c.getRete().containsInstance(a.getPredicate(),unified,true)){
-                        flag = false;
-                        break;
-                    } //TODO does it work for c.containsInstances as well?
-                }
-                if(flag) {
-                    //System.out.println("NO ANSWERSET DUE To CONSTRAINTS!");
-                    return false;
-                } // No AnswerSet since one constraint is fullfilled!
-            }
-        }
-        return true;
     }
     
     protected ArrayList<ArrayList<ChoiceNode>> SCC;
@@ -303,21 +247,6 @@ public class ChoiceUnit {
             }
              SCCSize.add(SCC.get(i).size());
         }
-
-        /*
-        /*System.out.println("DGraph initialized. SCCSize: " + this.SCC.size());
-        for(int i = 0; i < this.SCC.size();i++){
-            System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i));
-        }
-        for(int i = 0; i < this.SCC.size();i++){
-            System.out.println("SCC" + i + " is of size: " + this.SCCSize.get(i) + " :::: " + this.SCC.get(i));
-	    }
-        int i = 0;
-        for(DirectedSubgraph gsg: g.getSCCs()){
-            i++;
-            System.out.println("SCC: " + i);
-            System.out.println(gsg.vertexSet());
-	    }*/
     }
     
     public boolean killSoloSCC(){
@@ -331,11 +260,7 @@ public class ChoiceUnit {
         }
         return true;
     }
-    
-    public DecisionMemory getMemory(){
-        return this.memory;
-    }
-    
+
     /**
      * used for the MCS calculation. returns wether there is a next alternative to the actual guess
      * @return 

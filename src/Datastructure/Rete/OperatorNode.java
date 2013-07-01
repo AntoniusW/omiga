@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Datastructure.Rete;
 
-import Datastructure.storage.Storage;
 import Entity.Constant;
 import Entity.Instance;
 import Entity.Operator;
@@ -72,12 +67,6 @@ public class OperatorNode extends Node{
             for (Node child : children) {
                 sendInstanceToChild(instance2Add, child);
             }
-            /*for(int i = 0; i < this.children.size();i++){
-                this.children.get(i).addInstance(instance2Add, false);
-            }
-            for(int i = 0; i < this.childrenR.size();i++){
-                this.childrenR.get(i).addInstance(instance2Add, true);
-            }*/
         }else{
             for(Variable v: op.getUsedVariables()){
                 //we initialize all the avriable values by the insatnce values such that the operator can calculate its value
@@ -90,12 +79,6 @@ public class OperatorNode extends Node{
                 for (Node child : children) {
                     sendInstanceToChild(instance, child);
                 }
-                /*for(int i = 0; i < this.children.size();i++){
-                    this.children.get(i).addInstance(instance, false);
-                }
-                for(int i = 0; i < this.childrenR.size();i++){
-                    this.childrenR.get(i).addInstance(instance, true);
-                }*/
             }else{
                 //else we do not add the instance
                 //System.out.println("Operatorcheck not passed!");

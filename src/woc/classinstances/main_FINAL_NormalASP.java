@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package woc.classinstances;
 
 import Datastructure.Rete.ReteModificationHelper;
@@ -9,7 +5,6 @@ import Datastructure.Rewriting.Rewriter_easy;
 import Entity.*;
 import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
-import Interfaces.Term;
 import Manager.Manager;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -21,7 +16,6 @@ import parser.antlr.*;
 
 /**
  *
- * @author User
  */
 public class main_FINAL_NormalASP {
 
@@ -77,7 +71,6 @@ public class main_FINAL_NormalASP {
             }
         }
 
-        //GlobalSettings.getGlobalSettings().setStringbasedHashCode(true); // try non-string hash codes
         System.out.println("Input file: "+filename);
 
         // create context
@@ -136,7 +129,6 @@ public class main_FINAL_NormalASP {
 
 
         Manager m = new Manager(rewctx);
-        GlobalSettings.getGlobalSettings().setManager(m);
         long beforeCalc = System.currentTimeMillis();
         m.calculate(answersets, outprint, filter);
         System.out.println(m.printStatus());

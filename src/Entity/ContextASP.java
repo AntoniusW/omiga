@@ -1,11 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
 import Datastructure.Rete.BasicNode;
-import Datastructure.Rete.BasicNodeNegative;
 import Datastructure.Rete.Rete;
 import Datastructure.Rete.ReteBuilder;
 import Datastructure.choice.ChoiceUnit;
@@ -14,7 +9,6 @@ import Exceptions.RuleNotSafeException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import network.ReplyMessage;
 
 /**
  *

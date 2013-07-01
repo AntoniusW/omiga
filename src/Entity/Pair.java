@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
 import java.io.Serializable;
 
 /**
- *
- * @author aweinz
+ * Simple pair implementation.
  */
 public class Pair<T1,T2> implements Serializable {
     
