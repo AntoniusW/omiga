@@ -166,7 +166,7 @@ public class DecisionMemory {
      * Debug helper to find missing entries in the decision memory.
      * @return 
      */
-    public boolean debug_isEveryInstanceCovered() {
+/*    public boolean debug_isEveryInstanceCovered() {
         if( true) { // debug: disable method
             return true;
         }
@@ -206,7 +206,7 @@ public class DecisionMemory {
             }
         }
         return true;
-    }
+    }*/
 
     /**
      * Sets decisionLevel.

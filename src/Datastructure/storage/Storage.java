@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  *
@@ -26,9 +29,20 @@ import java.util.Map;
  */
 public class Storage {
     
-    public int arity; //TODO delete. Only needed for test use
+    public static long debugSelectTime = 0;
+    public static int debugSelectCount = 0;
+    public static long debugAddInstanceTime = 0;
+    public static int debugAddInstanceCount = 0;
     
-    HashMap<Term,HashSet<Instance>>[] memory; // this is where we store our stuff
+    public static int debugTotalInstances = 0;
+    public static int debugOverallTotalInstances = 0;
+    
+    public int debugStorageSize;
+    
+    public int arity;
+    
+    //HashMap<Term,HashSet<Instance>>[] memory; // this is where we store our stuff
+    TreeMap<Term,TreeSet<Instance>>[] memory;
     private HashMap<Integer,ArrayList<Instance>> backtrackInstances;    // stores instances for backtracking
 
     public HashMap<Integer, ArrayList<Instance>> getBacktrackInstances() {
@@ -46,15 +60,19 @@ public class Storage {
     public void initStorage(int arity){
         this.arity = arity;
         if ( arity == 0 ) { // 0-ary predicates need memory for true-false as empty instance
-            memory = new HashMap[1];
+            //memory = new HashMap[1];
+            memory = new TreeMap[1];
         } else {
-            this.memory = new HashMap[arity];
+            //this.memory = new HashMap[arity];
+            memory = new TreeMap[arity];
         }
         for(int i = 0; i < memory.length;i++){
-            memory[i] = new HashMap<Term,HashSet<Instance>>();
+            //memory[i] = new HashMap<Term,HashSet<Instance>>();
+            memory[i] = new TreeMap<Term,TreeSet<Instance>>();
         }
         backtrackInstances = new HashMap<Integer, ArrayList<Instance>>();
         backtrackMustBeTrue = new HashMap<Instance, Integer>();
+        debugStorageSize = 0;
     }
     
     /**
@@ -66,6 +84,11 @@ public class Storage {
      * 
      */
     public void addInstance(Instance instance){
+        debugStorageSize++;
+        debugOverallTotalInstances++;
+        debugTotalInstances++;
+        debugAddInstanceCount++;
+        long debugStartTime = System.currentTimeMillis();
         if( GlobalSettings.debugOutput && instance.isMustBeTrue ) {
             System.out.println("MBT instance adding: "+instance);
         }
@@ -73,13 +96,18 @@ public class Storage {
         for (int i = 0; i < instance.getSize(); i++) {
 
             if (!memory[i].containsKey(instance.get(i))) {
-                memory[i].put(instance.get(i), new HashSet<Instance>());
+                //memory[i].put(instance.get(i), new HashSet<Instance>());
+                memory[i].put(instance.get(i), new TreeSet<Instance>());
             }
 
-            // add leaves old instance, remove it first
-            memory[i].get(instance.get(i)).remove(instance);
-            memory[i].get(instance.get(i)).add(instance);   
+            // overwrite old instance with new one
+            // HashSet.add leaves old instance, remove it if necessary
+            if (!memory[i].get(instance.get(i)).add(instance)) {
+                memory[i].get(instance.get(i)).remove(instance);
+                memory[i].get(instance.get(i)).add(instance);
+            }
         }
+        debugAddInstanceTime += (System.currentTimeMillis()-debugStartTime);
         //System.out.println(this + " Added: " + Instance.getInstanceAsString(instance));
     }
     
@@ -94,6 +122,8 @@ public class Storage {
      */
     
     private void removeInstance(Instance instance){
+        debugStorageSize--;
+        debugTotalInstances--;
         for(int i = 0; i < instance.getSize();i++){
             memory[i].get(instance.get(i)).remove(instance);
         }
@@ -133,18 +163,7 @@ public class Storage {
         }
     }
     
-    
-     
-    // Following variables are defined public, since the select method is called very often during calculation
-    // Therefore many objects would be created if these variables were defined within the method itself
-    // Having them outside and just resetting them is much faster
-    private ArrayList<HashSet<Instance>> selected = new ArrayList<HashSet<Instance>>(); // used within method select, to store the hashsets that are treated by the actual guess
-    private HashSet<Instance> smallest;
-    //private ArrayList<Instance> ret = new ArrayList<Instance>(); // the arrayList that is returned by the select
-    boolean flag; // a flag needed in method select
-    
-    
-    
+ 
     /**
      * 
      * Returns all instances that match the selectionCriterion. 
@@ -161,64 +180,81 @@ public class Storage {
      * @return a List of all Instances contained in the memory, that follow all slots of the selection criteria
      */
     @SuppressWarnings("unchecked") // AW: workaround for array conversion
-    public Collection<Instance> select(Term[] selectionCriterion){
-        //System.out.println("SELCRIT OF STORAGE: " + Instance.getInstanceAsString(selectionCriterion));
-        // We reset the list we return and clear the temp list selected
-        //ret.clear();
-        ArrayList<Instance> ret = new ArrayList<Instance>();
-        selected.clear();
+    public Collection<Instance> select(Term[] selectionCriterion) {
+        debugSelectCount++;
+        long debugStartTime = System.currentTimeMillis();
         
+        ArrayList<Instance> ret = new ArrayList<Instance>();
+        
+        // check if selectionCriterion only consists of Variables
+        boolean selectionOnlyVariables = true;
+        for (int i = 0; i < selectionCriterion.length; i++) {
+            Term term = selectionCriterion[i];
+            if( !(term instanceof Variable)) {
+                selectionOnlyVariables = false;
+            }
+        }
+        // if selected is empty, this means the selectionCriterion consisted only of variables
+        // This means we have to return everything. So we add all instances of our first HashMap to ret, and return it.
+        if (selectionOnlyVariables) {
+            for (TreeSet hS : memory[0].values()) {
+                ret.addAll(hS);
+            }
+            //System.out.println("Storage returns everything, as only vars are in selCrit: " + Instance.getInstanceAsString(selectionCriterion));
+            return ret;
+        }
+        
+        
+        ArrayList<TreeSet<Instance>> selected = new ArrayList<TreeSet<Instance>>(); // used to store the hashsets that are treated by the actual guess
+        TreeSet<Instance> smallest;
+
         // for each term of the selectionCriterion we add the HashSet of that Key to our selected List.
         // If there is no entry for that term in the corresponding HashMap then there is no instance to return
         // and we return an empty list
         // if the term is a Variable we do nothing, since a variable is no restriction on the instances
-        for(int i = 0; i < selectionCriterion.length;i++){
-            if(!selectionCriterion[i].getClass().equals(Variable.class)){
-                if(!memory[i].containsKey(selectionCriterion[i])) {
+        for (int i = 0; i < selectionCriterion.length; i++) {
+            if (!selectionCriterion[i].getClass().equals(Variable.class)) {
+                if (!memory[i].containsKey(selectionCriterion[i])) {
                     // There is not even an entry for this key --> no instances
                     //System.out.println("Storage returns because no entry found!");
                     return ret;
                 }
                 //System.out.println("KEY: " + memory[i].get(selectionCriterion[i]));
                 selected.add(memory[i].get(selectionCriterion[i]));
-            }  
+            }
         }
-        
-        // if selected is empty, this means the selectionCriterion consisted only of variables
-        // This means we have to return everything. So we add all instances of our first HashMap to ret, and return it.
-        if(selected.isEmpty()) {
-            for(HashSet hS: memory[0].values()){
-                ret.addAll(hS);
+
+
+        // There is a selection Criterion so we return only those instances that are contained in each set.
+
+        // We find the set with least ammount of instances and remove it from selected
+        smallest = selected.get(0);
+        for (int i = 1; i < selected.size(); i++) { //TODO: Maybe this is useless!
+            if (selected.get(i).size() < smallest.size()) {
+                smallest = selected.get(i);
             }
-            //System.out.println("Storage returns everything, as only vars are in selCrit: " + Instance.getInstanceAsString(selectionCriterion));
-            return ret;
-        }else{
-            // There is a selection Criterion so we return only those instances that are contained in each set.
-            
-            // We find the set with least ammount of instances and remove it from selected
-            smallest = selected.get(0);
-            for(int i = 1; i < selected.size();i++){ //TODO: Maybe this is useless!
-                if(selected.get(i).size() < smallest.size()) smallest = selected.get(i);
-            }
-            selected.remove(smallest);
-            //System.out.println("SMALLEST: " + smallest);
-            // for each Instance within smallest we check if the instance is containd in all other sets
-            // if so the instance fullfills the selectioncriterion and is added to ret
-            for(Instance instance: smallest){
-                flag = true;
-                //for(HashSet hS: selected){
-                for(int i = 0; i < selected.size();i++){
-                    //To Check: Just go trough the instances of the smallest one, and check their positions
-                    if(!selected.get(i).contains(instance)){
-                        flag = false;
-                        break;
-                    }
+        }
+        selected.remove(smallest);
+        //System.out.println("SMALLEST: " + smallest);
+        // for each Instance within smallest we check if the instance is containd in all other sets
+        // if so the instance fullfills the selectioncriterion and is added to ret
+        for (Instance instance : smallest) {
+            boolean doesMatch = true;
+            //for(HashSet hS: selected){
+            for (int i = 0; i < selected.size(); i++) {
+                //To Check: Just go trough the instances of the smallest one, and check their positions
+                if (!selected.get(i).contains(instance)) {
+                    doesMatch = false;
+                    break;
                 }
-                if(flag) ret.add(instance);
             }
-            
+            if (doesMatch) {
+                ret.add(instance);
+            }
         }
+
         //System.out.println("Storage asked for: " + Instance.getInstanceAsString(selectionCriterion) + " therefore returning: " + ret);
+        debugSelectTime += (System.currentTimeMillis() - debugStartTime);
         return ret;
     }
     
@@ -228,7 +264,7 @@ public class Storage {
             return false;
         }
         if( densePrint ) {
-            for (HashSet<Instance> hashSet : memory[0].values()) {
+            for (Set<Instance> hashSet : memory[0].values()) {
                 for (Instance instance : hashSet) {
                     if(!didPrint) {
                         int instance_spacing = 16;
@@ -246,7 +282,7 @@ public class Storage {
                 }
             }
         } else {
-            for (HashSet<Instance> hashSet : memory[0].values()) {
+            for (Set<Instance> hashSet : memory[0].values()) {
                 for (Instance instance : hashSet) {
                     System.out.print(pred_name+Term.prettyPrint(instance.getTerms(),false));
                     System.out.print("@pL="+instance.propagationLevel+" ");
@@ -265,7 +301,7 @@ public class Storage {
      * prints all instances that are contained within this memory to standard out.
      */
     public void printAllInstances(){
-        for(HashSet<Instance> hS: memory[0].values()){
+        for(Set<Instance> hS: memory[0].values()){
             for(Instance instance: hS){
                 System.out.println(instance);
             }
@@ -338,7 +374,7 @@ public class Storage {
     }
     
     public boolean containsMustBeTrue() {
-        for (Map.Entry<Term, HashSet<Instance>> entry : memory[0].entrySet()) {
+        for (Map.Entry<Term, TreeSet<Instance>> entry : memory[0].entrySet()) {
             for (Instance instance : entry.getValue()) {
                 if( instance.isMustBeTrue ) {
                     return true;

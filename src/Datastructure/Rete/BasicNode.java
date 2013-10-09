@@ -49,6 +49,7 @@ public class BasicNode extends Node{
      * 
      * @param instance The instance you want to add
      */
+    @Override
     public void addInstance(Instance instance){
         if( GlobalSettings.debugOutput) {
             if( instance.isMustBeTrue ) System.out.println("BN/MBT instance adding: "+instance);

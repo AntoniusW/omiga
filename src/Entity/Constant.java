@@ -117,5 +117,7 @@ public class Constant extends Term implements OperandI, Serializable {
         return new HashSet<Variable>();
     }
 
+
+
     
 }

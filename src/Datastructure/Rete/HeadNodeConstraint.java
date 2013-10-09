@@ -61,13 +61,4 @@ public class HeadNodeConstraint extends Node{
         }
     }
     
-    /**
-     * 
-     * @return All Instances of this memory
-     */
-    public ArrayList<Instance> getAllInstances(){
-        return this.memory.getAllInstances();
-    }
-    
-    
 }

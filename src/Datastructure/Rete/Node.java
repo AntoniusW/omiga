@@ -107,15 +107,6 @@ public abstract class Node {
     }
     
     
-    /**
-     * 
-     * Adds an instance into the memory, without registering this instance in the Decision Memory
-     * 
-     * @param instance the instance you want to add to this nodes memory
-     */
-    public void simpleAddInstance(Instance instance){
-        this.memory.addInstance(instance);
-    }
         
     /**
      * 
@@ -157,6 +148,9 @@ public abstract class Node {
      */
     protected void propagateToChildren(ArrayList<Node> children) {
         ArrayList<Instance> all_inst = memory.getAllInstances();
+        if( all_inst.isEmpty() ) {
+            return;
+        }
         for (Node child : children) {
             for (Instance instance : all_inst) {
                 sendInstanceToChild(instance, child);
@@ -194,5 +188,16 @@ public abstract class Node {
      */
     public void backtrackTo(int decisionLevel) {
         memory.backtrackTo(decisionLevel);
+    }
+    
+    public static String printStorageSizes() {
+        String ret = "";
+        for (Node node : nodes) {
+            if( node.memory.debugStorageSize == 0 ) {
+                continue;
+            }
+            ret+="Storage size: "+node.memory.debugStorageSize+" of "+node+"\n";
+        }
+        return ret;
     }
 }

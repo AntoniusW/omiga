@@ -15,7 +15,7 @@ import java.io.Serializable;
  * 
  * @param instances a HashMap of instances in order to not create duplicate instances
  */
-public class Instance implements Serializable {
+public class Instance implements Serializable, Comparable<Instance> {
     
     public int propagationLevel;
     public int decisionLevel;
@@ -137,6 +137,28 @@ public class Instance implements Serializable {
         }
         return s+"]";
         //return s.substring(0, s.length()-1) + "]";
+    }
+
+    @Override
+    public int compareTo(Instance t) {
+        if( t.getSize() != getSize() ) {
+            throw new RuntimeException("BUG: Comparing instances of different size.");
+        }
+        // do lexicographic order on instance terms
+        for (int i = 0; i < terms.length; i++) {
+            Term thisTerm = terms[i];
+            Term otherTerm = t.terms[i];
+            int termsCompare = thisTerm.compareTo(otherTerm);
+            if( termsCompare < 0) {
+                return -1;
+            } else if( termsCompare > 0) {
+                return 1;
+            } else {
+                // continue with next term
+            }
+        }
+        // all terms compared with no difference found, they are equal
+        return 0;
     }
 }
 

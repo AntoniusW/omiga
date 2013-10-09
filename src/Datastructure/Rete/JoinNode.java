@@ -125,6 +125,9 @@ public class JoinNode extends Node{
         this.tempVarPosition = temp2;
     }
     
+    static long debugJoinCount = 0;
+    static long debugJoinTime = 0;
+    
     /**
      * 
      * Informs the joinNode of a new instance of it's parent nodes. The join node then 
@@ -135,6 +138,8 @@ public class JoinNode extends Node{
      * @param n the node where the instance arrived (a or b)
      */
     public void addInstance(Instance instance, Node fromNode){
+        debugJoinCount++;
+        long debugStartTime = System.currentTimeMillis();
         boolean from; // TODO: check boolean value
         if( a == fromNode) {
             from = true;
@@ -176,9 +181,12 @@ public class JoinNode extends Node{
         
         // We select all instances that match the selectionCriterion, and therefore are joinable with the new instance, from the other node
         Collection<Instance> joinPartners = selectFromHere.select(selectionCriteria);
+        
+//        debugJoinTime += (System.currentTimeMillis() - debugStartTime);
 
         // for each joinpartner we build a variable assignment we then add to this joinnodes memory
         for(Instance varAssignment: joinPartners){
+            debugStartTime = System.currentTimeMillis();
             Term[] toAdd = new Term[this.instanceOrdering.length];
             for(int i = 0; i < this.instanceOrdering.length;i++){
                 if(from){
@@ -199,6 +207,8 @@ public class JoinNode extends Node{
             Instance instance2Add = newInstanceFromJoin(varAssignment, instance, tempInst);
             //Instance instance2Add = Instance.getInstance(toAdd, propagationLevel, decisionLevel);
 
+            debugJoinTime += (System.currentTimeMillis() - debugStartTime);            
+            
             memory.addInstance(instance2Add);
             //super.addInstance(instance2Add); // register the adding of this variableassignment within the choiceUnit
             // We inform all children of this node that a new instance has arrived
@@ -238,7 +248,7 @@ public class JoinNode extends Node{
      * @return a (shallow) copy of base where DL and PL are the maximum of joinA
      * and joinB
      */
-    public static Instance newInstanceFromJoin(Instance joinA, Instance joinB, Instance base) {
+    protected static Instance newInstanceFromJoin(Instance joinA, Instance joinB, Instance base) {
         int decisionLevel;
         int propagationLevel;
         // use higher decision level

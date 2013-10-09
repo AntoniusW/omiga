@@ -99,18 +99,6 @@ public class ChoiceNode extends Node{
     
     /**
      * 
-     * Removes an instance from the memoery and "allInstances" without registering this removement in the ChoiceUnit
-     * 
-     * @param instance 
-     */
-    @Override
-    public void simpleAddInstance(Instance instance){
-        //memory.addInstanceWithoutBacktracking(instance);
-        this.allInstances.add(instance);
-    }
-    
-    /**
-     * 
      * @return the corresponding rule
      */
     public Rule getRule(){

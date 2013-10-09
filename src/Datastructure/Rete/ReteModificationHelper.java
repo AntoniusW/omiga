@@ -4,6 +4,7 @@ import Exceptions.ImmediateBacktrackingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import Datastructure.storage.Storage;
 
 /**
  * Helper class for running the propagation in Rete after a new rule was
