@@ -215,7 +215,7 @@ public class ChoiceUnit {
     
     protected ArrayList<ArrayList<ChoiceNode>> SCC;
     protected ArrayList<ArrayList<Predicate>> SCCPreds;
-    protected ArrayList<Integer> SCCSize;
+    protected ArrayList<Integer> SCCSize;       // number of ChoiceNodes in SCC
     protected int actualSCC;
     protected Stack<Integer> closedAt;
     public void DeriveSCC(){

@@ -41,7 +41,7 @@ public class JoinNodeNegative extends JoinNode{
         } else {
             throw new RuntimeException("JoinNode received input from unknown parent node");
         }
-        //System.out.println("Instance: " + instance + " reaches JoinNode: " + this + " from: " + from);
+        //System.out.println("Instance: " + instance + " reaches JoinNode: " + this + " from: " + fromNode);
         
         // we determine from which joinpartner the instance arrived, and build our selectionCriteria accordingly
         // by setting the position to be a variable if selectionCriterionX is null, and to the term of the insatnce's position
@@ -69,7 +69,7 @@ public class JoinNodeNegative extends JoinNode{
         }
             
         //selectionCriteria = selCrit2;
-        Collection<Instance> joinPartners = null;
+        Collection<Instance> joinPartners;
         if (from) {
             // The new instance arived from right, therefore we to push all instances of the select from left to the children
             joinPartners = b.select(selCrit2);

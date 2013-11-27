@@ -148,7 +148,7 @@ public class Instance implements Serializable, Comparable<Instance> {
         for (int i = 0; i < terms.length; i++) {
             Term thisTerm = terms[i];
             Term otherTerm = t.terms[i];
-            int termsCompare = thisTerm.compareTo(otherTerm);
+            int termsCompare = TermComparator.getInstance().compare(thisTerm, otherTerm);//thisTerm.compareTo(otherTerm);
             if( termsCompare < 0) {
                 return -1;
             } else if( termsCompare > 0) {

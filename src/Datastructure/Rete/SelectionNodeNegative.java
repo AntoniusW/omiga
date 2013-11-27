@@ -30,7 +30,7 @@ public class SelectionNodeNegative extends SelectionNode{
                 return !rete.containsInstance(atom, Instance.getInstance(atom.getTerms(),0,0), true);
             }
             
-            //System.out.println(this + " returning: " + !rete.containsInstance(atom, instance, true) + "when asked for: " + instance + " BECAUSE OF CLOSURE!");
+            //System.out.println(this + " returning: " + !rete.containsInstance(atom, instance, true) + " when asked for: " + instance + " BECAUSE OF CLOSURE!");
             return !rete.containsInstance(atom, instance, true);
         }else{
             if(instance.getSize() == 0){

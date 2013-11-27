@@ -2,6 +2,7 @@ package Datastructure.Rewriting;
 
 import Datastructure.Rete.Node;
 import Entity.Atom;
+import Entity.Constant;
 import Entity.ContextASP;
 import Entity.ContextASPRewriting;
 import Entity.Instance;
@@ -45,7 +46,7 @@ public class Rewriter_easy {
      * @return the rewritten context
      */
     public ContextASPRewriting rewrite(ContextASP c) throws RuleNotSafeException, FactSizeException{
-        int counter = 0;
+        int counterRuleID = 0;
         ContextASPRewriting ret = new ContextASPRewriting();
         
         // reset global nodes container
@@ -71,7 +72,7 @@ public class Rewriter_easy {
             //wir gehen jeweils alle regeln mit gleichem head durch
             ArrayList<Atom> heads = new ArrayList<Atom>();
             for(Rule r: sorted.get(p)){
-                counter++;
+                counterRuleID++;
                 HashSet<Variable> temp = new HashSet<Variable>();
                 
                 for(Atom a: r.getBodyPlus()){
@@ -81,14 +82,23 @@ public class Rewriter_easy {
                         }
                     }
                 }
-                Variable[] newHeadVars = new Variable[temp.size()];
+                /*Variable[] newHeadVars = new Variable[temp.size()];
                 int i = 0;
                 for(Variable v: temp){
                     newHeadVars[i] = v;
                     i++;
+                }*/
+                Variable newHeadVars[] = temp.toArray(new Variable[0]);
+                Atom head;
+                // avoid 0-ary heads by making them 1-ary
+                if(newHeadVars.length == 0) {
+                    // add the constant NIL to the head
+                    Term headConstant[] = { Constant.getConstant("NIL")};
+                    head = Atom.getAtom("rule"+counterRuleID+"_"+r.getHead().getName(), 1, headConstant );
+                } else {
+                    //the new Head contains all Variables of the rules body, to be unique
+                    head = Atom.getAtom("rule"+counterRuleID+"_"+r.getHead().getName(), newHeadVars.length, newHeadVars);
                 }
-                //the new Head contains all Variables of the rules body, to be unique
-                Atom head = Atom.getAtom("rule"+counter+"_"+r.getHead().getName(), newHeadVars.length, newHeadVars);
                 ret.addRule(new Rule(head,r.getBodyPlus(),r.getBodyMinus(), r.getOperators())); // newHead :- oldBody.
                 ArrayList<Atom> bodyPos = new ArrayList<Atom>();
                 bodyPos.add(head);

@@ -20,7 +20,7 @@ import java.util.HashSet;
  * 
  * 
  */
-public abstract class Term  implements OperandI, Comparable<Term> {
+public abstract class Term  implements OperandI {
     
     
     protected String name;
@@ -118,35 +118,5 @@ public abstract class Term  implements OperandI, Comparable<Term> {
 
     public abstract HashSet<Variable> getVariables();
     
-    /**
-     * We order the subclasses of Term as follows: Constant < Variable < FuncTerm
-     * @param t
-     * @return 
-     */
-    @Override
-    public int compareTo(Term t) {
-        // if both Terms are of the same type, compare them
-        if( this.getClass() == t.getClass() ) {
-            return hashcode - t.hashcode;   // use order imposed by hashCode, this is important for values ignored by hashCode
-        }
-        // rank according to classes of objects
-        if( this.getClass() == Constant.class ) {
-            // Constant is lowest, and other Term is of other type
-            return -1;
-        }
-        if( this.getClass() == FuncTerm.class) {
-            // FuncTerm is highest, and other Term is of other type
-            return 1;
-        }
-        if ( this.getClass() == Variable.class) {
-            // check if other Term is Constant
-            if( t.getClass() == Constant.class) {
-                return 1;
-            } else {    // other term is FuncTerm
-                return -1;
-            }
-        }
-        throw new RuntimeException("BUG: Term.compareTo finds no matching class types.");
-    }
     
 }

@@ -2,6 +2,7 @@ package Datastructure.storage;
 
 import Entity.GlobalSettings;
 import Entity.Instance;
+import Entity.TermComparator;
 import Entity.TrackingInstance;
 import Entity.Variable;
 import Interfaces.Term;
@@ -68,7 +69,7 @@ public class Storage {
         }
         for(int i = 0; i < memory.length;i++){
             //memory[i] = new HashMap<Term,HashSet<Instance>>();
-            memory[i] = new TreeMap<Term,TreeSet<Instance>>();
+            memory[i] = new TreeMap<Term,TreeSet<Instance>>(TermComparator.getInstance());
         }
         backtrackInstances = new HashMap<Integer, ArrayList<Instance>>();
         backtrackMustBeTrue = new HashMap<Instance, Integer>();
@@ -93,7 +94,9 @@ public class Storage {
             System.out.println("MBT instance adding: "+instance);
         }
         registerForBacktracking(instance);
-        for (int i = 0; i < instance.getSize(); i++) {
+        // in case predicate has arity 0, use memory[0]
+        int allIndices = (instance.getSize() == 0 ? 0 : instance.getSize()-1);
+        for (int i = 0; i <= allIndices; i++) {
 
             if (!memory[i].containsKey(instance.get(i))) {
                 //memory[i].put(instance.get(i), new HashSet<Instance>());
@@ -137,9 +140,12 @@ public class Storage {
      */
     public boolean containsInstance(Instance instance){   
         //memory[0].get(instance.get(0)) = null
+/*        if( instance.getSize() == 0) {
+            //return memory[0].get(null).contains(null);
+        }*/
         try{
             return memory[0].get(instance.get(0)).contains(instance);
-        }catch(Exception e){
+        }catch(Exception e){    // TODO: catching Exception is dangerous
             return false;
         }
     }
