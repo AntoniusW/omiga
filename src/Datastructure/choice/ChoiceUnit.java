@@ -20,6 +20,7 @@ import Interfaces.Term;
 import java.util.*;
 import network.ReplyMessage;
 import Datastructure.Rete.Node;
+import Entity.GlobalSettings;
 
 /**
  *
@@ -246,6 +247,15 @@ public class ChoiceUnit {
                }
             }
              SCCSize.add(SCC.get(i).size());
+        }
+        if(GlobalSettings.debugDecision) {
+            System.out.println("SCCs are:");
+            for (int i = 0; i < SCCPreds.size(); i++) {
+                System.out.println("SCC "+i+":");
+                System.out.println(SCCPreds.get(i));
+            }
+            System.out.println("------------------");
+            
         }
     }
     

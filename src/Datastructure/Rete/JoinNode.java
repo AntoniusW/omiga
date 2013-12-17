@@ -35,6 +35,9 @@ public class JoinNode extends Node{
     
     protected Variable tempVar; // used as a Variable for the lookup
     
+    protected boolean isSelfJoin;   // indicates that both parents of this join are the same node
+    private enum LEFT_RIGHT {left, right};  // hack to allow that self-join nodes call addInstance correctlly on themselves
+    
     /*
      * Select: Wir gehen einfach das Variable Ordering der anderen Node durch und setzen alle Variablen nach der Instanz davon
      */
@@ -52,6 +55,7 @@ public class JoinNode extends Node{
 
         this.a = a;
         this.b = b;
+        isSelfJoin = (a == b);
 
         //We initialize the instance Ordering array
         HashMap<Variable,Integer> temp = new HashMap<Variable, Integer>();
@@ -134,20 +138,39 @@ public class JoinNode extends Node{
      * calculates all joined variable assignments for this new instance, and adds them
      * to it's memory.
      * 
+     * Internally, this method finds from which side an instance arrives and
+     * then relays the call
+     * 
      * @param instance the new instance that has arrived
      * @param n the node where the instance arrived (a or b)
      */
-    public void addInstance(Instance instance, Node fromNode){
-        debugJoinCount++;
-        long debugStartTime = System.currentTimeMillis();
-        boolean from; // TODO: check boolean value
+    public void addInstance(Instance instance, Node fromNode) {
+        // if this is a self-join then we call addInstance to add once from left and once from right
+        if( isSelfJoin ) {
+            addInstance(instance, fromNode, LEFT_RIGHT.left);
+            addInstance(instance, fromNode, LEFT_RIGHT.right);
+            return;
+        }
+        // this node joins different nodes, find correct side and call original addInstance
+        LEFT_RIGHT from;
         if( a == fromNode) {
-            from = true;
+            from = LEFT_RIGHT.left;
         } else if ( b == fromNode ) {
-            from = false;
+            from = LEFT_RIGHT.right;
         } else {
             throw new RuntimeException("JoinNode received input from unknown parent node");
         }
+        addInstance(instance, fromNode, from);
+    }
+    
+    /**
+     * Actual addInstance method.
+     */
+    private void addInstance(Instance instance, Node fromNode, LEFT_RIGHT fromSide){
+        debugJoinCount++;
+        long debugStartTime = System.currentTimeMillis();
+        boolean from = (fromSide == LEFT_RIGHT.left); // TODO: check boolean value
+        
         //System.err.println("ADD Instance called: " + instance + " -" + from + " - " + this);
         Term[] selectionCriteria; // TODO: check if putting thise two variable outside this method decreases runtime
         Node selectFromHere; // TODO: check if putting thise two variable outside this method decreases runtime

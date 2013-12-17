@@ -124,5 +124,9 @@ public class Variable extends Term implements OperandI{
         vars.add(this);
         return vars;
     }
-    
+ 
+    private static int anonymousVariableCount = 0;
+    public static Variable newAnonymousVariable() {
+        return getVariable("aV"+anonymousVariableCount++);
+    }
 }

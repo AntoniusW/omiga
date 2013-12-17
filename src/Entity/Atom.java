@@ -183,7 +183,7 @@ public class Atom {
                     //a.setAtomAt(i,tempVars.get((Variable)terms[i]));
                     keyTerms[i] = tempVars.get((Variable)terms[i]);
                 }else{
-                    Variable unit_Var = Variable.getVariable("special_Var: " + tempVars.size());
+                    Variable unit_Var = Variable.getVariable("sV" + tempVars.size());
                     tempVars.put((Variable)terms[i], unit_Var);
                     //a.setAtomAt(i,unit_Var);
                     keyTerms[i] = unit_Var;
@@ -219,7 +219,7 @@ public class Atom {
                 if(tempVars.containsKey((Variable)t.getChildren().get(i))){
                     children.add(tempVars.get((Variable)t.getChildren().get(i)));
                 }else{
-                    Variable unit_Var = Variable.getVariable("special_Var: " + tempVars.size());
+                    Variable unit_Var = Variable.getVariable("sV" + tempVars.size());
                     tempVars.put((Variable)t.getChildren().get(i), unit_Var);
                     children.add(unit_Var);
                 }
@@ -251,6 +251,70 @@ public class Atom {
             vars.addAll(term.getVariables());
         }
         return vars;
+    }
+
+    /**
+     * Returns the positions of variables in the list of terms of this atom.
+     * It does not descend into FuncTerms.
+     */
+    public HashMap<Variable, Integer> getVariablePositions(HashSet<Variable> variables) {
+        HashMap<Variable, Integer> varPositions = new HashMap<Variable, Integer>();
+        // iterate over this atoms list of terms and build the mapping
+        for (int i = 0; i < getTerms().length; i++) {
+            Term term = getTerms()[i];
+            if( term instanceof Variable && variables.contains((Variable)term)) {
+                varPositions.put((Variable)term, i);
+            }
+        }
+        /* that check seems wrong
+        // check that each variable occures in this atom
+        for (Variable variable : variables) {
+            if( !varPositions.containsKey(variable)) {
+                return null;
+            }
+        }*/
+        return varPositions;
+    }
+
+    /**
+     * Returns a mapping of positions (list of terms of this atom) to variables.
+     * It does not descend into FuncTerms.
+     * @return a mapping: position -> variable
+     */
+    public HashMap<Integer, Variable> getPositionVariables() {
+        HashMap<Integer, Variable> positionVariables = new HashMap<Integer, Variable>();
+        for (int i = 0; i < getTerms().length; i++) {
+            Term term = getTerms()[i];
+            if( term instanceof Variable) {
+                positionVariables.put(i, (Variable)term);
+            }
+        }
+        return positionVariables;
+    }
+
+    /**
+     * Creates a new atom which is this one with renamed variables according to input.
+     * Returns null if not all variables map to a new variable.
+     */
+    public Atom createVariableRenamedAtom(HashMap<Integer, Variable> positionToNewVar, HashMap<Variable, Integer> varToPosition) {
+        Term[] renamedTerms = new Term[getArity()];
+        Term[] oldTerms = getTerms();
+        for (int i = 0; i < renamedTerms.length; i++) {
+            if( oldTerms[i] instanceof Variable){
+                Integer position = varToPosition.get((Variable)oldTerms[i]);
+                Variable newVar = positionToNewVar.get(position);
+                if( newVar != null) {
+                    renamedTerms[i] = newVar;
+                } else {
+                    return null;
+                    // no variable mapping is found, create 'anonymous' variable
+                    //renamedTerms[i] = Variable.newAnonymousVariable();
+                }
+            } else {
+                renamedTerms[i] = oldTerms[i];
+            }
+        }
+        return Atom.getAtom(getName(), getArity(), renamedTerms);
     }
      
 }

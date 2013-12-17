@@ -6,9 +6,9 @@ package Entity;
  * @author Antonius
  */
 public class GlobalSettings {
-    public static boolean debugOutput = false;
+    public static boolean debugOutput = true;
     public static boolean debugLearning = false;
-    public static boolean debugDecision = false;
+    public static boolean debugDecision = true;
     
     public static boolean debugHelper = false;
     
@@ -23,6 +23,6 @@ public class GlobalSettings {
     
     // below string is replaced by build-script automatically,
     // do not change line breaking
-    public static String version="07eaedc9b6b37662f989bca99db53a41f9ec6111";
+    public static String version="685838df1372e5123c0982c27fbc7b39284d840a";
     
 }

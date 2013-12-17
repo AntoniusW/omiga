@@ -7,6 +7,7 @@ import Entity.ContextASP;
 import Entity.ContextASPRewriting;
 import Entity.Instance;
 import Entity.Operator;
+import Entity.Pair;
 import Entity.Predicate;
 import Entity.Rule;
 import Entity.Variable;
@@ -70,7 +71,8 @@ public class Rewriter_easy {
         
         for(Predicate p: sorted.keySet()){
             //wir gehen jeweils alle regeln mit gleichem head durch
-            ArrayList<Atom> heads = new ArrayList<Atom>();
+            ArrayList<Pair<Atom,HashMap<Variable,Integer>>> heads = new ArrayList<Pair<Atom, HashMap<Variable, Integer>>>();
+                    //new ArrayList<Atom>();
             for(Rule r: sorted.get(p)){
                 counterRuleID++;
                 HashSet<Variable> temp = new HashSet<Variable>();
@@ -104,7 +106,11 @@ public class Rewriter_easy {
                 bodyPos.add(head);
                 ret.addRule(new Rule(r.getHead(),bodyPos, new ArrayList<Atom>(), new ArrayList<Operator>())); // oldHead :- newHead
                 
-                heads.add(head.getAtomAsReteKey()); // We add the atoms as ReteKeys to obtain unified variables for the rule over rules.
+                // record variable positions and add head atom to later build a rule of form
+                // --p(X,Y) :- not rule1_p(X,Y), not rule3_p(Y,X).
+                HashMap<Variable,Integer> varPositions = r.getHead().getVariablePositions(head.getVariables());
+                heads.add(new Pair(head,varPositions));
+                //heads.add(head.getAtomAsReteKey()); // We add the atoms as ReteKeys to obtain unified variables for the rule over rules.
                 
                 // Now we create negative rules for optimisation that put heads into out if a rule cannot be fullfilled anymore.
                 // We can not do this in general, but we do it for Bodyatoms which Variables are equal to those of the head
@@ -197,19 +203,37 @@ public class Rewriter_easy {
             // since there might be a rule that leads to p(X,Y) and one that leads to p(X,a), then we can derive
             // -p(a,b) even if p(a,a) can still be derived, which is not possible in the actual implementeion.
             for(int i = 0; i < sorted.get(p).size();i++){
-            Rule r1 = sorted.get(p).get(i);
+                Rule r1 = sorted.get(p).get(i);
                 ArrayList<Atom> BodyMinus = new ArrayList<Atom>();
                 Atom headAtom = Atom.getAtom(r1.getHead().getName(), r1.getHead().getArity(), r1.getHead().getAtomAsReteKey().getTerms());
+                HashMap<Integer, Variable> varPositionNames = headAtom.getPositionVariables();
+                
+                boolean hasUnmappedVariables = false;   // indicates that rewritten rule is like:
+                // --p(X) :- not rule1_p(X,Y).
+                // Here a for-all check regarding Y is necessary, skipping this rule for now.
+                // Possible solution:   --p(X) :- not exists2_rule1_p(X).
+                //                      exists2_rule1_p(X) :- rule1_p(X,Y).
+                // Not sure how much could be gained by such a rewriting.
+                
                 for(int j = 0; j < sorted.get(p).size();j++){
                     Rule r2 = sorted.get(p).get(j);
                     //if(!r1.equals(r2)){
                         if(r1.getHead().fatherOf(r2.getHead())){
-                            BodyMinus.add(heads.get(j));
+                            Atom renamed = heads.get(j).getArg1().createVariableRenamedAtom(varPositionNames,heads.get(j).getArg2());
+                            //for now: break if there are variables in atoms which occur not in the head
+                            //(rewriting requires a for-all check, or another rule with negation)
+                            if( renamed == null ) {
+                                hasUnmappedVariables = true;
+                                break;
+                            }
+                            BodyMinus.add(renamed);
                         }
                     //}
                 }
-                Rule rule2Add = new Rule(headAtom, new ArrayList<Atom>(), BodyMinus, new ArrayList<Operator>());
-                checkVariablesAddNegRule(rule2Add,ret);
+                if (!hasUnmappedVariables) {
+                    Rule rule2Add = new Rule(headAtom, new ArrayList<Atom>(), BodyMinus, new ArrayList<Operator>());
+                    checkVariablesAddNegRule(rule2Add, ret);
+                }
             }
         }
         
