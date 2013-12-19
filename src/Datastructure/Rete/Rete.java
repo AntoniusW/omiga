@@ -10,6 +10,7 @@ import Exceptions.ImmediateBacktrackingException;
 import Interfaces.Term;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  *
@@ -267,14 +268,20 @@ public class Rete {
      *        is null, all predicates are printed
      */
     public void printAnswerSet(String filter){
-        boolean onlyPrintIN = false; // TODO: for testing set to false
+        boolean onlyPrintIN = !GlobalSettings.debugOutput; // TODO: for testing set to false
         boolean densePrint = true; //true;
-        boolean filtering = filter==null? false : true;
+        boolean filtering = !(GlobalSettings.debugOutput && filter == null); //always filter except if debugOutput is active and no filter was specified
         //System.out.println("Printing Answerset: ");
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         //System.out.println("Positive Facts: ");
         System.out.println("-----------------------------");
         //System.out.println("IN:");
+        
+        // filter all internal predicates if output debugging is not active
+        if( !GlobalSettings.debugOutput && filter == null) {
+            filter = GlobalSettings.inputPredicates;
+        }
+        
         String filter_use="";
         if(filtering)
             filter_use = "," + filter + ",";
@@ -293,34 +300,37 @@ public class Rete {
                 System.out.println();
             }
         }
-        if( !onlyPrintIN ) {
-        //System.out.println("Negative Facts: ");
-        System.out.println("OUT:");
-        for (Predicate p : this.basicLayerMinus.keySet()) {
-            // skip predicate if it does not occur in the filter and filtering is on
-            String filter_pred = "," + p.getName() + ",";
-            if(filtering && filter_use.indexOf(filter_pred) == -1 )
-                continue;
-            Term[] selectionCriteria = new Term[p.getArity()];
-            for (int i = 0; i < p.getArity(); i++) {
-                selectionCriteria[i] = Variable.getVariable("X");
+        if (!onlyPrintIN) {
+            //System.out.println("Negative Facts: ");
+            System.out.println("OUT:");
+            for (Predicate p : this.basicLayerMinus.keySet()) {
+                // skip predicate if it does not occur in the filter and filtering is on
+                String filter_pred = "," + p.getName() + ",";
+                if (filtering && filter_use.indexOf(filter_pred) == -1) {
+                    continue;
+                }
+                Term[] selectionCriteria = new Term[p.getArity()];
+                for (int i = 0; i < p.getArity(); i++) {
+                    selectionCriteria[i] = Variable.getVariable("X");
+                }
+                boolean didPrint = basicLayerMinus.get(p).memory.prettyPrintAllInstances(p.getName(), densePrint);
+                if (didPrint) {
+                    System.out.println();
+                }
             }
-            boolean didPrint = basicLayerMinus.get(p).memory.prettyPrintAllInstances(p.getName(), densePrint);
+            System.out.println("Closed: ");
+
+            boolean didPrint = false;
+            for (Entry<Predicate, BasicNodeNegative> entry : basicLayerMinus.entrySet()) {
+                if (entry.getValue().isClosed()) {
+                    System.out.print(entry.getKey().getName() + "/" + entry.getKey().getArity() + " ");
+                    didPrint = true;
+                }
+            }
+
             if (didPrint) {
                 System.out.println();
             }
-        }
-        System.out.println("Closed: ");
-        
-        boolean didPrint = false;
-        for (Entry<Predicate, BasicNodeNegative> entry : basicLayerMinus.entrySet()) {
-            if (entry.getValue().isClosed()) {
-                System.out.print(entry.getKey().getName() + "/" + entry.getKey().getArity() + " ");
-                didPrint = true;
-            }
-        }
-        
-        if (didPrint) System.out.println();
         } // end if (onlyPrintIN)
         //System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         System.out.println("-----------------------------");

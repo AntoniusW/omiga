@@ -7,6 +7,7 @@ import Exceptions.FactSizeException;
 import Exceptions.RuleNotSafeException;
 import Manager.Manager;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.runtime.ANTLRFileStream;
@@ -65,6 +66,10 @@ public class main_FINAL_NormalASP {
             if (args[i].startsWith("-nolearning")) {
                  GlobalSettings.noLearning = true;
             }
+            if(args[i].startsWith("-debug=")) {
+                String debugChannels = args[i].substring("-debug=".length());
+                GlobalSettings.setDebugChannels(debugChannels);
+            }
             if (args[i].startsWith("-help") || args[i].startsWith("--help") || args[i].startsWith("-?")) {
                 help();
                 return;
@@ -96,6 +101,21 @@ public class main_FINAL_NormalASP {
                     parser.woc_program();
                     parsing_time = System.currentTimeMillis() - start_parsing_time;
                     //System.out.println("Parsed program, starting rewriting...");
+                    
+                    // build list of input predicates
+                    String inputPredicates = ",";
+                    HashSet<Predicate> predicates = new HashSet<Predicate>();
+                    for (Rule rule : ctx.getAllRules()) {
+                        if( !rule.isConstraint() ) {
+                            predicates.add(rule.getHead().getPredicate());
+                        }
+                    }
+                    predicates.addAll(ctx.getAllINFacts().keySet());
+                    for (Predicate predicate : predicates) {
+                        inputPredicates += predicate.getName()+",";
+                    }
+                    GlobalSettings.inputPredicates = inputPredicates;
+                    //System.out.println("Input predicates are:\n"+inputPredicates);
 
                     // rewrite  input program
                     Rewriter_easy rewriter = new Rewriter_easy();
@@ -141,9 +161,10 @@ public class main_FINAL_NormalASP {
 
     private static void help() {
         System.out.println("Usage is:");
-        System.out.println("java -jar omiga.jar <filename> [-answersets=NumAnswerSetsDesired, -filter=predicateNames -rewriting=0-2] -version"
+        System.out.println("java -jar omiga.jar <filename> [-answersets=NumAnswerSetsDesired -filter=predicateNames -rewriting=0-2 -version -debug=channels]"
                 + "\n\t rewriting: 0=No rewriting, 1=Normal rewriting, 2=Input is already rewritten"
                 + "\n\t filter: a comma-separated list of predicate names to print (no whitespace)"
+                + "\n\t debug: a comma-separated list of debug channels to activate (no whitespace), channels are: output, learning, decision"
                 + "\n\t version: print git-version/hash this binary was built with, then exit.\n");
     }
 }

@@ -6,9 +6,10 @@ package Entity;
  * @author Antonius
  */
 public class GlobalSettings {
-    public static boolean debugOutput = true;
+    public static boolean debugOutput = false;
     public static boolean debugLearning = false;
-    public static boolean debugDecision = true;
+    public static boolean debugDecision = false;
+    public static String inputPredicates = "";
     
     public static boolean debugHelper = false;
     
@@ -24,5 +25,24 @@ public class GlobalSettings {
     // below string is replaced by build-script automatically,
     // do not change line breaking
     public static String version="685838df1372e5123c0982c27fbc7b39284d840a";
+
+    /**
+     * Parse string of comma-separated debug channels and activate all channels.
+     * @param debugChannels 
+     */
+    public static void setDebugChannels(String debugChannels) {
+        String[] channel = debugChannels.split(",");
+        for (int i = 0; i < channel.length; i++) {
+            if( channel[i].equals("output")) {
+                debugOutput = true;
+            } else if( channel[i].equals("decision")) {
+                debugDecision = true;
+            } else if( channel[i].equals("learning")) {
+                debugLearning = true;
+            } else if( channel[i].equals("helper")) {
+                debugHelper = true;
+            }
+        }
+    }
     
 }
